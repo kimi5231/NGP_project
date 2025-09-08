@@ -8,6 +8,3 @@ Release/
 ##files
 **/*.i
 **/*.obj
-**/*.pb.cc
-**/*.pb.h
-~$*

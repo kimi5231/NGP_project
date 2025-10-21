@@ -1,4 +1,4 @@
-#ifndef _HEADER1_H_
+ï»¿#ifndef _HEADER1_H_
 #define _HEADER1_H_
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include "fmod.hpp"
-#include "fmod_errors.h"
+//#include "fmod.hpp"
+//#include "fmod_errors.h"
 
 #define START_MENU 10
 #define IN_GAME 20
@@ -29,14 +29,14 @@
 #define PLAYER_SPEED 5
 #define BULLET_SPEED 10
 
-// »óÀÎ
+// ìƒì¸
 #define MERCHANT_FRAME_WIDTH 120
 #define MERCHANT_FRAME_HEIGHT 30
 #define MERCHANT_SPRITE_CNT 4
 
 #define ITEM_NUM 30
 
-// ¸ó½ºÅÍ
+// ëª¬ìŠ¤í„°
 #define MONSTER_SPPED 3
 #define MONSTER_SPRITE_WCNT 8
 #define MONSTER_SPRITE_HCNT 4
@@ -49,12 +49,12 @@
 
 #define MONSTER_HP 5
 
-// º¸½º
+// ë³´ìŠ¤
 #define BOSS_SPRITE_WCNT 8
 #define BOSS_SPRITE_LCNT 4
 #define BOSSGUN_SPEED 12
 
-// Å¸ÀÌ¸Ó ID
+// íƒ€ì´ë¨¸ ID
 #define BULLET_MOVE 1
 #define ITEM_DURATION 2
 #define EFFECT_LOAD 3
@@ -73,17 +73,17 @@
 
 #define STAGE_TIME 10
 
-// ÆøÅº
+// í­íƒ„
 #define BOMB_TIME 100
 #define BOMB_SPRITE_CNT 6
 
 #define BOMBING_SPRITE_CNT 7
 #define BOMBING_SIZE 3
 
-// »ç¸Á ÀÌÆåÆ®
+// ì‚¬ë§ ì´í™íŠ¸
 #define DEAD_SPRITE_CNT 18
 
-// Àå¾Ö¹°
+// ì¥ì• ë¬¼
 #define WALL_OBSTACLE_CNT 48
 #define OBSTACLE_SPEED 5
 #define OBSTACLE_SPRITE_WCNT 3
@@ -147,7 +147,7 @@ typedef struct itemnum
 	bool is_end;
 }ITEMNUM;
 
-// ¸ó½ºÅÍ ±¸Á¶Ã¼
+// ëª¬ìŠ¤í„° êµ¬ì¡°ì²´
 typedef struct Monster
 {
 	TCHAR name[20];
@@ -167,7 +167,7 @@ typedef struct Monster_Node
 	struct Monster_Node* next;
 }MONSTERNODE;
 
-// ÆøÅº ±¸Á¶Ã¼
+// í­íƒ„ êµ¬ì¡°ì²´
 typedef struct Bomb
 {
 	POINT P;
@@ -181,7 +181,7 @@ typedef struct BombNode
 	struct BombNode* next;
 }BOMBNODE;
 
-// Àå¾Ö¹° ±¸Á¶Ã¼
+// ì¥ì• ë¬¼ êµ¬ì¡°ì²´
 typedef struct Obstacle
 {
 	POINT p;
@@ -192,7 +192,7 @@ typedef struct Obstacle
 	int current_frame;
 }OBSTACLE;
 
-// º¸½º ±¸Á¶Ã¼
+// ë³´ìŠ¤ êµ¬ì¡°ì²´
 typedef struct BOSS
 {
 	POINT P;
@@ -201,7 +201,7 @@ typedef struct BOSS
 	bool skill;
 }BOSS;
 
-// º¸½º ÃÑ¾Ë ±¸Á¶Ã¼
+// ë³´ìŠ¤ ì´ì•Œ êµ¬ì¡°ì²´
 typedef struct BOSSGUN
 {
 	POINT P;
@@ -209,159 +209,159 @@ typedef struct BOSSGUN
 	POINT G;
 }BOSSGUN;
 
-// window ÇÁ·Î½ÃÀú
+// window í”„ë¡œì‹œì €
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
-// »ç¿îµå ÇÔ¼ö
+// ì‚¬ìš´ë“œ í•¨ìˆ˜
 void SoundSetting(void);
 
-// ¸Ş´º ÇÔ¼ö
+// ë©”ë‰´ í•¨ìˆ˜
 void StartMenu(HDC hDC, RECT rt, RECT menu_start_rt, RECT menu_exit_rt);
 bool Menu_Is_Click(POINT m, RECT menu_start_rt, RECT menu_exit_rt);
 
-// ¸Ê ±âÁØ rect ¾ò´Â ÇÔ¼ö
+// ë§µ ê¸°ì¤€ rect ì–»ëŠ” í•¨ìˆ˜
 RECT GetStageRect(int x, int y);
 
 void TransitionToNextStage(HWND);
 void CALLBACK AnimateStageTransition(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 
-// °ÔÀÓ UI °»½Å ÇÔ¼ö
+// ê²Œì„ UI ê°±ì‹  í•¨ìˆ˜
 void GameUI(PLAYER player, HDC hdc);
-// °ÔÀÓ ¾ÆÀÌÅÛ UI ÇÔ¼ö
+// ê²Œì„ ì•„ì´í…œ UI í•¨ìˆ˜
 void GameUIItem(ITEM, HDC);
-// ½ºÅ×ÀÌÁö Á¾·á ½Ã »óÁ¡ ¿ÀÇÂ
+// ìŠ¤í…Œì´ì§€ ì¢…ë£Œ ì‹œ ìƒì  ì˜¤í”ˆ
 void EndStage();
-// »óÀÎ ÃÊ±âÈ­ ÇÔ¼ö
+// ìƒì¸ ì´ˆê¸°í™” í•¨ìˆ˜
 void InitMerchant();
-// »óÀÎ ±×¸®±â ÇÔ¼ö
+// ìƒì¸ ê·¸ë¦¬ê¸° í•¨ìˆ˜
 void DrawMerchant(HDC memDC);
 
-// ¾ÆÀÌÅÛÀ» ±¸¸ÅÇÏ´Â ÇÔ¼ö
+// ì•„ì´í…œì„ êµ¬ë§¤í•˜ëŠ” í•¨ìˆ˜
 void BuyItem(PLAYER* player, TCHAR* itemname, int itemprice);
 void GetShopItem(int Px, int Py, SHOPITEM shopitem);
-// »óÁ¡ UI °»½Å ÇÔ¼ö
+// ìƒì  UI ê°±ì‹  í•¨ìˆ˜
 void ShopUI(HDC memdc);
-// »óÀÎ Å¸ÀÌ¸Ó
+// ìƒì¸ íƒ€ì´ë¨¸
 void CALLBACK MerchantWalking(HWND, UINT, UINT_PTR, DWORD);
 void ShopItem(HDC memDC, HDC memDCImage);
 
-// ¾ÆÀÌÅÛ Áö¼Ó Å¸ÀÌ¸Ó ÇÁ·Î½ÃÀú
+// ì•„ì´í…œ ì§€ì† íƒ€ì´ë¨¸ í”„ë¡œì‹œì €
 void CALLBACK CountItemTime(HWND, UINT, UINT, DWORD);
-// ¾ÆÀÌÅÛ ºñÆ®¸Ê ·Îµå ÇÔ¼ö
+// ì•„ì´í…œ ë¹„íŠ¸ë§µ ë¡œë“œ í•¨ìˆ˜
 void MakeItem(HWND, POINT);
-// ¾ÆÀÌÅÛ ºñÆ®¸Ê Ãâ·Â ÇÔ¼ö
+// ì•„ì´í…œ ë¹„íŠ¸ë§µ ì¶œë ¥ í•¨ìˆ˜
 void ShowItem(ITEM item, HDC memDC, HDC memDCImage);
-// ¾ÆÀÌÅÛ È¹µæ ÇÔ¼ö
+// ì•„ì´í…œ íšë“ í•¨ìˆ˜
 ITEM GetItem(int Px, int Py, ITEM item, int idx);
-// ¾ÆÀÌÅÛ »ç¿ë ÇÔ¼ö
+// ì•„ì´í…œ ì‚¬ìš© í•¨ìˆ˜
 void UseItem(HWND);
 
-//ÀÌÆåÆ® ºñÆ®¸Ê ·Îµå ÇÔ¼ö
+//ì´í™íŠ¸ ë¹„íŠ¸ë§µ ë¡œë“œ í•¨ìˆ˜
 void CALLBACK EffectLoad(HWND, UINT, UINT, DWORD);
-// ÀÌÆåÆ® ºñÆ®¸Ê Ãâ·Â ÇÔ¼ö
+// ì´í™íŠ¸ ë¹„íŠ¸ë§µ ì¶œë ¥ í•¨ìˆ˜
 void ShowEffect(ITEM item, HDC memDC, HDC memDCImage);
-// ÀÌÆåÆ® ºñÆ®¸Ê¸¸ ·Îµå ÇÔ¼ö
+// ì´í™íŠ¸ ë¹„íŠ¸ë§µë§Œ ë¡œë“œ í•¨ìˆ˜
 void EffectBitmapLoad();
 
-// ºñÆ®¸Ê ·Îµå ÇÔ¼ö
+// ë¹„íŠ¸ë§µ ë¡œë“œ í•¨ìˆ˜
 void LoadAllBitmap();
-// ¹è°æ ºñÆ®¸Ê »èÁ¦ ÇÔ¼ö
+// ë°°ê²½ ë¹„íŠ¸ë§µ ì‚­ì œ í•¨ìˆ˜
 void UnLoadAllBitmap();
-// Àå¾Ö¹° ÇÑ Ä­ Ãâ·Â ÇÔ¼ö
+// ì¥ì• ë¬¼ í•œ ì¹¸ ì¶œë ¥ í•¨ìˆ˜
 void DrawOneObstacle(HBITMAP, HBITMAP, OBSTACLE, HDC, RECT);
-// Àå¾Ö¹° ¸ó½ºÅÍ Ãâ·Â ÇÔ¼ö
+// ì¥ì• ë¬¼ ëª¬ìŠ¤í„° ì¶œë ¥ í•¨ìˆ˜
 void DrawOneObstacleMonster(MONSTER monster, HBITMAP hmonster, HBITMAP hmonster_mask, HDC memDC, RECT rt);
-// ºÎÈ° ¸ó½ºÅÍ Ãâ·Â ÇÔ¼ö
+// ë¶€í™œ ëª¬ìŠ¤í„° ì¶œë ¥ í•¨ìˆ˜
 void DrawRespawnMonster(MONSTER monster, HBITMAP hmonster, HBITMAP hmonster_mask, HDC memDC, RECT rt);
-// ¸ğµç ºñÆ®¸Ê, ¾Ö´Ï¸ŞÀÌ¼Ç Ãâ·Â ÇÔ¼ö
+// ëª¨ë“  ë¹„íŠ¸ë§µ, ì• ë‹ˆë©”ì´ì…˜ ì¶œë ¥ í•¨ìˆ˜
 void DrawBitmap(HDC, RECT);
 
-// ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­ ÇÔ¼ö
+// í”Œë ˆì´ì–´ ì´ˆê¸°í™” í•¨ìˆ˜
 void InitPlayer(HWND);
-// ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ® ºí¶ô ÇÔ¼ö
+// í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ ë¸”ë½ í•¨ìˆ˜
 bool PlayerBlockObject();
 
-// ÃÑ¾Ë ÀÌµ¿ Å¸ÀÌ¸Ó ÇÔ¼ö
+// ì´ì•Œ ì´ë™ íƒ€ì´ë¨¸ í•¨ìˆ˜
 void CALLBACK BulletMove(HWND, UINT, UINT, DWORD);
-// ÃÑ¾Ë »ı¼º ÇÔ¼ö
+// ì´ì•Œ ìƒì„± í•¨ìˆ˜
 void MakeBullet(void);
-// ÃÑ¾Ë ¹æÇâ ÁöÁ¤ ÇÔ¼ö
+// ì´ì•Œ ë°©í–¥ ì§€ì • í•¨ìˆ˜
 void SetDirect(int);
-// ÃÑ¾Ë »èÁ¦ ÇÔ¼ö
+// ì´ì•Œ ì‚­ì œ í•¨ìˆ˜
 void DelBullet(void);
-// ÃÑ¾Ë, Àå¾Ö¹° Ãæµ¹Ã¼Å© ÇÔ¼ö
+// ì´ì•Œ, ì¥ì• ë¬¼ ì¶©ëŒì²´í¬ í•¨ìˆ˜
 bool BlockBullet(int);
-// ¼¦°Ç ÃÑ¾Ë ÇÔ¼ö
+// ìƒ·ê±´ ì´ì•Œ í•¨ìˆ˜
 void ShotgunBullet(int, int, int);
-// ¹°·¹¹ÙÄû ÃÑ¾Ë ÇÔ¼ö
+// ë¬¼ë ˆë°”í€´ ì´ì•Œ í•¨ìˆ˜
 void WaterWheelBullet(void);
 
-// ¸ó½ºÅÍ µ¥ÀÌÅÍ ÃÊ±âÈ­ ÇÔ¼ö
+// ëª¬ìŠ¤í„° ë°ì´í„° ì´ˆê¸°í™” í•¨ìˆ˜
 void initMonster(MONSTER* data, PLAYER player);
-// ¸ó½ºÅÍ tail ³ëµå ¸®ÅÏ ÇÔ¼ö
+// ëª¬ìŠ¤í„° tail ë…¸ë“œ ë¦¬í„´ í•¨ìˆ˜
 MONSTERNODE* Gettail(MONSTERNODE* head);
-// ¸ó½ºÅÍ ³ëµå »ğÀÔ ÇÔ¼ö
+// ëª¬ìŠ¤í„° ë…¸ë“œ ì‚½ì… í•¨ìˆ˜
 void InsertMonster(MONSTERNODE** head, MONSTER data);
-// ¸ó½ºÅÍ ID Å½»ö ÇÔ¼ö
+// ëª¬ìŠ¤í„° ID íƒìƒ‰ í•¨ìˆ˜
 MONSTERNODE* SearchNode(MONSTERNODE* head, MONSTERNODE* node, TCHAR* name);
-// ¸ó½ºÅÍ ³ëµå »èÁ¦ ÇÔ¼ö
+// ëª¬ìŠ¤í„° ë…¸ë“œ ì‚­ì œ í•¨ìˆ˜
 MONSTERNODE* DelMonster(MONSTERNODE** head, TCHAR* name);
 
-// ÆøÅº µ¥ÀÌÅÍ ÃÊ±âÈ­ ÇÔ¼ö
+// í­íƒ„ ë°ì´í„° ì´ˆê¸°í™” í•¨ìˆ˜
 void InitBomb(BOMB* bombdata, MONSTER monster);
-// ÆøÅº tail ³ëµå ¸®ÅÏ ÇÔ¼ö
+// í­íƒ„ tail ë…¸ë“œ ë¦¬í„´ í•¨ìˆ˜
 BOMBNODE* Bomb_Gettail(BOMBNODE* head);
-// ÆøÅº ³ëµå »ğÀÔ ÇÔ¼ö
+// í­íƒ„ ë…¸ë“œ ì‚½ì… í•¨ìˆ˜
 void InsertBomb(BOMBNODE** head, BOMB data);
-// ÆøÅº ID Å½»ö ÇÔ¼ö
+// í­íƒ„ ID íƒìƒ‰ í•¨ìˆ˜
 BOMBNODE* Bomb_SearchNode(BOMBNODE* head, BOMBNODE* node, int frame);
-// ÆøÅº ³ëµå »èÁ¦ ÇÔ¼ö
+// í­íƒ„ ë…¸ë“œ ì‚­ì œ í•¨ìˆ˜
 BOMBNODE* DelBomb(BOMBNODE** head, int frame);
 
-// ÆøÅº ÀÌµ¿ ÇÔ¼ö
+// í­íƒ„ ì´ë™ í•¨ìˆ˜
 void KickBomb();
-// ¸ó½ºÅÍ ÀÌµ¿ ÇÔ¼ö
+// ëª¬ìŠ¤í„° ì´ë™ í•¨ìˆ˜
 void OneMonsterMove(MONSTERNODE** node, POINT target);
-// ¸ó½ºÅÍ ºñÆ®¸Ê Ãâ·Â ÇÔ¼ö
+// ëª¬ìŠ¤í„° ë¹„íŠ¸ë§µ ì¶œë ¥ í•¨ìˆ˜
 void DrawOneMonster(MONSTER monster, HBITMAP hmonster, HBITMAP hmonster_mask, HDC hDC, RECT rt);
-// ¸ó½ºÅÍ ÀÌµ¿ ÇÁ·Î½ÃÀú
+// ëª¬ìŠ¤í„° ì´ë™ í”„ë¡œì‹œì €
 void CALLBACK MonsterMove(HWND, UINT, UINT, DWORD);
-// ¸ó½ºÅÍ Ãæµ¹ ÇÔ¼ö
+// ëª¬ìŠ¤í„° ì¶©ëŒ í•¨ìˆ˜
 bool MonsterConflict(POINT p, MONSTER monster);
-// ¸ó½ºÅÍ ½ºÅ³ Å¸ÀÓ ÇÔ¼ö
+// ëª¬ìŠ¤í„° ìŠ¤í‚¬ íƒ€ì„ í•¨ìˆ˜
 void MonsterSkillCnt(MONSTER* data);
 
-// ÆøÅº Ãâ·Â ÇÔ¼ö
+// í­íƒ„ ì¶œë ¥ í•¨ìˆ˜
 void DrawOneBombAndDead(BOMB bomb, HBITMAP hbomb, HBITMAP hbomb_mask, HDC memDC, RECT rt, int sprite_cnt);
-// Àå¾Ö¹° ÃÊ±âÈ­
+// ì¥ì• ë¬¼ ì´ˆê¸°í™”
 OBSTACLE* InitObstalce(OBSTACLE* obstacles);
-// Æø¹ß Ãæµ¹ Ã¼Å© ÇÔ¼ö
+// í­ë°œ ì¶©ëŒ ì²´í¬ í•¨ìˆ˜
 void BombingDamage(BOMB bombing);
 
-// º¸½º ÃÊ±âÈ­ ÇÔ¼ö
+// ë³´ìŠ¤ ì´ˆê¸°í™” í•¨ìˆ˜
 void InitBoss(HWND);
 
-// ÃÑ ½î´Â ¹æÇâ ÇÔ¼ö
+// ì´ ì˜ëŠ” ë°©í–¥ í•¨ìˆ˜
 void BossShoot();
-// º¸½º ½ºÅ³ ±×¸®±â
+// ë³´ìŠ¤ ìŠ¤í‚¬ ê·¸ë¦¬ê¸°
 void DrawBossSkill(HDC memDC);
-// ÃÑ¾Ë »ı¼º ÇÔ¼ö
+// ì´ì•Œ ìƒì„± í•¨ìˆ˜
 void MakeBossBullet();
-// ºĞÇÒ ÃÑ¾Ë »ı¼º ÇÔ¼ö
+// ë¶„í•  ì´ì•Œ ìƒì„± í•¨ìˆ˜
 void MakeBigBossBullet();
-// º¸½º°¡ ÇÃ·¹ÀÌ¾î ÁÂ¿ì ¿òÁ÷ÀÓ µû¶ó ÀÌµ¿ÇÏ´Â ÇÔ¼ö
+// ë³´ìŠ¤ê°€ í”Œë ˆì´ì–´ ì¢Œìš° ì›€ì§ì„ ë”°ë¼ ì´ë™í•˜ëŠ” í•¨ìˆ˜
 void CALLBACK BossFollowPlayer(HWND, UINT, UINT, DWORD);
-// º¸½º ÃÑ¾Ë ÀÌµ¿ ÇÔ¼ö
+// ë³´ìŠ¤ ì´ì•Œ ì´ë™ í•¨ìˆ˜
 void CALLBACK GunMove(HWND, UINT, UINT, DWORD);
-// º¸½º ÃÑ¾Ë ¹ß»ç ÇÔ¼ö
+// ë³´ìŠ¤ ì´ì•Œ ë°œì‚¬ í•¨ìˆ˜
 void CALLBACK Shooting(HWND, UINT, UINT, DWORD);
-// º¸½º Àå¾Ö¹° ·£´ı À§Ä¡ ¼³Á¤ ÇÔ¼ö
+// ë³´ìŠ¤ ì¥ì• ë¬¼ ëœë¤ ìœ„ì¹˜ ì„¤ì • í•¨ìˆ˜
 OBSTACLE* RandomLocateObstacle(OBSTACLE*);
-// º¸½º Àå¾Ö¹° ¼³Ä¡ ÇÔ¼ö
+// ë³´ìŠ¤ ì¥ì• ë¬¼ ì„¤ì¹˜ í•¨ìˆ˜
 void CALLBACK ObstacleInstallation(HWND, UINT, UINT, DWORD);
-// º¸½º ÃÑ¾Ë ºĞÇØ ÇÔ¼ö
+// ë³´ìŠ¤ ì´ì•Œ ë¶„í•´ í•¨ìˆ˜
 void BossBulletSkill(PLAYER, BOSSGUN*);
-// º¸½º ºĞÇØ ÃÑ¾Ë ¹ß»ç ÇÔ¼ö
+// ë³´ìŠ¤ ë¶„í•´ ì´ì•Œ ë°œì‚¬ í•¨ìˆ˜
 void CALLBACK BossBigBullet(HWND, UINT, UINT, DWORD);
 
 #endif

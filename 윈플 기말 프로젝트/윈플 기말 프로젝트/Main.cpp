@@ -1,26 +1,26 @@
-#include "Header.h"
+ï»¿#include "Header.h"
 
-// 1: ¸ñ¼û, 2: ÄÚÀÎ, 3: Ä¿ÇÇ, 4: ÅºÃ¢, 5: º­¶ô, 6: ¼¦°Ç, 7: ¹°·¹¹ÙÄû, 8: ½Ã°è
+// 1: ëª©ìˆ¨, 2: ì½”ì¸, 3: ì»¤í”¼, 4: íƒ„ì°½, 5: ë²¼ë½, 6: ìƒ·ê±´, 7: ë¬¼ë ˆë°”í€´, 8: ì‹œê³„
 
-FMOD::System* ssystem;
-FMOD::Sound* main_music;
-FMOD::Sound* stage_music;
-FMOD::Sound* boss_music;
-FMOD::Sound* bullet_sound;
-FMOD::Sound* hit_sound;
-FMOD::Sound* boom_sound;
-FMOD::Sound* item_get_sound;
-FMOD::Sound* item_use_sound;
-FMOD::Sound* gameclear_sound;
-FMOD::Channel* short_ch = 0;
-FMOD::Channel* long_ch = 0;
-FMOD::Channel* boom_ch = 0;
-FMOD_RESULT result;
+//FMOD::System* ssystem;
+//FMOD::Sound* main_music;
+//FMOD::Sound* stage_music;
+//FMOD::Sound* boss_music;
+//FMOD::Sound* bullet_sound;
+//FMOD::Sound* hit_sound;
+//FMOD::Sound* boom_sound;
+//FMOD::Sound* item_get_sound;
+//FMOD::Sound* item_use_sound;
+//FMOD::Sound* gameclear_sound;
+//FMOD::Channel* short_ch = 0;
+//FMOD::Channel* long_ch = 0;
+//FMOD::Channel* boom_ch = 0;
+//FMOD_RESULT result;
 void* extradriverdata = 0;
 
 HWND _hWnd;
 
-// ºñÆ®¸Ê
+// ë¹„íŠ¸ë§µ
 HBITMAP wall_wood_block;
 HBITMAP wood_block;
 HBITMAP wood_block_mask;
@@ -36,7 +36,7 @@ HBITMAP move_obstacle_mask;
 
 HBITMAP boss_sprite, boss_mask;
 
-// ÀÌÆåÆ® ºñÆ®¸Ê
+// ì´í™íŠ¸ ë¹„íŠ¸ë§µ
 HBITMAP coffee_effect;
 HBITMAP bullet_effect, bullet_effect_mask;
 HBITMAP shotgun_effect, shotgun_effect_mask;
@@ -44,7 +44,7 @@ HBITMAP waterwheel_effect, waterwheel_effect_mask;
 HBITMAP hourglass_effect;
 HBITMAP lightning_effect, lightning_effect_mask, lightning_effect_background;
 
-// ¸ó½ºÅÍ ºñÆ®¸Ê
+// ëª¬ìŠ¤í„° ë¹„íŠ¸ë§µ
 HBITMAP normal_monster;
 HBITMAP tank_monster;
 HBITMAP respawn_monster;
@@ -67,7 +67,7 @@ HBITMAP dead_effect_mask;
 
 int state = START_MENU;
 
-// °´Ã¼ º¯¼ö ¼±¾ğ
+// ê°ì²´ ë³€ìˆ˜ ì„ ì–¸
 PLAYER player;
 BULLET* bullet;
 ITEM item[ITEM_NUM];
@@ -75,66 +75,66 @@ ITEMNUM item_num;
 BOSS boss;
 BOSSGUN* bossgun;
 
-// »óÁ¡ ¾ÆÀÌÅÛ ¹è¿­ ¼±¾ğ
+// ìƒì  ì•„ì´í…œ ë°°ì—´ ì„ ì–¸
 SHOPITEM itemList[] = {
-	{L"½Å¹ß", 8},
-	{ L"ÃÑ¾Ë", 10},
-	{ L"ÃÑ", 15}
+	{L"ì‹ ë°œ", 8},
+	{ L"ì´ì•Œ", 10},
+	{ L"ì´", 15}
 };
 
-// ¸ó½ºÅÍ °´Ã¼ º¯¼ö ¼±¾ğ
+// ëª¬ìŠ¤í„° ê°ì²´ ë³€ìˆ˜ ì„ ì–¸
 MONSTERNODE* monster_head;
-// ºÎÈ° ¸ó½ºÅÍ °´Ã¼ º¯¼ö ¼±¾ğ
+// ë¶€í™œ ëª¬ìŠ¤í„° ê°ì²´ ë³€ìˆ˜ ì„ ì–¸
 MONSTERNODE* respawn_head;
-// ÆøÅº °´Ã¼ º¯¼ö ¼±¾ğ
+// í­íƒ„ ê°ì²´ ë³€ìˆ˜ ì„ ì–¸
 BOMBNODE* bomb_head;
-// Æø¹ß °´Ã¼ º¯¼ö ¼±¾ğ
+// í­ë°œ ê°ì²´ ë³€ìˆ˜ ì„ ì–¸
 BOMBNODE* bombing_head;
-// »ç¸Á ÀÌÆåÆ® °´Ã¼ º¯¼ö ¼±¾ğ
+// ì‚¬ë§ ì´í™íŠ¸ ê°ì²´ ë³€ìˆ˜ ì„ ì–¸
 BOMBNODE* dead_head;
-// µ¥¹ÌÁö Àå¾Ö¹° °´Ã¼
+// ë°ë¯¸ì§€ ì¥ì• ë¬¼ ê°ì²´
 OBSTACLE* obstacles;
 int obstacle_num;
 
-// ÇÃ·¹ÀÌ¾î ÇÁ·¹ÀÓ
+// í”Œë ˆì´ì–´ í”„ë ˆì„
 int frame_numW, frame_numL;
 
-// ÃÑ¾Ë º¯¼ö
+// ì´ì•Œ ë³€ìˆ˜
 int bullet_num = 0;
 int bullet_speed = 15;
 int bullet_count = 0;
 
-// ½ºÅ×ÀÌÁö º¯¼ö
+// ìŠ¤í…Œì´ì§€ ë³€ìˆ˜
 int currentStage = 1;
 int stageIndex = 0;     
 int animationOffset = 0;
 
 
-// º¸½º °ü·Ã º¯¼ö
+// ë³´ìŠ¤ ê´€ë ¨ ë³€ìˆ˜
 int bossgun_num = 0;
 int bigbossgun_num = 0;
 int bossframe_numL, bossframe_numW;
 
-// ¸Ê ½ÃÀÛ, ³¡ ÁÂÇ¥
+// ë§µ ì‹œì‘, ë ì¢Œí‘œ
 int StartX = 130, StartY = 40, EndX = 610, EndY = 520;
 
-// »óÀÎ º¯¼ö ¼±¾ğ
+// ìƒì¸ ë³€ìˆ˜ ì„ ì–¸
 MERCHANT merchant;
 
 const int walkAnimation[MERCHANT_SPRITE_CNT] = { 0, 1, 2, 3 };
 
-// »óÁ¡ÀÌ ¿­·Á ÀÖ´ÂÁö ¿©ºÎ¸¦ ÀúÀåÇÏ´Â º¯¼ö
+// ìƒì ì´ ì—´ë ¤ ìˆëŠ”ì§€ ì—¬ë¶€ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜
 bool isShopOpen = false;
 
-// »óÀÎÀÌ ÀÔÀå ÁßÀÎ ¿©ºÎ¸¦ ÀúÀåÇÏ´Â º¯¼ö
+// ìƒì¸ì´ ì…ì¥ ì¤‘ì¸ ì—¬ë¶€ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜
 bool isEntering = false;
 bool isExit = false;
 
-// ±¸¸Å ¿Ï·á ¿©ºÎ¸¦ ÀúÀåÇÏ´Â º¯¼ö
+// êµ¬ë§¤ ì™„ë£Œ ì—¬ë¶€ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜
 bool isPurchaseComplete = false;
 int play_time;
 
-// º¸½º ½ºÅ×ÀÌÁöÀÎÁö ¿©ºÎ¸¦ ÀúÀåÇÏ´Â º¯¼ö
+// ë³´ìŠ¤ ìŠ¤í…Œì´ì§€ì¸ì§€ ì—¬ë¶€ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜
 //bool isBossStage = false;
 bool moveleft = GetAsyncKeyState(VK_LEFT) & 0x8000, moveright = GetAsyncKeyState(VK_RIGHT) & 0x8000;
 
@@ -191,20 +191,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	switch (uMsg) {
 	case WM_CREATE:
-		// À©µµ¿ì Å©±â ¼³Á¤
+		// ìœˆë„ìš° í¬ê¸° ì„¤ì •
 		GetClientRect(hWnd, &rt);
-		// ·£´ıÇÔ¼ö Áßº¹ ¹æÁö
+		// ëœë¤í•¨ìˆ˜ ì¤‘ë³µ ë°©ì§€
 		srand(time(NULL));
 		menu_start_rt = { rt.right / 5, rt.bottom / 2 - FONT_SIZE,  rt.right / 5 * 2, rt.bottom / 2 };
 		menu_exit_rt = { menu_start_rt.left, menu_start_rt.top + FONT_SIZE * 2, menu_start_rt.right, menu_start_rt.bottom + FONT_SIZE * 2 };
 		EffectBitmapLoad();
 		InitMerchant();
-		// »ç¿îµå ¼ÂÆÃ
+		// ì‚¬ìš´ë“œ ì…‹íŒ…
 		SoundSetting();
-		// ºê±İ Ãâ·Â
-		long_ch->stop();
-		ssystem->playSound(main_music, 0, false, &long_ch);
-		long_ch->setVolume(0.3);
+		// ë¸Œê¸ˆ ì¶œë ¥
+		//long_ch->stop();
+		//ssystem->playSound(main_music, 0, false, &long_ch);
+		//long_ch->setVolume(0.3);
 		break;
 	case WM_LBUTTONDOWN:
 		if (START_MENU) {
@@ -212,18 +212,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			m.y = HIWORD(lParam);
 
 			if (Menu_Is_Click(m, menu_start_rt, menu_exit_rt)) {
-				long_ch->stop();
+				/*long_ch->stop();
 				ssystem->playSound(stage_music, 0, false, &long_ch);
 				long_ch->setVolume(0.3);
-				state = IN_GAME;
-				// ÇÃ·¹ÀÌ¾î ÃÊ±â ¼³Á¤
+				*/state = IN_GAME;
+				// í”Œë ˆì´ì–´ ì´ˆê¸° ì„¤ì •
 				InitPlayer(hWnd);
 
-				// °ÔÀÓ ½ÃÀÛ Å¸ÀÌ¸Ó ¼³Á¤
+				// ê²Œì„ ì‹œì‘ íƒ€ì´ë¨¸ ì„¤ì •
 				SetTimer(hWnd, STAGE_START, 1000, NULL);
-				// ¸ó½ºÅÍ »ı¼º Å¸ÀÌ¸Ó ¼³Á¤
+				// ëª¬ìŠ¤í„° ìƒì„± íƒ€ì´ë¨¸ ì„¤ì •
 				SetTimer(hWnd, MONSTER_PRODUSE, 3000, NULL);
-				// ¸ó½ºÅÍ ÀÌµ¿ Å¸ÀÌ¸Ó ¼³Á¤
+				// ëª¬ìŠ¤í„° ì´ë™ íƒ€ì´ë¨¸ ì„¤ì •
 				SetTimer(hWnd, MONSTER_MOVE, 60, reinterpret_cast<TIMERPROC>(MonsterMove));
 				obstacles = InitObstalce(obstacles);
 				InvalidateRect(hWnd, NULL, true);
@@ -249,18 +249,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_KEYDOWN:
-		// ÀÌµ¿ Áß Å°´Ù¿î Á¦¿Ü
+		// ì´ë™ ì¤‘ í‚¤ë‹¤ìš´ ì œì™¸
 		if (animationOffset != 0) {
 			break;
 		}
-		// ÇÃ·¹ÀÌ¾î ÀÌµ¿
+		// í”Œë ˆì´ì–´ ì´ë™
 		if ((GetKeyState(VK_LEFT) < 0) && (GetKeyState(VK_UP) >= 0) && (GetKeyState(VK_DOWN) >= 0))
 		{
 			Lframe++;
 			player.P.x -= PLAYER_SPEED * player.speed;
 			frame_numW = (Lframe) % COWBOY_SPRITE_WCNT + COWBOY_SPRITE_WCNT;
 			frame_numL = 1;
-			// ÇÃ·¹ÀÌ¾î Àå¾Ö¹° Ãæµ¹ Ã¼Å©
+			// í”Œë ˆì´ì–´ ì¥ì• ë¬¼ ì¶©ëŒ ì²´í¬
 			if (PlayerBlockObject()) {
 				player.P.x += PLAYER_SPEED * player.speed;
 			}
@@ -344,7 +344,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 
-		// ÃÑ¾Ë ¹ß»ç
+		// ì´ì•Œ ë°œì‚¬
 		if ((GetKeyState(VK_F2) < 0) && (GetKeyState('1') >= 0) && (GetKeyState('3') >= 0))
 		{
 			if (bullet_count % bullet_speed == 0)
@@ -541,12 +541,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (wParam == VK_SHIFT)
 			KickBomb();
 		
-		// ¾ÆÀÌÅÛ »ç¿ë
+		// ì•„ì´í…œ ì‚¬ìš©
 		if (wParam == VK_SPACE)
 			UseItem(hWnd);
 
 		
-		// ÇÃ·¹ÀÌ¾î, ¾ÆÀÌÅÛ Ãæµ¹Ã¼Å©
+		// í”Œë ˆì´ì–´, ì•„ì´í…œ ì¶©ëŒì²´í¬
 		for (int i = 0; i < ITEM_NUM; ++i) {
 			if (item[i].show) {
 				item[i] = GetItem(player.P.x, player.P.y, item[i], i);
@@ -562,7 +562,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		InvalidateRect(hWnd, NULL, false);
 		break;
 	case WM_KEYUP:
-		// Å°º¸µå ¶¼¸é ¼­ÀÖ°Ô ÇÏ±â
+		// í‚¤ë³´ë“œ ë–¼ë©´ ì„œìˆê²Œ í•˜ê¸°
 		if (wParam == VK_LEFT)
 		{
 			Rframe = Uframe = Dframe = Lframe = 0;
@@ -583,7 +583,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			Rframe = Uframe = Dframe = Lframe = 0;
 			frame_numW = COWBOY_SPRITE_WCNT * 9;
 		}
-		// ÃÑ¾Ë ¼Óµµ Ä«¿îÆ® ÃÊ±âÈ­
+		// ì´ì•Œ ì†ë„ ì¹´ìš´íŠ¸ ì´ˆê¸°í™”
 		if (wParam == VK_F2)
 			bullet_count = 0;
 		else if (wParam == '1')
@@ -599,7 +599,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if(state == START_MENU)
 			StartMenu(hDC, rt, menu_start_rt, menu_exit_rt);
 		else if(IN_GAME){
-			// °¡¸¸È÷ ÀÖ¾îµµ Ãæµ¹Ã¼Å©
+			// ê°€ë§Œíˆ ìˆì–´ë„ ì¶©ëŒì²´í¬
 			PlayerBlockObject();
 
 			if (play_time >= STAGE_TIME) {
@@ -609,7 +609,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			GameUI(player, hDC);
 
-			// ºñÆ®¸Ê Ãâ·Â
+			// ë¹„íŠ¸ë§µ ì¶œë ¥
 			DrawBitmap(hDC, rt);
 		}
 
@@ -617,9 +617,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
-		ssystem->release();
+		/*ssystem->release();
 		ssystem->close();
-	
+	*/
 		for (int i = 1; i <= BOSS_OBSTACLE; ++i) {
 			KillTimer(hWnd, i);
 		}
@@ -651,22 +651,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void SoundSetting(void)
 {
-	// »ç¿îµå ½Ã½ºÅÛ »ı¼º
-	result = FMOD::System_Create(&ssystem);
-	if (result != FMOD_OK)
-		exit(0);
+	//// ì‚¬ìš´ë“œ ì‹œìŠ¤í…œ ìƒì„±
+	//result = FMOD::System_Create(&ssystem);
+	//if (result != FMOD_OK)
+	//	exit(0);
 
-	// »ç¿îµå ½Ã½ºÅÛ ÃÊ±âÈ­
-	ssystem->init(32, FMOD_INIT_NORMAL, extradriverdata);
+	//// ì‚¬ìš´ë“œ ì‹œìŠ¤í…œ ì´ˆê¸°í™”
+	//ssystem->init(32, FMOD_INIT_NORMAL, extradriverdata);
 
-	// »ç¿îµå »ı¼º ¹× ¼³Á¤
-	ssystem->createSound("main_music.mp3", FMOD_LOOP_NORMAL, 0, &main_music);
-	ssystem->createSound("stage_music.mp3", FMOD_LOOP_NORMAL, 0, &stage_music);
-	ssystem->createSound("boss_music.mp3", FMOD_LOOP_NORMAL, 0, &boss_music);
-	ssystem->createSound("bullet_sound.mp3", FMOD_DEFAULT, 0, &bullet_sound);
-	ssystem->createSound("hit_sound.mp3", FMOD_DEFAULT, 0, &hit_sound);
-	ssystem->createSound("boom_sound.mp3", FMOD_DEFAULT, 0, &boom_sound);
-	ssystem->createSound("item_get_sound.mp3", FMOD_DEFAULT, 0, &item_get_sound);
-	ssystem->createSound("item_use_sound.mp3", FMOD_DEFAULT, 0, &item_use_sound);
-	ssystem->createSound("gameclear_sound.mp3", FMOD_DEFAULT, 0, &gameclear_sound);
+	//// ì‚¬ìš´ë“œ ìƒì„± ë° ì„¤ì •
+	//ssystem->createSound("main_music.mp3", FMOD_LOOP_NORMAL, 0, &main_music);
+	//ssystem->createSound("stage_music.mp3", FMOD_LOOP_NORMAL, 0, &stage_music);
+	//ssystem->createSound("boss_music.mp3", FMOD_LOOP_NORMAL, 0, &boss_music);
+	//ssystem->createSound("bullet_sound.mp3", FMOD_DEFAULT, 0, &bullet_sound);
+	//ssystem->createSound("hit_sound.mp3", FMOD_DEFAULT, 0, &hit_sound);
+	//ssystem->createSound("boom_sound.mp3", FMOD_DEFAULT, 0, &boom_sound);
+	//ssystem->createSound("item_get_sound.mp3", FMOD_DEFAULT, 0, &item_get_sound);
+	//ssystem->createSound("item_use_sound.mp3", FMOD_DEFAULT, 0, &item_use_sound);
+	//ssystem->createSound("gameclear_sound.mp3", FMOD_DEFAULT, 0, &gameclear_sound);
 }

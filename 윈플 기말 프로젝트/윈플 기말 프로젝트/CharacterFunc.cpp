@@ -1,22 +1,22 @@
-#include "Header.h"
+ï»¿#include "Header.h"
 
 extern HINSTANCE g_hInst;
 extern HWND _hWnd;
 
-// »ç¿îµå
-extern FMOD::System* ssystem;
-extern FMOD::Sound* main_music;
-extern FMOD::Sound* stage_music;
-extern FMOD::Sound* boss_music;
-extern FMOD::Sound* bullet_sound;
-extern FMOD::Sound* hit_sound;
-extern FMOD::Sound* boom_sound;
-extern FMOD::Sound* item_get_sound;
-extern FMOD::Sound* item_use_sound;
-extern FMOD::Sound* gameclear_sound;
-extern FMOD::Channel* short_ch;
-extern FMOD::Channel* long_ch;
-extern FMOD::Channel* boom_ch;
+// ì‚¬ìš´ë“œ
+//extern FMOD::System* ssystem;
+//extern FMOD::Sound* main_music;
+//extern FMOD::Sound* stage_music;
+//extern FMOD::Sound* boss_music;
+//extern FMOD::Sound* bullet_sound;
+//extern FMOD::Sound* hit_sound;
+//extern FMOD::Sound* boom_sound;
+//extern FMOD::Sound* item_get_sound;
+//extern FMOD::Sound* item_use_sound;
+//extern FMOD::Sound* gameclear_sound;
+//extern FMOD::Channel* short_ch;
+//extern FMOD::Channel* long_ch;
+//extern FMOD::Channel* boom_ch;
 
 extern int frame_numW, frame_numL;
 extern PLAYER player;
@@ -41,7 +41,7 @@ extern int obstacle_num;
 extern int currentStage;
 extern int animationOffset;
 extern int stageIndex;
-extern HBITMAP hStageBitmap[5];   // ½ºÅ×ÀÌÁö ºñÆ®¸Ê º¯¼ö
+extern HBITMAP hStageBitmap[5];   // ìŠ¤í…Œì´ì§€ ë¹„íŠ¸ë§µ ë³€ìˆ˜
 extern int play_time;
 
 extern bool isEntering;
@@ -62,7 +62,7 @@ extern int StartX, StartY, EndX, EndY;
 extern int bossleft, bossright;
 extern bool moveleft, moveright;
 
-// ¸ó½ºÅÍ ID
+// ëª¬ìŠ¤í„° ID
 int normal_id;
 int respawn_id;
 int tank_id;
@@ -71,7 +71,7 @@ int boomer_id;
 
 int clear = 0;
 
-// °ø¿ë
+// ê³µìš©
 RECT GetStageRect(int x, int y)
 {
 	return { x, y, x + CELL_SIZE, y + CELL_SIZE };
@@ -90,36 +90,36 @@ void TransitionToNextStage(HWND hWnd)
 
 	if (currentStage == STAGE_COUNT)
 	{
-		// ÇöÀç ½ºÅ×ÀÌÁö°¡ ¸¶Áö¸· ½ºÅ×ÀÌÁöÀÎ °æ¿ì Ã³¸®
+		// í˜„ì¬ ìŠ¤í…Œì´ì§€ê°€ ë§ˆì§€ë§‰ ìŠ¤í…Œì´ì§€ì¸ ê²½ìš° ì²˜ë¦¬
 		return;
 	}
 
 	if (currentStage == 4)
 	{
-		long_ch->stop();
+		/*long_ch->stop();
 		ssystem->playSound(boss_music, 0, false, &long_ch);
 		long_ch->setVolume(0.3);
-		InitBoss(hWnd);
+		*/InitBoss(hWnd);
 
 		KillTimer(hWnd, STAGE_START);
-		// º¸½º Å¸ÀÌ¸Ó ¼³Á¤
+		// ë³´ìŠ¤ íƒ€ì´ë¨¸ ì„¤ì •
 		SetTimer(hWnd, BOSS_MOVE, 120, reinterpret_cast<TIMERPROC>(BossFollowPlayer));
-		//// º¸½º ÃÑ¾Ë ¹ß»ç Å¸ÀÌ¸Ó ¼³Á¤
+		//// ë³´ìŠ¤ ì´ì•Œ ë°œì‚¬ íƒ€ì´ë¨¸ ì„¤ì •
 		//SetTimer(hWnd, BOSS_SHOOT, 3000, reinterpret_cast<TIMERPROC>(Shooting));
-		// Àå¾Ö¹° ¼³Ä¡ Å¸ÀÌ¸Ó
+		// ì¥ì• ë¬¼ ì„¤ì¹˜ íƒ€ì´ë¨¸
 		//SetTimer(hWnd, BOSS_OBSTACLE, 1000, reinterpret_cast<TIMERPROC>(ObstacleInstallation));
 	}
 
-	// ÁÖÀÎ°ø°ú ½ºÅ×ÀÌÁö°¡ ¾Æ·¡·Î ³»·Á°¡¸é¼­ ´ÙÀ½ ½ºÅ×ÀÌÁö·Î ÀüÈ¯
-	int animationFrames = BOARD_SIZE;  // ¾Ö´Ï¸ŞÀÌ¼Ç ÇÁ·¹ÀÓ ¼ö
+	// ì£¼ì¸ê³µê³¼ ìŠ¤í…Œì´ì§€ê°€ ì•„ë˜ë¡œ ë‚´ë ¤ê°€ë©´ì„œ ë‹¤ìŒ ìŠ¤í…Œì´ì§€ë¡œ ì „í™˜
+	int animationFrames = BOARD_SIZE;  // ì• ë‹ˆë©”ì´ì…˜ í”„ë ˆì„ ìˆ˜
 
-	// ¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§ÇÑ Å¸ÀÌ¸Ó ¼³Á¤
+	// ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ íƒ€ì´ë¨¸ ì„¤ì •
 	SetTimer(hWnd, STAGE_ANIMATION, ANIMATION_SPEED, reinterpret_cast<TIMERPROC>(AnimateStageTransition));
 
-	// ¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§ÇÑ ÀüÈ¯ Á¤º¸ ¼³Á¤
-	stageIndex = currentStage;  // ÇöÀç ½ºÅ×ÀÌÁö ÀÎµ¦½º ÀúÀå
+	// ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ ì „í™˜ ì •ë³´ ì„¤ì •
+	stageIndex = currentStage;  // í˜„ì¬ ìŠ¤í…Œì´ì§€ ì¸ë±ìŠ¤ ì €ì¥
 
-	// È­¸é °»½Å
+	// í™”ë©´ ê°±ì‹ 
 	InvalidateRect(hWnd, NULL, TRUE);
 }
 
@@ -128,11 +128,11 @@ void CALLBACK AnimateStageTransition(HWND hWnd, UINT uMsg, UINT idEvent, DWORD d
 {
 	static bool is_first = true;
 	static int Dframe = 0;
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ÇÁ·¹ÀÓ °£°İ °è»ê
-	int animationFrames = BOARD_SIZE;  // ¾Ö´Ï¸ŞÀÌ¼Ç ÇÁ·¹ÀÓ ¼ö
+	// ì• ë‹ˆë©”ì´ì…˜ í”„ë ˆì„ ê°„ê²© ê³„ì‚°
+	int animationFrames = BOARD_SIZE;  // ì• ë‹ˆë©”ì´ì…˜ í”„ë ˆì„ ìˆ˜
 	int frameHeight = (BOARD_SIZE * CELL_SIZE) / animationFrames;
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¿ÀÇÁ¼Â Áõ°¡
+	// ì• ë‹ˆë©”ì´ì…˜ ì˜¤í”„ì…‹ ì¦ê°€
 	animationOffset += frameHeight;
 
 	if (is_first) {
@@ -142,55 +142,55 @@ void CALLBACK AnimateStageTransition(HWND hWnd, UINT uMsg, UINT idEvent, DWORD d
 	}
 	else {
 		Dframe++;
-		// ÁÖÀÎ°øÀÇ À§Ä¡¸¦ ¾Æ·¡·Î ÀÌµ¿
+		// ì£¼ì¸ê³µì˜ ìœ„ì¹˜ë¥¼ ì•„ë˜ë¡œ ì´ë™
 		player.P.y += PLAYER_SPEED;
 		frame_numW = (Dframe) % COWBOY_SPRITE_WCNT + COWBOY_SPRITE_WCNT;
 		frame_numL = 9;
 	}
 
-	// ´ÙÀ½ ½ºÅ×ÀÌÁöÀÇ ºñÆ®¸Ê ±×¸®±â
+	// ë‹¤ìŒ ìŠ¤í…Œì´ì§€ì˜ ë¹„íŠ¸ë§µ ê·¸ë¦¬ê¸°
 	HDC hdc = GetDC(hWnd);
 	HDC hMemDC = CreateCompatibleDC(hdc);
 	HBITMAP hOldBitmap = (HBITMAP)SelectObject(hMemDC, hStageBitmap[currentStage + 1]);
 
-	// ´ÙÀ½ ½ºÅ×ÀÌÁöÀÇ ÀÏºÎ¸¸ ±×¸®±â
+	// ë‹¤ìŒ ìŠ¤í…Œì´ì§€ì˜ ì¼ë¶€ë§Œ ê·¸ë¦¬ê¸°
 	BitBlt(hdc, 0, animationOffset, BOARD_SIZE * CELL_SIZE, animationOffset, hMemDC, 0, 0, SRCCOPY);
 
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteDC(hMemDC);
 	ReleaseDC(hWnd, hdc);
 
-	// ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¿Ï·áµÇ¾úÀ» ¶§ Ã³¸®
+	// ì• ë‹ˆë©”ì´ì…˜ì´ ì™„ë£Œë˜ì—ˆì„ ë•Œ ì²˜ë¦¬
 	if (animationOffset >= BOARD_SIZE * CELL_SIZE)
 	{
-		// ÇöÀç ½ºÅ×ÀÌÁö ¾÷µ¥ÀÌÆ®
+		// í˜„ì¬ ìŠ¤í…Œì´ì§€ ì—…ë°ì´íŠ¸
 		currentStage++;
-		// Àå¾Ö¹° ÃÊ±âÈ­
+		// ì¥ì• ë¬¼ ì´ˆê¸°í™”
 		obstacles = InitObstalce(obstacles);
-		// ¾ÆÀÌÅÛ ÃÊ±âÈ­
+		// ì•„ì´í…œ ì´ˆê¸°í™”
 		for (int i = 0; i < item_num.num; ++i) {
 			item[i] = {};
 			item_num = {};
 		}
 
 		Dframe = 0;
-		animationOffset = 0;  // ¾Ö´Ï¸ŞÀÌ¼Ç ¿ÀÇÁ¼Â ÃÊ±âÈ­
+		animationOffset = 0;  // ì• ë‹ˆë©”ì´ì…˜ ì˜¤í”„ì…‹ ì´ˆê¸°í™”
 		is_first = true;
 
-		// ¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§ÇÑ Å¸ÀÌ¸Ó ÇØÁ¦
+		// ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ íƒ€ì´ë¨¸ í•´ì œ
 		KillTimer(hWnd, STAGE_ANIMATION);
 
 		if (currentStage != 5) {
-			// °ÔÀÓ ½ÃÀÛ Å¸ÀÌ¸Ó ¼³Á¤
+			// ê²Œì„ ì‹œì‘ íƒ€ì´ë¨¸ ì„¤ì •
 			SetTimer(hWnd, STAGE_START, 1000, NULL);
 
 		}
-		// ¸ó½ºÅÍ »ı¼º Å¸ÀÌ¸Ó ¼³Á¤
+		// ëª¬ìŠ¤í„° ìƒì„± íƒ€ì´ë¨¸ ì„¤ì •
 		SetTimer(hWnd, MONSTER_PRODUSE, 3000, NULL);
-		// ¸ó½ºÅÍ ÀÌµ¿ Å¸ÀÌ¸Ó ¼³Á¤
+		// ëª¬ìŠ¤í„° ì´ë™ íƒ€ì´ë¨¸ ì„¤ì •
 		SetTimer(hWnd, MONSTER_MOVE, 60, reinterpret_cast<TIMERPROC>(MonsterMove));
 
-		// È­¸é °»½Å
+		// í™”ë©´ ê°±ì‹ 
 		InvalidateRect(hWnd, NULL, FALSE);
 	}
 }
@@ -199,25 +199,25 @@ void BuyItem(PLAYER* player, TCHAR* itemname, int itemprice) {
 
 	if (player->coin >= itemprice) {
 
-		short_ch->stop();
+		/*short_ch->stop();
 		ssystem->playSound(item_get_sound, 0, false, &short_ch);
-		// ÄÚÀÎ Â÷°¨
+		*/// ì½”ì¸ ì°¨ê°
 		player->coin -= itemprice;
 
-		// ½Å¹ß ¾ÆÀÌÅÛÀÎ °æ¿ì ÀÌµ¿¼Óµµ Áõ°¡
-		if (_tcscmp(itemname, L"½Å¹ß") == 0) {
+		// ì‹ ë°œ ì•„ì´í…œì¸ ê²½ìš° ì´ë™ì†ë„ ì¦ê°€
+		if (_tcscmp(itemname, L"ì‹ ë°œ") == 0) {
 			player->speed += 2;
 		}
-		// ÃÑ¾Ë ¾ÆÀÌÅÛÀÎ °æ¿ì °ø°İ·Â Áõ°¡
-		else if (_tcscmp(itemname, L"ÃÑ¾Ë") == 0) {
+		// ì´ì•Œ ì•„ì´í…œì¸ ê²½ìš° ê³µê²©ë ¥ ì¦ê°€
+		else if (_tcscmp(itemname, L"ì´ì•Œ") == 0) {
 			player->ATP += 5;
 		}
-		// ÃÑ ¾ÆÀÌÅÛÀÎ °æ¿ì °ø°İ ¼Óµµ Áõ°¡
-		else if (_tcscmp(itemname, L"ÃÑ") == 0) {
+		// ì´ ì•„ì´í…œì¸ ê²½ìš° ê³µê²© ì†ë„ ì¦ê°€
+		else if (_tcscmp(itemname, L"ì´") == 0) {
 			bullet_speed += 5;
 		}
 
-		// ¾ÆÀÌÅÛ ±¸¸Å Á¤º¸ ¾÷µ¥ÀÌÆ®
+		// ì•„ì´í…œ êµ¬ë§¤ ì •ë³´ ì—…ë°ì´íŠ¸
 		_tcscmp(player->shopt_item.name, itemname);
 		player->shopt_item.price = itemprice;
 	}
@@ -230,12 +230,12 @@ void GetShopItem(int Px, int Py, SHOPITEM shopitem)
 	RECT slug_rt = { 200, 160, 270, 230 };
 	RECT gun_rt = { 290, 160, 360, 230 };
 	RECT dest;
-	// ¾ÆÀÌÅÛ, ÇÃ·¹ÀÌ¾î Ãæµ¹Ã¼Å©
+	// ì•„ì´í…œ, í”Œë ˆì´ì–´ ì¶©ëŒì²´í¬
 	bool buyshoe = IntersectRect(&dest, &player_rt, &shoe_rt);
 	bool buyslug = IntersectRect(&dest, &player_rt, &slug_rt);
 	bool buygun = IntersectRect(&dest, &player_rt, &gun_rt);
 
-	// ÇÃ·¹ÀÌ¾î°¡ ½Å¹ß ÁÂÇ¥¿¡ À§Ä¡ÇÒ ½Ã
+	// í”Œë ˆì´ì–´ê°€ ì‹ ë°œ ì¢Œí‘œì— ìœ„ì¹˜í•  ì‹œ
 	if (buyshoe)
 	{
 		BuyItem(&player, itemList[0].name, itemList[0].price);
@@ -296,7 +296,7 @@ void ShopUI(HDC memdc)
 {
 	if (isShopOpen) {
 
-		// »óÁ¡ ¾ÆÀÌÅÛ Ç¥½Ã
+		// ìƒì  ì•„ì´í…œ í‘œì‹œ
 		int xShop = 150;
 		int yShop = 200;
 
@@ -310,17 +310,17 @@ void ShopUI(HDC memdc)
 
 		for (int i = 0; i < 3; i++)
 		{
-			SetBkMode(memdc, TRANSPARENT); // ¹è°æÀ» Åõ¸íÇÏ°Ô ¼³Á¤
-			// ¾ÆÀÌÅÛ Á¤º¸ Ãâ·Â
+			SetBkMode(memdc, TRANSPARENT); // ë°°ê²½ì„ íˆ¬ëª…í•˜ê²Œ ì„¤ì •
+			// ì•„ì´í…œ ì •ë³´ ì¶œë ¥
 			TextOut(memdc, xShop - 40, yShop, itemList[i].name, lstrlen(itemList[i].name));
-			TextOut(memdc, xShop - 13, yShop, L"°¡°İ:", 5);
+			TextOut(memdc, xShop - 13, yShop, L"ê°€ê²©:", 5);
 			TCHAR pricenum[20] = {};
 			wsprintf(pricenum, L"%d", itemList[i].price);
 			TextOut(memdc, xShop + 20, yShop, pricenum, lstrlen(pricenum));
-			xShop += 90;        // ´ÙÀ½ ¾ÆÀÌÅÛ À§Ä¡ Á¶Á¤
+			xShop += 90;        // ë‹¤ìŒ ì•„ì´í…œ ìœ„ì¹˜ ì¡°ì •
 		}
 
-		// ¾ÆÀÌÅÛ ±¸¸Å ¿Ï·á ÈÄ »óÀÎ ÅğÀå
+		// ì•„ì´í…œ êµ¬ë§¤ ì™„ë£Œ í›„ ìƒì¸ í‡´ì¥
 		if (isPurchaseComplete)
 		{
 			merchant.current_frame = 2;
@@ -333,23 +333,23 @@ void ShopUI(HDC memdc)
 	}
 }
 
-// ÇÃ·¹ÀÌ¾î
+// í”Œë ˆì´ì–´
 void InitPlayer(HWND hWnd)
 {
 	player = {};
 
-	// ÇÃ·¹ÀÌ¾î ½ÃÀÛ ½ÃÆ® ÁöÁ¤
+	// í”Œë ˆì´ì–´ ì‹œì‘ ì‹œíŠ¸ ì§€ì •
 	frame_numW = 1;
 	frame_numL = 9;
 
-	// ÃÑ¾Ë ÀÌµ¿ Å¸ÀÌ¸Ó
+	// ì´ì•Œ ì´ë™ íƒ€ì´ë¨¸
 	SetTimer(hWnd, BULLET_MOVE, 100, reinterpret_cast<TIMERPROC>(BulletMove));
 
-	// ÇÃ·¹ÀÌ¾î ÃÊ±â À§Ä¡ ¼³Á¤
+	// í”Œë ˆì´ì–´ ì´ˆê¸° ìœ„ì¹˜ ì„¤ì •
 	player.P.x = CELL_SIZE * BOARD_SIZE / 2;
 	player.P.y = CELL_SIZE * BOARD_SIZE / 2;
 
-	// ÇÃ·¹ÀÌ¾î ÃÊ±â ½ºÅİ ¼³Á¤
+	// í”Œë ˆì´ì–´ ì´ˆê¸° ìŠ¤í…Ÿ ì„¤ì •
 	player.ATP = 5;
 	player.speed = 1;
 	player.life = 5;
@@ -364,7 +364,7 @@ bool PlayerBlockObject()
 	RECT player_rt = GetStageRect(player.P.x, player.P.y);
 	RECT map_out_rt = {};
 
-	// Àå¾Ö¹° Ãæµ¹ Ã¼Å©
+	// ì¥ì• ë¬¼ ì¶©ëŒ ì²´í¬
 	if (obstacles) {
 		for (int i = 0; i < obstacle_num; ++i) {
 			RECT obstacle_rt = GetStageRect(obstacles[i].p.x, obstacles[i].p.y);
@@ -374,18 +374,18 @@ bool PlayerBlockObject()
 				}
 			}
 			else {
-				// ½ºÅ×ÀÌÁö ¾Ö´Ï¸ŞÀÌ¼Ç ÀÛµ¿ ½Ã Ãæµ¹ X
+				// ìŠ¤í…Œì´ì§€ ì• ë‹ˆë©”ì´ì…˜ ì‘ë™ ì‹œ ì¶©ëŒ X
 				if (animationOffset == 0) {
 					if (IntersectRect(&dest, &player_rt, &obstacle_rt)) {
 						player.life--;
 						if (player.life == 0) {
-							// °ÔÀÓ ¿À¹öÃ³¸®
+							// ê²Œì„ ì˜¤ë²„ì²˜ë¦¬
 							PostQuitMessage(0);
 						}
 						while (1) {
 							MONSTER m = {};
 							player.P = { rand() % ((BOARD_SIZE - 2) * CELL_SIZE) + CELL_SIZE, rand() % ((BOARD_SIZE - 2) * CELL_SIZE + CELL_SIZE) };
-							// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+							// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 							if (!MonsterConflict(player.P, m)) {
 								break;
 							}
@@ -397,7 +397,7 @@ bool PlayerBlockObject()
 		}
 	}
 
-	// ÇÃ·¹ÀÌ¾î ¸ó½ºÅÍ Ãæµ¹Ã¼Å©
+	// í”Œë ˆì´ì–´ ëª¬ìŠ¤í„° ì¶©ëŒì²´í¬
 	if (monster_head) {
 		RECT player_rt = GetStageRect(player.P.x, player.P.y);
 		RECT dest;
@@ -405,18 +405,18 @@ bool PlayerBlockObject()
 		while (p->next != NULL) {
 			RECT m_rt = GetStageRect(p->data.P.x, p->data.P.y);
 			if (IntersectRect(&dest, &player_rt, &m_rt)) {
-				short_ch->stop();
+				/*short_ch->stop();
 				ssystem->playSound(hit_sound, 0, false, &short_ch);
-				player.life--;
+				*/player.life--;
 				if (player.life == 0) {
-					// °ÔÀÓ ¿À¹öÃ³¸®
+					// ê²Œì„ ì˜¤ë²„ì²˜ë¦¬
 					PostQuitMessage(0);
 				}
 				if (currentStage != 5) {
 					while (1) {
 						MONSTER m = {};
 						player.P = { rand() % ((BOARD_SIZE - 2) * CELL_SIZE) + CELL_SIZE, rand() % ((BOARD_SIZE - 2) * CELL_SIZE + CELL_SIZE) };
-						// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+						// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 						if (!MonsterConflict(player.P, m)) {
 							break;
 						}
@@ -426,7 +426,7 @@ bool PlayerBlockObject()
 					while (1) {
 						MONSTER m = {};
 						player.P = { rand() % ((BOARD_SIZE - 1) * CELL_SIZE), rand() % (5 * CELL_SIZE) };
-						// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+						// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 						if (!MonsterConflict(player.P, m)) {
 							break;
 						}
@@ -438,9 +438,9 @@ bool PlayerBlockObject()
 		}
 		RECT m_rt = GetStageRect(p->data.P.x, p->data.P.y);
 		if (IntersectRect(&dest, &player_rt, &m_rt)) {
-			short_ch->stop();
+			/*short_ch->stop();
 			ssystem->playSound(hit_sound, 0, false, &short_ch);
-			player.life--;
+			*/player.life--;
 			if (player.life == 0) {
 				PostQuitMessage(0);
 
@@ -450,7 +450,7 @@ bool PlayerBlockObject()
 				while (1) {
 					MONSTER m = {};
 					player.P = { rand() % ((BOARD_SIZE - 2) * CELL_SIZE) + CELL_SIZE, rand() % ((BOARD_SIZE - 2) * CELL_SIZE + CELL_SIZE) };
-					// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+					// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 					if (!MonsterConflict(player.P, m)) {
 						break;
 					}
@@ -460,7 +460,7 @@ bool PlayerBlockObject()
 				while (1) {
 					MONSTER m = {};
 					player.P = { rand() % ((BOARD_SIZE - 1) * CELL_SIZE), rand() % (5 * CELL_SIZE) };
-					// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+					// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 					if (!MonsterConflict(player.P, m)) {
 						break;
 					}
@@ -470,24 +470,24 @@ bool PlayerBlockObject()
 		}
 	}
 
-	// ¸Ê ¹Û Ãæµ¹ Ã¼Å©
+	// ë§µ ë°– ì¶©ëŒ ì²´í¬
 	for (int i = 0; i <= 16; ++i) {
-		// ¼­ÂÊ
+		// ì„œìª½
 		map_out_rt = GetStageRect(-1 * CELL_SIZE, i * CELL_SIZE);
 		if (IntersectRect(&dest, &player_rt, &map_out_rt)) {
 			return true;
 		}
-		// µ¿ÂÊ
+		// ë™ìª½
 		map_out_rt = GetStageRect(BOARD_SIZE * CELL_SIZE, i * CELL_SIZE);
 		if (IntersectRect(&dest, &player_rt, &map_out_rt)) {
 			return true;
 		}
-		// ºÏÂÊ
+		// ë¶ìª½
 		map_out_rt = GetStageRect(i * CELL_SIZE, -1 * CELL_SIZE);
 		if (IntersectRect(&dest, &player_rt, &map_out_rt)) {
 			return true;
 		}
-		// ³²ÂÊ
+		// ë‚¨ìª½
 		map_out_rt = GetStageRect(i * CELL_SIZE, BOARD_SIZE * CELL_SIZE);
 		if (IntersectRect(&dest, &player_rt, &map_out_rt)) {
 			if (play_time >= STAGE_TIME) {
@@ -514,30 +514,30 @@ bool PlayerBlockObject()
 	return false;
 }
 
-// ÃÑ¾Ë
+// ì´ì•Œ
 void CALLBACK BulletMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
-	// ÃÑ¾Ë À§Ä¡ º¯°æ
+	// ì´ì•Œ ìœ„ì¹˜ ë³€ê²½
 	for (int i = 0; i < bullet_num; i++)
 	{
 		bullet[i].P.x += BULLET_SPEED * bullet[i].direct.x;
 		bullet[i].P.y += BULLET_SPEED * bullet[i].direct.y;
 	}
 
-	// ÃÑ¾Ë »èÁ¦
+	// ì´ì•Œ ì‚­ì œ
 	DelBullet();
 
-	//Paint È£Ãâ
+	//Paint í˜¸ì¶œ
 	InvalidateRect(hWnd, NULL, false);
 }
 
 void MakeBullet(void)
 {
-	short_ch->stop();
+	/*short_ch->stop();
 	ssystem->playSound(bullet_sound, 0, false, &short_ch);
-	// ÃÑ¾Ë Ãß°¡
+	*/// ì´ì•Œ ì¶”ê°€
 	bullet_num++;
-	// µ¿ÀûÇÒ´ç
+	// ë™ì í• ë‹¹
 	if (bullet == NULL)
 		bullet = (BULLET*)malloc(sizeof(BULLET) * bullet_num);
 	else
@@ -553,7 +553,7 @@ void MakeBullet(void)
 
 void SetDirect(int num)
 {
-	// ÃÑ¾Ë ¹æÇâ ÁöÁ¤
+	// ì´ì•Œ ë°©í–¥ ì§€ì •
 	switch (num)
 	{
 	case 1:
@@ -636,7 +636,7 @@ void DelBullet(void)
 			free(temp);
 		}
 
-		// ÃÑ¾Ë°ú ¸ó½ºÅÍ Ãæµ¹Ã¼Å©
+		// ì´ì•Œê³¼ ëª¬ìŠ¤í„° ì¶©ëŒì²´í¬
 		if (monster_head) {
 			MONSTERNODE* p = monster_head;
 			RECT dest = {};
@@ -646,7 +646,7 @@ void DelBullet(void)
 				bullet_rt = { bullet[i].P.x, bullet[i].P.y, bullet[i].P.x + 5, bullet[i].P.y + 5 };
 				monster_rt = GetStageRect(p->data.P.x, p->data.P.y);
 				if (IntersectRect(&dest, &bullet_rt, &monster_rt)) {
-					// ÃÑ¾Ë »èÁ¦
+					// ì´ì•Œ ì‚­ì œ
 					bullet_num--;
 					for (int j = i; j < bullet_num; j++)
 						bullet[j] = bullet[j + 1];
@@ -657,7 +657,7 @@ void DelBullet(void)
 					memcpy(bullet, temp, sizeof(BULLET) * bullet_num);
 					free(temp);
 
-					//¸ó½ºÅÍ HP
+					//ëª¬ìŠ¤í„° HP
 					p->data.HP -= player.ATP;
 					if (p->data.HP <= 0) {
 						if (p->data.name[0] == 'R' && !p->data.skill) {
@@ -665,12 +665,12 @@ void DelBullet(void)
 							InsertMonster(&respawn_head, p->data);
 						}
 						else {
-							// »ç¸Á ÀÌÆåÆ® °´Ã¼ Ãß°¡
+							// ì‚¬ë§ ì´í™íŠ¸ ê°ì²´ ì¶”ê°€
 							BOMB dead_data;
 							InitBomb(&dead_data, p->data);
 							InsertBomb(&dead_head, dead_data);
 						}
-						// ¸ó½ºÅÍ »èÁ¦
+						// ëª¬ìŠ¤í„° ì‚­ì œ
 						p = DelMonster(&monster_head, p->data.name);
 						if (p->next == NULL) break;
 					}
@@ -681,7 +681,7 @@ void DelBullet(void)
 			bullet_rt = { bullet[i].P.x, bullet[i].P.y, bullet[i].P.x + 5, bullet[i].P.y + 5 };
 			monster_rt = GetStageRect(p->data.P.x, p->data.P.y);
 			if (IntersectRect(&dest, &bullet_rt, &monster_rt)) {
-				// ÃÑ¾Ë »èÁ¦
+				// ì´ì•Œ ì‚­ì œ
 				bullet_num--;
 				for (int j = i; j < bullet_num; j++)
 					bullet[j] = bullet[j + 1];
@@ -692,7 +692,7 @@ void DelBullet(void)
 				memcpy(bullet, temp, sizeof(BULLET) * bullet_num);
 				free(temp);
 
-				//¸ó½ºÅÍ HP
+				//ëª¬ìŠ¤í„° HP
 				p->data.HP -= player.ATP;
 				if (p->data.HP <= 0) {
 					if (p->data.name[0] == 'R' && !p->data.skill) {
@@ -700,12 +700,12 @@ void DelBullet(void)
 						InsertMonster(&respawn_head, p->data);
 					}
 					else {
-						// »ç¸Á ÀÌÆåÆ® °´Ã¼ Ãß°¡
+						// ì‚¬ë§ ì´í™íŠ¸ ê°ì²´ ì¶”ê°€
 						BOMB dead_data;
 						InitBomb(&dead_data, p->data);
 						InsertBomb(&dead_head, dead_data);
 					}
-					// ¸ó½ºÅÍ »èÁ¦
+					// ëª¬ìŠ¤í„° ì‚­ì œ
 					DelMonster(&monster_head, p->data.name);
 				}
 			}
@@ -720,9 +720,9 @@ void DelBullet(void)
 				boss.hp -= player.ATP;
 				if (clear == 0) {
 					if (boss.hp <= 0) {
-						short_ch->stop();
+						/*short_ch->stop();
 						ssystem->playSound(gameclear_sound, 0, false, &short_ch);
-						TCHAR text[30] = L"°ÔÀÓ Å¬¸®¾î ÇÏ¼Ì½À´Ï´Ù!";
+						*/TCHAR text[30] = L"ê²Œì„ í´ë¦¬ì–´ í•˜ì…¨ìŠµë‹ˆë‹¤!";
 						TCHAR text_caption[30] = L"CowBoy";
 						clear++;
 						for (int i = 1; i <= BOSS_OBSTACLE; ++i) {
@@ -758,7 +758,7 @@ void ShotgunBullet(int n1, int n2, int n3)
 {
 	int num[3] = { n1, n2, n3 };
 
-	// ÃÑ¾Ë ¹æÇâº° 3°³ »ı¼º
+	// ì´ì•Œ ë°©í–¥ë³„ 3ê°œ ìƒì„±
 	for (int i = 0; i < 3; i++)
 	{
 		MakeBullet();
@@ -768,7 +768,7 @@ void ShotgunBullet(int n1, int n2, int n3)
 
 void WaterWheelBullet(void)
 {
-	// ¸ğµç ¹æÇâ ÃÑ¾Ë »ı¼º
+	// ëª¨ë“  ë°©í–¥ ì´ì•Œ ìƒì„±
 	for (int i = 0; i < 8; i++)
 	{
 		MakeBullet();
@@ -776,17 +776,17 @@ void WaterWheelBullet(void)
 	}
 }
 
-// ¾ÆÀÌÅÛ
+// ì•„ì´í…œ
 void CALLBACK CountItemTime(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
 	if (player.effect_item.effect) {
-		// ¾ÆÀÌÅÛ Áö¼Ó½Ã°£ ÃøÁ¤
+		// ì•„ì´í…œ ì§€ì†ì‹œê°„ ì¸¡ì •
 		player.effect_item.use_cnt++;
 
-		// ¾ÆÀÌÅÛ ´É·Â Á¾·á
+		// ì•„ì´í…œ ëŠ¥ë ¥ ì¢…ë£Œ
 		if (player.effect_item.use_cnt == 5)
 		{
-			// 1: ¸ñ¼û, 2: ÄÚÀÎ, 3: Ä¿ÇÇ, 4: ÅºÃ¢, 5: º­¶ô, 6: ¼¦°Ç, 7: ¹°·¹¹ÙÄû, 8: ½Ã°è
+			// 1: ëª©ìˆ¨, 2: ì½”ì¸, 3: ì»¤í”¼, 4: íƒ„ì°½, 5: ë²¼ë½, 6: ìƒ·ê±´, 7: ë¬¼ë ˆë°”í€´, 8: ì‹œê³„
 			if (player.effect_item.num == 3)
 				player.speed--;
 			else if (player.effect_item.num == 4)
@@ -795,12 +795,12 @@ void CALLBACK CountItemTime(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 				player.bullet = false;
 			else if (player.effect_item.num == 8)
 			{
-				// °ÔÀÓ ½ÃÀÛ Å¸ÀÌ¸Ó ¼³Á¤
+				// ê²Œì„ ì‹œì‘ íƒ€ì´ë¨¸ ì„¤ì •
 				SetTimer(hWnd, STAGE_START, 1000, NULL);
-				// ¸ó½ºÅÍ »ı¼º Å¸ÀÌ¸Ó ´Ù½Ã ½ÃÀÛ
+				// ëª¬ìŠ¤í„° ìƒì„± íƒ€ì´ë¨¸ ë‹¤ì‹œ ì‹œì‘
 				
 				if (play_time >= STAGE_TIME) {
-					// ¸ó½ºÅÍ ÀÌµ¿ Å¸ÀÌ¸Ó ´Ù½Ã ½ÃÀÛ
+					// ëª¬ìŠ¤í„° ì´ë™ íƒ€ì´ë¨¸ ë‹¤ì‹œ ì‹œì‘
 					SetTimer(_hWnd, MONSTER_MOVE, 60, reinterpret_cast<TIMERPROC>(MonsterMove));
 				}
 				else {
@@ -821,7 +821,7 @@ void CALLBACK CountItemTime(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 		else if (player.effect_item.use_cnt == 1 && player.effect_item.num == 5)
 		{
 			if (play_time >= STAGE_TIME) {
-				// ¸ó½ºÅÍ ÀÌµ¿ Å¸ÀÌ¸Ó ´Ù½Ã ½ÃÀÛ
+				// ëª¬ìŠ¤í„° ì´ë™ íƒ€ì´ë¨¸ ë‹¤ì‹œ ì‹œì‘
 				SetTimer(_hWnd, MONSTER_MOVE, 60, reinterpret_cast<TIMERPROC>(MonsterMove));
 			}
 			else {
@@ -846,22 +846,22 @@ ITEM GetItem(int Px, int Py, ITEM item_, int idx)
 	RECT player_rt = { Px, Py, Px + CELL_SIZE, Py + CELL_SIZE };
 	RECT item_rt = { item_.P.x, item_.P.y, item_.P.x + CELL_SIZE, item_.P.y + CELL_SIZE };
 	RECT dest;
-	// ¾ÆÀÌÅÛ, ÇÃ·¹ÀÌ¾î Ãæµ¹Ã¼Å©
+	// ì•„ì´í…œ, í”Œë ˆì´ì–´ ì¶©ëŒì²´í¬
 	bool result = IntersectRect(&dest, &player_rt, &item_rt);
 
-	// ÇÃ·¹ÀÌ°¡ ¾ÆÀÌÅÛÀ» ¸Ô¾úÀ» ½Ã
+	// í”Œë ˆì´ê°€ ì•„ì´í…œì„ ë¨¹ì—ˆì„ ì‹œ
 	if (result)
 	{
-		short_ch->stop();
+		/*short_ch->stop();
 		ssystem->playSound(item_get_sound, 0, false, &short_ch);
-		// ¾ÆÀÌÅÛ º¸ÀÌ±â
+		*/// ì•„ì´í…œ ë³´ì´ê¸°
 		item_.show = false;
-		// ÇÃ·¹ÀÌ¾î°¡ ¾ÆÀÌÅÛ Áö´Ï°í ÀÖ°Ô ÇÏ±â
+		// í”Œë ˆì´ì–´ê°€ ì•„ì´í…œ ì§€ë‹ˆê³  ìˆê²Œ í•˜ê¸°
 		player.item = true;
 		player.item_idx = idx;
 
-		// 1: ¸ñ¼û, 2: ÄÚÀÎ, 3: Ä¿ÇÇ, 4: ÅºÃ¢, 5: º­¶ô, 6: ¼¦°Ç, 7: ¹°·¹¹ÙÄû, 8: ½Ã°è
-		// ¸ñ¼û, ÄÚÀÎ °¹¼ö Áõ°¡
+		// 1: ëª©ìˆ¨, 2: ì½”ì¸, 3: ì»¤í”¼, 4: íƒ„ì°½, 5: ë²¼ë½, 6: ìƒ·ê±´, 7: ë¬¼ë ˆë°”í€´, 8: ì‹œê³„
+		// ëª©ìˆ¨, ì½”ì¸ ê°¯ìˆ˜ ì¦ê°€
 		if (item_.num == 1)
 			player.life++;
 		else if (item_.num == 2)
@@ -875,11 +875,11 @@ void UseItem(HWND hWnd)
 {
 	if (player.item)
 	{
-		short_ch->stop();
+		/*short_ch->stop();
 		ssystem->playSound(item_use_sound, 0, false, &short_ch);
-		// ÀÌÀü ¾ÆÀÌÅÛ ´É·Â Á¾·á
+		*/// ì´ì „ ì•„ì´í…œ ëŠ¥ë ¥ ì¢…ë£Œ
 		if (player.effect_item.effect) {
-			// 1: ¸ñ¼û, 2: ÄÚÀÎ, 3: Ä¿ÇÇ, 4: ÅºÃ¢, 5: º­¶ô, 6: ¼¦°Ç, 7: ¹°·¹¹ÙÄû, 8: ½Ã°è
+			// 1: ëª©ìˆ¨, 2: ì½”ì¸, 3: ì»¤í”¼, 4: íƒ„ì°½, 5: ë²¼ë½, 6: ìƒ·ê±´, 7: ë¬¼ë ˆë°”í€´, 8: ì‹œê³„
 			if (player.effect_item.num == 3)
 				player.speed--;
 			else if (player.effect_item.num == 4)
@@ -888,12 +888,12 @@ void UseItem(HWND hWnd)
 				player.bullet = false;
 			else if (player.effect_item.num == 8)
 			{
-				// °ÔÀÓ ½ÃÀÛ Å¸ÀÌ¸Ó ¼³Á¤
+				// ê²Œì„ ì‹œì‘ íƒ€ì´ë¨¸ ì„¤ì •
 				SetTimer(hWnd, STAGE_START, 1000, NULL);
-				// ¸ó½ºÅÍ »ı¼º Å¸ÀÌ¸Ó ´Ù½Ã ½ÃÀÛ
+				// ëª¬ìŠ¤í„° ìƒì„± íƒ€ì´ë¨¸ ë‹¤ì‹œ ì‹œì‘
 
 				if (play_time >= STAGE_TIME) {
-					// ¸ó½ºÅÍ ÀÌµ¿ Å¸ÀÌ¸Ó ´Ù½Ã ½ÃÀÛ
+					// ëª¬ìŠ¤í„° ì´ë™ íƒ€ì´ë¨¸ ë‹¤ì‹œ ì‹œì‘
 					SetTimer(_hWnd, MONSTER_MOVE, 60, reinterpret_cast<TIMERPROC>(MonsterMove));
 				}
 				else {
@@ -913,7 +913,7 @@ void UseItem(HWND hWnd)
 			if (player.effect_item.use_cnt == 1)
 			{
 				if (play_time >= STAGE_TIME) {
-					// ¸ó½ºÅÍ ÀÌµ¿ Å¸ÀÌ¸Ó ´Ù½Ã ½ÃÀÛ
+					// ëª¬ìŠ¤í„° ì´ë™ íƒ€ì´ë¨¸ ë‹¤ì‹œ ì‹œì‘
 					SetTimer(_hWnd, MONSTER_MOVE, 60, reinterpret_cast<TIMERPROC>(MonsterMove));
 				}
 				else {
@@ -932,24 +932,24 @@ void UseItem(HWND hWnd)
 			}
 		}
 
-		// ÇÃ·¹ÀÌ¾î ¾ÆÀÌÅÛ ¼Ò¸ğ
+		// í”Œë ˆì´ì–´ ì•„ì´í…œ ì†Œëª¨
 		player.item = false;
-		//ÀÌÆåÆ® È°¼ºÈ­
+		//ì´í™íŠ¸ í™œì„±í™”
 		item[player.item_idx].effect = true;
 
-		// ÇÃ·¹ÀÌ¾î È¿°ú
+		// í”Œë ˆì´ì–´ íš¨ê³¼
 		player.effect_item = item[player.item_idx];
 
-		// 1: ¸ñ¼û, 2: ÄÚÀÎ, 3: Ä¿ÇÇ, 4: ÅºÃ¢, 5: º­¶ô, 6: ¼¦°Ç, 7: ¹°·¹¹ÙÄû, 8: ½Ã°è
-		// ¾ÆÀÌÅÛ ´É·Â ¹İ¿µ
+		// 1: ëª©ìˆ¨, 2: ì½”ì¸, 3: ì»¤í”¼, 4: íƒ„ì°½, 5: ë²¼ë½, 6: ìƒ·ê±´, 7: ë¬¼ë ˆë°”í€´, 8: ì‹œê³„
+		// ì•„ì´í…œ ëŠ¥ë ¥ ë°˜ì˜
 		if (item[player.item_idx].num == 3)
 			player.speed++;
 		else if (item[player.item_idx].num == 4)
 			bullet_speed -= 5;
 		else if (item[player.item_idx].num == 5) {
-			// ¸ó½ºÅÍ »ı¼º Å¸ÀÌ¸Ó ÁßÁö
+			// ëª¬ìŠ¤í„° ìƒì„± íƒ€ì´ë¨¸ ì¤‘ì§€
 			KillTimer(hWnd, MONSTER_PRODUSE);
-			// ¸ó½ºÅÍ ÀÌµ¿ Å¸ÀÌ¸Ó ÁßÁö
+			// ëª¬ìŠ¤í„° ì´ë™ íƒ€ì´ë¨¸ ì¤‘ì§€
 			KillTimer(hWnd, MONSTER_MOVE);
 			if (monster_head) {
 				MONSTERNODE* p = monster_head;
@@ -959,12 +959,12 @@ void UseItem(HWND hWnd)
 						InsertMonster(&respawn_head, p->data);
 					}
 					else {
-						// »ç¸Á ÀÌÆåÆ® °´Ã¼ Ãß°¡
+						// ì‚¬ë§ ì´í™íŠ¸ ê°ì²´ ì¶”ê°€
 						BOMB dead_data;
 						InitBomb(&dead_data, p->data);
 						InsertBomb(&dead_head, dead_data);
 					}
-					// ¸ó½ºÅÍ »èÁ¦
+					// ëª¬ìŠ¤í„° ì‚­ì œ
 					p = DelMonster(&monster_head, p->data.name);
 					if (p->next == NULL) break;
 				}
@@ -973,12 +973,12 @@ void UseItem(HWND hWnd)
 					InsertMonster(&respawn_head, p->data);
 				}
 				else {
-					// »ç¸Á ÀÌÆåÆ® °´Ã¼ Ãß°¡
+					// ì‚¬ë§ ì´í™íŠ¸ ê°ì²´ ì¶”ê°€
 					BOMB dead_data;
 					InitBomb(&dead_data, p->data);
 					InsertBomb(&dead_head, dead_data);
 				}
-				// ¸ó½ºÅÍ »èÁ¦
+				// ëª¬ìŠ¤í„° ì‚­ì œ
 				p = DelMonster(&monster_head, p->data.name);
 			}
 		}
@@ -986,21 +986,21 @@ void UseItem(HWND hWnd)
 			player.bullet = true;
 		else if (item[player.item_idx].num == 8)
 		{
-			// ¸ó½ºÅÍ »ı¼º Å¸ÀÌ¸Ó ÁßÁö
+			// ëª¬ìŠ¤í„° ìƒì„± íƒ€ì´ë¨¸ ì¤‘ì§€
 			KillTimer(hWnd, MONSTER_PRODUSE);
-			// ¸ó½ºÅÍ ÀÌµ¿ Å¸ÀÌ¸Ó ÁßÁö
+			// ëª¬ìŠ¤í„° ì´ë™ íƒ€ì´ë¨¸ ì¤‘ì§€
 			KillTimer(hWnd, MONSTER_MOVE);
-			// °ÔÀÓ ½Ã°£ ÁßÁö
+			// ê²Œì„ ì‹œê°„ ì¤‘ì§€
 			KillTimer(hWnd, STAGE_START);
 		}
-		// ÀÌÆåÆ® Å¸ÀÌ¸Ó ½ÇÇà
+		// ì´í™íŠ¸ íƒ€ì´ë¨¸ ì‹¤í–‰
 		SetTimer(hWnd, EFFECT_LOAD, 100, reinterpret_cast<TIMERPROC>(EffectLoad));
-		// ¾ÆÀÌÅÛ Áö¼Ó½Ã°£ Å¸ÀÌ¸Ó ½ÇÇà
+		// ì•„ì´í…œ ì§€ì†ì‹œê°„ íƒ€ì´ë¨¸ ì‹¤í–‰
 		SetTimer(hWnd, ITEM_DURATION, 1000, reinterpret_cast<TIMERPROC>(CountItemTime));
 	}
 }
 
-// ¸ó½ºÅÍ
+// ëª¬ìŠ¤í„°
 void initMonster(MONSTER* data, PLAYER player)
 {
 	(*data) = {};
@@ -1009,7 +1009,7 @@ void initMonster(MONSTER* data, PLAYER player)
 	POINT p = {};
 	TCHAR id[20] = L"";
 
-	// Á¾·ù¿¡ µû¸¥ ID ÀÔ·Â
+	// ì¢…ë¥˜ì— ë”°ë¥¸ ID ì…ë ¥
 	switch (kind) {
 	case NORMAL_MONSTER:
 		_tcscpy(data->name, L"N");
@@ -1039,7 +1039,7 @@ void initMonster(MONSTER* data, PLAYER player)
 		data->HP = MONSTER_HP;
 		while (1) {
 			data->target = { rand() % ((BOARD_SIZE - 2) * CELL_SIZE) + CELL_SIZE, rand() % ((BOARD_SIZE - 2) * CELL_SIZE + CELL_SIZE) };
-			// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+			// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 			if (!MonsterConflict(data->target, *data)) {
 				break;
 			}
@@ -1052,7 +1052,7 @@ void initMonster(MONSTER* data, PLAYER player)
 		data->HP = MONSTER_HP;
 		while (1) {
 			data->target = { rand() % ((BOARD_SIZE - 2) * CELL_SIZE) + CELL_SIZE, rand() % ((BOARD_SIZE - 2) * CELL_SIZE + CELL_SIZE) };
-			// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+			// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 			if (!MonsterConflict(data->target, *data)) {
 				break;
 			}
@@ -1062,22 +1062,22 @@ void initMonster(MONSTER* data, PLAYER player)
 		break;
 	}
 
-	// À§Ä¡ ·£´ı »ı¼º
+	// ìœ„ì¹˜ ëœë¤ ìƒì„±
 	switch (rand_p) {
 	case 0:
-		// ºÏÂÊ
+		// ë¶ìª½
 		p = { (rand() % 3) + 7, 0};
 		break;
 	case 1:
-		// µ¿ÂÊ
+		// ë™ìª½
 		p = { BOARD_SIZE - 1, (rand() % 3) + 7 };
 		break;
 	case 2:
-		// ³²ÂÊ
+		// ë‚¨ìª½
 		p = { (rand() % 3) + 7, BOARD_SIZE - 1 };
 		break;
 	case 3:
-		// ¼­ÂÊ
+		// ì„œìª½
 		p = { 0, (rand() % 3) + 7 };
 		break;
 	default:
@@ -1087,7 +1087,7 @@ void initMonster(MONSTER* data, PLAYER player)
 	data->P = { p.x * CELL_SIZE, p.y * CELL_SIZE };
 }
 
-// ¸ó½ºÅÍ ³ëµå
+// ëª¬ìŠ¤í„° ë…¸ë“œ
 // ============================================ //
 MONSTERNODE* Gettail(MONSTERNODE* head)
 {
@@ -1141,8 +1141,8 @@ MONSTERNODE* DelMonster(MONSTERNODE** head, TCHAR* name)
 	MONSTERNODE* temp = NULL;
 	temp = SearchNode(*head, *head, name);
 
-	short_ch->stop();
-	ssystem->playSound(hit_sound, 0, false, &short_ch);
+	/*short_ch->stop();
+	ssystem->playSound(hit_sound, 0, false, &short_ch);*/
 
 	if (temp == NULL) return NULL;
 
@@ -1161,7 +1161,7 @@ MONSTERNODE* DelMonster(MONSTERNODE** head, TCHAR* name)
 }
 // ============================================ //
 
-// ÆøÅº ³ëµå
+// í­íƒ„ ë…¸ë“œ
 // ============================================ //
 void InitBomb(BOMB* bombdata, MONSTER monster)
 {
@@ -1254,11 +1254,11 @@ void OneMonsterMove(MONSTERNODE** node, POINT target)
 
 	double distance = sqrt(dx * dx + dy * dy);
 	if (distance <= MONSTER_SPPED) {
-		// ¸ñÇ¥ À§Ä¡¿¡ µµ´ŞÇßÀ» °æ¿ì
+		// ëª©í‘œ ìœ„ì¹˜ì— ë„ë‹¬í–ˆì„ ê²½ìš°
 		(*node)->data.P = target;
 	}
 	else {
-		// ÀÏÁ¤ÇÑ ¼Óµµ·Î ÀÌµ¿
+		// ì¼ì •í•œ ì†ë„ë¡œ ì´ë™
 		double ratio = MONSTER_SPPED / distance;
 		(*node)->data.P.x += static_cast<int>(dx * ratio);
 		(*node)->data.P.y += static_cast<int>(dy * ratio);
@@ -1267,7 +1267,7 @@ void OneMonsterMove(MONSTERNODE** node, POINT target)
 			(*node)->data.P.y -= static_cast<int>(dy * ratio);
 			while (1) {
 				(*node)->data.target = { rand() % ((BOARD_SIZE - 2) * CELL_SIZE) + CELL_SIZE, rand() % ((BOARD_SIZE - 2) * CELL_SIZE + CELL_SIZE) };
-				// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+				// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 				if (!MonsterConflict((*node)->data.target, (*node)->data)) {
 					break;
 				}
@@ -1295,39 +1295,39 @@ void OneMonsterMove(MONSTERNODE** node, POINT target)
 
 void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
-	// ¸ó½ºÅÍ
+	// ëª¬ìŠ¤í„°
 	if (monster_head) {
 		MONSTERNODE* p = monster_head;
 		while (p->next != NULL) {
-			// ÀÏ¹İ, µ¢Ä¡, ºÎÈ° ¸ó½ºÅÍ
+			// ì¼ë°˜, ë©ì¹˜, ë¶€í™œ ëª¬ìŠ¤í„°
 			if (p->data.name[0] == 'N' || p->data.name[0] == 'R' || p->data.name[0] == 'T') {
 				OneMonsterMove(&p, player.P);
 			}
-			// ±× ¿Ü ¸ó½ºÅÍ
+			// ê·¸ ì™¸ ëª¬ìŠ¤í„°
 			else {
-				// ÆøÅº ¸ó½ºÅÍ
+				// í­íƒ„ ëª¬ìŠ¤í„°
 				if (p->data.name[0] == 'B') {
-					// ¸ñÇ¥¹°·Î µµÂøÇßÀ» ¶§(ÆøÅº ¼³Ä¡ ½Ã)
+					// ëª©í‘œë¬¼ë¡œ ë„ì°©í–ˆì„ ë•Œ(í­íƒ„ ì„¤ì¹˜ ì‹œ)
 					if ((p->data.P.x == p->data.target.x && p->data.P.y == p->data.target.y) || p->data.skill) {
 						if(!p->data.skill) p->data.skill = true;
 						MonsterSkillCnt(&p->data);
 					}
-					// Æò¼Ò ÀÌµ¿
+					// í‰ì†Œ ì´ë™
 					else {
 						OneMonsterMove(&p, p->data.target);
 					}
 				}
-				// Àå¾Ö¹° ¸ó½ºÅÍ
+				// ì¥ì• ë¬¼ ëª¬ìŠ¤í„°
 				else if (p->data.name[0] == 'O') {
-					// ¸ñÇ¥¹°·Î µµÂøÇßÀ» ¶§
+					// ëª©í‘œë¬¼ë¡œ ë„ì°©í–ˆì„ ë•Œ
 					if ((p->data.P.x == p->data.target.x && p->data.P.y == p->data.target.y) || p->data.skill) {
 						if (!p->data.skill) {
 							p->data.skill = true;
-							// Àå¾Ö¹°ÀÌ µÇ¾úÀ» ¶§ HPÀÇ µÎ ¹è
+							// ì¥ì• ë¬¼ì´ ë˜ì—ˆì„ ë•Œ HPì˜ ë‘ ë°°
 							p->data.HP *= 2;
 						}
 					}
-					// Æò¼Ò ÀÌµ¿
+					// í‰ì†Œ ì´ë™
 					else {
 						OneMonsterMove(&p, p->data.target);
 					}
@@ -1336,35 +1336,35 @@ void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 			p = p->next;
 		}
 
-		// ÀÏ¹İ, µ¢Ä¡, ºÎÈ° ¸ó½ºÅÍ
+		// ì¼ë°˜, ë©ì¹˜, ë¶€í™œ ëª¬ìŠ¤í„°
 		if (p->data.name[0] == 'N' || p->data.name[0] == 'R' || p->data.name[0] == 'T') {
 			OneMonsterMove(&p, player.P);
 		}
-		// ±× ¿Ü ¸ó½ºÅÍ
+		// ê·¸ ì™¸ ëª¬ìŠ¤í„°
 		else {
-			// ÆøÅº ¸ó½ºÅÍ
+			// í­íƒ„ ëª¬ìŠ¤í„°
 			if (p->data.name[0] == 'B') {
-				// ¸ñÇ¥¹°·Î µµÂøÇßÀ» ¶§(ÆøÅº ¼³Ä¡ ½Ã)
+				// ëª©í‘œë¬¼ë¡œ ë„ì°©í–ˆì„ ë•Œ(í­íƒ„ ì„¤ì¹˜ ì‹œ)
 				if ((p->data.P.x == p->data.target.x && p->data.P.y == p->data.target.y) || p->data.skill) {
 					if (!p->data.skill) p->data.skill = true;
 					MonsterSkillCnt(&p->data);
 				}
-				// Æò¼Ò ÀÌµ¿
+				// í‰ì†Œ ì´ë™
 				else {
 					OneMonsterMove(&p, p->data.target);
 				}
 			}
-			// Àå¾Ö¹° ¸ó½ºÅÍ
+			// ì¥ì• ë¬¼ ëª¬ìŠ¤í„°
 			else if (p->data.name[0] == 'O') {
-				// ¸ñÇ¥¹°·Î µµÂøÇßÀ» ¶§
+				// ëª©í‘œë¬¼ë¡œ ë„ì°©í–ˆì„ ë•Œ
 				if ((p->data.P.x == p->data.target.x && p->data.P.y == p->data.target.y) || p->data.skill) {
 					if (!p->data.skill) {
 						p->data.skill = true;
-						// Àå¾Ö¹°ÀÌ µÇ¾úÀ» ¶§ HPÀÇ µÎ ¹è
+						// ì¥ì• ë¬¼ì´ ë˜ì—ˆì„ ë•Œ HPì˜ ë‘ ë°°
 						p->data.HP *= 3;
 					}
 				}
-				// Æò¼Ò ÀÌµ¿
+				// í‰ì†Œ ì´ë™
 				else {
 					OneMonsterMove(&p, p->data.target);
 				}
@@ -1372,7 +1372,7 @@ void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 		}
 	}
 
-	// ºÎÈ° ¸ó½ºÅÍ
+	// ë¶€í™œ ëª¬ìŠ¤í„°
 	if (respawn_head) {
 		MONSTERNODE* p = respawn_head;
 		while (p->next != NULL) {
@@ -1382,15 +1382,15 @@ void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 		MonsterSkillCnt(&p->data);
 	}
 	
-	// ÆøÅº
+	// í­íƒ„
 	if (bomb_head) {
 		BOMBNODE* p = bomb_head;
 		while (p->next != NULL) {
-			// ÆøÅº ½Ã°£ °è»ê
+			// í­íƒ„ ì‹œê°„ ê³„ì‚°
 			p->data.cnt++;
-			// ÇÁ·¹ÀÓ Áõ°¡
+			// í”„ë ˆì„ ì¦ê°€
 			if (p->data.cnt % (BOMB_TIME / BOMB_SPRITE_CNT) == 0) p->data.current_frame++;
-			// ¸¸¾à ¸¶Áö¸· ÇÁ·¹ÀÓÀÌ¸é ÅÍÆ®¸®±â
+			// ë§Œì•½ ë§ˆì§€ë§‰ í”„ë ˆì„ì´ë©´ í„°íŠ¸ë¦¬ê¸°
 			if (p->data.current_frame == BOMB_SPRITE_CNT) {
 				BOMB bombing_data;
 				InitBombing(&bombing_data, p->data);
@@ -1403,21 +1403,21 @@ void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 		p->data.cnt++;
 		if (p->data.cnt % (BOMB_TIME / BOMB_SPRITE_CNT) == 0) p->data.current_frame++;
 		if (p->data.current_frame == BOMB_SPRITE_CNT) {
-			boom_ch->stop();
+			/*boom_ch->stop();
 			ssystem->playSound(boom_sound, 0, false, &boom_ch);
 			boom_ch->setVolume(0.3);
-			BOMB bombing_data;
+			*/BOMB bombing_data;
 			InitBombing(&bombing_data, p->data);
 			InsertBomb(&bombing_head, bombing_data);
 			DelBomb(&bomb_head, BOMB_SPRITE_CNT);
 		}
 	}
 
-	// Æø¹ß
+	// í­ë°œ
 	if (bombing_head) {
 		BOMBNODE* p = bombing_head;
 		while (p->next != NULL) {
-			// Æø¹ß ½Ã°£ ¹× ÇÁ·¹ÀÓ
+			// í­ë°œ ì‹œê°„ ë° í”„ë ˆì„
 			p->data.cnt++;
 			if (p->data.cnt % (BOMBING_SPRITE_CNT * 2) == 0) p->data.current_frame++;
 			if (p->data.current_frame == BOMBING_SPRITE_CNT) {
@@ -1435,19 +1435,19 @@ void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 		BombingDamage(p->data);
 	}
 	
-	// »ç¸Á ÀÌÆåÆ®
+	// ì‚¬ë§ ì´í™íŠ¸
 	if (dead_head) {
 		BOMBNODE* p = dead_head;
 		while (p->next != NULL) {
 			p->data.cnt++;
 			if (p->data.cnt % (DEAD_SPRITE_CNT / 6) == 0) p->data.current_frame++;
 			if (p->data.current_frame == DEAD_SPRITE_CNT) {
-				// ·£´ıÀûÀ¸·Î ¾ÆÀÌÅÛ µå¶ø
+				// ëœë¤ì ìœ¼ë¡œ ì•„ì´í…œ ë“œë
 				int rand_num = rand() % 2;
 				if(rand_num)
 					MakeItem(_hWnd, p->data.P);
 
-				// »ç¸Á ÀÌÆåÆ® »èÁ¦
+				// ì‚¬ë§ ì´í™íŠ¸ ì‚­ì œ
 				p = DelBomb(&dead_head, DEAD_SPRITE_CNT);
 				if(p->next == NULL) break;
 			}
@@ -1456,7 +1456,7 @@ void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 		p->data.cnt++;
 		if (p->data.cnt % (DEAD_SPRITE_CNT / 6) == 0) p->data.current_frame++;
 		if (p->data.current_frame == DEAD_SPRITE_CNT) {
-			// ·£´ıÀûÀ¸·Î ¾ÆÀÌÅÛ µå¶ø
+			// ëœë¤ì ìœ¼ë¡œ ì•„ì´í…œ ë“œë
 			int rand_num = rand() % 2;
 			if (rand_num)
 				MakeItem(_hWnd, p->data.P);
@@ -1466,7 +1466,7 @@ void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 	}
 
 
-	// Àå¾Ö¹° ¿òÁ÷ÀÓ
+	// ì¥ì• ë¬¼ ì›€ì§ì„
 	if (obstacles) {
 		for (int i = 0; i < obstacle_num; ++i) {
 			if (obstacles[i].kind == MOVE_ID) {
@@ -1486,7 +1486,7 @@ void CALLBACK MonsterMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 				else if (obstacles[i].direct.y < 0) {
 					obstacles[i].current_frame = (obstacles[i].current_frame % OBSTACLE_SPRITE_WCNT) + (OBSTACLE_SPRITE_WCNT * 0);
 				}
-				// ¹İ´ëÂÊÀ¸·Î µµÂøÇÏ¸é ´Ù½Ã ¹İ´ë·Î
+				// ë°˜ëŒ€ìª½ìœ¼ë¡œ ë„ì°©í•˜ë©´ ë‹¤ì‹œ ë°˜ëŒ€ë¡œ
 				if (obstacles[i].p.x == abs((BOARD_SIZE * CELL_SIZE ) - obstacles[i].start_p.x) || obstacles[i].p.y == abs((BOARD_SIZE * CELL_SIZE) - obstacles[i].start_p.y)) {
 					obstacles[i].direct.x *= -1;
 					obstacles[i].direct.y *= -1;
@@ -1508,7 +1508,7 @@ bool MonsterConflict(POINT p, MONSTER monster)
 	RECT dest = {};
 	RECT map_out_rt = {};
 
-	// Àå¾Ö¹° Ãæµ¹ Ã¼Å©
+	// ì¥ì• ë¬¼ ì¶©ëŒ ì²´í¬
 	if (obstacles) {
 		for (int i = 0; i < obstacle_num; ++i) {
 			if (obstacles[i].kind != MOVE_ID) {
@@ -1521,7 +1521,7 @@ bool MonsterConflict(POINT p, MONSTER monster)
 		}
 	}
 
-	// ´Ù¸¥ ¸ó½ºÅÍ¿ÍÀÇ Ãæµ¹ Ã¼Å©
+	// ë‹¤ë¥¸ ëª¬ìŠ¤í„°ì™€ì˜ ì¶©ëŒ ì²´í¬
 	if (monster_head) {
 		MONSTERNODE* q = monster_head;
 		while (q->next != NULL) {
@@ -1560,24 +1560,24 @@ bool MonsterConflict(POINT p, MONSTER monster)
 		}
 	}
 
-	// ¸Ê ¹Û Ãæµ¹ Ã¼Å©
+	// ë§µ ë°– ì¶©ëŒ ì²´í¬
 	for (int i = 7; i <= 9; ++i) {
-		// ¼­ÂÊ
+		// ì„œìª½
 		map_out_rt = GetStageRect(-1 * CELL_SIZE, i * CELL_SIZE);
 		if (IntersectRect(&dest, &rt, &map_out_rt)) {
 			return true;
 		}
-		// µ¿ÂÊ
+		// ë™ìª½
 		map_out_rt = GetStageRect(BOARD_SIZE * CELL_SIZE, i * CELL_SIZE);
 		if (IntersectRect(&dest, &rt, &map_out_rt)) {
 			return true;
 		}
-		// ºÏÂÊ
+		// ë¶ìª½
 		map_out_rt = GetStageRect(i * CELL_SIZE, -1 * CELL_SIZE);
 		if (IntersectRect(&dest, &rt, &map_out_rt)) {
 			return true;
 		}
-		// ³²ÂÊ
+		// ë‚¨ìª½
 		map_out_rt = GetStageRect(i * CELL_SIZE, BOARD_SIZE * CELL_SIZE);
 		if (IntersectRect(&dest, &rt, &map_out_rt)) {
 			return true;
@@ -1592,7 +1592,7 @@ void MonsterSkillCnt(MONSTER* data)
 	data->time_cnt++;
 	if (data->time_cnt == 40) {
 		data->time_cnt = 0;
-		// ÆøÅº »ı¼º
+		// í­íƒ„ ìƒì„±
 		if (data->name[0] == 'B') {
 			data->skill = false;
 			BOMB bomb = {};
@@ -1600,7 +1600,7 @@ void MonsterSkillCnt(MONSTER* data)
 			InsertBomb(&bomb_head, bomb);
 		}
 		if (data->name[0] == 'R') {
-			// ´É·ÂÀ» È°¼ºÈ­ÇÏ°í ¸ó½ºÅÍ Çìµå·Î ÀÌµ¿
+			// ëŠ¥ë ¥ì„ í™œì„±í™”í•˜ê³  ëª¬ìŠ¤í„° í—¤ë“œë¡œ ì´ë™
 			data->skill = true;
 			InsertMonster(&monster_head, *data);
 			DelMonster(&respawn_head, data->name);
@@ -1609,7 +1609,7 @@ void MonsterSkillCnt(MONSTER* data)
 
 		while (1) {
 			data->target = { rand() % ((BOARD_SIZE - 2)* CELL_SIZE) + CELL_SIZE, rand() % ((BOARD_SIZE - 2) * CELL_SIZE + CELL_SIZE) };
-			// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+			// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 			if (!MonsterConflict(data->target, *data)) {
 				break;
 			}
@@ -1623,14 +1623,14 @@ OBSTACLE* InitObstalce(OBSTACLE* obstacles)
 
 	switch (currentStage) {
 	case 1:
-		// ÀÌ¹Ì ¹è¿­ÀÌ ÀÖÀ¸¸é ÇØÁ¦ ÈÄ ÀçÇÒ´ç
+		// ì´ë¯¸ ë°°ì—´ì´ ìˆìœ¼ë©´ í•´ì œ í›„ ì¬í• ë‹¹
 		if ((obstacles)) {
 			free(obstacles);
 		}
 
-		// Àå¾Ö¹°Àº º¯ÇÏÁö ¾Ê±â ¶§¹®¿¡ ¹è¿­·Î ¼±¾ğ
+		// ì¥ì• ë¬¼ì€ ë³€í•˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ë°°ì—´ë¡œ ì„ ì–¸
 		(obstacles) = (OBSTACLE*)malloc(sizeof(OBSTACLE) * (WALL_OBSTACLE_CNT + 2));
-		// °¡·Î
+		// ê°€ë¡œ
 		for (int i = 0; i < 16; ++i) {
 			if (i >= 7 && i <= 9) continue;
 			obstacles[obstacle_num] = {};
@@ -1643,7 +1643,7 @@ OBSTACLE* InitObstalce(OBSTACLE* obstacles)
 			obstacles[obstacle_num].kind = WALL_ID;
 			obstacles[obstacle_num++].p = { i * CELL_SIZE, (BOARD_SIZE - 1) * CELL_SIZE };
 		}
-		// ¼¼·Î
+		// ì„¸ë¡œ
 		for (int i = 1; i < 15; ++i) {
 			if (i >= 7 && i <= 9) continue;
 			obstacles[obstacle_num] = {};
@@ -1680,13 +1680,13 @@ OBSTACLE* InitObstalce(OBSTACLE* obstacles)
 		}
 		break;
 	case 2:
-		// ÀÌ¹Ì ¹è¿­ÀÌ ÀÖÀ¸¸é ÇØÁ¦ ÈÄ ÀçÇÒ´ç
+		// ì´ë¯¸ ë°°ì—´ì´ ìˆìœ¼ë©´ í•´ì œ í›„ ì¬í• ë‹¹
 		if ((obstacles)) {
 			free(obstacles);
 		}
 
 		(obstacles) = (OBSTACLE*)malloc(sizeof(OBSTACLE) * (WALL_OBSTACLE_CNT + 12));
-		// °¡·Î
+		// ê°€ë¡œ
 		for (int i = 0; i < 16; ++i) {
 			if (i >= 7 && i <= 9) continue;
 			obstacles[obstacle_num] = {};
@@ -1699,7 +1699,7 @@ OBSTACLE* InitObstalce(OBSTACLE* obstacles)
 			obstacles[obstacle_num].kind = WALL_ID;
 			obstacles[obstacle_num++].p = { i * CELL_SIZE, (BOARD_SIZE - 1) * CELL_SIZE };
 		}
-		// ¼¼·Î
+		// ì„¸ë¡œ
 		for (int i = 1; i < 15; ++i) {
 			if (i >= 7 && i <= 9) continue;
 			obstacles[obstacle_num] = {};
@@ -1760,7 +1760,7 @@ OBSTACLE* InitObstalce(OBSTACLE* obstacles)
 		}
 
 		(obstacles) = (OBSTACLE*)malloc(sizeof(OBSTACLE) * (WALL_OBSTACLE_CNT + 4));
-		// °¡·Î
+		// ê°€ë¡œ
 		for (int i = 0; i < 16; ++i) {
 			if (i >= 7 && i <= 9) continue;
 			obstacles[obstacle_num] = {};
@@ -1773,7 +1773,7 @@ OBSTACLE* InitObstalce(OBSTACLE* obstacles)
 			obstacles[obstacle_num].kind = WALL_ID;
 			obstacles[obstacle_num++].p = { i * CELL_SIZE, (BOARD_SIZE - 1) * CELL_SIZE };
 		}
-		// ¼¼·Î
+		// ì„¸ë¡œ
 		for (int i = 1; i < 15; ++i) {
 			if (i >= 7 && i <= 9) continue;
 			obstacles[obstacle_num] = {};
@@ -1806,7 +1806,7 @@ OBSTACLE* InitObstalce(OBSTACLE* obstacles)
 		}
 
 		(obstacles) = (OBSTACLE*)malloc(sizeof(OBSTACLE) * (WALL_OBSTACLE_CNT + 4));
-		// °¡·Î
+		// ê°€ë¡œ
 		for (int i = 0; i < 16; ++i) {
 			if (i >= 7 && i <= 9) continue;
 			obstacles[obstacle_num] = {};
@@ -1819,7 +1819,7 @@ OBSTACLE* InitObstalce(OBSTACLE* obstacles)
 			obstacles[obstacle_num].kind = WALL_ID;
 			obstacles[obstacle_num++].p = { i * CELL_SIZE, (BOARD_SIZE - 1) * CELL_SIZE };
 		}
-		// ¼¼·Î
+		// ì„¸ë¡œ
 		for (int i = 1; i < 15; ++i) {
 			if (i >= 7 && i <= 9) continue;
 			obstacles[obstacle_num] = {};
@@ -1888,8 +1888,8 @@ void KickBomb()
 	RECT b_rt = {};
 
 	if (bomb_head) {
-		short_ch->stop();
-		ssystem->playSound(bullet_sound, 0, false, &short_ch);
+		//short_ch->stop();
+		//ssystem->playSound(bullet_sound, 0, false, &short_ch);
 		BOMBNODE* p = bomb_head;
 		while (p->next != NULL) {
 			POINT change_p = {};
@@ -1931,7 +1931,7 @@ void KickBomb()
 					break;
 				}
 
-				// ¿ÀºêÁ§Æ®¸¦ ¸¸³¯ ¶§±îÁö ÀÌµ¿
+				// ì˜¤ë¸Œì íŠ¸ë¥¼ ë§Œë‚  ë•Œê¹Œì§€ ì´ë™
 				while (1) {
 					MONSTER m = {};
 					p->data.P.x += change_p.x;
@@ -1997,7 +1997,7 @@ void BombingDamage(BOMB bombing)
 {
 	RECT dest;
 	RECT b_rt = { bombing.P.x, bombing.P.y, bombing.P.x + CELL_SIZE * BOMBING_SIZE, bombing.P.y + CELL_SIZE * BOMBING_SIZE };
-	// ¸ó½ºÅÍ Æø¹ß µ¥¹ÌÁö
+	// ëª¬ìŠ¤í„° í­ë°œ ë°ë¯¸ì§€
 	if (monster_head) {
 		MONSTERNODE* q = monster_head;
 		while (q->next != NULL) {
@@ -2008,12 +2008,12 @@ void BombingDamage(BOMB bombing)
 					InsertMonster(&respawn_head, q->data);
 				}
 				else {
-					// »ç¸Á ÀÌÆåÆ® °´Ã¼ Ãß°¡
+					// ì‚¬ë§ ì´í™íŠ¸ ê°ì²´ ì¶”ê°€
 					BOMB dead_data;
 					InitBomb(&dead_data, q->data);
 					InsertBomb(&dead_head, dead_data);
 				}
-				// ¸ó½ºÅÍ »èÁ¦
+				// ëª¬ìŠ¤í„° ì‚­ì œ
 				q = DelMonster(&monster_head, q->data.name);
 				if (q->next == NULL) break;
 			}
@@ -2026,12 +2026,12 @@ void BombingDamage(BOMB bombing)
 				InsertMonster(&respawn_head, q->data);
 			}
 			else {
-				// »ç¸Á ÀÌÆåÆ® °´Ã¼ Ãß°¡
+				// ì‚¬ë§ ì´í™íŠ¸ ê°ì²´ ì¶”ê°€
 				BOMB dead_data;
 				InitBomb(&dead_data, q->data);
 				InsertBomb(&dead_head, dead_data);
 			}
-			// ¸ó½ºÅÍ »èÁ¦
+			// ëª¬ìŠ¤í„° ì‚­ì œ
 			q = DelMonster(&monster_head, q->data.name);
 		}
 	}
@@ -2040,13 +2040,13 @@ void BombingDamage(BOMB bombing)
 	if (IntersectRect(&dest, &b_rt, &player_rt)) {
 		player.life--;
 		if (player.life == 0) {
-			// °ÔÀÓ ¿À¹öÃ³¸®
+			// ê²Œì„ ì˜¤ë²„ì²˜ë¦¬
 			PostQuitMessage(0);
 		}
 		while (1) {
 			MONSTER m = {};
 			player.P = { rand() % ((BOARD_SIZE - 2) * CELL_SIZE) + CELL_SIZE, rand() % ((BOARD_SIZE - 2) * CELL_SIZE + CELL_SIZE) };
-			// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+			// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 			if (!MonsterConflict(player.P, m)) {
 				break;
 			}
@@ -2054,35 +2054,35 @@ void BombingDamage(BOMB bombing)
 	}
 }
 
-// º¸½º
+// ë³´ìŠ¤
 void InitBoss(HWND hWnd)
 {
 	bossframe_numW = 0;
 	bossframe_numL = 2;
 
-	// ÃÑ¾Ë ÀÌµ¿ Å¸ÀÌ¸Ó
+	// ì´ì•Œ ì´ë™ íƒ€ì´ë¨¸
 	SetTimer(hWnd, BOSSGUN_MOVE, 1000, reinterpret_cast<TIMERPROC>(GunMove));
 
-	boss.P.x = 240;  // º¸½ºÀÇ x ÁÂÇ¥
-	boss.P.y = 390;  // º¸½ºÀÇ y ÁÂÇ¥
-	boss.hp = 100;	// º¸½º Ã¼·Â
+	boss.P.x = 240;  // ë³´ìŠ¤ì˜ x ì¢Œí‘œ
+	boss.P.y = 390;  // ë³´ìŠ¤ì˜ y ì¢Œí‘œ
+	boss.hp = 100;	// ë³´ìŠ¤ ì²´ë ¥
 }
 
 void BossShoot()
 {
-	// ÇÃ·¹ÀÌ¾î¿Í º¸½ºÀÇ °Å¸® °è»ê
+	// í”Œë ˆì´ì–´ì™€ ë³´ìŠ¤ì˜ ê±°ë¦¬ ê³„ì‚°
 	int dx = player.P.x - boss.P.x;
 	int dy = player.P.y - boss.P.y;
 
 
 	for (int i = 0; i < bossgun_num; i++)
 	{
-		// ÃÑ¾ËÀÇ ÀÌµ¿ ¹æÇâ °è»ê
+		// ì´ì•Œì˜ ì´ë™ ë°©í–¥ ê³„ì‚°
 		double angle = atan2(dy, dx);
 		bossgun[i].B.x = cos(angle) * BOSSGUN_SPEED;
 		bossgun[i].B.y = sin(angle) * BOSSGUN_SPEED;
 
-		// ÃÑ¾Ë ÃÊ±â À§Ä¡ ¼³Á¤
+		// ì´ì•Œ ì´ˆê¸° ìœ„ì¹˜ ì„¤ì •
 		bossgun[i].P.x = boss.P.x;
 		bossgun[i].P.y = boss.P.y;
 
@@ -2097,10 +2097,10 @@ void BossShoot()
 
 void MakeBossBullet()
 {
-	// ÃÑ¾Ë Ãß°¡
+	// ì´ì•Œ ì¶”ê°€
 	bossgun_num++;
 
-	// µ¿ÀûÇÒ´ç
+	// ë™ì í• ë‹¹
 	if (bossgun == NULL)
 		bossgun = (BOSSGUN*)malloc(sizeof(BOSSGUN) * bossgun_num);
 	else
@@ -2117,10 +2117,10 @@ void MakeBossBullet()
 
 void MakeBigBossBullet()
 {
-	// ÃÑ¾Ë Ãß°¡
+	// ì´ì•Œ ì¶”ê°€
 	bigbossgun_num++;
 
-	// µ¿ÀûÇÒ´ç
+	// ë™ì í• ë‹¹
 	if (bossgun == NULL)
 		bossgun = (BOSSGUN*)malloc(sizeof(BOSSGUN) * bigbossgun_num);
 	else
@@ -2157,24 +2157,24 @@ void CALLBACK BossFollowPlayer(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 		bossframe_numL = 2;
 	}
 
-	// È­¸é °»½Å
+	// í™”ë©´ ê°±ì‹ 
 	InvalidateRect(hWnd, NULL, false);
 }
 
 void CALLBACK GunMove(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
-	// ÃÑ¾Ë À§Ä¡ º¯°æ
+	// ì´ì•Œ ìœ„ì¹˜ ë³€ê²½
 	for (int i = 0; i < bossgun_num; i++)
 	{
 		bossgun[i].P.x += BOSSGUN_SPEED * bossgun[i].B.x;
 		bossgun[i].P.y += BOSSGUN_SPEED * bossgun[i].B.y;
 	}
 
-	//Paint È£Ãâ
+	//Paint í˜¸ì¶œ
 	InvalidateRect(hWnd, NULL, false);
 }
 
-// º¸½º ÃÑ¾Ë ºĞÇØ ÇÔ¼ö
+// ë³´ìŠ¤ ì´ì•Œ ë¶„í•´ í•¨ìˆ˜
 void BossBulletSkill(PLAYER player, BOSSGUN* bossgun)
 {
 	for (int i = 0; i < bossgun_num; i++)
@@ -2207,7 +2207,7 @@ void CALLBACK BossBigBullet(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 	BossBulletSkill(player, bossgun);
 }
 
-// ÃÑ¾Ë ¹ß»ç
+// ì´ì•Œ ë°œì‚¬
 void CALLBACK Shooting(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
 	MakeBossBullet();
@@ -2220,13 +2220,13 @@ OBSTACLE* RandomLocateObstacle(OBSTACLE* obstacles)
 	while (1) {
 		MONSTER m = {};
 		rand_p = { rand() % (BOARD_SIZE * CELL_SIZE), rand() % (5 * CELL_SIZE) };
-		// ¸ñÇ¥°¡ Àå¾Ö¹°ÀÌ¸é ´Ù½Ã »ı¼º
+		// ëª©í‘œê°€ ì¥ì• ë¬¼ì´ë©´ ë‹¤ì‹œ ìƒì„±
 		if (!MonsterConflict(rand_p, m)) {
 			break;
 		}
 	}
 	
-	// ¹è¿­ ´Ã¸®±â
+	// ë°°ì—´ ëŠ˜ë¦¬ê¸°
 	if ((obstacles)) {
 		OBSTACLE* temp = (OBSTACLE*)malloc(sizeof(OBSTACLE) * obstacle_num);
 		memcpy(temp, obstacles, sizeof(OBSTACLE) * obstacle_num);

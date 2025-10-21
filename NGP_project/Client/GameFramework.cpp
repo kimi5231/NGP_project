@@ -1,10 +1,15 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameFramework.h"
 #include "GameScene.h"
 
 GameFramework::GameFramework()
 {
 	_scene = new GameScene();
+}
+
+GameFramework::GameFramework(CWindowGameMediator* mediator)
+	: _mediator{ mediator }, _scene{ new GameScene }
+{
 }
 
 GameFramework::~GameFramework()

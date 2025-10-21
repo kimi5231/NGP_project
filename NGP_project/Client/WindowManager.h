@@ -1,5 +1,5 @@
 ﻿#pragma once
-//#include "GameFramework.h"
+#include "GameFramework.h"
 #include "framework.h"
 
 //class CGameFramework;
@@ -43,5 +43,5 @@ public:
 	void OnDestroy();
 private:
 	std::unique_ptr<CWindowManager> window_manager;
-	//std::unique_ptr<CGameFramework> game_framework;
+	std::unique_ptr<GameFramework> game_framework;
 };

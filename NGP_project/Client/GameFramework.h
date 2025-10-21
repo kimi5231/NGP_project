@@ -1,11 +1,13 @@
-#pragma once
+﻿#pragma once
 
 class Scene;
+class CWindowGameMediator;
 
 class GameFramework
 {
 public:
 	GameFramework();
+	GameFramework(CWindowGameMediator* mediator);
 	virtual ~GameFramework();
 
 	void Init();
@@ -16,5 +18,5 @@ public:
 
 private:
 	Scene* _scene{};
-
+	CWindowGameMediator* _mediator;
 };

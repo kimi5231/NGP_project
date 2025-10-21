@@ -126,7 +126,7 @@ LRESULT CWindowManager::WndProc(UINT msg, WPARAM wParam, LPARAM lParam)
 // =================
 
 CWindowGameMediator::CWindowGameMediator(HINSTANCE hInstance)
-    : window_manager{ std::make_unique<CWindowManager>(hInstance, this) }/*, game_framework{ std::make_unique<CGameFramework>(this) }*/
+    : window_manager{ std::make_unique<CWindowManager>(hInstance, this) }, game_framework{ std::make_unique<GameFramework>(this) }
 {
 }
 

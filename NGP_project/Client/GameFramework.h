@@ -13,6 +13,7 @@ public:
 	void Init();
 	void Update();
 	void Render();
+	void Render(HDC hDC);
 
 	void ChangeScene();
 

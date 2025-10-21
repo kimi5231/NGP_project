@@ -104,6 +104,9 @@ LRESULT CALLBACK CWindowManager::StaticWndProc(HWND hwnd, UINT msg, WPARAM wPara
 
 LRESULT CWindowManager::WndProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    PAINTSTRUCT ps;
+    HDC hDC;
+
     switch (msg)
     {
     case WM_SIZE:
@@ -114,6 +117,14 @@ LRESULT CWindowManager::WndProc(UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_MOUSEMOVE:
     case WM_KEYDOWN:
     case WM_KEYUP:
+        break;
+    case WM_PAINT:
+        hDC = BeginPaint(h_wnd, &ps);
+
+        mediator->Render(hDC);
+
+        ReleaseDC(h_wnd, hDC);
+        EndPaint(h_wnd, &ps);
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
@@ -143,6 +154,11 @@ bool CWindowGameMediator::Init(int nCmdShow)
 void CWindowGameMediator::Update()
 {
     //game_framework->FrameAdvance();
+}
+
+void CWindowGameMediator::Render(HDC hDC)
+{
+    game_framework->Render(hDC);
 }
 
 void CWindowGameMediator::OnDestroy()

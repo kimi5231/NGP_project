@@ -14,6 +14,7 @@ public:
 	BOOL Init(int nCmdShow);
 	bool Create(int nCmdShow);
 	HWND GetHWND() const { return h_wnd; }
+	HINSTANCE GetInstance() const { return h_inst; }
 	SIZE GetClientSize() const { return client; }
 private:
 	CWindowGameMediator* mediator;
@@ -37,9 +38,11 @@ public:
 	// window manager 관련 함수
 	SIZE GetClientSize() const { return window_manager->GetClientSize(); }
 	HWND GetHWND() const { return window_manager->GetHWND(); }
+	HINSTANCE GetInstance() const { return window_manager->GetInstance(); }
 
 	bool Init(int nCmdShow);
 	void Update();
+	void Render(HDC hDC);
 	void OnDestroy();
 private:
 	std::unique_ptr<CWindowManager> window_manager;

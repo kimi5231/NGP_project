@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 class Scene
 {
 public:
@@ -9,6 +9,5 @@ public:
 	virtual void Init() {};
 	virtual void Update() {};
 	virtual void Render() {};
-
-
+	virtual void Render(HDC) {};
 };

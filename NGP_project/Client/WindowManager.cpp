@@ -1,4 +1,5 @@
-﻿#include "WindowManager.h"
+﻿#include "pch.h"
+#include "WindowManager.h"
 #include "Resource.h"
 
 CWindowManager::CWindowManager(HINSTANCE hInstance, CWindowGameMediator* mediator)

@@ -1,13 +1,7 @@
 ﻿#pragma once
-class Player
-{
-public:
-	Player(HINSTANCE hInst);
+#include "GameObject.h"
 
-	void Render() {};
-	void Render(HDC hDC);
-private:
-	HBITMAP _bitmap;
-	HBITMAP _bitmapMask;
+class Player : public GameObject
+{
 };
 

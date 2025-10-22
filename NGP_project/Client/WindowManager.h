@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "GameFramework.h"
-#include "framework.h"
+#include "pch.h"
 
 //class CGameFramework;
 class CWindowGameMediator;

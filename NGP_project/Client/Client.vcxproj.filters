@@ -26,9 +26,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>소스 파일\Default</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>소스 파일\Default</Filter>
     </ClInclude>

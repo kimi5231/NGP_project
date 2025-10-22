@@ -35,4 +35,5 @@ void GameScene::Render(HDC hDC)
 	for (GameObject* object : _objects) {
 		object->Render(hDC);
 	}
+
 }

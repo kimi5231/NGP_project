@@ -2,7 +2,6 @@
 #include "GameObject.h"
 
 
-#define CELL_SIZE 100 // 나중에 수정
 
 GameObject::GameObject(HINSTANCE hInst)
 {
@@ -18,10 +17,10 @@ void GameObject::Render(HDC hDC, HDC srcDC)
     int startY = 40;
    
     oldbit = (HBITMAP)SelectObject(srcDC, _bitmapMask);
-    BitBlt(hDC, 100, 100, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCAND);
+    BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCAND);
 
     SelectObject(srcDC, _bitmap);
-    BitBlt(hDC, 100, 100, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCPAINT);
+    BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCPAINT);
     
     SelectObject(srcDC, oldbit);
 }

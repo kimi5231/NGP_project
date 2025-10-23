@@ -17,5 +17,10 @@
 
 #define FRAME_BUFFER_WIDTH 800
 #define FRAME_BUFFER_HEIGHT 600
+#define CELL_SIZE 30
 
 using PlayerRef = std::shared_ptr<class Player>;
+
+typedef struct Vertex {
+	int x, y;
+};

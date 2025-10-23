@@ -10,5 +10,6 @@ public:
 private:
 	HBITMAP _bitmap;		// static으로 수정하기
 	HBITMAP _bitmapMask;
+	Vertex _pos{ FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
 };
 

@@ -32,8 +32,27 @@ void GameScene::Render(HDC hDC)
 {
 	/*for (PlayerRef player : _players)
 		player->Render(hDC);*/
+	HDC memDC, memDCImage;
+	HBITMAP hbit, oldbit;
+
+	// 더블 버퍼링을 위해 두 개의 메모리 DC 생성
+	memDC = CreateCompatibleDC(hDC);
+	memDCImage = CreateCompatibleDC(memDC);
+
+	// hDC와 hbit 연결
+	hbit = CreateCompatibleBitmap(hDC, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
+	// memDC hbit객체 선택
+	oldbit = (HBITMAP)SelectObject(memDC, hbit);
+
 	for (GameObject* object : _objects) {
-		object->Render(hDC);
+		object->Render(memDC, memDCImage);
 	}
 
+	// hDC에 memDC 출력(최종화면 출력)
+	BitBlt(hDC, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);
+
+	SelectObject(memDC, oldbit);
+	DeleteObject(hbit);
+	DeleteDC(memDC);
+	DeleteDC(memDCImage);
 }

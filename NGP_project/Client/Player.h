@@ -6,5 +6,7 @@ public:
 	Player(HINSTANCE hInst);
 
 	virtual void init(HINSTANCE hInst) override;
+private:
+
 };
 

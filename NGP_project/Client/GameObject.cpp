@@ -3,6 +3,7 @@
 
 HBITMAP GameObject::_bitmap = nullptr;
 HBITMAP GameObject::_bitmapMask = nullptr;
+Vertex GameObject::_spriteCnt{};
 
 GameObject::GameObject(HINSTANCE hInst)
 {
@@ -22,9 +23,6 @@ GameObject::~GameObject()
 void GameObject::Render(HDC hDC, HDC srcDC)
 {
     HBITMAP oldbit;
-
-    int startX = 130;
-    int startY = 40;
    
     oldbit = (HBITMAP)SelectObject(srcDC, _bitmapMask);
     BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCAND);

@@ -7,7 +7,7 @@ public:
 	GameObject(HINSTANCE hInst);
 	virtual ~GameObject();
 
-	virtual void init(HINSTANCE hInst) {};
+	virtual void Init(HINSTANCE hInst) {};
 	virtual void Render(HDC hDC, HDC srcDC);
 
 protected:

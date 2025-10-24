@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 class GameObject;
+class Monster;
 
 class GameScene : public Scene
 {
@@ -18,4 +19,5 @@ public:
 private:
 	std::vector<PlayerRef> _players;
 	std::vector<GameObject*> _objects;
+	Monster* _monster;
 };

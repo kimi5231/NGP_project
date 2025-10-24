@@ -4,10 +4,10 @@
 Player::Player(HINSTANCE hInst)
 	: GameObject(hInst)
 {
-    init(hInst);
+    Init(hInst);
 }
 
-void Player::init(HINSTANCE hInst)
+void Player::Init(HINSTANCE hInst)
 {
     if (!_bitmap || !_bitmapMask) {
         _bitmap = (HBITMAP)LoadImage(hInst, TEXT("cowboy_move.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);

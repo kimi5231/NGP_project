@@ -2,11 +2,14 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "GameScene.h"
+#include "Monster.h"
 
 GameScene::GameScene(HINSTANCE hInst)
 {
 	_players.push_back(std::make_shared<Player>(hInst));
 	//_objects.push_back(new GameObject(hInst));
+
+	_monster = new Monster(hInst);
 }
 
 GameScene::~GameScene()
@@ -46,10 +49,11 @@ void GameScene::Render(HDC hDC)
 	/*for (GameObject* object : _objects) {
 		object->Render(memDC, memDCImage);
 	}*/
-	for (PlayerRef player : _players) {
-		player->Render(memDC, memDCImage);
-	}
+	//for (PlayerRef player : _players) {
+	//	player->Render(memDC, memDCImage);
+	//}
 
+	_monster->Render(memDC, memDCImage);
 
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hDC, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);

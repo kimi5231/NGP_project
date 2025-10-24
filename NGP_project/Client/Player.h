@@ -5,7 +5,7 @@ class Player : public GameObject {
 public:
 	Player(HINSTANCE hInst);
 
-	virtual void init(HINSTANCE hInst) override;
+	virtual void Init(HINSTANCE hInst) override;
 private:
 
 };

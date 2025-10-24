@@ -23,9 +23,12 @@ GameObject::~GameObject()
 void GameObject::Render(HDC hDC, HDC srcDC)
 {
     HBITMAP oldbit;
-   
+    int cnt{};
     oldbit = (HBITMAP)SelectObject(srcDC, _bitmapMask);
     BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCAND);
+    char buffer[100];
+    sprintf_s(buffer, "디버그 값: %d\n", _pos.x);
+    OutputDebugStringA(buffer);
 
     SelectObject(srcDC, _bitmap);
     BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCPAINT);

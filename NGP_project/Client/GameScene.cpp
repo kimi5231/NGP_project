@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "GameObject.h"
 #include "Player.h"
+#include "InputManager.h"
 #include "GameScene.h"
 
 // Monster
@@ -36,6 +37,31 @@ void GameScene::Update()
 
 void GameScene::Render()
 {
+}
+
+void GameScene::ProcessInput(InputManager* inputManager)
+{
+	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
+	if (inputManager->GetButton(KeyType::Left)) {
+		for (PlayerRef player : _players) {
+			player->Left();
+		}
+	}
+	if (inputManager->GetButton(KeyType::Right)) {
+		for (PlayerRef player : _players) {
+			player->Right();
+		}
+	}
+	if (inputManager->GetButton(KeyType::Up)) {
+		for (PlayerRef player : _players) {
+			player->Up();
+		}
+	}
+	if (inputManager->GetButton(KeyType::Down)) {
+		for (PlayerRef player : _players) {
+			player->Down();
+		}
+	}
 
 }
 
@@ -60,7 +86,7 @@ void GameScene::Render(HDC hDC)
 		player->Render(memDC, memDCImage);
 	}
 
-	_monster->Render(memDC, memDCImage);
+	//_monster->Render(memDC, memDCImage);
 
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hDC, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);

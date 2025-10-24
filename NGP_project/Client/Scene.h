@@ -1,4 +1,7 @@
 ﻿#pragma once
+
+class InputManager;
+
 class Scene
 {
 public:
@@ -10,4 +13,5 @@ public:
 	virtual void Update() {};
 	virtual void Render() {};
 	virtual void Render(HDC) {};
+	virtual void ProcessInput(InputManager* inputManager) {};
 };

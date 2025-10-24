@@ -154,6 +154,7 @@ bool CWindowGameMediator::Init(int nCmdShow)
 void CWindowGameMediator::Update()
 {
     //game_framework->FrameAdvance();
+    game_framework->Update();
 }
 
 void CWindowGameMediator::Render(HDC hDC)

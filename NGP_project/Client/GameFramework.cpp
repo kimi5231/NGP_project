@@ -2,14 +2,17 @@
 #include "GameFramework.h"
 #include "GameScene.h"
 #include "WindowManager.h"
+#include "InputManager.h"
+
 GameFramework::GameFramework()
 {
 	_scene = new GameScene();
 }
 
 GameFramework::GameFramework(CWindowGameMediator* mediator)
-	: _mediator{ mediator }, _scene{ new GameScene(mediator->GetInstance())}
+	: _mediator{ mediator }, _scene{ new GameScene(mediator->GetInstance())}, _inputManager{GET_SINGLE(InputManager)}
 {
+	Init();
 }
 
 GameFramework::~GameFramework()
@@ -19,10 +22,13 @@ GameFramework::~GameFramework()
 
 void GameFramework::Init()
 {
+	_inputManager->Init(_mediator->GetHWND());
 }
 
 void GameFramework::Update()
 {
+	_inputManager->Update();
+	_scene->ProcessInput(GET_SINGLE(InputManager));
 	_scene->Update();
 }
 

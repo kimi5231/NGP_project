@@ -2,6 +2,7 @@
 
 class Scene;
 class CWindowGameMediator;
+class InputManager;
 
 class GameFramework
 {
@@ -20,4 +21,5 @@ public:
 private:
 	Scene* _scene{};
 	CWindowGameMediator* _mediator;
+	InputManager* _inputManager;
 };

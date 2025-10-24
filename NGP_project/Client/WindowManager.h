@@ -43,7 +43,6 @@ public:
 	bool Init(int nCmdShow);
 	void Update();
 	void Render(HDC hDC);
-	void OnDestroy();
 private:
 	std::unique_ptr<CWindowManager> window_manager;
 	std::unique_ptr<GameFramework> game_framework;

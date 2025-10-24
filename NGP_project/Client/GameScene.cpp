@@ -42,22 +42,22 @@ void GameScene::Render()
 void GameScene::ProcessInput(InputManager* inputManager)
 {
 	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
-	if (inputManager->GetButton(KeyType::Left)) {
+	if (inputManager->GetButtonDown(KeyType::Left)) {
 		for (PlayerRef player : _players) {
 			player->Left();
 		}
 	}
-	if (inputManager->GetButton(KeyType::Right)) {
+	if (inputManager->GetButtonDown(KeyType::Right)) {
 		for (PlayerRef player : _players) {
 			player->Right();
 		}
 	}
-	if (inputManager->GetButton(KeyType::Up)) {
+	if (inputManager->GetButtonDown(KeyType::Up)) {
 		for (PlayerRef player : _players) {
 			player->Up();
 		}
 	}
-	if (inputManager->GetButton(KeyType::Down)) {
+	if (inputManager->GetButtonDown(KeyType::Down)) {
 		for (PlayerRef player : _players) {
 			player->Down();
 		}

@@ -22,23 +22,23 @@ void Player::Init(HINSTANCE hInst)
 
 void Player::Left()
 {
-    _pos.x -= PLAYER_SPEED * 10;
+    _pos.x -= PLAYER_SPEED;
 }
 
 void Player::Right()
 {
-    _pos.x += PLAYER_SPEED * 10;
+    _pos.x += PLAYER_SPEED;
 
 }
 
 void Player::Up()
 {
-    _pos.y -= PLAYER_SPEED * 10;
+    _pos.y -= PLAYER_SPEED;
 
 }
 
 void Player::Down()
 {
-    _pos.y += PLAYER_SPEED * 10;
+    _pos.y += PLAYER_SPEED;
 
 }

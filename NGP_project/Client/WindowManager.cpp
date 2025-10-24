@@ -153,16 +153,12 @@ bool CWindowGameMediator::Init(int nCmdShow)
 
 void CWindowGameMediator::Update()
 {
-    //game_framework->FrameAdvance();
     game_framework->Update();
+
+    InvalidateRect(window_manager->GetHWND(), NULL, false);
 }
 
 void CWindowGameMediator::Render(HDC hDC)
 {
     game_framework->Render(hDC);
-}
-
-void CWindowGameMediator::OnDestroy()
-{
-    //game_framework->OnDestroy();
 }

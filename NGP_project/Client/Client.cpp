@@ -39,8 +39,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             WGMediator.Update();
         }
      }
-     WGMediator.OnDestroy();
+      //기본 메시지 루프입니다:
+    /*while (GetMessage(&msg, 0, 0, 0)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+        WGMediator.Update();
+    }*/
 
      return (int) msg.wParam;
 }
-

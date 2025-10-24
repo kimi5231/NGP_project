@@ -1,9 +1,9 @@
 ﻿#include "pch.h"
 #include "GameObject.h"
-
-HBITMAP GameObject::_bitmap = nullptr;
-HBITMAP GameObject::_bitmapMask = nullptr;
-Vertex GameObject::_spriteCnt{};
+//
+//HBITMAP GameObject::_bitmap = nullptr;
+//HBITMAP GameObject::_bitmapMask = nullptr;
+//Vertex GameObject::_spriteCnt{};
 
 GameObject::GameObject(HINSTANCE hInst)
 {

@@ -24,6 +24,9 @@
     <Filter Include="소스 파일\Window">
       <UniqueIdentifier>{23d4d0b0-3505-43e5-bfcc-886a38542a87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Game\Object\Monster">
+      <UniqueIdentifier>{2d6ae8a9-8e9c-4494-94cd-d03b36225d4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -36,9 +39,6 @@
       <Filter>소스 파일\Game</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>소스 파일\Game\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Monster.h">
       <Filter>소스 파일\Game\Object</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -59,15 +59,30 @@
     <ClInclude Include="WindowManager.h">
       <Filter>소스 파일\Window</Filter>
     </ClInclude>
+    <ClInclude Include="TankMonster.h">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="RespawnMonster.h">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleMonster.h">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalMonster.h">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="BomberMonster.h">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">
       <Filter>소스 파일\Game</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>소스 파일\Game\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Monster.cpp">
       <Filter>소스 파일\Game\Object</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -90,6 +105,24 @@
     </ClCompile>
     <ClCompile Include="WindowManager.cpp">
       <Filter>소스 파일\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="TankMonster.cpp">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="RespawnMonster.cpp">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstacleMonster.cpp">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalMonster.cpp">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="BomberMonster.cpp">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

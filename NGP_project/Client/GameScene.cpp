@@ -2,14 +2,21 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "GameScene.h"
+
+// Monster
 #include "Monster.h"
+#include "BomberMonster.h"
+#include "NormalMonster.h"
+#include "ObstacleMonster.h"
+#include "RespawnMonster.h"
+#include "TankMonster.h"
 
 GameScene::GameScene(HINSTANCE hInst)
 {
 	_players.push_back(std::make_shared<Player>(hInst));
 	//_objects.push_back(new GameObject(hInst));
 
-	_monster = new Monster(hInst);
+	_monster = new TankMonster(hInst);
 }
 
 GameScene::~GameScene()
@@ -49,9 +56,9 @@ void GameScene::Render(HDC hDC)
 	/*for (GameObject* object : _objects) {
 		object->Render(memDC, memDCImage);
 	}*/
-	//for (PlayerRef player : _players) {
-	//	player->Render(memDC, memDCImage);
-	//}
+	for (PlayerRef player : _players) {
+		player->Render(memDC, memDCImage);
+	}
 
 	_monster->Render(memDC, memDCImage);
 

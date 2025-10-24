@@ -6,11 +6,11 @@
 
 GameFramework::GameFramework()
 {
-	_scene = new GameScene();
+
 }
 
 GameFramework::GameFramework(CWindowGameMediator* mediator)
-	: _mediator{ mediator }, _scene{ new GameScene(mediator->GetInstance())}, _inputManager{GET_SINGLE(InputManager)}
+	: _mediator{ mediator }
 {
 	Init();
 }
@@ -22,13 +22,15 @@ GameFramework::~GameFramework()
 
 void GameFramework::Init()
 {
-	_inputManager->Init(_mediator->GetHWND());
+	GET_SINGLE(InputManager)->Init(_mediator->GetHWND());
+
+	_scene = new GameScene(_mediator->GetInstance());
 }
 
 void GameFramework::Update()
 {
-	_inputManager->Update();
-	_scene->ProcessInput(GET_SINGLE(InputManager));
+	GET_SINGLE(InputManager)->Update();
+
 	_scene->Update();
 }
 

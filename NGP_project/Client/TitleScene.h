@@ -13,5 +13,5 @@ public:
 	virtual void Render(HDC hDC);
 
 private:
-	virtual void ProcessInput(InputManager* inputManager) {};
+	virtual void ProcessInput() {};
 };

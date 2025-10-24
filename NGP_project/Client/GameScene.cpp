@@ -33,32 +33,32 @@ void GameScene::Init()
 
 void GameScene::Update()
 {
+	ProcessInput();
 }
 
-void GameScene::ProcessInput(InputManager* inputManager)
+void GameScene::ProcessInput()
 {
 	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
-	if (inputManager->GetButtonDown(KeyType::Left)) {
+	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::Left)) {
 		for (PlayerRef player : _players) {
 			player->Left();
 		}
 	}
-	if (inputManager->GetButtonDown(KeyType::Right)) {
+	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::Right)) {
 		for (PlayerRef player : _players) {
 			player->Right();
 		}
 	}
-	if (inputManager->GetButtonDown(KeyType::Up)) {
+	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::Up)) {
 		for (PlayerRef player : _players) {
 			player->Up();
 		}
 	}
-	if (inputManager->GetButtonDown(KeyType::Down)) {
+	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::Down)) {
 		for (PlayerRef player : _players) {
 			player->Down();
 		}
 	}
-
 }
 
 void GameScene::Render(HDC hDC)

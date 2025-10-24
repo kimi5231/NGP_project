@@ -1,16 +1,5 @@
 ﻿#pragma once
 // InputManager : 키보드, 마우스 입력을 처리하는 매니저
-#define DECLARE_SINGLE(classname)            \
-private:                                    \
-    classname() { }                            \
-public:                                        \
-    static classname* GetInstance()            \
-    {                                        \
-        static classname s_instance;        \
-        return &s_instance;                    \
-    }
-
-#define GET_SINGLE(classname)    classname::GetInstance()
 
 enum class KeyType	// 키 버튼 
 {
@@ -59,6 +48,7 @@ enum    // 개수 깔끔하게 정리
 class InputManager
 {
 	DECLARE_SINGLE(InputManager);
+
 public:
 	void Init(HWND hwnd);
 	void Update();
@@ -81,4 +71,3 @@ private:
 	std::vector<KeyState> _states;
 	POINT _mousePos;
 };
-

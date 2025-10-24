@@ -17,7 +17,7 @@ public:
 	virtual void Render(HDC hDC);
 
 public:
-	virtual void ProcessInput(InputManager* inputManager) override;
+	virtual void ProcessInput() override;
 	
 private:
 	std::vector<PlayerRef> _players;

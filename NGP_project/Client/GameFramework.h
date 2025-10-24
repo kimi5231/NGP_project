@@ -22,5 +22,4 @@ public:
 private:
 	Scene* _scene{};
 	CWindowGameMediator* _mediator;
-	InputManager* _inputManager;
 };

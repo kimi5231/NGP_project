@@ -1,11 +1,12 @@
 ﻿#include "pch.h"
 #include "GameObject.h"
+#include "Player.h"
 #include "GameScene.h"
 
 GameScene::GameScene(HINSTANCE hInst)
 {
-	//_players.push_back(std::make_shared<Player>(hInst));
-	_objects.push_back(new GameObject(hInst));
+	_players.push_back(std::make_shared<Player>(hInst));
+	//_objects.push_back(new GameObject(hInst));
 }
 
 GameScene::~GameScene()
@@ -30,8 +31,6 @@ void GameScene::Render()
 
 void GameScene::Render(HDC hDC)
 {
-	/*for (PlayerRef player : _players)
-		player->Render(hDC);*/
 	HDC memDC, memDCImage;
 	HBITMAP hbit, oldbit;
 
@@ -44,9 +43,13 @@ void GameScene::Render(HDC hDC)
 	// memDC hbit객체 선택
 	oldbit = (HBITMAP)SelectObject(memDC, hbit);
 
-	for (GameObject* object : _objects) {
+	/*for (GameObject* object : _objects) {
 		object->Render(memDC, memDCImage);
+	}*/
+	for (PlayerRef player : _players) {
+		player->Render(memDC, memDCImage);
 	}
+
 
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hDC, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);

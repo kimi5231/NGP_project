@@ -1,12 +1,22 @@
 ﻿#include "pch.h"
 #include "GameObject.h"
 
-
+HBITMAP GameObject::_bitmap = nullptr;
+HBITMAP GameObject::_bitmapMask = nullptr;
 
 GameObject::GameObject(HINSTANCE hInst)
 {
-    _bitmap = (HBITMAP)LoadImage(hInst, TEXT("cowboy_move.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    _bitmapMask = (HBITMAP)LoadImage(hInst, TEXT("cowboy_mask.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    //init(hInst);
+}
+
+GameObject::~GameObject()
+{
+    if (_bitmap) {
+        DeleteObject(_bitmap);
+    }
+    if (_bitmapMask) {
+        DeleteObject(_bitmapMask);
+    }
 }
 
 void GameObject::Render(HDC hDC, HDC srcDC)

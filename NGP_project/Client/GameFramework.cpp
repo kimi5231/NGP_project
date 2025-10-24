@@ -32,14 +32,9 @@ void GameFramework::Update()
 	_scene->Update();
 }
 
-void GameFramework::Render()
+void GameFramework::Render(HDC hdc)
 {
-	_scene->Render();
-}
-
-void GameFramework::Render(HDC hDC)
-{
-	_scene->Render(hDC);
+	_scene->Render(hdc);
 }
 
 void GameFramework::ChangeScene()

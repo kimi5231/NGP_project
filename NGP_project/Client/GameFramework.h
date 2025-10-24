@@ -11,11 +11,12 @@ public:
 	GameFramework(CWindowGameMediator* mediator);
 	virtual ~GameFramework();
 
+public:
 	void Init();
 	void Update();
-	void Render();
-	void Render(HDC hDC);
+	void Render(HDC hdc);
 
+public:
 	void ChangeScene();
 
 private:

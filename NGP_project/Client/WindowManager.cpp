@@ -158,7 +158,7 @@ void CWindowGameMediator::Update()
     InvalidateRect(window_manager->GetHWND(), NULL, false);
 }
 
-void CWindowGameMediator::Render(HDC hDC)
+void CWindowGameMediator::Render(HDC hdc)
 {
-    game_framework->Render(hDC);
+    game_framework->Render(hdc);
 }

@@ -14,9 +14,11 @@ public:
 public:
 	virtual void Init();
 	virtual void Update();
-	virtual void Render();
+	virtual void Render(HDC hDC);
+
+public:
 	virtual void ProcessInput(InputManager* inputManager) override;
-	void Render(HDC hDC);
+	
 private:
 	std::vector<PlayerRef> _players;
 	std::vector<GameObject*> _objects;

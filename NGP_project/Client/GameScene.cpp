@@ -35,10 +35,6 @@ void GameScene::Update()
 {
 }
 
-void GameScene::Render()
-{
-}
-
 void GameScene::ProcessInput(InputManager* inputManager)
 {
 	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)

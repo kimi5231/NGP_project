@@ -11,7 +11,8 @@ public:
 public:
 	virtual void Init() {};
 	virtual void Update() {};
-	virtual void Render() {};
-	virtual void Render(HDC) {};
+	virtual void Render(HDC hDC) {};
+
+public:
 	virtual void ProcessInput(InputManager* inputManager) {};
 };

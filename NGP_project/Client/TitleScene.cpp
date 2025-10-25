@@ -6,7 +6,7 @@
 TitleScene::TitleScene()
 {
 	// Create Title
-	GameObject* title = new GameObject();
+	GameObjectRef title = std::make_shared<GameObject>();
 	
 	HBITMAP bitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "Title.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	title->SetObjectType(ObjectType::Background);

@@ -16,7 +16,7 @@ public:
 	virtual void ProcessInput() {};
 
 protected:
-	std::vector<GameObject*> _objects;
+	std::vector<GameObjectRef> _objects;
 
 protected:
 	// Double Buffering

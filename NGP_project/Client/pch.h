@@ -14,7 +14,8 @@ enum class ObjectState
 {
     Idle,
     Move,
-
+    Boom,
+    Dead,
 };
 
 enum class ObjectType
@@ -22,6 +23,7 @@ enum class ObjectType
     Player,
     Monster,
     Background,
+    Item,
 };
 
 enum class ItemType : int
@@ -40,7 +42,10 @@ struct Vertex
     int x, y;
 };
 
+using GameObjectRef = std::shared_ptr<class GameObject>;
 using PlayerRef = std::shared_ptr<class Player>;
+using TankMonsterRef = std::shared_ptr<class TankMonster>;
+using ItemRef = std::shared_ptr<class Item>;
 
 #define DECLARE_SINGLE(classname)           \
 private:                                    \

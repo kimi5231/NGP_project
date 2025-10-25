@@ -6,13 +6,27 @@ public:
 	virtual ~GameObject();
 
 public:
+	virtual void Update();
 	virtual void Render(HDC hdc, HDC srcDC);
+
+public:
+	virtual void Left();
+	virtual void Right();
+	virtual void Up();
+	virtual void Down();
+
+private:
+	virtual void Idle() {};
+	virtual void Move() {};
+	virtual void Boom() {};
+	virtual void Dead() {};
 
 public:
 	void SetBitmap(HBITMAP bitmap) { _bitmap = bitmap; }
 	void SetSpriteCount(Vertex count) { _spriteCnt = count; }
 
 	void SetObjectType(ObjectType type) { _type = type; }
+	ObjectType GetObjectType() { return _type; }
 	void SetState(ObjectState state) { _state = state; }
 	void SetPos(Vertex pos) { _pos = pos; }
 

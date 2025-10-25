@@ -15,6 +15,25 @@ GameObject::~GameObject()
     }
 }
 
+void GameObject::Update()
+{
+    switch (_state)
+    {
+    case ObjectState::Idle:
+        Idle();
+        break;
+    case ObjectState::Move:
+        Move();
+        break;
+    case ObjectState::Boom:
+        Boom();
+        break;
+    case ObjectState::Dead:
+        Dead();
+        break;
+    }
+}
+
 void GameObject::Render(HDC hdc, HDC srcDC)
 {
     if (_type == ObjectType::Background)
@@ -39,9 +58,23 @@ void GameObject::Render(HDC hdc, HDC srcDC)
     }
 }
 
+void GameObject::Left()
+{
+}
+
+void GameObject::Right()
+{
+}
+
+void GameObject::Up()
+{
+}
+
+void GameObject::Down()
+{
+}
 
 void GameObject::ResetCurFrame()
 {
     _curFrame.x = 0;
 }
-

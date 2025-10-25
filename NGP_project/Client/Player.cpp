@@ -22,8 +22,9 @@ void Player::Update()
 {
 }
 
-void Player::Render(HDC hdc)
+void Player::Render(HDC hdc, HDC srcDC)
 {
+    GameObject::Render(hdc, srcDC);
 }
 
 void Player::Left()

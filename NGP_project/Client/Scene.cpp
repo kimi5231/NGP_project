@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Scene.h"
-#include "GameObject.h"
+#include "Player.h"
 
 void Scene::Render(HDC hdc)
 {
@@ -13,7 +13,7 @@ void Scene::Render(HDC hdc)
 	// memDC hbit객체 선택
 	_oldbit = (HBITMAP)SelectObject(_memDC, _hbit);
 
-	for (GameObject* object : _objects)
+	for (GameObjectRef object : _objects)
 		object->Render(_memDC, _memDCImage);
 
 	// hdc에 memDC 출력(최종화면 출력)

@@ -17,9 +17,4 @@ public:
 
 public:
 	virtual void ProcessInput() override;
-
-private:
-	//std::vector<PlayerRef> _players;
-	//std::vector<GameObject*> _objects;
-	Monster* _monster;
 };

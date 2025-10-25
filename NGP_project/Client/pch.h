@@ -26,7 +26,7 @@ enum class ObjectType
     Item,
 };
 
-enum class ItemType : int
+enum class ItemType
 {
     Life,
     Magazine,
@@ -35,6 +35,19 @@ enum class ItemType : int
     Coffee,
     Shotgun,
     Hourglass,
+};
+
+enum class Dir
+{
+   Left,
+   Right,
+   Up,
+   Down,
+
+   LeftUp,
+   LeftDown,
+   RightUp,
+   RightDown,
 };
 
 struct Vertex
@@ -46,6 +59,7 @@ using GameObjectRef = std::shared_ptr<class GameObject>;
 using PlayerRef = std::shared_ptr<class Player>;
 using TankMonsterRef = std::shared_ptr<class TankMonster>;
 using ItemRef = std::shared_ptr<class Item>;
+using ProjectileRef = std::shared_ptr<class Projectile>;
 
 #define DECLARE_SINGLE(classname)           \
 private:                                    \

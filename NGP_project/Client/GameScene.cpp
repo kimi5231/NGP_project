@@ -4,6 +4,7 @@
 #include "GameScene.h"
 #include "Global.h"
 #include "Item.h"
+#include "projectile.h"
 
 // Monster
 #include "BomberMonster.h"
@@ -26,6 +27,10 @@ GameScene::GameScene()
 	item->SetObjectType(ObjectType::Item);
 	item->SetPos({ 50, 50 });
 	_objects.push_back(item);
+
+	ProjectileRef bullet = std::make_shared<Projectile>(Dir::RightDown);
+	bullet->SetState(ObjectState::Move);
+	_objects.push_back(bullet);
 }
 
 GameScene::~GameScene()
@@ -35,6 +40,8 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
+	Scene::Update();
+
 	ProcessInput();
 
 	// test 용

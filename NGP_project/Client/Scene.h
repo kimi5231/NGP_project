@@ -9,7 +9,7 @@ public:
 	virtual ~Scene() {};
 
 public:
-	virtual void Update() {};
+	virtual void Update();
 	virtual void Render(HDC hdc);
 
 public:

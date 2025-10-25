@@ -40,7 +40,9 @@ protected:
 
 	ObjectType _type{};
 	ObjectState _state{};
-
+	Dir _dir{};
 	Vertex _pos{};
 	Vertex _curFrame{};
+
+	int _speed{};
 };

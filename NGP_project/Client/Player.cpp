@@ -5,7 +5,6 @@
 #define PLAYER_SPEED 5
 
 Player::Player()
-	: GameObject()
 {
     Init();
 }

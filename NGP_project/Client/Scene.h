@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-class InputManager;
+class GameObject;
 
 class Scene
 {
@@ -9,10 +9,20 @@ public:
 	virtual ~Scene() {};
 
 public:
-	virtual void Init() {};
 	virtual void Update() {};
-	virtual void Render(HDC hDC) {};
+	virtual void Render(HDC hdc);
 
 public:
 	virtual void ProcessInput() {};
+
+protected:
+	std::vector<GameObject*> _objects;
+
+protected:
+	// Double Buffering
+	HDC _memDC{};
+	HDC _memDCImage{};
+
+	HBITMAP _hbit{}; 
+	HBITMAP _oldbit{};
 };

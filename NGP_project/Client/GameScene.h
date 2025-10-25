@@ -10,16 +10,16 @@ class GameScene : public Scene
 public:
 	GameScene();
 	virtual ~GameScene();
+
 public:
-	virtual void Init();
 	virtual void Update();
-	virtual void Render(HDC hDC);
+	virtual void Render(HDC hdc);
 
 public:
 	virtual void ProcessInput() override;
+
 private:
-	std::vector<PlayerRef> _players;
-	std::vector<GameObject*> _objects;
+	//std::vector<PlayerRef> _players;
+	//std::vector<GameObject*> _objects;
 	Monster* _monster;
-	Merchant* _merchant;
 };

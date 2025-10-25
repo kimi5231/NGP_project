@@ -1,12 +1,26 @@
 #include "pch.h"
 #include "TitleScene.h"
+#include "Global.h"
+#include "GameObject.h"
 
-void TitleScene::Init()
+TitleScene::TitleScene()
 {
-	// Load Title Image
+	// Create Title
+	GameObject* title = new GameObject();
+	
+	HBITMAP bitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "Title.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	title->SetObjectType(ObjectType::Background);
+	title->SetBitmap(bitmap);
+	title->SetSpriteCount({0,0});
+	
+	_objects.push_back(title);
 }
 
-void TitleScene::Render(HDC hDC)
+TitleScene::~TitleScene()
 {
-	// Render Title Image
+}
+
+void TitleScene::Render(HDC hdc)
+{
+	Scene::Render(hdc);
 }

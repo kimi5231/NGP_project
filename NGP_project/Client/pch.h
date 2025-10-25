@@ -17,6 +17,18 @@ enum class ObjectState
 
 };
 
+enum class ObjectType
+{
+    Player,
+    Monster,
+    Background,
+};
+
+enum class ItemType
+{
+    None,
+};
+
 struct Vertex
 {
     int x, y;

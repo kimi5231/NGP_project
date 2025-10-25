@@ -1,16 +1,17 @@
 #pragma once
 #include "Scene.h"
 
+class GameObject;
+
 class TitleScene : public Scene
 {
 public:
-	TitleScene() {};
-	virtual ~TitleScene() {};
+	TitleScene();
+	virtual ~TitleScene();
 
 public:
-	virtual void Init();
 	virtual void Update() {};
-	virtual void Render(HDC hDC);
+	virtual void Render(HDC hdc);
 
 private:
 	virtual void ProcessInput() {};

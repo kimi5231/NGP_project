@@ -2,6 +2,7 @@
 #include "GameFramework.h"
 #include "GameScene.h"
 #include "InputManager.h"
+#include "TimeManager.h"
 #include "Global.h"
 
 GameFramework::GameFramework()
@@ -20,13 +21,14 @@ void GameFramework::Init()
 	g_resourcePath = std::filesystem::current_path().parent_path() / "Resource\\Bitmap";
 
 	GET_SINGLE(InputManager)->Init(hWnd);
-
+	GET_SINGLE(TimeManager)->Init();
 	_scene = new GameScene();
 }
 
 void GameFramework::Update()
 {
 	GET_SINGLE(InputManager)->Update();
+	GET_SINGLE(TimeManager)->Update();
 
 	_scene->Update();
 	InvalidateRect(hWnd, NULL, false);

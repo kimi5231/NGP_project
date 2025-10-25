@@ -4,6 +4,7 @@
 class GameObject
 {
 public:
+	GameObject() {};
 	GameObject(HINSTANCE hInst);
 	virtual ~GameObject();
 

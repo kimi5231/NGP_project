@@ -27,6 +27,9 @@
     <Filter Include="소스 파일\Game\Object\Monster">
       <UniqueIdentifier>{2d6ae8a9-8e9c-4494-94cd-d03b36225d4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Game\Object\Item">
+      <UniqueIdentifier>{07661162-3097-4270-b053-a238dbf09766}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -83,6 +86,9 @@
     <ClInclude Include="TitleScene.h">
       <Filter>소스 파일\Game\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>소스 파일\Game\Object\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">
@@ -135,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>소스 파일\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>소스 파일\Game\Object\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,9 @@
 ﻿#pragma once
-
-class Monster;
+#include "Monster.h"
 
 class ObstacleMonster : public Monster
 {
 public:
 	ObstacleMonster();
-
-	virtual void Init() override;
+	virtual ~ObstacleMonster() {};
 };
-

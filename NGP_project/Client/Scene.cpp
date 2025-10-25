@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Scene.h"
 #include "GameObject.h"
- 
+
 void Scene::Render(HDC hdc)
 {
 	// 더블 버퍼링을 위해 두 개의 메모리 DC 생성

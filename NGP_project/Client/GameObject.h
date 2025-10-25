@@ -6,7 +6,6 @@ public:
 	virtual ~GameObject();
 
 public:
-	virtual void Init();
 	virtual void Render(HDC hDC, HDC srcDC);
 
 public:

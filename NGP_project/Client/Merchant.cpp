@@ -11,7 +11,6 @@ void Merchant::Init()
 {
 	_bitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "Merchant.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	_bitmapMask = (HBITMAP)LoadImage(hInst, (g_resourcePath / "Merchant_mask.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-
 	_spriteCnt = { 1, 4 };
 	_pos = { 230, 30 };
 	_state = ObjectState::Idle;

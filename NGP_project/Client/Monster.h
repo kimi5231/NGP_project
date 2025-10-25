@@ -1,17 +1,15 @@
 ﻿#pragma once
-
-class GameObject;
+#include "GameObject.h"
 
 class Monster : public GameObject
 {
 public:
 	Monster();
+	virtual ~Monster() {};
 
-	virtual void Init() override;
-
+public:
 	virtual void Left();
 	virtual void Right();
 	virtual void Up();
 	virtual void Down();
 };
-

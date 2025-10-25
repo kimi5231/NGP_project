@@ -6,20 +6,24 @@
 
 Player::Player()
 {
-    Init();
-}
+    if (!_bitmap || !_bitmapMask) 
+    {
+        _bitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "Player.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        _bitmapMask = (HBITMAP)LoadImage(hInst, (g_resourcePath / "Player_mask.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    }
 
-void Player::Init()
-{
-    if (!_bitmap || !_bitmapMask) {
-        _bitmap = (HBITMAP)LoadImage(hInst, TEXT("cowboy_move.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-        _bitmapMask = (HBITMAP)LoadImage(hInst, TEXT("cowboy_mask.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-    }
-    if (!_spriteCnt.x) {
+    if (!_spriteCnt.x)
         _spriteCnt = { 8,10 };
-    }
 
     _pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
+}
+
+void Player::Update()
+{
+}
+
+void Player::Render(HDC hdc)
+{
 }
 
 void Player::Left()

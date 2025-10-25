@@ -1,16 +1,10 @@
 ﻿#include "pch.h"
-#include "GameObject.h"
 #include "Monster.h"
 
 // 임시지정
 #define MONSTER_SPEED 0.1
 
-Monster::Monster() : GameObject()
-{
-	Init();
-}
-
-void Monster::Init()
+Monster::Monster()
 {
 }
 

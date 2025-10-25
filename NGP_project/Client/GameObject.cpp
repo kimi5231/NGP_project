@@ -8,7 +8,6 @@
 
 GameObject::GameObject()
 {
-    Init();
 }
 
 GameObject::~GameObject()
@@ -19,10 +18,6 @@ GameObject::~GameObject()
     if (_bitmapMask) {
         DeleteObject(_bitmapMask);
     }
-}
-
-void GameObject::Init()
-{
 }
 
 void GameObject::Render(HDC hdc, HDC srcDC)

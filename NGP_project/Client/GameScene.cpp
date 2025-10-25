@@ -28,6 +28,8 @@ GameScene::~GameScene()
 	for (GameObject* object : _objects) {
 		delete object;
 	}
+	delete _merchant;
+	delete _monster;
 }
 
 void GameScene::Init()
@@ -37,6 +39,7 @@ void GameScene::Init()
 void GameScene::Update()
 {
 	ProcessInput();
+	_monster->Right();	// test 용
 }
 
 void GameScene::Render(HDC hDC)
@@ -62,7 +65,7 @@ void GameScene::Render(HDC hDC)
 
 	_merchant->Render(memDC, memDCImage);
 
-	//_monster->Render(memDC, memDCImage);
+	_monster->Render(memDC, memDCImage);
 
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hDC, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);
@@ -75,7 +78,7 @@ void GameScene::Render(HDC hDC)
 
 void GameScene::ProcessInput()
 {
-	// 오버헤드를 줄이기 위해 포인트로 받고 사용
+	// 코드 길어져서 포인터로 받기
 	InputManager* input = GET_SINGLE(InputManager);
 	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
 	if (input->GetButtonDown(KeyType::Left)) {

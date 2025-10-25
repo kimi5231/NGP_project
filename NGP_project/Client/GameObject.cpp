@@ -5,6 +5,7 @@
 //HBITMAP GameObject::_bitmapMask = nullptr;
 //Vertex GameObject::_spriteCnt{};
 
+
 GameObject::GameObject(HINSTANCE hInst)
 {
     Init(hInst);
@@ -37,3 +38,10 @@ void GameObject::Render(HDC hDC, HDC srcDC)
     
     SelectObject(srcDC, oldbit);
 }
+
+
+void GameObject::ResetCurFrame()
+{
+    _curFrame.x = 0;
+}
+

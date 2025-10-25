@@ -51,8 +51,3 @@ void Player::Down()
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 
 }
-
-void Player::ResetCurFrame()
-{
-    _curFrame.x = 0;
-}

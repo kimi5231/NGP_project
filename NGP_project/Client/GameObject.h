@@ -10,6 +10,8 @@ public:
 
 	virtual void Init(HINSTANCE hInst) = 0;
 	virtual void Render(HDC hDC, HDC srcDC);
+
+	void ResetCurFrame();
 public:
 	void SetState(ObjectState state) { _state = state; }
 

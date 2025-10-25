@@ -7,7 +7,6 @@ class InputManager;
 class GameFramework
 {
 public:
-	GameFramework();
 	GameFramework(CWindowGameMediator* mediator);
 	virtual ~GameFramework();
 

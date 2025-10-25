@@ -8,7 +8,7 @@ public:
 	GameObject(HINSTANCE hInst);
 	virtual ~GameObject();
 
-	virtual void Init(HINSTANCE hInst);
+	virtual void Init(HINSTANCE hInst) = 0;
 	virtual void Render(HDC hDC, HDC srcDC);
 
 public:

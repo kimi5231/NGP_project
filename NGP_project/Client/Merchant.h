@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 
 class Merchant : public GameObject
@@ -10,7 +10,7 @@ public:
 	virtual ~Merchant() {};
 
 public:
-	virtual void Init();
+	virtual void Init(HINSTANCE hInst);
 	virtual void Update();
 	virtual void Render(HDC hDC, HDC srcDC);
 };

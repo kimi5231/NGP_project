@@ -5,11 +5,6 @@
 #include "InputManager.h"
 #include "Global.h"
 
-GameFramework::GameFramework()
-{
-
-}
-
 GameFramework::GameFramework(CWindowGameMediator* mediator)
 	: _mediator{ mediator }
 {

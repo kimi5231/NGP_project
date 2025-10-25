@@ -3,6 +3,7 @@
 #include "GameScene.h"
 #include "WindowManager.h"
 #include "InputManager.h"
+#include "TimeManager.h"
 #include "Global.h"
 
 GameFramework::GameFramework(CWindowGameMediator* mediator)
@@ -22,6 +23,7 @@ void GameFramework::Init()
 	g_resourcePath = std::filesystem::current_path().parent_path() / "Resource\\Bitmap";
 
 	GET_SINGLE(InputManager)->Init(_mediator->GetHWND());
+	GET_SINGLE(TimeManager)->Init();
 
 	_scene = new GameScene(_mediator->GetInstance());
 }
@@ -29,6 +31,7 @@ void GameFramework::Init()
 void GameFramework::Update()
 {
 	GET_SINGLE(InputManager)->Update();
+	GET_SINGLE(TimeManager)->Update();
 
 	_scene->Update();
 }

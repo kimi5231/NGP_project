@@ -151,6 +151,7 @@
     <ClInclude Include="RespawnMonster.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TankMonster.h" />
+    <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="WindowManager.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="RespawnMonster.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TankMonster.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WindowManager.cpp" />

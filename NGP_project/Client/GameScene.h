@@ -3,6 +3,7 @@
 
 class GameObject;
 class Monster;
+class Merchant;
 
 class GameScene : public Scene
 {
@@ -23,4 +24,5 @@ private:
 	std::vector<PlayerRef> _players;
 	std::vector<GameObject*> _objects;
 	Monster* _monster;
+	Merchant* _merchant;
 };

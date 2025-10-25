@@ -7,7 +7,7 @@
 
 GameObject::GameObject(HINSTANCE hInst)
 {
-    //init(hInst);
+    Init(hInst);
 }
 
 GameObject::~GameObject()
@@ -18,6 +18,11 @@ GameObject::~GameObject()
     if (_bitmapMask) {
         DeleteObject(_bitmapMask);
     }
+}
+
+void GameObject::Init(HINSTANCE hInst)
+{
+    _hInst = hInst;
 }
 
 void GameObject::Render(HDC hDC, HDC srcDC)

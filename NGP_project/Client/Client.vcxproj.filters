@@ -89,6 +89,12 @@
     <ClInclude Include="Item.h">
       <Filter>소스 파일\Game\Object\Item</Filter>
     </ClInclude>
+    <ClInclude Include="Merchant.h">
+      <Filter>소스 파일\Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>소스 파일\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">
@@ -144,6 +150,12 @@
     </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>소스 파일\Game\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Merchant.cpp">
+      <Filter>소스 파일\Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>소스 파일\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

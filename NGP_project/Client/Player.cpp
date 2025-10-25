@@ -18,6 +18,8 @@ void Player::Init(HINSTANCE hInst)
     if (!_spriteCnt.x) {
         _spriteCnt = { 8,10 };
     }
+
+    _pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
 }
 
 void Player::Left()

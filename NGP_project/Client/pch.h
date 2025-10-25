@@ -17,6 +17,13 @@ enum class ObjectState
 
 };
 
+enum class ShopItemType
+{
+    Shose,
+    Bullet,
+    Gun,
+};
+
 struct Vertex
 {
     int x, y;

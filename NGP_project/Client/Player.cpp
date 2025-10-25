@@ -22,6 +22,31 @@ void Player::Init(HINSTANCE hInst)
     _pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
 }
 
+void Player::Update()
+{
+    // 충돌 처리
+}
+
+void Player::BuyItem(ShopItemType itemType)
+{
+    _currentItem = itemType;
+
+    switch (itemType)
+    {
+    case ShopItemType::Shose:
+        _speed += 2;
+        break;
+    case ShopItemType::Bullet:
+        _attack += 5;
+        break;
+    case ShopItemType::Gun:
+        _bulletSpeed += 5;
+        break;
+    default:
+        break;
+    }
+}
+
 void Player::Left()
 {
     _pos.x -= PLAYER_SPEED;

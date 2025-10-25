@@ -3,8 +3,8 @@
 #include "Player.h"
 #include "InputManager.h"
 #include "GameScene.h"
-#include "Merchant.h"
 #include "Global.h"
+#include "Item.h"
 
 // Monster
 #include "Monster.h"
@@ -23,6 +23,10 @@ GameScene::GameScene()
 	TankMonster* TM = new TankMonster();
 	_objects.push_back(TM);
 	_monster = TM;
+
+	Item* item = new Item(ItemType::Life);
+	item->SetPos({ 50, 50 });
+	_objects.push_back(item);
 }
 
 GameScene::~GameScene()

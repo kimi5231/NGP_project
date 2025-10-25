@@ -6,7 +6,7 @@ public:
 	virtual ~GameObject();
 
 public:
-	virtual void Render(HDC hDC, HDC srcDC);
+	virtual void Render(HDC hdc, HDC srcDC);
 
 public:
 	void SetBitmap(HBITMAP bitmap) { _bitmap = bitmap; }

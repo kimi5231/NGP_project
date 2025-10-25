@@ -4,14 +4,13 @@
 class Item : public GameObject
 {
 public:
-	Item() {};
+	Item(ItemType type);
 	virtual ~Item() {};
 
 public:
-	virtual void Init();
 	virtual void Update();
-	virtual void Render();
+	virtual void Render(HDC hdc, HDC srcDC);
 
 private:
-
+	ItemType _type{};
 };

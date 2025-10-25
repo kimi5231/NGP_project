@@ -141,7 +141,6 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Item.h" />
-    <ClInclude Include="Merchant.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="NormalMonster.h" />
     <ClInclude Include="ObstacleMonster.h" />
@@ -152,7 +151,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TankMonster.h" />
     <ClInclude Include="TimeManager.h" />
-    <ClInclude Include="Timer.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -164,7 +162,6 @@
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Item.cpp" />
-    <ClCompile Include="Merchant.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="NormalMonster.cpp" />
     <ClCompile Include="ObstacleMonster.cpp" />
@@ -177,7 +174,6 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TankMonster.cpp" />
     <ClCompile Include="TimeManager.cpp" />
-    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>

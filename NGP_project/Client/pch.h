@@ -24,9 +24,15 @@ enum class ObjectType
     Background,
 };
 
-enum class ItemType
+enum class ItemType : int
 {
-    None,
+    Life,
+    Magazine,
+    Lightning,
+    Waterwheel,
+    Coffee,
+    Shotgun,
+    Hourglass,
 };
 
 struct Vertex

@@ -59,9 +59,6 @@
     <ClInclude Include="pch.h">
       <Filter>소스 파일\Window</Filter>
     </ClInclude>
-    <ClInclude Include="WindowManager.h">
-      <Filter>소스 파일\Window</Filter>
-    </ClInclude>
     <ClInclude Include="TankMonster.h">
       <Filter>소스 파일\Game\Object\Monster</Filter>
     </ClInclude>
@@ -119,9 +116,6 @@
       <Filter>소스 파일\Window</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>소스 파일\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowManager.cpp">
       <Filter>소스 파일\Window</Filter>
     </ClCompile>
     <ClCompile Include="TankMonster.cpp">

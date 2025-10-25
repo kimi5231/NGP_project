@@ -1,12 +1,12 @@
-#pragma once
+﻿#pragma once
 
 class Monster;
 
 class NormalMonster : public Monster
 {
 public:
-	NormalMonster(HINSTANCE hInst);
+	NormalMonster();
 
-	virtual void Init(HINSTANCE hInst) override;
+	virtual void Init() override;
 };
 

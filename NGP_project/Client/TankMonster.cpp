@@ -1,14 +1,15 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameObject.h"
 #include "Monster.h"
 #include "TankMonster.h"
+#include "Global.h"
 
-TankMonster::TankMonster(HINSTANCE hInst) : Monster(hInst)
+TankMonster::TankMonster() : Monster()
 {
-	Init(hInst);
+	Init();
 }
 
-void TankMonster::Init(HINSTANCE hInst)
+void TankMonster::Init()
 {
     if (!_bitmap || !_bitmapMask) {
         _bitmap = (HBITMAP)LoadImage(hInst, TEXT("tank.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);

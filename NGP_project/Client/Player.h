@@ -3,9 +3,9 @@
 
 class Player : public GameObject {
 public:
-	Player(HINSTANCE hInst);
+	Player();
 
-	virtual void Init(HINSTANCE hInst) override;
+	virtual void Init() override;
 
 	// 나중에 Command 패턴 적용
 	void Left();

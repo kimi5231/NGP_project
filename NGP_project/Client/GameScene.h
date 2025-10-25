@@ -8,10 +8,8 @@ class Merchant;
 class GameScene : public Scene
 {
 public:
-	GameScene() {};
-	GameScene(HINSTANCE hInst);
+	GameScene();
 	virtual ~GameScene();
-
 public:
 	virtual void Init();
 	virtual void Update();

@@ -1,13 +1,12 @@
 ﻿#pragma once
 
 class Scene;
-class CWindowGameMediator;
 class InputManager;
 
 class GameFramework
 {
 public:
-	GameFramework(CWindowGameMediator* mediator);
+	GameFramework();
 	virtual ~GameFramework();
 
 public:
@@ -20,5 +19,4 @@ public:
 
 private:
 	Scene* _scene{};
-	CWindowGameMediator* _mediator;
 };

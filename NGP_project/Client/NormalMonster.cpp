@@ -1,14 +1,15 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameObject.h"
 #include "Monster.h"
 #include "NormalMonster.h"
+#include "Global.h"
 
-NormalMonster::NormalMonster(HINSTANCE hInst) : Monster(hInst)
+NormalMonster::NormalMonster() : Monster()
 {
-	Init(hInst);
+	Init();
 }
 
-void NormalMonster::Init(HINSTANCE hInst)
+void NormalMonster::Init()
 {
     if (!_bitmap || !_bitmapMask) {
         _bitmap = (HBITMAP)LoadImage(hInst, TEXT("normal_monster.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);

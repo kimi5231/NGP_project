@@ -1,14 +1,15 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameObject.h"
 #include "Monster.h"
 #include "ObstacleMonster.h"
+#include "Global.h"
 
-ObstacleMonster::ObstacleMonster(HINSTANCE hInst) : Monster(hInst)
+ObstacleMonster::ObstacleMonster() : Monster()
 {
-	Init(hInst);
+	Init();
 }
 
-void ObstacleMonster::Init(HINSTANCE hInst)
+void ObstacleMonster::Init()
 {
     if (!_bitmap || !_bitmapMask) {
         _bitmap = (HBITMAP)LoadImage(hInst, TEXT("obstacle.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);

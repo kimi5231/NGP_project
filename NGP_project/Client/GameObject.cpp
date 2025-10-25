@@ -6,9 +6,9 @@
 //Vertex GameObject::_spriteCnt{};
 
 
-GameObject::GameObject(HINSTANCE hInst)
+GameObject::GameObject()
 {
-    Init(hInst);
+    Init();
 }
 
 GameObject::~GameObject()
@@ -21,9 +21,8 @@ GameObject::~GameObject()
     }
 }
 
-void GameObject::Init(HINSTANCE hInst)
+void GameObject::Init()
 {
-    _hInst = hInst;
 }
 
 void GameObject::Render(HDC hDC, HDC srcDC)

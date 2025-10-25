@@ -153,7 +153,6 @@
     <ClInclude Include="TankMonster.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BomberMonster.cpp" />
@@ -178,7 +177,6 @@
     <ClCompile Include="TankMonster.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

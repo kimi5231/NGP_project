@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "GameScene.h"
 #include "Merchant.h"
+#include "Global.h"
 
 // Monster
 #include "Monster.h"
@@ -13,14 +14,14 @@
 #include "RespawnMonster.h"
 #include "TankMonster.h"
 
-GameScene::GameScene(HINSTANCE hInst)
+GameScene::GameScene()
 {
-	_players.push_back(std::make_shared<Player>(hInst));
+	_players.push_back(std::make_shared<Player>());
 	//_objects.push_back(new GameObject(hInst));
 
-	_monster = new TankMonster(hInst);
+	_monster = new TankMonster();
 
-	_merchant = new Merchant(hInst);
+	_merchant = new Merchant();
 }
 
 GameScene::~GameScene()

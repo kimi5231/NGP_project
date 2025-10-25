@@ -1,14 +1,15 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameObject.h"
 #include "Monster.h"
 #include "RespawnMonster.h"
+#include "Global.h"
 
-RespawnMonster::RespawnMonster(HINSTANCE hInst) : Monster(hInst)
+RespawnMonster::RespawnMonster() : Monster()
 {
-	Init(hInst);
+	Init();
 }
 
-void RespawnMonster::Init(HINSTANCE hInst)
+void RespawnMonster::Init()
 {
     if (!_bitmap || !_bitmapMask) {
         _bitmap = (HBITMAP)LoadImage(hInst, TEXT("respawn.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);

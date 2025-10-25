@@ -1,15 +1,16 @@
 ﻿#include "pch.h"
 #include "Player.h"
+#include "Global.h"
 
 #define PLAYER_SPEED 5
 
-Player::Player(HINSTANCE hInst)
-	: GameObject(hInst)
+Player::Player()
+	: GameObject()
 {
-    Init(hInst);
+    Init();
 }
 
-void Player::Init(HINSTANCE hInst)
+void Player::Init()
 {
     if (!_bitmap || !_bitmapMask) {
         _bitmap = (HBITMAP)LoadImage(hInst, TEXT("cowboy_move.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);

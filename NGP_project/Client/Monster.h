@@ -5,9 +5,9 @@ class GameObject;
 class Monster : public GameObject
 {
 public:
-	Monster(HINSTANCE hInst);
+	Monster();
 
-	virtual void Init(HINSTANCE hInst) override;
+	virtual void Init() override;
 
 	virtual void Left();
 	virtual void Right();

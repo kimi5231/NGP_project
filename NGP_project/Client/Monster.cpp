@@ -5,12 +5,12 @@
 // 임시지정
 #define MONSTER_SPEED 0.1
 
-Monster::Monster(HINSTANCE hInst) : GameObject(hInst)
+Monster::Monster() : GameObject()
 {
-	Init(hInst);
+	Init();
 }
 
-void Monster::Init(HINSTANCE hInst)
+void Monster::Init()
 {
 }
 

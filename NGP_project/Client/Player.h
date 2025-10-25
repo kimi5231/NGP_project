@@ -12,6 +12,8 @@ public:
 	void Right();
 	void Up();
 	void Down();
+
+	void ResetCurFrame();
 private:
 
 };

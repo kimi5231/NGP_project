@@ -75,25 +75,31 @@ void GameScene::Render(HDC hDC)
 
 void GameScene::ProcessInput()
 {
+	// 오버헤드를 줄이기 위해 포인트로 받고 사용
+	InputManager* input = GET_SINGLE(InputManager);
 	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
-	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::Left)) {
+	if (input->GetButtonDown(KeyType::Left)) {
 		for (PlayerRef player : _players) {
 			player->Left();
 		}
-	}
-	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::Right)) {
+	} if (input->GetButtonDown(KeyType::Right)) {
 		for (PlayerRef player : _players) {
 			player->Right();
 		}
-	}
-	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::Up)) {
+	} if (input->GetButtonDown(KeyType::Up)) {
 		for (PlayerRef player : _players) {
 			player->Up();
 		}
-	}
-	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::Down)) {
+	} if (input->GetButtonDown(KeyType::Down)) {
 		for (PlayerRef player : _players) {
 			player->Down();
 		}
 	}
+
+	// 이동 버튼 GetButton으로 변경 시 주석 풀기
+	/*if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {
+		for (PlayerRef player : _players) {
+			player->ResetCurFrame();
+		}
+	}*/
 }

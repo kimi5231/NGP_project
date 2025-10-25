@@ -30,10 +30,10 @@ void GameObject::Render(HDC hDC, HDC srcDC)
     HBITMAP oldbit;
     int cnt{};
     oldbit = (HBITMAP)SelectObject(srcDC, _bitmapMask);
-    BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCAND);
+    BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCAND);
 
     SelectObject(srcDC, _bitmap);
-    BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, 0, 0, SRCPAINT);
+    BitBlt(hDC, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCPAINT);
     
     SelectObject(srcDC, oldbit);
 }

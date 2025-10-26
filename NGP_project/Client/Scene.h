@@ -9,20 +9,9 @@ public:
 	virtual ~Scene() {};
 
 public:
-	virtual void Update();
-	virtual void Render(HDC hdc);
+	virtual void Update() {};
+	virtual void Render(HDC hdc) {};
 
 public:
 	virtual void ProcessInput() {};
-
-protected:
-	std::vector<GameObjectRef> _objects;
-
-protected:
-	// Double Buffering
-	HDC _memDC{};
-	HDC _memDCImage{};
-
-	HBITMAP _hbit{}; 
-	HBITMAP _oldbit{};
 };

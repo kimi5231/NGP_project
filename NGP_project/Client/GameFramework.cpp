@@ -24,7 +24,7 @@ void GameFramework::Init()
 	GET_SINGLE(InputManager)->Init(hWnd);
 	GET_SINGLE(TimeManager)->Init();
 
-	_scene = new GameScene();
+	_scene = new TitleScene();
 }
 
 void GameFramework::Update()

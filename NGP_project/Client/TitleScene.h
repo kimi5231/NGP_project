@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h"
 
 class GameObject;
@@ -14,5 +14,7 @@ public:
 	virtual void Render(HDC hdc);
 
 private:
+	HBITMAP _backgroundBitmap{};
+
 	virtual void ProcessInput() {};
 };

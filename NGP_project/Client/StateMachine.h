@@ -41,7 +41,7 @@ public:
 
 class StateMachine {
 public:
-	StateMachine(GameObject* object);
+	StateMachine(GameObject* object, State* state = new SetTarget);
 	~StateMachine();
 	void Start();
 	void Update();

@@ -70,8 +70,8 @@ void Dead::doing(GameObject* object)
 }
 
 // StateMachine
-StateMachine::StateMachine(GameObject* object)
-	: _object{ object }, _curState{ new SetTarget }
+StateMachine::StateMachine(GameObject* object, State* state)
+	: _object{ object }, _curState{ state }
 {
 }
 

@@ -21,5 +21,4 @@ void TitleScene::Render(HDC hdc)
 
 	SelectObject(memDC, _backgroundBitmap);
 	StretchBlt(hdc, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
-
 }

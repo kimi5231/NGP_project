@@ -69,6 +69,19 @@ void Dead::doing(GameObject* object)
 {
 }
 
+// UseItem
+void UseItem::enter(GameObject* object)
+{
+}
+
+void UseItem::exit(GameObject* object)
+{
+}
+
+void UseItem::doing(GameObject* object)
+{
+}
+
 // StateMachine
 StateMachine::StateMachine(GameObject* object, State* state)
 	: _object{ object }, _curState{ state }

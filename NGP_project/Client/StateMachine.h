@@ -39,6 +39,13 @@ public:
 	virtual void doing(GameObject* object) override;
 };
 
+class UseItem : public State {
+public:
+	virtual void enter(GameObject* object) override;
+	virtual void exit(GameObject* object) override;
+	virtual void doing(GameObject* object) override;
+};
+
 class StateMachine {
 public:
 	StateMachine(GameObject* object, State* state = new SetTarget);

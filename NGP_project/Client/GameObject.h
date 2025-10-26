@@ -27,7 +27,6 @@ public:
 
 	void SetObjectType(ObjectType type) { _type = type; }
 	ObjectType GetObjectType() { return _type; }
-	void SetState(ObjectState state) { _state = state; }
 	void SetPos(Vertex pos) { _pos = pos; }
 
 public:
@@ -39,7 +38,6 @@ protected:
 	Vertex _spriteCnt{};	// 스프라이트 시트의 가로/세로 칸 개수
 
 	ObjectType _type{};
-	ObjectState _state{};
 	Dir _dir{};
 	Vertex _pos{};
 	Vertex _curFrame{};

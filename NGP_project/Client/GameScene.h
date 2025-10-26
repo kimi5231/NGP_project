@@ -17,4 +17,8 @@ public:
 
 public:
 	virtual void ProcessInput() override;
+private:
+	std::vector<Player*> _players;
+	std::vector<Monster*> _monsters;
+	//std::shared_ptr<Merchant> _merchant;
 };

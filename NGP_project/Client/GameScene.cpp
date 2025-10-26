@@ -15,35 +15,27 @@
 
 GameScene::GameScene()
 {
-	/*PlayerRef player = std::make_shared<Player>();
-	player->SetObjectType(ObjectType::Player);
-	_objects.push_back(player);
-
-	TankMonsterRef TM = std::make_shared<TankMonster>();
-	TM->SetObjectType(ObjectType::Monster);
-	_objects.push_back(TM);
-
-	ItemRef item = std::make_shared<Item>(ItemType::Life);
-	item->SetObjectType(ObjectType::Item);
-	item->SetPos({ 50, 50 });
-	_objects.push_back(item);
-
-	ProjectileRef bullet = std::make_shared<Projectile>(Dir::RightDown);
-	bullet->SetState(ObjectState::Move);
-	_objects.push_back(bullet);*/
+	_players.push_back(new Player);
+	_monsters.push_back(new TankMonster);
 }
 
 GameScene::~GameScene()
 {
+	if (_players.data()) {
+		for (Player* player : _players) {
+			delete player;
+		}
+	}
+	if (_monsters.data()) {
+		for (Monster* monster: _monsters) {
+			delete monster;
+		}
+	}
 }
 
 void GameScene::Update()
 {
-	Scene::Update();
-
-	ProcessInput();
-
-	
+	ProcessInput();	
 }
 
 void GameScene::Render(HDC hdc)
@@ -60,16 +52,16 @@ void GameScene::Render(HDC hdc)
 	// memDC hbit객체 선택
 	oldbit = (HBITMAP)SelectObject(memDC, hbit);
 
-	/*for (GameObject* object : _objects) {
-		object->Render(memDC, memDCImage);
-	}*//*
-	for (PlayerRef player : _players) {
+	
+	for (Player* player : _players) {
 		player->Render(memDC, memDCImage);
 	}
 
-	_merchant->Render(memDC, memDCImage);
+	//_merchant->Render(memDC, memDCImage);
 
-	_monster->Render(memDC, memDCImage);*/
+	for (Monster* monster : _monsters) {
+		monster->Render(memDC, memDCImage);
+	}
 
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hdc, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);
@@ -85,14 +77,12 @@ void GameScene::ProcessInput()
 	// 코드 길어져서 포인터로 받기
 	InputManager* input = GET_SINGLE(InputManager);
 	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
-	//for (GameObjectRef object : _objects) {
-	//	if (object->GetObjectType() == ObjectType::Player) {
-	//		if (input->GetButtonDown(KeyType::Left)) object->Left();
-	//		if (input->GetButtonDown(KeyType::Right)) object->Right();
-	//		if (input->GetButtonDown(KeyType::Up)) object->Up();
-	//		if (input->GetButtonDown(KeyType::Down)) object->Down();
-	//	}
-	//}
+	for (Player* player : _players) {
+		if (input->GetButtonDown(KeyType::Left)) player->Left();
+		if (input->GetButtonDown(KeyType::Right)) player->Right();
+		if (input->GetButtonDown(KeyType::Up)) player->Up();
+		if (input->GetButtonDown(KeyType::Down)) player->Down();
+	}
 	
 	// 이동 버튼 GetButton으로 변경 시 주석 풀기
 	/*if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {

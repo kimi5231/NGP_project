@@ -17,33 +17,18 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
-    switch (_state)
-    {
-    case ObjectState::Idle:
-        Idle();
-        break;
-    case ObjectState::Move:
-        Move();
-        break;
-    case ObjectState::Boom:
-        Boom();
-        break;
-    case ObjectState::Dead:
-        Dead();
-        break;
-    }
 }
 
 void GameObject::Render(HDC hdc, HDC srcDC)
 {
-        HBITMAP oldbit;
-        oldbit = (HBITMAP)SelectObject(srcDC, _bitmapMask);
-        BitBlt(hdc, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCAND);
+    HBITMAP oldbit;
+    oldbit = (HBITMAP)SelectObject(srcDC, _bitmapMask);
+    BitBlt(hdc, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCAND);
 
-        SelectObject(srcDC, _bitmap);
-        BitBlt(hdc, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCPAINT);
+    SelectObject(srcDC, _bitmap);
+    BitBlt(hdc, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCPAINT);
 
-        SelectObject(srcDC, oldbit);
+    SelectObject(srcDC, oldbit);
 }
 
 void GameObject::Left()

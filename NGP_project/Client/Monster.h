@@ -12,4 +12,7 @@ public:
 	virtual void Right();
 	virtual void Up();
 	virtual void Down();
+
+private:
+	Vertex _targetPos{};
 };

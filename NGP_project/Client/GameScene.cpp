@@ -13,10 +13,14 @@
 #include "RespawnMonster.h"
 #include "TankMonster.h"
 
+#define BOARD_SIZE 16
+HBITMAP hCellBitmap;
+
 GameScene::GameScene()
 {
 	_players.push_back(new Player);
 	_monsters.push_back(new TankMonster);
+	hCellBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
 
 GameScene::~GameScene()
@@ -35,7 +39,10 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
-	ProcessInput();	
+	for (Monster* monster : _monsters) {
+		monster->Update();
+	}
+	ProcessInput();
 }
 
 void GameScene::Render(HDC hdc)
@@ -52,6 +59,16 @@ void GameScene::Render(HDC hdc)
 	// memDC hbit객체 선택
 	oldbit = (HBITMAP)SelectObject(memDC, hbit);
 
+	// 배경
+	for (int row = 0; row < BOARD_SIZE; row++) {
+		for (int col = 0; col < BOARD_SIZE; col++) {
+			int cellX = col * CELL_SIZE;
+			int cellY = row * CELL_SIZE;
+			// 한 칸의 비트맵 그리기
+			oldbit = (HBITMAP)SelectObject(memDCImage, hCellBitmap);
+			BitBlt(memDC, cellX, cellY, CELL_SIZE, CELL_SIZE, memDCImage, 0, 0, SRCCOPY);
+		}
+	}
 	
 	for (Player* player : _players) {
 		player->Render(memDC, memDCImage);

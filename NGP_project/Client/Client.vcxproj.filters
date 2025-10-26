@@ -30,6 +30,9 @@
     <Filter Include="소스 파일\Game\Object\Item">
       <UniqueIdentifier>{07661162-3097-4270-b053-a238dbf09766}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Game\Object\StateMachin">
+      <UniqueIdentifier>{9ada7704-1d9a-4118-9388-dfd7d7322975}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -49,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>소스 파일\Game\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>소스 파일\Game</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>소스 파일\Game\Scene</Filter>
@@ -86,14 +86,15 @@
     <ClInclude Include="Item.h">
       <Filter>소스 파일\Game\Object\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Merchant.h">
-      <Filter>소스 파일\Game\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Global.h">
       <Filter>소스 파일\Window</Filter>
     </ClInclude>
     <ClInclude Include="TimeManager.h">
       <Filter>소스 파일\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="StateMachine.h">
+      <Filter>소스 파일\Game\Object\StateMachin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,9 +109,6 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>소스 파일\Game\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>소스 파일\Game</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>소스 파일\Game\Scene</Filter>
@@ -148,14 +146,17 @@
     <ClCompile Include="Item.cpp">
       <Filter>소스 파일\Game\Object\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Merchant.cpp">
-      <Filter>소스 파일\Game\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Global.cpp">
       <Filter>소스 파일\Window</Filter>
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
       <Filter>소스 파일\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
+      <Filter>소스 파일\Game\Object\StateMachin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

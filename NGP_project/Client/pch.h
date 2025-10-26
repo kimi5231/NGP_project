@@ -22,7 +22,7 @@ enum class ObjectType
 {
     Player,
     Monster,
-    Background,
+    Button,
     Item,
 };
 

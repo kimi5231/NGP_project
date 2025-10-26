@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "StateMachine.h"
+
 class GameObject
 {
 public:
@@ -14,21 +16,26 @@ public:
 	virtual void Right();
 	virtual void Up();
 	virtual void Down();
+	virtual void Move() {};
 
 private:
 	virtual void Idle() {};
-	virtual void Move() {};
+	//virtual void Move() {};
 	virtual void Boom() {};
 	virtual void Dead() {};
 
 public:
 	void SetBitmap(HBITMAP bitmap) { _bitmap = bitmap; }
-	void SetSpriteCount(Vertex count) { _spriteCnt = count; }
+	void SetSpriteVertex(Vertex Vertex) { _spriteCnt = Vertex; }
 
 	void SetObjectType(ObjectType type) { _type = type; }
 	ObjectType GetObjectType() { return _type; }
 	void SetPos(Vertex pos) { _pos = pos; }
 
+	StateMachine* GetStateMachine() { return _stateMachine; }
+	Vertex GetTargetPos() { return _targetPos; }
+	void SetTargetPos(Vertex target) { _targetPos = target; }
+	Vertex GetPos() { return _pos; }
 public:
 	void ResetCurFrame();
 
@@ -43,4 +50,8 @@ protected:
 	Vertex _curFrame{};
 
 	int _speed{};
+
+	StateMachine* _stateMachine;
+
+	Vertex _targetPos{};
 };

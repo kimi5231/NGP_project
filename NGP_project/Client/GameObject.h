@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "StateMachine.h"
 
+class BoundingBox;
+
 class GameObject
 {
 public:
@@ -36,6 +38,9 @@ public:
 	Vertex GetTargetPos() { return _targetPos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
+
+	BoundingBox getBoundingBox() const;
+	bool isCollision(const GameObject* other) const;
 public:
 	void ResetCurFrame();
 

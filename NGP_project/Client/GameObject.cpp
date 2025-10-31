@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "BoundingBox.h"
 #include "GameObject.h"
 
 GameObject::GameObject()
@@ -46,6 +47,16 @@ void GameObject::Up()
 
 void GameObject::Down()
 {
+}
+
+BoundingBox GameObject::getBoundingBox() const
+{
+    return BoundingBox(_pos);
+}
+
+bool GameObject::isCollision(const GameObject* other) const
+{
+    return getBoundingBox().intersects(other->getBoundingBox());
 }
 
 void GameObject::ResetCurFrame()

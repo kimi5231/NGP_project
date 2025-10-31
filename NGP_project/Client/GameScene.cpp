@@ -20,7 +20,8 @@ GameScene::GameScene()
 {
 	_players.push_back(new Player);
 	_monsters.push_back(new TankMonster);
-	hCellBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	_monsters.push_back(new TankMonster);
+	//hCellBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
 
 GameScene::~GameScene()
@@ -42,7 +43,13 @@ void GameScene::Update()
 	for (Monster* monster : _monsters) {
 		monster->Update();
 	}
+
+	//GET_SINGLE(InputManager)->Update();
 	ProcessInput();
+
+	if (_players[0]->isCollision(_monsters[0])) {
+		_players[0]->Left();	// test 용
+	}
 }
 
 void GameScene::Render(HDC hdc)

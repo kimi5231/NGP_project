@@ -14,3 +14,8 @@ RespawnMonster::RespawnMonster()
     if (!_spriteCnt.x)
         _spriteCnt = { 8, 6 };
 }
+
+void RespawnMonster::FindTarget(GameObject* other)
+{
+    SetTargetPos(other->GetPos());
+}

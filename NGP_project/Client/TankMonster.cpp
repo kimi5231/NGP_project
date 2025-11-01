@@ -14,3 +14,8 @@ TankMonster::TankMonster()
     if (!_spriteCnt.x)
         _spriteCnt = { 8, 4 };
 }
+
+void TankMonster::FindTarget(GameObject* other)
+{
+    SetTargetPos(other->GetPos());
+}

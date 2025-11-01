@@ -16,3 +16,8 @@ NormalMonster::NormalMonster()
         _spriteCnt = { 8, 4 };
     }
 }
+
+void NormalMonster::FindTarget(GameObject* other)
+{
+    SetTargetPos(other->GetPos());
+}

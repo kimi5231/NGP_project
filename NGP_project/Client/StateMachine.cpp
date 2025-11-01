@@ -1,94 +1,84 @@
 ﻿#include "pch.h"
 #include "StateMachine.h"
 #include "GameObject.h"
-#include <random>
-
-std::random_device rd;
-std::mt19937 gen(rd());
-
-std::uniform_int_distribution<> randWidth(0, FRAME_BUFFER_WIDTH);
-std::uniform_int_distribution<> randHeight(0, FRAME_BUFFER_HEIGHT);
 
 // MoveToTarget
-void MoveToTarget::Enter(GameObject* object)
+void MoveToTarget::Enter(GameObject* self)
 {
 }
 
-void MoveToTarget::Exit(GameObject* object)
+void MoveToTarget::Exit(GameObject* self)
 {
 	// if hp == 0
 	/*object->GetStateMachine()->ChangeState(new Dead);*/
 	
-	object->GetStateMachine()->ChangeState(new SetTarget);
-	object->GetStateMachine()->Start();
+	self->GetStateMachine()->ChangeState(new SetTarget);
+	self->GetStateMachine()->Start();
 }
 
-void MoveToTarget::Tick(GameObject* object)
+void MoveToTarget::Tick(GameObject* self, GameObject* other)
 {
-	object->Move();
-	if (object->IsArrive()) {
-		Exit(object);
+	self->Move();
+	if (self->IsArrive()) {
+		Exit(self);
 	}
 }
 
 // SetTarget
-void SetTarget::Enter(GameObject* object)
+void SetTarget::Enter(GameObject* self)
 {
 
 }
 
-void SetTarget::Exit(GameObject* object)
+void SetTarget::Exit(GameObject* self)
 {
-	object->GetStateMachine()->ChangeState(new MoveToTarget);
-	object->GetStateMachine()->Start();
+	self->GetStateMachine()->ChangeState(new MoveToTarget);
+	self->GetStateMachine()->Start();
 }
 
-void SetTarget::Tick(GameObject* object)
+void SetTarget::Tick(GameObject* self, GameObject* other)
 {	
-	object->SetTargetPos({ randWidth(gen), randHeight(gen) });
-	Exit(object);
+	self->FindTarget(other);	// test
+	Exit(self);
 }
 
-void SetTarget::SearchTarget(Vertex targetPos)
-{
-}
 
 // Bomb
-void Bomb::Enter(GameObject* object)
+void Bomb::Enter(GameObject* self)
 {
 }
 
-void Bomb::Exit(GameObject* object)
+void Bomb::Exit(GameObject* self)
 {
 }
 
-void Bomb::Tick(GameObject* object)
+void Bomb::Tick(GameObject* self, GameObject* other)
 {
 }
 
 // Dead
-void Dead::Enter(GameObject* object)
+void Dead::Enter(GameObject* self)
 {
 }
 
-void Dead::Exit(GameObject* object)
+void Dead::Exit(GameObject* self)
 {
 }
 
-void Dead::Tick(GameObject* object)
+void Dead::Tick(GameObject* self, GameObject* other)
 {
 }
 
 // UseItem
-void UseItem::Enter(GameObject* object)
+void UseItem::Enter(GameObject* self)
 {
 }
 
-void UseItem::Exit(GameObject* object)
+void UseItem::Exit(GameObject* self)
 {
 }
 
-void UseItem::Tick(GameObject* object)
+void UseItem::Tick(GameObject* self, GameObject* other)
 {
 }
 
@@ -110,9 +100,9 @@ void StateMachine::Start()
 	_curState->Enter(_object);
 }
 
-void StateMachine::Update()
+void StateMachine::Update(GameObject* other)
 {
-	_curState->Tick(_object);
+	_curState->Tick(_object, other);
 }
 
 void StateMachine::ChangeState(State* state)

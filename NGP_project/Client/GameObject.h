@@ -34,10 +34,12 @@ public:
 	ObjectType GetObjectType() { return _type; }
 	void SetPos(Vertex pos) { _pos = pos; }
 
+	// stateMachine 필요 함수
 	StateMachine* GetStateMachine() { return _stateMachine; }
 	Vertex GetTargetPos() { return _targetPos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
+	virtual void FindTarget(GameObject* other) {};
 
 	// 충돌 관련
 	BoundingBox GetBoundingBox() const;

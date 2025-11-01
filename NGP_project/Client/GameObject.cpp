@@ -49,14 +49,24 @@ void GameObject::Down()
 {
 }
 
-BoundingBox GameObject::getBoundingBox() const
+BoundingBox GameObject::GetBoundingBox() const
 {
     return BoundingBox(_pos);
 }
 
-bool GameObject::isCollision(const GameObject* other) const
+BoundingBox GameObject::GetTargetBoundingBox() const
 {
-    return getBoundingBox().intersects(other->getBoundingBox());
+    return BoundingBox(_targetPos);
+}
+
+bool GameObject::IsCollision(const GameObject* other) const
+{
+    return GetBoundingBox().Intersects(other->GetBoundingBox());
+}
+
+bool GameObject::IsArrive() const
+{
+    return GetBoundingBox().Intersects(GetTargetBoundingBox());
 }
 
 void GameObject::ResetCurFrame()

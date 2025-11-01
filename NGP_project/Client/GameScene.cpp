@@ -47,7 +47,7 @@ void GameScene::Update()
 	//GET_SINGLE(InputManager)->Update();
 	ProcessInput();
 
-	if (_players[0]->isCollision(_monsters[0])) {
+	if (_players[0]->IsCollision(_monsters[0])) {
 		_players[0]->Left();	// test 용
 	}
 }

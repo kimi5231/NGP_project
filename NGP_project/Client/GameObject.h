@@ -39,8 +39,11 @@ public:
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
 
-	BoundingBox getBoundingBox() const;
-	bool isCollision(const GameObject* other) const;
+	// 충돌 관련
+	BoundingBox GetBoundingBox() const;
+	BoundingBox GetTargetBoundingBox() const;	// 타겟에 도작했는지 확인용
+	bool IsCollision(const GameObject* other) const;
+	bool IsArrive() const;
 public:
 	void ResetCurFrame();
 

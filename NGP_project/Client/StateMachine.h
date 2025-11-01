@@ -5,45 +5,47 @@ class StateMachine;
 
 class State {
 public:
-	virtual void enter(GameObject* object) = 0;
-	virtual void exit(GameObject* object) = 0;
-	virtual void doing(GameObject* object) = 0;
+	virtual void Enter(GameObject* object) = 0;
+	virtual void Exit(GameObject* object) = 0;
+	virtual void Tick(GameObject* object) = 0;
 };
 
 class MoveToTarget : public State{
 public:
-	virtual void enter(GameObject* object) override;
-	virtual void exit(GameObject* object) override;
-	virtual void doing(GameObject* object) override;
+	virtual void Enter(GameObject* object) override;
+	virtual void Exit(GameObject* object) override;
+	virtual void Tick(GameObject* object) override;
 };
 
 // random or player.pos
 class SetTarget : public State {
 public:
-	virtual void enter(GameObject* object) override;
-	virtual void exit(GameObject* object) override;
-	virtual void doing(GameObject* object) override;
+	virtual void Enter(GameObject* object) override;
+	virtual void Exit(GameObject* object) override;
+	virtual void Tick(GameObject* object) override;
+
+	void SearchTarget(Vertex targetPos);
 };
 
 class Bomb : public State {
 public:
-	virtual void enter(GameObject* object) override;
-	virtual void exit(GameObject* object) override;
-	virtual void doing(GameObject* object) override;
+	virtual void Enter(GameObject* object) override;
+	virtual void Exit(GameObject* object) override;
+	virtual void Tick(GameObject* object) override;
 };
 
 class Dead : public State {
 public:
-	virtual void enter(GameObject* object) override;
-	virtual void exit(GameObject* object) override;
-	virtual void doing(GameObject* object) override;
+	virtual void Enter(GameObject* object) override;
+	virtual void Exit(GameObject* object) override;
+	virtual void Tick(GameObject* object) override;
 };
 
 class UseItem : public State {
 public:
-	virtual void enter(GameObject* object) override;
-	virtual void exit(GameObject* object) override;
-	virtual void doing(GameObject* object) override;
+	virtual void Enter(GameObject* object) override;
+	virtual void Exit(GameObject* object) override;
+	virtual void Tick(GameObject* object) override;
 };
 
 class StateMachine {

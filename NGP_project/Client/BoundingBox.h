@@ -10,7 +10,7 @@ public:
     float top() const { return _center.y - _size.y / 2; }
     float bottom() const { return _center.y + _size.y / 2; }
 
-    bool intersects(const BoundingBox& other) const {
+    bool Intersects(const BoundingBox& other) const {
         return (
             left() < other.right() &&
             right() > other.left() &&

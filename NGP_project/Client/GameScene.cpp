@@ -13,14 +13,14 @@
 #include "RespawnMonster.h"
 #include "TankMonster.h"
 
-#define BOARD_SIZE 16
-HBITMAP hCellBitmap;
+HBITMAP gBackgroundBitmap;
+RECT gBackgoundRect{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };	// 이 수치를 조정해서 배경화면 그리기
 
 GameScene::GameScene()
 {
 	_players.push_back(new Player);
 	_monsters.push_back(new TankMonster);
-	hCellBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
 
 GameScene::~GameScene()
@@ -43,7 +43,6 @@ void GameScene::Update()
 		monster->Update(_players[0]);
 	}
 
-	//GET_SINGLE(InputManager)->Update();
 	ProcessInput();
 
 	if (_players[0]->IsCollision(_monsters[0])) {
@@ -54,7 +53,7 @@ void GameScene::Update()
 void GameScene::Render(HDC hdc)
 {
 	HDC memDC, memDCImage;
-	HBITMAP hbit, oldbit;
+	HBITMAP hbit, oldbit[2];
 
 	// 더블 버퍼링을 위해 두 개의 메모리 DC 생성
 	memDC = CreateCompatibleDC(hdc);
@@ -63,19 +62,15 @@ void GameScene::Render(HDC hdc)
 	// hDC와 hbit 연결
 	hbit = CreateCompatibleBitmap(hdc, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
 	// memDC hbit객체 선택
-	oldbit = (HBITMAP)SelectObject(memDC, hbit);
+	oldbit[0] = (HBITMAP)SelectObject(memDC, hbit);
 
 	// 배경
-	for (int row = 0; row < BOARD_SIZE; row++) {
-		for (int col = 0; col < BOARD_SIZE; col++) {
-			int cellX = col * CELL_SIZE;
-			int cellY = row * CELL_SIZE;
-			// 한 칸의 비트맵 그리기
-			oldbit = (HBITMAP)SelectObject(memDCImage, hCellBitmap);
-			BitBlt(memDC, cellX, cellY, CELL_SIZE, CELL_SIZE, memDCImage, 0, 0, SRCCOPY);
-		}
-	}
-	
+	BITMAP bmpInfo;
+	GetObject(gBackgroundBitmap, sizeof(BITMAP), &bmpInfo);
+	oldbit[1] = (HBITMAP)SelectObject(memDCImage, gBackgroundBitmap);
+	StretchBlt(memDC, gBackgoundRect.left, gBackgoundRect.top, gBackgoundRect.right, gBackgoundRect.bottom, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
+
+	// GameObject
 	for (Player* player : _players) {
 		player->Render(memDC, memDCImage);
 	}
@@ -89,7 +84,8 @@ void GameScene::Render(HDC hdc)
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hdc, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);
 
-	SelectObject(memDC, oldbit);
+	SelectObject(memDC, oldbit[0]);
+	SelectObject(memDCImage, oldbit[1]);
 	DeleteObject(hbit);
 	DeleteDC(memDC);
 	DeleteDC(memDCImage);
@@ -101,16 +97,15 @@ void GameScene::ProcessInput()
 	InputManager* input = GET_SINGLE(InputManager);
 	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
 	for (Player* player : _players) {
-		if (input->GetButtonDown(KeyType::Left)) player->Left();
-		if (input->GetButtonDown(KeyType::Right)) player->Right();
-		if (input->GetButtonDown(KeyType::Up)) player->Up();
-		if (input->GetButtonDown(KeyType::Down)) player->Down();
+		if (input->GetButton(KeyType::Left)) player->Left();
+		if (input->GetButton(KeyType::Right)) player->Right();
+		if (input->GetButton(KeyType::Up)) player->Up();
+		if (input->GetButton(KeyType::Down)) player->Down();
 	}
 	
-	// 이동 버튼 GetButton으로 변경 시 주석 풀기
-	/*if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {
-		for (PlayerRef player : _players) {
+	if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {
+		for (Player* player : _players) {
 			player->ResetCurFrame();
 		}
-	}*/
+	}
 }

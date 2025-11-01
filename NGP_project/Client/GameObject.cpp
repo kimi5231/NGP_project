@@ -23,14 +23,11 @@ void GameObject::Update()
 
 void GameObject::Render(HDC hdc, HDC srcDC)
 {
-    HBITMAP oldbit;
-    oldbit = (HBITMAP)SelectObject(srcDC, _bitmapMask);
+    SelectObject(srcDC, _bitmapMask);
     BitBlt(hdc, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCAND);
 
     SelectObject(srcDC, _bitmap);
     BitBlt(hdc, _pos.x, _pos.y, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCPAINT);
-
-    SelectObject(srcDC, oldbit);
 }
 
 void GameObject::Left()

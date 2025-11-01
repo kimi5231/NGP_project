@@ -13,6 +13,9 @@ std::uniform_int_distribution<> randHeight(0, FRAME_BUFFER_HEIGHT);
 
 Monster::Monster()
 {
+    _status._hp = 10;
+    _status._speed = MONSTER_SPEED;
+
     _stateMachine->Start();
 }
 
@@ -28,13 +31,13 @@ void Monster::Move()
     Vertex direct{ dx, dy };
     double distance = sqrt(dx * dx + dy * dy);
 
-    if (distance <= MONSTER_SPEED) {
+    if (distance <= _status._speed) {
         // 목표 위치에 도달했을 경우
         _pos = _targetPos;
     }
     else {
         // 일정한 속도로 이동
-        double ratio = MONSTER_SPEED / distance;
+        double ratio = _status._speed / distance;
         _pos.x += static_cast<int>(dx * ratio);
         _pos.y += static_cast<int>(dy * ratio);
     }

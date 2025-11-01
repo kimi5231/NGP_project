@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "Global.h"
 
-#define PLAYER_SPEED 5
+#define PLAYER_SPEED 3
 
 Player::Player()
 {
@@ -16,6 +16,9 @@ Player::Player()
         _spriteCnt = { 8,10 };
 
     _pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
+
+    _status._hp = 10;
+    _status._speed = PLAYER_SPEED;
 }
 
 void Player::Update()
@@ -24,21 +27,21 @@ void Player::Update()
 
 void Player::Left()
 {
-    _pos.x -= PLAYER_SPEED;
+    _pos.x -= _status._speed;
     _curFrame.y = 1;    // 시간 되면 대각선 백터로 구현
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 
 void Player::Right()
 {
-    _pos.x += PLAYER_SPEED;
+    _pos.x += _status._speed;
     _curFrame.y = 0;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 
 void Player::Up()
 {
-    _pos.y -= PLAYER_SPEED;
+    _pos.y -= _status._speed;
     _curFrame.y = 5;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 
@@ -46,7 +49,7 @@ void Player::Up()
 
 void Player::Down()
 {
-    _pos.y += PLAYER_SPEED;
+    _pos.y += _status._speed;
     _curFrame.y = 9;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 

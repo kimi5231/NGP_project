@@ -37,8 +37,8 @@ void SetTarget::Exit(GameObject* self)
 }
 
 void SetTarget::Tick(GameObject* self, GameObject* other)
-{	
-	self->FindTarget(other);	// test
+{
+	self->FindTarget(other);
 	Exit(self);
 }
 

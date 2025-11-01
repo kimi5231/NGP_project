@@ -3,6 +3,11 @@
 
 class BoundingBox;
 
+typedef struct Status {
+	int _speed{};
+	int _hp{};
+}Status;
+
 class GameObject
 {
 public:
@@ -57,11 +62,10 @@ protected:
 	ObjectType _type{};
 	Dir _dir{};
 	Vertex _pos{};
+	Vertex _targetPos{};
 	Vertex _curFrame{};
-
-	int _speed{};
 
 	StateMachine* _stateMachine;
 
-	Vertex _targetPos{};
+	Status _status{};
 };

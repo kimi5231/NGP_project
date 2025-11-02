@@ -20,6 +20,6 @@ public:
 private:
 	std::vector<PlayerRef> _players;
 	std::vector<MonsterRef> _monsters;
-	std::vector<GameObjectRef> _objects;	// obstacle, bomb 등
+	std::vector<GameObjectRef> _objects;	// obstacle, bomb, projectile 등
 	//std::shared_ptr<Merchant> _merchant;
 };

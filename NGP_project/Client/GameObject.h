@@ -52,6 +52,9 @@ public:
 	BoundingBox GetTargetBoundingBox() const;	// 타겟에 도작했는지 확인용
 	bool IsCollision(const GameObject* other) const;
 	bool IsArrive() const;
+
+	void SetToDead() { _isDead = true; }
+	bool IsDead() const { return _isDead; }
 public:
 	void ResetCurFrame();
 
@@ -69,4 +72,5 @@ protected:
 	std::unique_ptr<StateMachine> _stateMachine;
 
 	Status _status{};
+	bool _isDead{};
 };

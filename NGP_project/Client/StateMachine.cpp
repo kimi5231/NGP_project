@@ -2,6 +2,27 @@
 #include "StateMachine.h"
 #include "GameObject.h"
 
+// Move
+void MoveState::Enter(GameObject* self)
+{
+}
+
+void MoveState::Exit(GameObject* self)
+{
+	self->GetStateMachine()->ChangeState(new DeadState);
+	self->GetStateMachine()->Start();
+}
+
+void MoveState::Tick(GameObject* self, GameObject* other)
+{
+	self->Move();
+	Vertex pos = self->GetPos();
+	if (pos.x < 0 || pos.x > FRAME_BUFFER_WIDTH ||
+		pos.y < 0 || pos.y > FRAME_BUFFER_HEIGHT) {
+		Exit(self);
+	}
+}
+
 // MoveToTarget
 void MoveToTarget::Enter(GameObject* self)
 {
@@ -12,7 +33,7 @@ void MoveToTarget::Exit(GameObject* self)
 	// if hp == 0
 	/*object->GetStateMachine()->ChangeState(new Dead);*/
 	
-	self->GetStateMachine()->ChangeState(new SetTarget);
+	self->GetStateMachine()->ChangeState(new SetTargetState);
 	self->GetStateMachine()->Start();
 }
 
@@ -25,18 +46,18 @@ void MoveToTarget::Tick(GameObject* self, GameObject* other)
 }
 
 // SetTarget
-void SetTarget::Enter(GameObject* self)
+void SetTargetState::Enter(GameObject* self)
 {
 
 }
 
-void SetTarget::Exit(GameObject* self)
+void SetTargetState::Exit(GameObject* self)
 {
 	self->GetStateMachine()->ChangeState(new MoveToTarget);
 	self->GetStateMachine()->Start();
 }
 
-void SetTarget::Tick(GameObject* self, GameObject* other)
+void SetTargetState::Tick(GameObject* self, GameObject* other)
 {
 	self->FindTarget(other);
 	Exit(self);
@@ -44,41 +65,43 @@ void SetTarget::Tick(GameObject* self, GameObject* other)
 
 
 // Bomb
-void Bomb::Enter(GameObject* self)
+void BombState::Enter(GameObject* self)
 {
 }
 
-void Bomb::Exit(GameObject* self)
+void BombState::Exit(GameObject* self)
 {
 }
 
-void Bomb::Tick(GameObject* self, GameObject* other)
+void BombState::Tick(GameObject* self, GameObject* other)
 {
 }
 
 // Dead
-void Dead::Enter(GameObject* self)
+void DeadState::Enter(GameObject* self)
 {
 }
 
-void Dead::Exit(GameObject* self)
+void DeadState::Exit(GameObject* self)
 {
 }
 
-void Dead::Tick(GameObject* self, GameObject* other)
+void DeadState::Tick(GameObject* self, GameObject* other)
 {
+	self->SetToDead();
+	Exit(self);
 }
 
 // UseItem
-void UseItem::Enter(GameObject* self)
+void UseItemState::Enter(GameObject* self)
 {
 }
 
-void UseItem::Exit(GameObject* self)
+void UseItemState::Exit(GameObject* self)
 {
 }
 
-void UseItem::Tick(GameObject* self, GameObject* other)
+void UseItemState::Tick(GameObject* self, GameObject* other)
 {
 }
 
@@ -103,6 +126,11 @@ void StateMachine::Start()
 void StateMachine::Update(GameObject* other)
 {
 	_curState->Tick(_object, other);
+}
+
+void StateMachine::Update()
+{
+	_curState->Tick(_object, nullptr);
 }
 
 void StateMachine::ChangeState(State* state)

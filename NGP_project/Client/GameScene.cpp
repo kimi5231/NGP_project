@@ -14,6 +14,7 @@
 #include "RespawnMonster.h"
 #include "TankMonster.h"
 
+
 HBITMAP gBackgroundBitmap;
 RECT gBackgoundRect{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };	// 이 수치를 조정해서 배경화면 그리기
 
@@ -36,6 +37,13 @@ void GameScene::Update()
 	for (const auto& monster : _monsters) {
 		monster->Update(_players[0].get());
 	}
+	for (const auto object : _objects) {
+		object->Update();
+	}
+	_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
+			return o->IsDead();
+		}),	_objects.end());
+
 
 	ProcessInput();
 
@@ -75,8 +83,8 @@ void GameScene::Render(HDC hdc)
 		monster->Render(memDC, memDCImage);
 	}
 
-	for (const auto bomb : _objects) {
-		bomb->Render(memDC, memDCImage);
+	for (const auto object : _objects) {
+		object->Render(memDC, memDCImage);
 	}
 
 	// hDC에 memDC 출력(최종화면 출력)
@@ -100,10 +108,28 @@ void GameScene::ProcessInput()
 		if (input->GetButton(KeyType::Up)) player->Up();
 		if (input->GetButton(KeyType::Down)) player->Down();
 	}
+
+	for (const auto& player : _players) {
+		Vertex playerPos = player->GetPos();
+		if (input->GetButton(KeyType::W)) {
+			_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+		}
+		if (input->GetButton(KeyType::D)) {
+			_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+		}
+		if (input->GetButton(KeyType::A)) {
+			_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+		}
+		if (input->GetButton(KeyType::S)) {
+			_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+		}
+	}
 	
 	if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {
 		for (const auto& player : _players) {
 			player->ResetCurFrame();
 		}
 	}
+
+
 }

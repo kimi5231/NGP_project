@@ -5,6 +5,7 @@
 #include <memory>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 #define FRAME_BUFFER_WIDTH 800
 #define FRAME_BUFFER_HEIGHT 600
@@ -24,6 +25,7 @@ enum class ObjectType
     Monster,
     Button,
     Item,
+    Bullet,
 };
 
 enum class ItemType

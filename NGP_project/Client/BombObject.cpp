@@ -3,7 +3,7 @@
 #include "Global.h"
 
 BombObject::BombObject()
-    : GameObject(new Bomb)
+    : GameObject(new BombState)
 {
     if (!_bitmap || !_bitmapMask)
     {

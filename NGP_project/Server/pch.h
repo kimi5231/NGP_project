@@ -24,6 +24,7 @@ enum class ObjectType
     Monster,
     Button,
     Item,
+    Bullet,
 };
 
 enum class ItemType

@@ -10,6 +10,13 @@ public:
 	virtual void Tick(GameObject* self, GameObject* other) = 0;
 };
 
+class MoveState : public State {
+public:
+	virtual void Enter(GameObject* self) override;
+	virtual void Exit(GameObject* self) override;
+	virtual void Tick(GameObject* self, GameObject* other) override;
+};
+
 class MoveToTarget : public State{
 public:
 	virtual void Enter(GameObject* self) override;
@@ -52,6 +59,7 @@ public:
 	~StateMachine();
 	void Start();
 	void Update(GameObject* other);
+	void Update();
 
 	void ChangeState(State* state);
 private:

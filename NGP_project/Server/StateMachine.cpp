@@ -2,6 +2,20 @@
 #include "StateMachine.h"
 #include "GameObject.h"
 
+
+// Move
+void MoveState::Enter(GameObject* self)
+{
+}
+
+void MoveState::Exit(GameObject* self)
+{
+}
+
+void MoveState::Tick(GameObject* self, GameObject* other)
+{
+}
+
 // MoveToTarget
 void MoveToTarget::Enter(GameObject* self)
 {
@@ -84,6 +98,10 @@ void StateMachine::Start()
 }
 
 void StateMachine::Update(GameObject* other)
+{
+}
+
+void StateMachine::Update()
 {
 }
 

@@ -10,6 +10,7 @@ class GameObject
 {
 public:
 	GameObject();
+	GameObject(State* state);
 
 	virtual void Move() {};
 	virtual void FindTarget(GameObject* other) {};

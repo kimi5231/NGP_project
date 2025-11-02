@@ -23,7 +23,7 @@ public:
 	virtual void Right();
 	virtual void Up();
 	virtual void Down();
-	virtual void Move() {};
+	virtual void Move() {}
 
 private:
 	virtual void Idle() {};
@@ -40,7 +40,7 @@ public:
 	void SetPos(Vertex pos) { _pos = pos; }
 
 	// stateMachine 필요 함수
-	StateMachine* GetStateMachine() { return _stateMachine; }
+	StateMachine* GetStateMachine() { return _stateMachine.get(); }
 	Vertex GetTargetPos() { return _targetPos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
@@ -65,7 +65,7 @@ protected:
 	Vertex _targetPos{};
 	Vertex _curFrame{};
 
-	StateMachine* _stateMachine;
+	std::unique_ptr<StateMachine> _stateMachine;
 
 	Status _status{};
 };

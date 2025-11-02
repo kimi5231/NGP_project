@@ -72,6 +72,8 @@ int main(void)
 			clientSocket = accept(listenSocket, (sockaddr*)&clientAddr, &addrLen);
 			if (clientSocket == INVALID_SOCKET)
 				break;
+
+			std::cout << "클라이언트 연결 성공" << std::endl;
 		}
 	}
 

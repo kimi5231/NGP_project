@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "TimeManager.h"
 #include "Global.h"
+#include "GameNetwork.h"
 
 GameFramework::GameFramework()
 {
@@ -25,6 +26,7 @@ void GameFramework::Init()
 	GET_SINGLE(TimeManager)->Init();
 
 	_scene = new GameScene;
+	_gameNetwork = new GameNetwork;
 }
 
 void GameFramework::Update()

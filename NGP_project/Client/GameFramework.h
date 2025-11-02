@@ -2,6 +2,7 @@
 
 class Scene;
 class InputManager;
+class GameNetwork;
 
 class GameFramework
 {
@@ -19,4 +20,5 @@ public:
 
 private:
 	Scene* _scene{};
+	GameNetwork* _gameNetwork{};
 };

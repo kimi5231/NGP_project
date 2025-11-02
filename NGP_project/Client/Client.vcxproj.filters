@@ -33,6 +33,9 @@
     <Filter Include="소스 파일\Game\Object\StateMachin">
       <UniqueIdentifier>{9ada7704-1d9a-4118-9388-dfd7d7322975}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Network">
+      <UniqueIdentifier>{6905b09f-48a3-4215-ad5c-7b4b2c08631d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -98,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BombObject.h" />
+    <ClInclude Include="GameNetwork.h">
+      <Filter>소스 파일\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">
@@ -165,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="BombObject.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameNetwork.cpp">
+      <Filter>소스 파일\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

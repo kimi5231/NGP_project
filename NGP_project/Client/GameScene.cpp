@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "Item.h"
 #include "projectile.h"
+#include "BombObject.h"
 
 // Monster
 #include "BomberMonster.h"
@@ -16,36 +17,29 @@
 HBITMAP gBackgroundBitmap;
 RECT gBackgoundRect{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };	// 이 수치를 조정해서 배경화면 그리기
 
+
 GameScene::GameScene()
 {
-	_players.push_back(new Player);
-	_monsters.push_back(new TankMonster);
+	_players.push_back(std::make_shared <Player>());
+	_monsters.push_back(std::make_shared < TankMonster>());
+	_objects.push_back(std::make_shared<BombObject>());
+
 	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
 
 GameScene::~GameScene()
 {
-	if (_players.data()) {
-		for (Player* player : _players) {
-			delete player;
-		}
-	}
-	if (_monsters.data()) {
-		for (Monster* monster: _monsters) {
-			delete monster;
-		}
-	}
 }
 
 void GameScene::Update()
 {
-	for (Monster* monster : _monsters) {
-		monster->Update(_players[0]);
+	for (const auto& monster : _monsters) {
+		monster->Update(_players[0].get());
 	}
 
 	ProcessInput();
 
-	if (_players[0]->IsCollision(_monsters[0])) {
+	if (_players[0]->IsCollision(_monsters[0].get())) {
 		//_players[0]->Left();	// test 용
 	}
 }
@@ -71,14 +65,18 @@ void GameScene::Render(HDC hdc)
 	StretchBlt(memDC, gBackgoundRect.left, gBackgoundRect.top, gBackgoundRect.right, gBackgoundRect.bottom, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
 
 	// GameObject
-	for (Player* player : _players) {
+	for (const auto& player : _players) {
 		player->Render(memDC, memDCImage);
 	}
 
 	//_merchant->Render(memDC, memDCImage);
 
-	for (Monster* monster : _monsters) {
+	for (const auto& monster : _monsters) {
 		monster->Render(memDC, memDCImage);
+	}
+
+	for (const auto bomb : _objects) {
+		bomb->Render(memDC, memDCImage);
 	}
 
 	// hDC에 memDC 출력(최종화면 출력)
@@ -96,7 +94,7 @@ void GameScene::ProcessInput()
 	// 코드 길어져서 포인터로 받기
 	InputManager* input = GET_SINGLE(InputManager);
 	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
-	for (Player* player : _players) {
+	for (const auto& player : _players) {
 		if (input->GetButton(KeyType::Left)) player->Left();
 		if (input->GetButton(KeyType::Right)) player->Right();
 		if (input->GetButton(KeyType::Up)) player->Up();
@@ -104,7 +102,7 @@ void GameScene::ProcessInput()
 	}
 	
 	if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {
-		for (Player* player : _players) {
+		for (const auto& player : _players) {
 			player->ResetCurFrame();
 		}
 	}

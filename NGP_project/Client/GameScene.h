@@ -18,7 +18,8 @@ public:
 public:
 	virtual void ProcessInput() override;
 private:
-	std::vector<Player*> _players;
-	std::vector<Monster*> _monsters;
+	std::vector<PlayerRef> _players;
+	std::vector<MonsterRef> _monsters;
+	std::vector<GameObjectRef> _objects;	// obstacle, bomb 등
 	//std::shared_ptr<Merchant> _merchant;
 };

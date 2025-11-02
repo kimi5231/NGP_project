@@ -7,6 +7,11 @@ GameObject::GameObject()
 {
 }
 
+GameObject::GameObject(State* state)
+    : _stateMachine{ new StateMachine{this, state }}
+{
+}
+
 GameObject::~GameObject()
 {
     if (_bitmap) {

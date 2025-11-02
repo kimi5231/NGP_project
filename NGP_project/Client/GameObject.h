@@ -12,6 +12,7 @@ class GameObject
 {
 public:
 	GameObject();
+	GameObject(State* state);
 	virtual ~GameObject();
 
 public:

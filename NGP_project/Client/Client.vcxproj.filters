@@ -96,6 +96,8 @@
     <ClInclude Include="StateMachine.h">
       <Filter>소스 파일\Game\Object\StateMachin</Filter>
     </ClInclude>
+    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="BombObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">
@@ -157,6 +159,12 @@
     </ClCompile>
     <ClCompile Include="StateMachine.cpp">
       <Filter>소스 파일\Game\Object\StateMachin</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BombObject.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

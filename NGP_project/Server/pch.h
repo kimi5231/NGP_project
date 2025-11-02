@@ -1,10 +1,14 @@
 ﻿#pragma once
 
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #include <windows.h>
 
 #include <memory>
 #include <iostream>
 #include <vector>
+
+#pragma comment(lib, "ws2_32")
 
 #define FRAME_BUFFER_WIDTH 800
 #define FRAME_BUFFER_HEIGHT 600

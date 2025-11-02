@@ -9,19 +9,19 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Window">
-      <UniqueIdentifier>{d5ba46e6-2df5-40d4-bdac-e197daa3bb0c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Object">
       <UniqueIdentifier>{2d9c379e-d765-4b75-aaca-032ddb5e84ec}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Monster">
       <UniqueIdentifier>{e69981d8-a302-48f3-94b0-9e370099fcfa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Main">
+      <UniqueIdentifier>{d5ba46e6-2df5-40d4-bdac-e197daa3bb0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>소스 파일\Object</Filter>
@@ -29,13 +29,10 @@
     <ClInclude Include="StateMachine.h">
       <Filter>소스 파일\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>소스 파일\Object</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>소스 파일\Object</Filter>
@@ -43,8 +40,8 @@
     <ClCompile Include="StateMachine.cpp">
       <Filter>소스 파일\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>소스 파일\Object</Filter>
+    <ClCompile Include="Server.cpp">
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

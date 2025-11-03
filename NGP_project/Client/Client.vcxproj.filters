@@ -21,9 +21,6 @@
     <Filter Include="소스 파일\Game\Scene">
       <UniqueIdentifier>{4c62ecd8-3254-4cca-9177-b1a42830d93b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Window">
-      <UniqueIdentifier>{23d4d0b0-3505-43e5-bfcc-886a38542a87}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Game\Object\Monster">
       <UniqueIdentifier>{2d6ae8a9-8e9c-4494-94cd-d03b36225d4b}</UniqueIdentifier>
     </Filter>
@@ -35,6 +32,9 @@
     </Filter>
     <Filter Include="소스 파일\Network">
       <UniqueIdentifier>{6905b09f-48a3-4215-ad5c-7b4b2c08631d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Main">
+      <UniqueIdentifier>{23d4d0b0-3505-43e5-bfcc-886a38542a87}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +60,7 @@
       <Filter>소스 파일\Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClInclude>
     <ClInclude Include="TankMonster.h">
       <Filter>소스 파일\Game\Object\Monster</Filter>
@@ -81,7 +81,7 @@
       <Filter>소스 파일\Game\Object\Monster</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>소스 파일\Game\Scene</Filter>
@@ -90,19 +90,25 @@
       <Filter>소스 파일\Game\Object\Item</Filter>
     </ClInclude>
     <ClInclude Include="Global.h">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClInclude>
     <ClInclude Include="TimeManager.h">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h" />
     <ClInclude Include="StateMachine.h">
       <Filter>소스 파일\Game\Object\StateMachin</Filter>
     </ClInclude>
-    <ClInclude Include="BoundingBox.h" />
-    <ClInclude Include="BombObject.h" />
     <ClInclude Include="GameNetwork.h">
       <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="BombObject.h">
+      <Filter>소스 파일\Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox.h">
+      <Filter>소스 파일\Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>소스 파일\Game\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,10 +128,10 @@
       <Filter>소스 파일\Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Client.cpp">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="TankMonster.cpp">
       <Filter>소스 파일\Game\Object\Monster</Filter>
@@ -146,7 +152,7 @@
       <Filter>소스 파일\Game\Object\Monster</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>소스 파일\Game\Scene</Filter>
@@ -155,25 +161,25 @@
       <Filter>소스 파일\Game\Object\Item</Filter>
     </ClCompile>
     <ClCompile Include="Global.cpp">
-      <Filter>소스 파일\Window</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
-      <Filter>소스 파일\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="StateMachine.cpp">
       <Filter>소스 파일\Game\Object\StateMachin</Filter>
     </ClCompile>
-    <ClCompile Include="BoundingBox.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="BombObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GameNetwork.cpp">
       <Filter>소스 파일\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="BombObject.cpp">
+      <Filter>소스 파일\Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>소스 파일\Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>소스 파일\Game\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

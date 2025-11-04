@@ -9,7 +9,6 @@
 
 GameFramework::GameFramework()
 {
-	Init();
 }
 
 GameFramework::~GameFramework()

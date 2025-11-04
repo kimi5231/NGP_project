@@ -9,8 +9,8 @@ Projectile::Projectile(Dir dir, const Vertex& pos)
 	: GameObject(new MoveState)
 {
 	// 임시
-	_bitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "Life.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	_bitmapMask = (HBITMAP)LoadImage(hInst, (g_resourcePath / "Life_mask.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	_bitmap = (HBITMAP)LoadImage(hInst, L"Resource\\Bitmap\\Life.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	_bitmapMask = (HBITMAP)LoadImage(hInst, L"Resource\\Bitmap\\Life_mask.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 	_dir = dir;
 	_status._speed = 1;

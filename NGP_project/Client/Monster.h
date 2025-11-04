@@ -11,4 +11,9 @@ public:
 	virtual void Move() override;
 
 	virtual void Update(GameObject* other);
+	virtual void UseSkill() {};
+
+	void SetCallback(SpawnCallback cb) { _spawnCallback = cb; }
+protected:
+	SpawnCallback _spawnCallback;
 };

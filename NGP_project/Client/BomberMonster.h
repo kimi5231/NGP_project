@@ -6,5 +6,7 @@ class BomberMonster : public Monster
 public: 
 	BomberMonster();
 	virtual ~BomberMonster() {};
+
+	void UseSkill() override;
 };
 

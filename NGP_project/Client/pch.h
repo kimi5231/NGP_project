@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 #pragma comment(lib, "ws2_32")
 
@@ -30,6 +31,7 @@ enum class ObjectType
     Button,
     Item,
     Bullet,
+    Bomb,
 };
 
 enum class ItemType

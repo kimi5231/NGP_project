@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "StateMachine.h"
 #include "GameObject.h"
+#include "Monster.h"
+#include "BombObject.h"
 
 // Move
 void MoveState::Enter(GameObject* self)
@@ -24,11 +26,11 @@ void MoveState::Tick(GameObject* self, GameObject* other)
 }
 
 // MoveToTarget
-void MoveToTarget::Enter(GameObject* self)
+void MoveToTargetState::Enter(GameObject* self)
 {
 }
 
-void MoveToTarget::Exit(GameObject* self)
+void MoveToTargetState::Exit(GameObject* self)
 {
 	// if hp == 0
 	/*object->GetStateMachine()->ChangeState(new Dead);*/
@@ -37,7 +39,7 @@ void MoveToTarget::Exit(GameObject* self)
 	self->GetStateMachine()->Start();
 }
 
-void MoveToTarget::Tick(GameObject* self, GameObject* other)
+void MoveToTargetState::Tick(GameObject* self, GameObject* other)
 {
 	self->Move();
 	if (self->IsArrive()) {
@@ -53,7 +55,7 @@ void SetTargetState::Enter(GameObject* self)
 
 void SetTargetState::Exit(GameObject* self)
 {
-	self->GetStateMachine()->ChangeState(new MoveToTarget);
+	self->GetStateMachine()->ChangeState(new UseSkillState);
 	self->GetStateMachine()->Start();
 }
 
@@ -62,24 +64,10 @@ void SetTargetState::Tick(GameObject* self, GameObject* other)
 	self->FindTarget(other);
 	Exit(self);
 }
-
-
-// Bomb
-void BombState::Enter(GameObject* self)
-{
-}
-
-void BombState::Exit(GameObject* self)
-{
-}
-
-void BombState::Tick(GameObject* self, GameObject* other)
-{
-}
-
 // Dead
 void DeadState::Enter(GameObject* self)
 {
+	self->SetToDead();
 }
 
 void DeadState::Exit(GameObject* self)
@@ -88,8 +76,7 @@ void DeadState::Exit(GameObject* self)
 
 void DeadState::Tick(GameObject* self, GameObject* other)
 {
-	self->SetToDead();
-	Exit(self);
+	//Exit(self);
 }
 
 // UseItem
@@ -103,6 +90,24 @@ void UseItemState::Exit(GameObject* self)
 
 void UseItemState::Tick(GameObject* self, GameObject* other)
 {
+}
+
+// UseSkill
+void UseSkillState::Enter(GameObject* self)
+{
+
+}
+
+void UseSkillState::Exit(GameObject* self)
+{
+	self->GetStateMachine()->ChangeState(new MoveToTargetState);
+	self->GetStateMachine()->Start();
+}
+
+void UseSkillState::Tick(GameObject* self, GameObject* other)
+{
+	dynamic_cast<Monster*>(self)->UseSkill();
+	Exit(self);
 }
 
 // StateMachine

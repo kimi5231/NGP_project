@@ -17,7 +17,7 @@ public:
 	virtual void Tick(GameObject* self, GameObject* other) override;
 };
 
-class MoveToTarget : public State{
+class MoveToTargetState : public State{
 public:
 	virtual void Enter(GameObject* self) override;
 	virtual void Exit(GameObject* self) override;
@@ -32,13 +32,6 @@ public:
 	virtual void Tick(GameObject* self, GameObject* other) override;
 };
 
-class BombState : public State {
-public:
-	virtual void Enter(GameObject* self) override;
-	virtual void Exit(GameObject* self) override;
-	virtual void Tick(GameObject* self, GameObject* other) override;
-};
-
 class DeadState : public State {
 public:
 	virtual void Enter(GameObject* self) override;
@@ -47,6 +40,13 @@ public:
 };
 
 class UseItemState : public State {
+public:
+	virtual void Enter(GameObject* self) override;
+	virtual void Exit(GameObject* self) override;
+	virtual void Tick(GameObject* self, GameObject* other) override;
+};
+
+class UseSkillState : public State {
 public:
 	virtual void Enter(GameObject* self) override;
 	virtual void Exit(GameObject* self) override;

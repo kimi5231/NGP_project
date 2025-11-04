@@ -14,7 +14,7 @@ public:
 public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
-
+	void AddObject(GameObject*) override;
 public:
 	virtual void ProcessInput() override;
 private:

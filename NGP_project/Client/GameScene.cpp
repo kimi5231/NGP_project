@@ -22,7 +22,7 @@ RECT gBackgoundRect{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };	// 이 수
 GameScene::GameScene()
 {
 	_players.push_back(std::make_shared <Player>());
-	_monsters.push_back(std::make_shared < TankMonster>());
+	_monsters.push_back(std::make_shared < BomberMonster>());
 	_objects.push_back(std::make_shared<BombObject>());
 
 	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
@@ -32,13 +32,22 @@ GameScene::~GameScene()
 {
 }
 
+void GameScene::AddObject(GameObject* obj)
+{
+	_objects.push_back(std::shared_ptr<GameObject>(obj));
+}
+
 void GameScene::Update()
 {
-	for (const auto& monster : _monsters) {
-		monster->Update(_players[0].get());
-	}
 	for (const auto object : _objects) {
 		object->Update();
+
+	}
+	for (const auto& monster : _monsters) {
+		monster->Update(_players[0].get());
+		monster->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj);
+			});
 	}
 	_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
 			return o->IsDead();
@@ -96,6 +105,7 @@ void GameScene::Render(HDC hdc)
 	DeleteDC(memDC);
 	DeleteDC(memDCImage);
 }
+
 
 void GameScene::ProcessInput()
 {

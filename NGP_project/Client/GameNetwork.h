@@ -8,5 +8,12 @@ public:
 
 public:
 	void Update();
+
+private:
+	void ProcessSend();
+	void processRecv();
+
+private:
+	SOCKET _socket;
 };
 

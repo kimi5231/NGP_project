@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Player.h"
 #include "Global.h"
+#include "TimeManager.h"
 
 #define PLAYER_SPEED 3
 
@@ -27,30 +28,36 @@ void Player::Update()
 
 void Player::Left()
 {
-    _pos.x -= _status._speed;
+    float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
+
+    _pos.x -= _status._speed * deltaTime;
     _curFrame.y = 1;    // 시간 되면 대각선 백터로 구현
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 
 void Player::Right()
 {
-    _pos.x += _status._speed;
+    float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
+
+    _pos.x += _status._speed * deltaTime;
     _curFrame.y = 0;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 
 void Player::Up()
 {
-    _pos.y -= _status._speed;
+    float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
+
+    _pos.y -= _status._speed * deltaTime;
     _curFrame.y = 5;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
-
 }
 
 void Player::Down()
 {
-    _pos.y += _status._speed;
+    float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
+
+    _pos.y += _status._speed * deltaTime;
     _curFrame.y = 9;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
-
 }

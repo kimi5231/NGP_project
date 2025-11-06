@@ -9,6 +9,7 @@ public:
 	void Update() override;
 	void Render(HDC hdc, HDC srcDC) override;
 private:
+	size_t _bombCount{};
 	bool _isBomb{};
 	int _size{ CELL_SIZE };
 };

@@ -1,5 +1,5 @@
-#pragma once
-// ÇÁ·¹ÀÓ°ú ½Ã°£ °ü·ÃµÈ ¸ğµç °Í °ü¸®
+ï»¿#pragma once
+// í”„ë ˆì„ê³¼ ì‹œê°„ ê´€ë ¨ëœ ëª¨ë“  ê²ƒ ê´€ë¦¬
 
 class TimeManager
 {
@@ -8,6 +8,7 @@ class TimeManager
 public:
 	void Init();
 	void Update();
+	void Tick(float lockFps);
 
 	unsigned __int32 GetFps() { return _fps; }
 	float GetDeltaTime() { return _deltaTime; }
@@ -17,6 +18,11 @@ private:
 	unsigned __int64 _prevCount = 0;
 	float _deltaTime = 0.f;
 
+	double _timeScale;
+	const static size_t _maxSampleCount{ 50 };
+	float _frameTimeSample[_maxSampleCount];
+	float _sampleCount{};
+	size_t _currentFps{};
 private:
 	unsigned __int32 _frameCount = 0;
 	float _frameTime = 0.f;

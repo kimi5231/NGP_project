@@ -22,9 +22,8 @@ BombObject::BombObject(Vertex pos)
 
 void BombObject::Update()
 {
-    static int cnt{}; // frame rate 지정 시 제거
-    cnt++;
-    if (cnt % 500 == 0) {
+    _bombCount++;
+    if (_bombCount % 50 == 0) {
         _curFrame.x++;
     }
 
@@ -38,6 +37,8 @@ void BombObject::Update()
             _spriteCnt = { 7, 1 };
             _curFrame = {};
             _size *= 3;
+            _pos.x -= _size/2;
+            _pos.y -= _size/2;
         }
         else {
             _stateMachine->ChangeState(new DeadState);

@@ -1,10 +1,11 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "TimeManager.h"
 
 void TimeManager::Init()
 {
 	::QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&_frequency));
-	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&_prevCount)); // CPU Å¬·°
+	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&_prevCount)); // CPU í´ëŸ­
+	_timeScale = 1.0 / (double)_frequency;
 }
 
 void TimeManager::Update()
@@ -12,19 +13,62 @@ void TimeManager::Update()
 	unsigned __int64 currentCount;
 	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&currentCount));
 
-	// °æ°ú ½Ã°£(ÃÊ) = ÇöÀç ½Ã°£ - Àü ½Ã°£ / ºóµµ
+	// ê²½ê³¼ ì‹œê°„(ì´ˆ) = í˜„ì¬ ì‹œê°„ - ì „ ì‹œê°„ / ë¹ˆë„
 	_deltaTime = (currentCount - _prevCount) / static_cast<float>(_frequency);
 	_prevCount = currentCount;
 
-	_frameCount++;	// ¸î ¹ø È£Ãâ µÆ´ÂÁö °è¼Ó ÃßÀû
-	_frameTime += _deltaTime;	// °æ°úµÈ ½Ã°£ ÃßÀû
+	_frameCount++;	// ëª‡ ë²ˆ í˜¸ì¶œ ëëŠ”ì§€ ê³„ì† ì¶”ì 
+	_frameTime += _deltaTime;	// ê²½ê³¼ëœ ì‹œê°„ ì¶”ì 
 
 	if (_frameTime >= 1.f)
 	{
-		// 1ÃÊµ¿¾È ¸î ¹øÀÇ ÇÔ¼ö°¡ È£ÃâµÆ´ÂÁö, fps ±¸ÇÏ´Â °Ô ÇÙ½É
+		// 1ì´ˆë™ì•ˆ ëª‡ ë²ˆì˜ í•¨ìˆ˜ê°€ í˜¸ì¶œëëŠ”ì§€, fps êµ¬í•˜ëŠ” ê²Œ í•µì‹¬
 		_fps = static_cast<unsigned __int32>(_frameCount / _frameTime);
 
 		_frameTime = 0.f;
 		_frameCount = 0;
 	}
+}
+
+void TimeManager::Tick(float lockFps)
+{
+	unsigned long long currentCount;
+	QueryPerformanceCounter((LARGE_INTEGER*)&currentCount);
+
+	float timeElapse = float((currentCount - _prevCount) * _timeScale);
+
+	if (lockFps > 0.0f)
+	{
+		// ì›í•˜ëŠ” delta timeì´ ì•„ë‹ˆë©´ loop
+		while (timeElapse < (1.0f / lockFps))
+		{
+			QueryPerformanceCounter((LARGE_INTEGER*)&currentCount);
+
+			timeElapse = float((currentCount - _prevCount) * _timeScale);
+		}
+	}
+
+	_prevCount = currentCount;
+
+	// ë§ˆì§€ë§‰ í”„ë ˆì„ ì²˜ë¦¬ ì‹œê°„ê³¼ í˜„ì¬ í”„ë ˆì„ ì²˜ë¦¬ ì‹œê°„ì˜ ì°¨ì´ê°€ 1ì´ˆë³´ë‹¤ ì‘ìœ¼ë©´ í˜„ì¬ í”„ë ˆì„ ì²˜ë¦¬ ì‹œê°„ì„ frame_time[0]ì— ì €ì¥
+	if (fabsf(timeElapse - _deltaTime) < 1.0f)
+	{
+		::memmove(&_frameTimeSample[1], _frameTimeSample, (_maxSampleCount- 1) * sizeof(float));
+		_frameTimeSample[0] = timeElapse;
+		if (_sampleCount < _maxSampleCount) ++_sampleCount;
+	}
+
+	// í”„ë ˆì„++, í˜„ì¬ í”„ë ˆì„ ì²˜ë¦¬ ì‹œê°„ì„ ëˆ„ì  í•˜ê³  ì €ì¥
+	++_fps;
+	_frameTime += timeElapse;
+	if (_frameTime> 1.0f) {
+		_currentFps = _fps;
+		_fps = 0;
+		_frameTime = 0.0f;
+	}
+
+	// ìƒ˜í”Œë§
+	timeElapse = 0.0f;
+	for (ULONG i = 0; i < _sampleCount; i++) _deltaTime += _frameTimeSample[i];
+	if (_sampleCount > 0) _deltaTime /= _sampleCount;
 }

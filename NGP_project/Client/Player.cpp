@@ -24,40 +24,34 @@ Player::Player()
 
 void Player::Update()
 {
+
 }
 
 void Player::Left()
 {
-    float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
-
-    _pos.x -= _status._speed * deltaTime;
+    _pos.x -= _status._speed;
     _curFrame.y = 1;    // 시간 되면 대각선 백터로 구현
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 
 void Player::Right()
 {
-    float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
 
-    _pos.x += _status._speed * deltaTime;
+    _pos.x += _status._speed;
     _curFrame.y = 0;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 
 void Player::Up()
 {
-    float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
-
-    _pos.y -= _status._speed * deltaTime;
+    _pos.y -= _status._speed;
     _curFrame.y = 5;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 
 void Player::Down()
 {
-    float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
-
-    _pos.y += _status._speed * deltaTime;
+    _pos.y += _status._speed;
     _curFrame.y = 9;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }

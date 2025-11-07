@@ -29,10 +29,10 @@ void GameObject::Update()
 void GameObject::Render(HDC hdc, HDC srcDC)
 {
     SelectObject(srcDC, _bitmapMask);
-    BitBlt(hdc, _pos.x - CELL_SIZE / 2, _pos.y - CELL_SIZE / 2, CELL_SIZE , CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCAND);
+    BitBlt(hdc, _pos.x - _size.x / 2, _pos.y - _size.y / 2, _size.x , _size.y, srcDC, _curFrame.x * _size.x, _curFrame.y * _size.y, SRCAND);
 
     SelectObject(srcDC, _bitmap);
-    BitBlt(hdc, _pos.x - CELL_SIZE / 2, _pos.y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE, srcDC, _curFrame.x * CELL_SIZE, _curFrame.y * CELL_SIZE, SRCPAINT);
+    BitBlt(hdc, _pos.x - _size.x / 2, _pos.y - _size.y / 2, _size.x, _size.y, srcDC, _curFrame.x * _size.x, _curFrame.y * _size.y, SRCPAINT);
 }
 
 void GameObject::Left()
@@ -53,7 +53,7 @@ void GameObject::Down()
 
 BoundingBox GameObject::GetBoundingBox() const
 {
-    return BoundingBox(_pos);
+    return BoundingBox(_pos, _size);
 }
 
 BoundingBox GameObject::GetTargetBoundingBox() const
@@ -64,6 +64,11 @@ BoundingBox GameObject::GetTargetBoundingBox() const
 bool GameObject::IsCollision(const GameObject* other) const
 {
     return GetBoundingBox().Intersects(other->GetBoundingBox());
+}
+
+bool GameObject::IsClick(const POINT mouse) const
+{
+    return GetBoundingBox().Intersects(mouse);
 }
 
 bool GameObject::IsArrive() const

@@ -150,6 +150,7 @@
     <ClInclude Include="BomberMonster.h" />
     <ClInclude Include="BombObject.h" />
     <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="GameFramework.h" />
     <ClInclude Include="GameNetwork.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="BomberMonster.cpp" />
     <ClCompile Include="BombObject.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GameFramework.cpp" />
     <ClCompile Include="GameNetwork.cpp" />

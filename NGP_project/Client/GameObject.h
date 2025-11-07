@@ -53,6 +53,7 @@ public:
 	BoundingBox GetBoundingBox() const;
 	BoundingBox GetTargetBoundingBox() const;	// 타겟에 도작했는지 확인용
 	bool IsCollision(const GameObject* other) const;
+	bool IsClick(const POINT mouse) const;
 	bool IsArrive() const;
 
 	void SetToDead() { _isDead = true; }
@@ -75,4 +76,5 @@ protected:
 
 	Status _status{};
 	bool _isDead{};
+	Vertex _size{ CELL_SIZE, CELL_SIZE };
 };

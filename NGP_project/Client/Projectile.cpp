@@ -16,6 +16,7 @@ Projectile::Projectile(Dir dir, const Vertex& pos)
 	_status._speed = 1;
 	_pos = pos;
 	_type = ObjectType::Bullet;
+	_size = { 10, 10 };
 }
 
 void Projectile::Update()

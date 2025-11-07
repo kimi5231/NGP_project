@@ -6,6 +6,8 @@
 #include "Item.h"
 #include "projectile.h"
 #include "BombObject.h"
+#include "BoundingBox.h"
+#include "Button.h"
 
 // Monster
 #include "BomberMonster.h"
@@ -24,9 +26,9 @@ GameScene::GameScene()
 	_players.push_back(std::make_shared <Player>());
 	_monsters.push_back(std::make_shared <BomberMonster>());
 	_monsters.push_back(std::make_shared <TankMonster>());
-	_monsters.push_back(std::make_shared <ObstacleMonster>());
-	_monsters.push_back(std::make_shared <RespawnMonster>());
-	_objects.push_back(std::make_shared<BombObject>());
+	/*_monsters.push_back(std::make_shared <ObstacleMonster>());
+	_monsters.push_back(std::make_shared <RespawnMonster>());*/
+	_objects.push_back(std::make_shared<Button>(Vertex{ 400, 300 }, Vertex{100, 100}));
 
 	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
@@ -87,16 +89,19 @@ void GameScene::Render(HDC hdc)
 	// GameObject
 	for (const auto& player : _players) {
 		player->Render(memDC, memDCImage);
+		player->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
 	}
 
 	//_merchant->Render(memDC, memDCImage);
 
 	for (const auto& monster : _monsters) {
 		monster->Render(memDC, memDCImage);
+		monster->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
 	}
 
 	for (const auto object : _objects) {
 		object->Render(memDC, memDCImage);
+		object->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
 	}
 
 	// hDC에 memDC 출력(최종화면 출력)
@@ -148,6 +153,16 @@ void GameScene::ProcessInput()
 		// 키 Up
 		if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
 			player->ResetCurFrame();
+		}
+	}
+
+	if (input->GetButtonDown(KeyType::LeftMouse)) {
+		for (const auto object : _objects) {
+			if (object->GetObjectType() == ObjectType::Button) {
+				if (object->IsClick(input->GetMousePos())) {
+					_monsters.push_back(std::make_shared<TankMonster>());	// test
+				}
+			}
 		}
 	}
 

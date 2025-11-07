@@ -40,7 +40,8 @@ void GameFramework::Update()
 
 void GameFramework::Render(HDC hdc)
 {
-	_scene->Render(hdc);
+	if(_scene)
+		_scene->Render(hdc);
 }
 
 void GameFramework::ChangeScene()

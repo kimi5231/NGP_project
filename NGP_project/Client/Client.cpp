@@ -30,12 +30,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    gameFramework.Init();
     // TODO: 여기에 코드를 입력합니다.
     // 애플리케이션 초기화를 수행합니다:
     if (!InitInstance(hInstance, nCmdShow)) {
         return FALSE;
     }
+    gameFramework.Init();
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 

@@ -110,6 +110,7 @@
     <ClInclude Include="Projectile.h">
       <Filter>소스 파일\Game\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">
@@ -180,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>소스 파일\Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

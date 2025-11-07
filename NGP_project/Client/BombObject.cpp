@@ -10,7 +10,7 @@ BombObject::BombObject()
     _bitmapMask = (HBITMAP)LoadImage(hInst, (g_resourcePath / "bomb_mask.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
     _spriteCnt = { 6, 1 };
-
+    _type = ObjectType::Bomb;
 }
 
 BombObject::BombObject(Vertex pos)
@@ -20,6 +20,7 @@ BombObject::BombObject(Vertex pos)
     _bitmapMask = (HBITMAP)LoadImage(hInst, (g_resourcePath / "bomb_mask.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
     _spriteCnt = { 6, 1 };
+    _type = ObjectType::Bomb;
 }
 
 void BombObject::Update()
@@ -38,22 +39,12 @@ void BombObject::Update()
             _bitmapMask = (HBITMAP)LoadImage(hInst, (g_resourcePath / "bomb_effect_mask.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
             _spriteCnt = { 7, 1 };
             _curFrame = {};
-            _size *= 3;
-            _pos.x -= _size/2;
-            _pos.y -= _size/2;
+            _size.x *= 3;
+            _size.y *= 3;
         }
         else {
             _stateMachine->ChangeState(new DeadState);
             _stateMachine->Start();
         }
     }
-}
-
-void BombObject::Render(HDC hdc, HDC srcDC)
-{
-    SelectObject(srcDC, _bitmapMask);
-    BitBlt(hdc, _pos.x, _pos.y, _size, _size, srcDC, _curFrame.x * _size, _curFrame.y * _size, SRCAND);
-
-    SelectObject(srcDC, _bitmap);
-    BitBlt(hdc, _pos.x, _pos.y, _size, _size, srcDC, _curFrame.x * _size, _curFrame.y * _size, SRCPAINT);
 }

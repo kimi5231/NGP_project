@@ -27,6 +27,10 @@ void Player::Update()
 
 }
 
+void Player::Move(Dir dir)
+{
+}
+
 void Player::Left()
 {
     _pos.x -= _status._speed;

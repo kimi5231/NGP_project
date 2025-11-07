@@ -8,6 +8,7 @@ public:
 public:
 	virtual void Update();
 public:
+	virtual void Move(Dir dir);
 	virtual void Left();
 	virtual void Right();
 	virtual void Up();

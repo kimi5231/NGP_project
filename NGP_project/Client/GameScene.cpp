@@ -14,10 +14,10 @@
 #include "RespawnMonster.h"
 #include "TankMonster.h"
 
+#define BULLET_TIMER 30
 
 HBITMAP gBackgroundBitmap;
 RECT gBackgoundRect{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };	// 이 수치를 조정해서 배경화면 그리기
-
 
 GameScene::GameScene()
 {
@@ -111,35 +111,41 @@ void GameScene::ProcessInput()
 {
 	// 코드 길어져서 포인터로 받기
 	InputManager* input = GET_SINGLE(InputManager);
-	// 연속 이동을 원하면 GetButton 사용 (키를 누르고 있는 동안 true)
-	for (const auto& player : _players) {
-		if (input->GetButton(KeyType::Left)) player->Left();
-		if (input->GetButton(KeyType::Right)) player->Right();
-		if (input->GetButton(KeyType::Up)) player->Up();
-		if (input->GetButton(KeyType::Down)) player->Down();
-	}
 
+	static int cnt{};
+	cnt++;
 	for (const auto& player : _players) {
-		Vertex playerPos = player->GetPos();
-		if (input->GetButton(KeyType::W)) {
-			_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+		// 이동
+		if (input->GetButton(KeyType::A))  player->Left();
+		if (input->GetButton(KeyType::D)) player->Right();
+		if (input->GetButton(KeyType::W))    player->Up();
+		if (input->GetButton(KeyType::S))  player->Down();
+
+		// 총알 발사
+		if (cnt % BULLET_TIMER == 0) {
+			Vertex playerPos = player->GetPos();
+			if (input->GetButton(KeyType::Up)) {
+				if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+				else if (input->GetButton(KeyType::Left)) _objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+				else _objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+			}
+			else if (input->GetButton(KeyType::Down)) {
+				if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+				else if (input->GetButton(KeyType::Left)) _objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+				else _objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+			}
+			else if (input->GetButton(KeyType::Right)) {
+				_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+			}
+			else if (input->GetButton(KeyType::Left)) {
+				_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+			}
 		}
-		if (input->GetButton(KeyType::D)) {
-			_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-		}
-		if (input->GetButton(KeyType::A)) {
-			_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-		}
-		if (input->GetButton(KeyType::S)) {
-			_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-		}
-	}
-	
-	if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {
-		for (const auto& player : _players) {
+
+		// 키 Up
+		if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {
 			player->ResetCurFrame();
 		}
 	}
-
 
 }

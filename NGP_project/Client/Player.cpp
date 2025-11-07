@@ -27,10 +27,6 @@ void Player::Update()
 
 }
 
-void Player::Move(Dir dir)
-{
-}
-
 void Player::Left()
 {
     _pos.x -= _status._speed;
@@ -40,7 +36,6 @@ void Player::Left()
 
 void Player::Right()
 {
-
     _pos.x += _status._speed;
     _curFrame.y = 0;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;

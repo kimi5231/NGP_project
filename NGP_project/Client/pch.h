@@ -61,6 +61,10 @@ enum class Dir
 struct Vertex
 {
     int x, y;
+
+    bool operator!=(const Vertex& other) const {
+        return !((other.x == x) && (other.y == y));
+    }
 };
 
 using GameObjectRef = std::shared_ptr<class GameObject>;

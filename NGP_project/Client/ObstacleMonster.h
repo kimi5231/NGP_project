@@ -6,4 +6,6 @@ class ObstacleMonster : public Monster
 public:
 	ObstacleMonster();
 	virtual ~ObstacleMonster() {};
+
+	void UseSkill() override;
 };

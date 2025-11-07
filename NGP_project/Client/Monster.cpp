@@ -43,7 +43,7 @@ void Monster::Move()
     }
 
     if (direct.x <= 0) {
-        _curFrame.y = 3;    // 시간 되면 대각선 백터로 구현
+        _curFrame.y = 3;
     }
     else if (direct.x > 0) {
         _curFrame.y = 1;

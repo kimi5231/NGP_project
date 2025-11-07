@@ -42,7 +42,7 @@ void MoveToTargetState::Exit(GameObject* self)
 void MoveToTargetState::Tick(GameObject* self, GameObject* other)
 {
 	self->Move();
-	if (self->IsArrive()) {
+	if (self->IsArrive() || dynamic_cast<Monster*>(self)->GetIsFollow()) {
 		Exit(self);
 	}
 }

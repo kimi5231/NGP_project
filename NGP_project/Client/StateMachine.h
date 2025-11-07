@@ -10,6 +10,13 @@ public:
 	virtual void Tick(GameObject* self, GameObject* other) = 0;
 };
 
+class IdleState : public State{
+public:
+	virtual void Enter(GameObject* self) override {};
+	virtual void Exit(GameObject* self) override {};
+	virtual void Tick(GameObject* self, GameObject* other) override {};
+};
+
 class MoveState : public State {
 public:
 	virtual void Enter(GameObject* self) override;

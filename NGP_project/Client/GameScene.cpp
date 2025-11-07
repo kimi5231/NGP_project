@@ -22,7 +22,10 @@ RECT gBackgoundRect{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };	// 이 수
 GameScene::GameScene()
 {
 	_players.push_back(std::make_shared <Player>());
-	_monsters.push_back(std::make_shared < BomberMonster>());
+	_monsters.push_back(std::make_shared <BomberMonster>());
+	_monsters.push_back(std::make_shared <TankMonster>());
+	_monsters.push_back(std::make_shared <ObstacleMonster>());
+	_monsters.push_back(std::make_shared <RespawnMonster>());
 	_objects.push_back(std::make_shared<BombObject>());
 
 	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
@@ -143,7 +146,7 @@ void GameScene::ProcessInput()
 		}
 
 		// 키 Up
-		if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Right) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down)) {
+		if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
 			player->ResetCurFrame();
 		}
 	}

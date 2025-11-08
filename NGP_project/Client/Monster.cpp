@@ -12,6 +12,16 @@ std::uniform_int_distribution<> randHeight(0, FRAME_BUFFER_HEIGHT);
 #define MONSTER_SPEED 2
 
 Monster::Monster()
+    : GameObject()
+{
+    _status._hp = 10;
+    _status._speed = MONSTER_SPEED;
+
+    _stateMachine->Start();
+}
+
+Monster::Monster(State* state)
+    : GameObject(state)
 {
     _status._hp = 10;
     _status._speed = MONSTER_SPEED;
@@ -62,3 +72,11 @@ void Monster::Update(GameObject* other)
     _stateMachine->Update(other);
 }
 
+void Monster::Damaged(int damage)
+{
+    _status._hp -= damage;
+
+    if (_status._hp <= 0) {
+        _isDead = true;
+    }
+}

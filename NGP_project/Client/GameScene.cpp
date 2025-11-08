@@ -26,8 +26,8 @@ GameScene::GameScene()
 	_players.push_back(std::make_shared <Player>());
 	_monsters.push_back(std::make_shared <BomberMonster>());
 	_monsters.push_back(std::make_shared <TankMonster>());
-	/*_monsters.push_back(std::make_shared <ObstacleMonster>());
-	_monsters.push_back(std::make_shared <RespawnMonster>());*/
+	_monsters.push_back(std::make_shared <ObstacleMonster>());
+	_monsters.push_back(std::make_shared <RespawnMonster>());
 	_objects.push_back(std::make_shared<Button>(Vertex{ 400, 300 }, Vertex{100, 100}));
 
 	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
@@ -44,7 +44,7 @@ void GameScene::AddObject(GameObject* obj)
 
 void GameScene::Update()
 {
-	for (const auto object : _objects) {
+	for (const auto& object : _objects) {
 		object->Update();
 
 	}
@@ -53,6 +53,11 @@ void GameScene::Update()
 		monster->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj);
 			});
+		for (const auto& object : _objects) {
+			if (object->GetObjectType() == ObjectType::Bullet) {
+				monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
+			}
+		}
 	}
 	_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
 			return o->IsDead();

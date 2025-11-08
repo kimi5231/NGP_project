@@ -106,7 +106,7 @@ void UseSkillState::Exit(GameObject* self)
 
 void UseSkillState::Tick(GameObject* self, GameObject* other)
 {
-	dynamic_cast<Monster*>(self)->UseSkill();
+	if (dynamic_cast<Monster*>(self)->UseSkill()) return;
 	Exit(self);
 }
 

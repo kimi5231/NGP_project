@@ -7,6 +7,6 @@ public:
 	BomberMonster();
 	virtual ~BomberMonster() {};
 
-	void UseSkill() override;
+	bool UseSkill() override;
 };
 

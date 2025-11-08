@@ -12,8 +12,10 @@ BomberMonster::BomberMonster()
     _isFollow = false;
 }
 
-void BomberMonster::UseSkill()
+bool BomberMonster::UseSkill()
 {
     GameObject* bomb = new BombObject(_pos);
     _spawnCallback(bomb);
+
+    return false;
 }

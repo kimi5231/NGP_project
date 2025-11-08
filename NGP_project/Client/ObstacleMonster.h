@@ -7,5 +7,5 @@ public:
 	ObstacleMonster();
 	virtual ~ObstacleMonster() {};
 
-	void UseSkill() override;
+	bool UseSkill() override;
 };

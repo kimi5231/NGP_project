@@ -7,5 +7,6 @@ public:
 	RespawnMonster();
 	virtual ~RespawnMonster() {};
 
+	bool UseSkill() override;
 	virtual void FindTarget(GameObject* other) override;
 };

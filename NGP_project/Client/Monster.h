@@ -5,6 +5,7 @@ class Monster : public GameObject
 {
 public:
 	Monster();
+	Monster(State* state);
 	virtual ~Monster() {};
 public:
 	virtual void FindTarget(GameObject* other) override;	// 랜덤 타겟 지정
@@ -12,7 +13,9 @@ public:
 	virtual void Move() override;
 
 	virtual void Update(GameObject* other);
-	virtual void UseSkill() {};
+	// 외부에서 state을 위해 bool값 리턴 - true: state 변경
+	virtual bool UseSkill() { return false; }
+	void Damaged(int damage);
 
 	void SetCallback(SpawnCallback cb) { _spawnCallback = cb; }
 protected:

@@ -9,6 +9,9 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc, HDC srcDC);
 
+	int GetDamage() const { return _damage; }
 private:
 	virtual void Move();
+
+	int _damage;
 };

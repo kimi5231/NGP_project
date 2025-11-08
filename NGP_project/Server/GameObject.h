@@ -30,6 +30,7 @@ protected:
 	Vertex _pos{};
 	Vertex _targetPos{};
 	Vertex _curFrame{};
+	Vertex _spriteCnt{};
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 
 	std::unique_ptr<StateMachine> _stateMachine;

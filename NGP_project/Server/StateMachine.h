@@ -10,6 +10,13 @@ public:
 	virtual void Tick(GameObject* self, GameObject* other) = 0;
 };
 
+class IdleState : public State {
+public:
+	virtual void Enter(GameObject* self) override {};
+	virtual void Exit(GameObject* self) override {};
+	virtual void Tick(GameObject* self, GameObject* other) override {};
+};
+
 class MoveState : public State {
 public:
 	virtual void Enter(GameObject* self) override;
@@ -17,7 +24,7 @@ public:
 	virtual void Tick(GameObject* self, GameObject* other) override;
 };
 
-class MoveToTarget : public State{
+class MoveToTargetState : public State {
 public:
 	virtual void Enter(GameObject* self) override;
 	virtual void Exit(GameObject* self) override;
@@ -25,28 +32,28 @@ public:
 };
 
 // random or player.pos
-class SetTarget : public State {
+class SetTargetState : public State {
 public:
 	virtual void Enter(GameObject* self) override;
 	virtual void Exit(GameObject* self) override;
 	virtual void Tick(GameObject* self, GameObject* other) override;
 };
 
-class Bomb : public State {
+class DeadState : public State {
 public:
 	virtual void Enter(GameObject* self) override;
 	virtual void Exit(GameObject* self) override;
 	virtual void Tick(GameObject* self, GameObject* other) override;
 };
 
-class Dead : public State {
+class UseItemState : public State {
 public:
 	virtual void Enter(GameObject* self) override;
 	virtual void Exit(GameObject* self) override;
 	virtual void Tick(GameObject* self, GameObject* other) override;
 };
 
-class UseItem : public State {
+class UseSkillState : public State {
 public:
 	virtual void Enter(GameObject* self) override;
 	virtual void Exit(GameObject* self) override;
@@ -55,7 +62,7 @@ public:
 
 class StateMachine {
 public:
-	StateMachine(GameObject* object, State* state = new SetTarget);
+	StateMachine(GameObject* object, State* state = new SetTargetState);
 	~StateMachine();
 	void Start();
 	void Update(GameObject* other);

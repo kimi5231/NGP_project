@@ -20,6 +20,7 @@ Player::Player()
 
     _status._hp = 10;
     _status._speed = PLAYER_SPEED;
+    _type = ObjectType::Player;
 }
 
 void Player::Update()

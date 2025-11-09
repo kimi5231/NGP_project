@@ -98,7 +98,7 @@ public:                                     \
 
 #define GET_SINGLE(classname)    classname::GetInstance()
 
-enum C_PacketID
+enum PacketID
 {
     C_UpdateObjectState,
     C_UpdateDir,
@@ -111,7 +111,7 @@ enum C_PacketID
 
 struct Header
 {
-    C_PacketID id;
+    PacketID id;
     int dataSize;
 };
 

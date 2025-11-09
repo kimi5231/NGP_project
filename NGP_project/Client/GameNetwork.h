@@ -10,15 +10,18 @@ public:
 	void Update();
 
 private:
-	void ProcessSend(const std::vector<char>& buffer);
+	template<class T>
+	void ProcessSend(PacketID id, const T& packet);
+
 	void processRecv();
 
 public:
 	template <class T>
-	std::vector<char> CreatePacket(C_PacketID id, T& packet);
+	std::vector<char> CreatePacket(PacketID id, T& packet);
 
 private:
 	SOCKET _socket;
-	fd_set _readSet;
-	fd_set _writeSet;
+
+	fd_set _readSet{};
+	fd_set _writeSet{};
 };

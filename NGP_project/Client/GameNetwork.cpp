@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GameNetwork.h"
 
-char* SERVERIP = (char*)"127.0.0.1";
+char* SERVERIP = (char*)"61.255.49.141";
 #define SERVERPORT 7777
 #define BUFSIZE 512
 
@@ -49,13 +49,52 @@ GameNetwork::~GameNetwork()
 	WSACleanup();
 }
 
-void GameNetwork::ProcessSend(const std::vector<char>& packet)
+void GameNetwork::Update()
 {
-	int retval;
-	int packetSize = static_cast<int>(packet.size());
-	char buf[BUFSIZE];
+	// socket set 초기화
+	FD_ZERO(&_readSet);
+	FD_ZERO(&_writeSet);
 
-	// 고정 길이
+	// readSet, wirteSet에 socket 등록
+	FD_SET(_socket, &_readSet);
+	FD_SET(_socket, &_writeSet);
+
+	// select
+	if (select(0, &_readSet, &_writeSet, NULL, NULL) == SOCKET_ERROR)
+	{
+		//err_display("select");
+		return;
+	}
+
+	if (FD_ISSET(_socket, &_readSet))
+	{
+		// ProcessRecv();
+	}
+
+	if (FD_ISSET(_socket, &_writeSet))
+	{
+		// 사이즈 보내기 test
+		int packetSize = 4;
+		int retval;
+		retval = send(_socket, (char*)&packetSize, sizeof(int), 0);
+		if (retval == SOCKET_ERROR)
+		{
+			err_display("send()");
+			return;
+		}
+	}
+}
+
+template<class T>
+void GameNetwork::ProcessSend(PacketID id, const T& packet)
+{
+	// 패킷 생성
+	std::vector<char> sendPacket = CreatePacket(id, packet);
+
+	int retval;
+	int packetSize = static_cast<int>(sendPacket.size());
+
+	// 고정 길이 데이터 전송
 	retval = send(_socket, (char*)&packetSize, sizeof(int), 0);
 	if (retval == SOCKET_ERROR)
 	{
@@ -64,7 +103,7 @@ void GameNetwork::ProcessSend(const std::vector<char>& packet)
 	}
 
 	// 가변 길이
-	retval = send(_socket, packet.data(), packetSize, 0);
+	retval = send(_socket, sendPacket.data(), packetSize, 0);
 	if (retval == SOCKET_ERROR)
 	{
 		// err_display("send()");
@@ -77,7 +116,7 @@ void GameNetwork::processRecv()
 }
 
 template<class T>
-std::vector<char> GameNetwork::CreatePacket(C_PacketID id, T& packet)
+std::vector<char> GameNetwork::CreatePacket(PacketID id, T& packet)
 {
 	std::vector<char> retPacket;
 

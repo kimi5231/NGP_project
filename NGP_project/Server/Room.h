@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "GameObject.h"
+
 class Room
 {
 public:
@@ -7,4 +9,7 @@ public:
 
 public:
 	void Update();
+
+private:
+	std::vector<GameObjectRef> _objects;
 };

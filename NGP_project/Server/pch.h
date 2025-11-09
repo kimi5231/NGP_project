@@ -7,6 +7,7 @@
 #include <memory>
 #include <iostream>
 #include <vector>
+#include <functional>
 
 #pragma comment(lib, "ws2_32")
 
@@ -61,7 +62,6 @@ struct Vertex
 
 using GameObjectRef = std::shared_ptr<class GameObject>;
 using PlayerRef = std::shared_ptr<class Player>;
-using TankMonsterRef = std::shared_ptr<class TankMonster>;
 using ItemRef = std::shared_ptr<class Item>;
 using ProjectileRef = std::shared_ptr<class Projectile>;
 

@@ -39,12 +39,12 @@ ServerFramework::ServerFramework()
 	}
 
 	// Non-Blocking Socket 전환
-	u_long on = 1;
+	/*u_long on = 1;
 	if (ioctlsocket(_listenSocket, FIONBIO, &on) == SOCKET_ERROR)
 	{
 		std::cout << "Non-Blocking Socket 전환 실패" << std::endl;
 		return;
-	}
+	}*/
 }
 
 ServerFramework::~ServerFramework()
@@ -116,32 +116,32 @@ void ServerFramework::ProcessRecv(SOCKET clientSocket)
 	int packetSize{};
 	recv(clientSocket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
 
-	//// Packet 수신(가변 데이터)
-	//std::vector<char> packet(512);
-	//recv(clientSocket, packet.data(), packetSize, MSG_WAITALL);
+	// Packet 수신(가변 데이터)
+	std::vector<char> packet(512);
+	recv(clientSocket, packet.data(), packetSize, MSG_WAITALL);
 
-	//// Header 추출
-	//Header header;
-	//memcpy(&header, packet.data(), sizeof(Header));
+	// Header 추출
+	Header header;
+	memcpy(&header, packet.data(), sizeof(Header));
 
-	//// Data 추출
-	//switch (header.id)
-	//{
-	//case C_UpdateObjectState:
-	//	break;
-	//case C_UpdateDir:
-	//	break;
-	//case C_Move:
-	//	break;
-	//case C_Collision:
-	//	break;
-	//case C_UseItem:
-	//	break;
-	//case C_StayGame:
-	//	break;
-	//case C_EndGame:
-	//	break;
-	//default:
-	//	break;
-	//}
+	// Data 추출
+	switch (header.id)
+	{
+	case C_UpdateObjectState:
+		break;
+	case C_UpdateDir:
+		break;
+	case C_Move:
+		C_Move_Packet movePacket;
+		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(C_Move_Packet));
+		break;
+	case C_Collision:
+		break;
+	case C_UseItem:
+		break;
+	case C_StayGame:
+		break;
+	case C_EndGame:
+		break;
+	}
 }

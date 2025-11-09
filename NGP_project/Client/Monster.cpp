@@ -1,13 +1,13 @@
 ﻿#include "pch.h"
 #include "Monster.h"
+#include "Global.h"
 #include <random>
 
 std::random_device rd;
 std::mt19937 gen(rd());
 
-extern RECT gBackgoundRect;
-std::uniform_int_distribution<> randWidth(gBackgoundRect.left, gBackgoundRect.right);
-std::uniform_int_distribution<> randHeight(gBackgoundRect.top, gBackgoundRect.bottom);
+std::uniform_int_distribution<> randWidth(gBackgroundRect.left, gBackgroundRect.right);
+std::uniform_int_distribution<> randHeight(gBackgroundRect.top, gBackgroundRect.bottom);
 
 // 임시지정
 #define MONSTER_SPEED 2

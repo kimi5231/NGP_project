@@ -18,7 +18,6 @@
 
 
 HBITMAP gBackgroundBitmap;
-RECT gBackgoundRect{ 150, 50, FRAME_BUFFER_WIDTH- 300, FRAME_BUFFER_HEIGHT - 100 };	// 이 수치를 조정해서 배경화면 그리기
 
 GameScene::GameScene()
 {
@@ -55,7 +54,7 @@ void GameScene::Update()
 		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			if (object->GetObjectType() == ObjectType::Bullet) {
-				if (monster->IsCollision(object.get())) {
+				if (monster->IsCollision(object.get()) && !monster->IsDead()) {
 					monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
 					object->SetToDead();
 				}
@@ -71,12 +70,7 @@ void GameScene::Update()
 			return o->IsDead();
 		}),	_objects.end());
 
-
 	ProcessInput();
-
-	if (_players[0]->IsCollision(_monsters[0].get())) {
-		//_players[0]->Left();	// test 용
-	}
 }
 
 void GameScene::Render(HDC hdc)
@@ -97,7 +91,7 @@ void GameScene::Render(HDC hdc)
 	BITMAP bmpInfo;
 	GetObject(gBackgroundBitmap, sizeof(BITMAP), &bmpInfo);
 	oldbit[1] = (HBITMAP)SelectObject(memDCImage, gBackgroundBitmap);
-	StretchBlt(memDC, gBackgoundRect.left, gBackgoundRect.top, gBackgoundRect.right, gBackgoundRect.bottom, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
+	StretchBlt(memDC, gBackgroundRect.left, gBackgroundRect.top, gBackgroundRect.right- gBackgroundRect.left, gBackgroundRect.bottom - gBackgroundRect.top, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
 
 	// GameObject
 	for (const auto& player : _players) {
@@ -166,7 +160,6 @@ void GameScene::ProcessInput()
 		// 키 Up
 		if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
 			player->ResetCurFrame();
-			player->SetBulletCnt(0);
 		}
 	}
 

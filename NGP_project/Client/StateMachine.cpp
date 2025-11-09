@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Monster.h"
 #include "BombObject.h"
+#include "Global.h"
 
 // Move
 void MoveState::Enter(GameObject* self)
@@ -19,8 +20,8 @@ void MoveState::Tick(GameObject* self, GameObject* other)
 {
 	self->Move();
 	Vertex pos = self->GetPos();
-	if (pos.x < 0 || pos.x > FRAME_BUFFER_WIDTH ||
-		pos.y < 0 || pos.y > FRAME_BUFFER_HEIGHT) {
+	if (pos.x < gBackgroundRect.left || pos.x > gBackgroundRect.right||
+		pos.y < gBackgroundRect.top|| pos.y > gBackgroundRect.bottom) {
 		Exit(self);
 	}
 }
@@ -67,6 +68,7 @@ void SetTargetState::Tick(GameObject* self, GameObject* other)
 // Dead
 void DeadState::Enter(GameObject* self)
 {
+	self->SetToDead();
 }
 
 void DeadState::Exit(GameObject* self)

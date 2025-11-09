@@ -7,6 +7,7 @@ public:
 
 public:
 	void Update();
+	void ProcessRecv(SOCKET clientSocket);
 
 private:
 	fd_set _readSet{};

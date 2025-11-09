@@ -65,6 +65,13 @@ void ServerFramework::Update()
 	// readSet에 listenSocket 등록
 	FD_SET(_listenSocket, &_readSet);
 
+	// readSet, writeSet에 clientSocket 등록
+	for (SOCKET client : _clientSockets)
+	{
+		FD_SET(client, &_readSet);
+		FD_SET(client, &_writeSet);
+	}
+	
 	// select
 	if (select(0, &_readSet, &_writeSet, NULL, NULL) == SOCKET_ERROR)
 	{
@@ -88,4 +95,22 @@ void ServerFramework::Update()
 		_clientSockets.push_back(clientSocket);
 		std::cout << "Client 접속" << std::endl;
 	}
+
+	for (SOCKET client : _clientSockets)
+	{
+		if (FD_ISSET(client, &_readSet))
+		{
+			ProcessRecv(client);
+		}
+
+		if (FD_ISSET(client, &_writeSet))
+		{
+			// 추후 ProcessSend 추가
+		}
+	}
+}
+
+void ServerFramework::ProcessRecv(SOCKET clientSocket)
+{
+
 }

@@ -9,6 +9,8 @@
 #include <vector>
 #include <functional>
 
+#include "Packet.h"
+
 #pragma comment(lib, "ws2_32")
 
 #define FRAME_BUFFER_WIDTH 800

@@ -13,7 +13,7 @@ Projectile::Projectile(Dir dir, const Vertex& pos)
 	_bitmapMask = (HBITMAP)LoadImage(hInst, L"Resource\\Bitmap\\Life_mask.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 	_dir = dir;
-	_status._speed = 1;
+	_status._speed = 3;
 	_pos = pos;
 	_type = ObjectType::Bullet;
 	_size = { 10, 10 };
@@ -21,7 +21,7 @@ Projectile::Projectile(Dir dir, const Vertex& pos)
 
 void Projectile::Update()
 {
-	_stateMachine->Update();
+	_stateMachine->Update(nullptr);
 }
 
 void Projectile::Render(HDC hdc, HDC srcDC)
@@ -34,6 +34,7 @@ void Projectile::Render(HDC hdc, HDC srcDC)
 
 	DeleteObject(hBrush);
 }
+
 
 void Projectile::Move()
 {

@@ -74,7 +74,7 @@ protected:
 
 	std::unique_ptr<StateMachine> _stateMachine;
 
-	Status _status{};
+	Status _status{0, 10};
 	bool _isDead{};
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 };

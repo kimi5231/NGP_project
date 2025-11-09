@@ -13,5 +13,5 @@ public:
 private:
 	virtual void Move();
 
-	int _damage;
+	int _damage{10};
 };

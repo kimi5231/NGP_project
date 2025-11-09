@@ -16,10 +16,9 @@
 #include "RespawnMonster.h"
 #include "TankMonster.h"
 
-#define BULLET_TIMER 30
 
 HBITMAP gBackgroundBitmap;
-RECT gBackgoundRect{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };	// 이 수치를 조정해서 배경화면 그리기
+RECT gBackgoundRect{ 150, 50, FRAME_BUFFER_WIDTH- 300, FRAME_BUFFER_HEIGHT - 100 };	// 이 수치를 조정해서 배경화면 그리기
 
 GameScene::GameScene()
 {
@@ -53,12 +52,21 @@ void GameScene::Update()
 		monster->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj);
 			});
+		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			if (object->GetObjectType() == ObjectType::Bullet) {
-				monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
+				if (monster->IsCollision(object.get())) {
+					monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
+					object->SetToDead();
+				}
 			}
 		}
 	}
+
+	_monsters.erase(std::remove_if(_monsters.begin(), _monsters.end(), [](const MonsterRef& o) {
+		return o->IsDead();
+		}), _monsters.end());
+
 	_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
 			return o->IsDead();
 		}),	_objects.end());
@@ -135,7 +143,7 @@ void GameScene::ProcessInput()
 		if (input->GetButton(KeyType::S))  player->Down();
 
 		// 총알 발사
-		if (cnt % BULLET_TIMER == 0) {
+		if (player->IsCanShoot()) {
 			Vertex playerPos = player->GetPos();
 			if (input->GetButton(KeyType::Up)) {
 				if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
@@ -158,6 +166,7 @@ void GameScene::ProcessInput()
 		// 키 Up
 		if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
 			player->ResetCurFrame();
+			player->SetBulletCnt(0);
 		}
 	}
 

@@ -10,11 +10,23 @@
 #include <algorithm>
 #include <functional>
 
+#include <tchar.h> // _T(), ...
+#include <stdio.h> // printf(), ...
+#include <stdlib.h> // exit(), ...
+#include <string.h> // strncpy(), ...
+
 #pragma comment(lib, "ws2_32")
 
 #define FRAME_BUFFER_WIDTH 800
 #define FRAME_BUFFER_HEIGHT 600
 #define CELL_SIZE 30
+
+// 소켓 함수 오류 출력 후 종료
+void err_quit(const char* msg);
+// 소켓 함수 오류 출력
+void err_display(const char* msg);
+// 소켓 함수 오류 출력
+void err_display(int errcode);
 
 enum class ObjectState
 {

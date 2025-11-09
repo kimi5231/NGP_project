@@ -10,7 +10,7 @@ public:
 	void Update();
 
 private:
-	void ProcessSend();
+	void ProcessSend(const std::vector<char>& buffer);
 	void processRecv();
 
 public:

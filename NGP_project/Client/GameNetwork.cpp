@@ -16,6 +16,7 @@ GameNetwork::GameNetwork()
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket == INVALID_SOCKET)
 		return;
+		// err_quit("socket()");	// 지금은 서버와 접속 안 돼도 클라 실행되도록 되어있음
 
 	// connect()
 	int retval;
@@ -25,10 +26,10 @@ GameNetwork::GameNetwork()
 	inet_pton(AF_INET, SERVERIP, &serveraddr.sin_addr);
 	serveraddr.sin_port = htons(SERVERPORT);
 	retval = connect(_socket, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
-	if (retval == SOCKET_ERROR) {
-		int errCode = WSAGetLastError();
-		std::cout << "connect 실패, 에러 코드: " << errCode << "\n";
-	}
+	if (retval == SOCKET_ERROR)
+		return;
+		// err_quit("connect()");
+	
 }
 
 GameNetwork::~GameNetwork()
@@ -40,8 +41,21 @@ GameNetwork::~GameNetwork()
 	WSACleanup();
 }
 
-void GameNetwork::ProcessSend()
+void GameNetwork::ProcessSend(const std::vector<char>& packet)
 {
+	int retval;
+	int packetSize = sizeof(packet);
+	char buf[BUFSIZE];
+
+	// 고정 길이
+	retval = send(_socket, (char*)&packetSize, sizeof(int), 0);
+	// 가변 길이
+	retval = send(_socket, (char*)&packet, sizeof(packetSize), 0);
+	if (retval == SOCKET_ERROR)
+	{
+		// err_display("send()");
+		return;
+	}
 }
 
 void GameNetwork::processRecv()

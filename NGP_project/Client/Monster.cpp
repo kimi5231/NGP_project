@@ -80,6 +80,6 @@ void Monster::Damaged(int damage)
     _status._hp -= damage;
 
     if (_status._hp <= 0) {
-        _isDead = true;
+        SetState(ObjectState::Dead);
     }
 }

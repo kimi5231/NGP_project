@@ -54,20 +54,20 @@ void GameScene::Update()
 		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			if (object->GetObjectType() == ObjectType::Bullet) {
-				if (monster->IsCollision(object.get()) && !monster->IsDead()) {
+				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && !monster->IsState(ObjectState::Revive)) {
 					monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
-					object->SetToDead();
+					object->SetState(ObjectState::Dead);
 				}
 			}
 		}
 	}
 
 	_monsters.erase(std::remove_if(_monsters.begin(), _monsters.end(), [](const MonsterRef& o) {
-		return o->IsDead();
+		return o->IsState(ObjectState::Dead);
 		}), _monsters.end());
 
 	_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
-			return o->IsDead();
+			return o->IsState(ObjectState::Dead);
 		}),	_objects.end());
 
 	ProcessInput();

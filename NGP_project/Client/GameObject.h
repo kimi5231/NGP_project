@@ -56,8 +56,8 @@ public:
 	bool IsClick(const POINT mouse) const;
 	bool IsArrive() const;
 
-	void SetToDead() { _isDead = true; }
-	bool IsDead() const { return _isDead; }
+	void SetState(ObjectState state) { _state = state; }
+	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
 public:
 	void ResetCurFrame();
 
@@ -67,6 +67,7 @@ protected:
 	Vertex _spriteCnt{};	// 스프라이트 시트의 가로/세로 칸 개수
 
 	ObjectType _type{};
+	ObjectState _state;
 	Dir _dir{};
 	Vertex _pos{};
 	Vertex _targetPos{};
@@ -74,7 +75,7 @@ protected:
 
 	std::unique_ptr<StateMachine> _stateMachine;
 
+	int _life{ 1 };
 	Status _status{0, 10};
-	bool _isDead{};
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 };

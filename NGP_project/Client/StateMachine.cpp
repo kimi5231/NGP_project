@@ -68,7 +68,7 @@ void SetTargetState::Tick(GameObject* self, GameObject* other)
 // Dead
 void DeadState::Enter(GameObject* self)
 {
-	self->SetToDead();
+	self->SetState(ObjectState::Dead);
 }
 
 void DeadState::Exit(GameObject* self)
@@ -132,7 +132,7 @@ void StateMachine::Start()
 void StateMachine::Update(GameObject* other)
 {
 	_curState->Tick(_object, other);
-	if (_object->IsDead()) {
+	if (_object->IsState(ObjectState::Dead)) {
 		ChangeState(new DeadState);
 		Start();
 	}

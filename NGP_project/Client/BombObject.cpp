@@ -43,7 +43,7 @@ void BombObject::Update()
             _size.y *= 3;
         }
         else {
-            SetToDead();
+            SetState(ObjectState::Dead);
         }
     }
 }

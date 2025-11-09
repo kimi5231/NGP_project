@@ -112,5 +112,36 @@ void ServerFramework::Update()
 
 void ServerFramework::ProcessRecv(SOCKET clientSocket)
 {
+	// PacketSize 수신(고정 길이)
+	int packetSize{};
+	recv(clientSocket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
 
+	//// Packet 수신(가변 데이터)
+	//std::vector<char> packet(512);
+	//recv(clientSocket, packet.data(), packetSize, MSG_WAITALL);
+
+	//// Header 추출
+	//Header header;
+	//memcpy(&header, packet.data(), sizeof(Header));
+
+	//// Data 추출
+	//switch (header.id)
+	//{
+	//case C_UpdateObjectState:
+	//	break;
+	//case C_UpdateDir:
+	//	break;
+	//case C_Move:
+	//	break;
+	//case C_Collision:
+	//	break;
+	//case C_UseItem:
+	//	break;
+	//case C_StayGame:
+	//	break;
+	//case C_EndGame:
+	//	break;
+	//default:
+	//	break;
+	//}
 }

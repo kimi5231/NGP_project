@@ -1,10 +1,4 @@
 #pragma once
-struct Header
-{
-    PacketID id;
-    int dataSize;
-};
-
 enum PacketID
 {
     C_UpdateObjectState,
@@ -14,4 +8,10 @@ enum PacketID
     C_UseItem,
     C_StayGame,
     C_EndGame,
+};
+
+struct Header
+{
+    PacketID id;
+    int dataSize;
 };

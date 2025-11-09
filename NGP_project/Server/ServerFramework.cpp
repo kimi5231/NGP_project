@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ServerFramework.h"
+#include "Room.h"
 
 ServerFramework::ServerFramework()
 {
@@ -38,13 +39,8 @@ ServerFramework::ServerFramework()
 		return;
 	}
 
-	// Non-Blocking Socket 전환
-	/*u_long on = 1;
-	if (ioctlsocket(_listenSocket, FIONBIO, &on) == SOCKET_ERROR)
-	{
-		std::cout << "Non-Blocking Socket 전환 실패" << std::endl;
-		return;
-	}*/
+	// Room 생성
+	_room = new Room();
 }
 
 ServerFramework::~ServerFramework()

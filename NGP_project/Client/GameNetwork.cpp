@@ -47,3 +47,24 @@ void GameNetwork::ProcessSend()
 void GameNetwork::processRecv()
 {
 }
+
+template<class T>
+std::vector<char> GameNetwork::CreatePacket(C_PacketID id, T& packet)
+{
+	std::vector<char> retPacket;
+
+	// 헤더
+	Header header;
+	header.id = id;
+	header.dataSize = sizeof(T);
+
+	// 전체 패킷 크기
+	int totalSize = sizeof(Header) + sizeof(T);
+	retPacket.resize(totalSize);
+
+	// 패킷 넣기
+	memcpy(retPacket.data(), &header, sizeof(Header));
+	memcpy(retPacket.data() + sizeof(Header), &packet, sizeof(packet));
+
+	return retPacket;
+}

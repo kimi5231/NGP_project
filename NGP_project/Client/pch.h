@@ -58,6 +58,12 @@ enum class Dir
    RightDown,
 };
 
+enum class CollisionType
+{
+    Monster,
+    Item,
+};
+
 struct Vertex
 {
     int x, y;
@@ -80,3 +86,69 @@ public:                                     \
     }
 
 #define GET_SINGLE(classname)    classname::GetInstance()
+
+enum C_PacketID
+{
+    C_UpdateObjectState,
+    C_UpdateDir,
+    C_Move,
+    C_Collision,
+    C_UseItem,
+    C_StayGame,
+    C_EndGame,
+};
+
+struct Header
+{
+    C_PacketID id;
+    int dataSize;
+};
+
+// Packet
+struct C_UpdateObjectState
+{
+    int objectID;
+    ObjectType type;
+    ObjectState state;
+};
+
+struct C_UpdateDir
+{
+    int objectID;
+    ObjectType type;
+    Dir dir;
+};
+
+struct C_Move
+{
+    int objectID;
+    ObjectType type;
+    Vertex pos;
+};
+
+struct C_Collision
+{
+    CollisionType collisionType;
+    int objectID1;
+    ObjectType type1;
+    Vertex pos1;
+    int objectID2;
+    ObjectType type2;
+    Vertex pos2;
+};
+
+struct C_UseItem
+{
+    int objectID;
+    ObjectType itemType;
+};
+
+struct C_StayGame
+{
+    int objectID;
+};
+
+struct C_EndGame
+{
+    int objectID;
+};

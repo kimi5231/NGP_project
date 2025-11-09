@@ -18,14 +18,6 @@ GameNetwork::GameNetwork()
 		return;
 		// err_quit("socket()");	// 지금은 서버와 접속 안 돼도 클라 실행되도록 되어있음
 
-	// Non-Blocking Socket 전환
-	u_long on = 1;
-	if (ioctlsocket(_socket, FIONBIO, &on) == SOCKET_ERROR)
-	{
-		return;
-		// err_quit("Non-Blocking Socket Switch");
-	}
-
 	// connect()
 	int retval;
 	struct sockaddr_in serveraddr;

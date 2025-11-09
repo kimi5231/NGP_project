@@ -116,28 +116,28 @@ struct Header
 };
 
 // Packet
-struct C_UpdateObjectState
+struct C_UpdateObjectState_Packet
 {
     int objectID;
     ObjectType type;
     ObjectState state;
 };
 
-struct C_UpdateDir
+struct C_UpdateDir_Packet
 {
     int objectID;
     ObjectType type;
     Dir dir;
 };
 
-struct C_Move
+struct C_Move_Packet
 {
     int objectID;
     ObjectType type;
     Vertex pos;
 };
 
-struct C_Collision
+struct C_Collision_Packet
 {
     CollisionType collisionType;
     int objectID1;
@@ -148,18 +148,18 @@ struct C_Collision
     Vertex pos2;
 };
 
-struct C_UseItem
+struct C_UseItem_Packet
 {
     int objectID;
     ObjectType itemType;
 };
 
-struct C_StayGame
+struct C_StayGame_Packet
 {
     int objectID;
 };
 
-struct C_EndGame
+struct C_EndGame_Packet
 {
     int objectID;
 };

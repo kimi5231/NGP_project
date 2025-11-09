@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GameNetwork.h"
 
-char* SERVERIP = (char*)"127.0.0.1";
+char* SERVERIP = (char*)"61.255.49.141";
 #define SERVERPORT 7777
 #define BUFSIZE 512
 
@@ -65,15 +65,13 @@ void GameNetwork::Update()
 
 	if (FD_ISSET(_socket, &_writeSet))
 	{
-		// 사이즈 보내기 test
-		int packetSize = 4;
-		int retval;
-		retval = send(_socket, (char*)&packetSize, sizeof(int), 0);
-		if (retval == SOCKET_ERROR)
-		{
-			err_display("send()");
-			return;
-		}
+		// Move Packet 전송 테스트
+		C_Move_Packet movePacket;
+		movePacket.objectID = 1;
+		movePacket.type = ObjectType::Player;
+		movePacket.pos = { 100, 100 };
+
+		ProcessSend(PacketID::C_Move, movePacket);
 	}
 }
 

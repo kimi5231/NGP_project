@@ -9,19 +9,9 @@ Room::~Room()
 {
 }
 
-void Room::EnterRoom()
+void Room::Update()
 {
+
 }
 
-void Room::LeaveRoom()
-{
-}
-
-void Room::AddObject()
-{
-}
-
-void Room::RemoveObject()
-{
-}
 

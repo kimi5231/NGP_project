@@ -65,8 +65,7 @@ public:
 	StateMachine(GameObject* object, State* state = new SetTargetState);
 	~StateMachine();
 	void Start();
-	void Update(GameObject* other);
-	void Update();
+	void Update(GameObject* other = nullptr);
 
 	void ChangeState(State* state);
 private:

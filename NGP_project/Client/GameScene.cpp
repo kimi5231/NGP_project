@@ -16,10 +16,8 @@
 #include "RespawnMonster.h"
 #include "TankMonster.h"
 
-#define BULLET_TIMER 30
 
 HBITMAP gBackgroundBitmap;
-RECT gBackgoundRect{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };	// 이 수치를 조정해서 배경화면 그리기
 
 GameScene::GameScene()
 {
@@ -53,22 +51,26 @@ void GameScene::Update()
 		monster->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj);
 			});
+		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			if (object->GetObjectType() == ObjectType::Bullet) {
-				monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
+				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && !monster->IsState(ObjectState::Revive)) {
+					monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
+					object->SetState(ObjectState::Dead);
+				}
 			}
 		}
 	}
+
+	_monsters.erase(std::remove_if(_monsters.begin(), _monsters.end(), [](const MonsterRef& o) {
+		return o->IsState(ObjectState::Dead);
+		}), _monsters.end());
+
 	_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
-			return o->IsDead();
+			return o->IsState(ObjectState::Dead);
 		}),	_objects.end());
 
-
 	ProcessInput();
-
-	if (_players[0]->IsCollision(_monsters[0].get())) {
-		//_players[0]->Left();	// test 용
-	}
 }
 
 void GameScene::Render(HDC hdc)
@@ -89,7 +91,7 @@ void GameScene::Render(HDC hdc)
 	BITMAP bmpInfo;
 	GetObject(gBackgroundBitmap, sizeof(BITMAP), &bmpInfo);
 	oldbit[1] = (HBITMAP)SelectObject(memDCImage, gBackgroundBitmap);
-	StretchBlt(memDC, gBackgoundRect.left, gBackgoundRect.top, gBackgoundRect.right, gBackgoundRect.bottom, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
+	StretchBlt(memDC, gBackgroundRect.left, gBackgroundRect.top, gBackgroundRect.right- gBackgroundRect.left, gBackgroundRect.bottom - gBackgroundRect.top, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
 
 	// GameObject
 	for (const auto& player : _players) {
@@ -135,7 +137,7 @@ void GameScene::ProcessInput()
 		if (input->GetButton(KeyType::S))  player->Down();
 
 		// 총알 발사
-		if (cnt % BULLET_TIMER == 0) {
+		if (player->IsCanShoot()) {
 			Vertex playerPos = player->GetPos();
 			if (input->GetButton(KeyType::Up)) {
 				if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));

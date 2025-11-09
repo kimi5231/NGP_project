@@ -1,12 +1,13 @@
 ﻿#include "pch.h"
 #include "Monster.h"
+#include "Global.h"
 #include <random>
 
 std::random_device rd;
 std::mt19937 gen(rd());
 
-std::uniform_int_distribution<> randWidth(0, FRAME_BUFFER_WIDTH);
-std::uniform_int_distribution<> randHeight(0, FRAME_BUFFER_HEIGHT);
+std::uniform_int_distribution<> randWidth(gBackgroundRect.left, gBackgroundRect.right);
+std::uniform_int_distribution<> randHeight(gBackgroundRect.top, gBackgroundRect.bottom);
 
 // 임시지정
 #define MONSTER_SPEED 2
@@ -16,6 +17,7 @@ Monster::Monster()
 {
     _status._hp = 10;
     _status._speed = MONSTER_SPEED;
+    _pos = { randWidth(gen), randHeight(gen) };
 
     _stateMachine->Start();
 }
@@ -25,6 +27,7 @@ Monster::Monster(State* state)
 {
     _status._hp = 10;
     _status._speed = MONSTER_SPEED;
+    _pos = { randWidth(gen), randHeight(gen) };
 
     _stateMachine->Start();
 }
@@ -77,6 +80,6 @@ void Monster::Damaged(int damage)
     _status._hp -= damage;
 
     if (_status._hp <= 0) {
-        _isDead = true;
+        SetState(ObjectState::Dead);
     }
 }

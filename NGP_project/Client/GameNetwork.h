@@ -19,4 +19,6 @@ public:
 
 private:
 	SOCKET _socket;
+	fd_set _readSet;
+	fd_set _writeSet;
 };

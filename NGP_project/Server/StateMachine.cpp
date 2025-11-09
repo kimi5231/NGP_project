@@ -102,10 +102,6 @@ void StateMachine::Update(GameObject* other)
 {
 }
 
-void StateMachine::Update()
-{
-}
-
 void StateMachine::ChangeState(State* state)
 {
 }

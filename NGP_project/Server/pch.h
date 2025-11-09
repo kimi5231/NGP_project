@@ -16,9 +16,8 @@
 
 enum class ObjectState
 {
-    Idle,
-    Move,
-    Boom,
+    Alive,
+    Revive,
     Dead,
 };
 

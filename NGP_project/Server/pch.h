@@ -9,8 +9,6 @@
 #include <vector>
 #include <functional>
 
-#include "Packet.h"
-
 #pragma comment(lib, "ws2_32")
 
 #define FRAME_BUFFER_WIDTH 800
@@ -60,6 +58,31 @@ enum class Dir
 struct Vertex
 {
     int x, y;
+};
+
+enum PacketID
+{
+    C_UpdateObjectState,
+    C_UpdateDir,
+    C_Move,
+    C_Collision,
+    C_UseItem,
+    C_StayGame,
+    C_EndGame,
+};
+
+struct Header
+{
+    PacketID id;
+    int dataSize;
+};
+
+// Client Packet
+struct C_Move_Packet
+{
+    int objectID;
+    ObjectType type;
+    Vertex pos;
 };
 
 using GameObjectRef = std::shared_ptr<class GameObject>;

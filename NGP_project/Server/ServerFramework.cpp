@@ -99,9 +99,10 @@ void ServerFramework::Update()
 			ProcessRecv(client);
 		}
 
+		// send가 가능할 때마다 true
 		if (FD_ISSET(client, &_writeSet))
 		{
-			// 추후 ProcessSend 추가
+			
 		}
 	}
 }
@@ -140,4 +141,32 @@ void ServerFramework::ProcessRecv(SOCKET clientSocket)
 	case C_EndGame:
 		break;
 	}
+}
+
+template <class T>
+void ServerFramework::ProcessSend(PacketID id, const T& packetData, SOCKET clientSocket)
+{
+	std::vector<char> packet = CreatePakcet(id, packetData);
+	int packetSize = sizeof(packet);
+
+	// packetSize 송신(고정 길이)
+	send(clientSocket, (char*)&packetSize, sizeof(int), 0);
+	// packet 송신(가변 데이터)
+	send(clientSocket, packet.data(), packetSize, 0);
+}
+
+template<class T>
+std::vector<char> ServerFramework::CreatePakcet(PacketID id, const T& packetData)
+{
+	// Header
+	Header header;
+	header.id = id;
+	header.dataSize = sizeof(packetData);
+
+	// Packet
+	std::vector<char> packet(sizeof(Header) + header.dataSize);
+	memcpy(packet.data(), &header, sizeof(Header));
+	memcpy(packet.data() + sizeof(Header), &packetData, header.dataSize);
+
+	return packet;
 }

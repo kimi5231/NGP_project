@@ -11,6 +11,12 @@ public:
 	void Update();
 	void ProcessRecv(SOCKET clientSocket);
 
+	template <class T>
+	void ProcessSend(PacketID id, const T& packetData, SOCKET clientSocket);
+
+	template <class T>
+	std::vector<char> CreatePakcet(PacketID id, const T& packetData);
+
 public:
 	Room* GetRoom() { return _room; }
 

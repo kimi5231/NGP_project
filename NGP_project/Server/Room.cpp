@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Room.h"
 #include "Monster.h"
+#include "Player.h"
 
 Room::Room()
 {
@@ -51,4 +52,15 @@ void Room::Update()
 
 }
 
+GameObjectRef Room::AddObject(ObjectType type)
+{
+	if (type == ObjectType::Player)
+	{
+		// Player 생성
+		PlayerRef player = std::make_shared<Player>();
+		_objects.push_back(player);
+		return player;
+	}
 
+	// 추후 다른 객체 클래스 추가되면 코드 추가 예정
+}

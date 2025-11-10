@@ -88,8 +88,16 @@ void ServerFramework::Update()
 			std::cout << "clientSocket 생성 실패" << std::endl;
 		}
 
-		_clientSockets.push_back(clientSocket);
 		std::cout << "Client 접속" << std::endl;
+
+		_clientSockets.push_back(clientSocket);
+
+		// 접속한 Client를 나타낼 Player 추가
+		GameObjectRef player = _room->AddObject(ObjectType::Player);
+		// Player 추가 BroadCast
+		C_AddObject_Packet packetData{ 1, ObjectType::Player, player->GetPos() };
+		for (SOCKET client : _clientSockets)
+			ProcessSend(S_AddObject, packetData, client);
 	}
 
 	for (SOCKET client : _clientSockets)

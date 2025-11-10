@@ -69,6 +69,8 @@ enum PacketID
     C_UseItem,
     C_StayGame,
     C_EndGame,
+
+    S_AddObject,
 };
 
 struct Header
@@ -79,6 +81,14 @@ struct Header
 
 // Client Packet
 struct C_Move_Packet
+{
+    int objectID;
+    ObjectType type;
+    Vertex pos;
+};
+
+// Server Packet
+struct C_AddObject_Packet
 {
     int objectID;
     ObjectType type;

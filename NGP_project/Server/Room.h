@@ -10,6 +10,9 @@ public:
 public:
 	void Update();
 
+public:
+	GameObjectRef AddObject(ObjectType type);
+
 private:
 	std::vector<GameObjectRef> _objects;
 };

@@ -151,6 +151,7 @@
     <ClInclude Include="BombObject.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Constant.h" />
     <ClInclude Include="GameFramework.h" />
     <ClInclude Include="GameNetwork.h" />
     <ClInclude Include="GameObject.h" />

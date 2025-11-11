@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UI.h"
 #include <string>
+#include "Global.h"
 
 void UI::Render(HDC hdc, HDC srcDC, int num)
 {
@@ -29,4 +30,18 @@ void UI::Render(HDC hdc, HDC srcDC, int num)
     // 객체 삭제
     DeleteObject(hPen);
     DeleteObject(hBrush);
+}
+
+void ProgressBar::Update(float& currentTime)
+{
+    // 0이 아니면 진행
+    if (_progress == 0) {
+        _box._halfSize.x = 0;
+        return;
+    }
+    if(CheckTimer(currentTime, 1)) {
+        _progress--;
+        _box._halfSize.x -= _maxSize / _maxProgress;
+        _box._center.x -= _maxSize / _maxProgress;
+    }
 }

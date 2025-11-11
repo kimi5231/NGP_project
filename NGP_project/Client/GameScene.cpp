@@ -6,8 +6,6 @@
 #include "Item.h"
 #include "projectile.h"
 #include "BombObject.h"
-#include "BoundingBox.h"
-#include "UI.h"
 
 // Monster
 #include "BomberMonster.h"
@@ -18,6 +16,7 @@
 
 
 HBITMAP gBackgroundBitmap;
+
 
 GameScene::GameScene()
 {
@@ -31,8 +30,7 @@ GameScene::GameScene()
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
 	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 100 }, Vertex{100, 100}, L"Item UI"));
 	DWORD uiColor{ RGB(50, 50, 50) };
-	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 200 }, Vertex{100, 50}, uiColor, L"Life: ", true));
-	_ui.push_back(std::make_shared<UI>(Vertex{ FRAME_BUFFER_WIDTH / 2, 30}, Vertex{500, 20}, uiColor, L"time"));
+	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 200 }, Vertex{100, 50}, L"Life: ", uiColor, true));
 
 	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
@@ -76,6 +74,8 @@ void GameScene::Update()
 			return o->IsState(ObjectState::Dead);
 		}),	_objects.end());
 
+	_timerUI.Update(_stagetime);
+
 	ProcessInput();
 }
 
@@ -117,9 +117,11 @@ void GameScene::Render(HDC hdc)
 		object->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
 	}
 
+	// UI
 	for (const auto ui : _ui) {
 		ui->Render(memDC, memDCImage, _players[0]->GetLife());	// 나중에 수정
 	}
+	_timerUI.Render(memDC, memDCImage, _stagetime);
 
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hdc, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);
@@ -137,40 +139,46 @@ void GameScene::ProcessInput()
 	// 코드 길어져서 포인터로 받기
 	InputManager* input = GET_SINGLE(InputManager);
 
-	static int cnt{};
-	cnt++;
-	for (const auto& player : _players) {
-		// 이동
-		if (input->GetButton(KeyType::A))  player->Left();
-		if (input->GetButton(KeyType::D)) player->Right();
-		if (input->GetButton(KeyType::W))    player->Up();
-		if (input->GetButton(KeyType::S))  player->Down();
+	static bool prevKeyUp{};
+	// 키 입력은 첫 번째 플레이어(자기자신)만 받음
+	// 이동
+	if (input->GetButton(KeyType::A))  _players[0]->Left();
+	if (input->GetButton(KeyType::D)) _players[0]->Right();
+	if (input->GetButton(KeyType::W))    _players[0]->Up();
+	if (input->GetButton(KeyType::S))  _players[0]->Down();
 
-		// 총알 발사
-		if (player->IsCanShoot()) {
-			Vertex playerPos = player->GetPos();
-			if (input->GetButton(KeyType::Up)) {
-				if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-				else if (input->GetButton(KeyType::Left)) _objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-				else _objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-			}
-			else if (input->GetButton(KeyType::Down)) {
-				if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-				else if (input->GetButton(KeyType::Left)) _objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-				else _objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-			}
-			else if (input->GetButton(KeyType::Right)) {
-				_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-			}
-			else if (input->GetButton(KeyType::Left)) {
-				_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-			}
+	// 총알 발사
+	if (prevKeyUp || CheckTimer(_players[0]->_timer, BULLET_TIME)) {
+		Vertex playerPos = _players[0]->GetPos();
+		if (input->GetButton(KeyType::Up)) {
+			if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+			else if (input->GetButton(KeyType::Left)) _objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+			else _objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+			prevKeyUp = false;
 		}
+		else if (input->GetButton(KeyType::Down)) {
+			if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+			else if (input->GetButton(KeyType::Left)) _objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+			else _objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+			prevKeyUp = false;
+		}
+		else if (input->GetButton(KeyType::Right)) {
+			_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+			prevKeyUp = false;
+		}
+		else if (input->GetButton(KeyType::Left)) {
+			_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+			prevKeyUp = false;
+		}
+	}
 
-		// 키 Up
-		if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
-			player->ResetCurFrame();
-		}
+	// 키 Up
+	if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
+		_players[0]->ResetCurFrame();
+	}
+	if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down) || input->GetButtonUp(KeyType::Right)) {
+		prevKeyUp = true;
+		_players[0]->_timer = 0.0f;
 	}
 
 	if (input->GetButtonDown(KeyType::LeftMouse)) {

@@ -2,8 +2,7 @@
 #include "Monster.h"
 #include "RespawnMonster.h"
 #include "Global.h"
-
-#define RESPAWN_TIME 80
+#include "Constant.h"
 
 RespawnMonster::RespawnMonster() : Monster()
 {
@@ -18,7 +17,7 @@ void RespawnMonster::Update(GameObject* other)
 {
     Monster::Update(other);
     if (IsState(ObjectState::Revive)) {
-        if (++_respawnCnt % RESPAWN_TIME == 0) {
+        if (CheckTimer(_timer, RESPAWN_TIME)) {
             SetState(ObjectState::Alive);
 
             _stateMachine->ChangeState(new SetTargetState);

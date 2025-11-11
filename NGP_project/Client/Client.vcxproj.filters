@@ -116,6 +116,9 @@
     <ClInclude Include="UI.h">
       <Filter>소스 파일\Game\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Constant.h">
+      <Filter>소스 파일\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">

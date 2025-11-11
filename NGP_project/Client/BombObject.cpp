@@ -1,8 +1,7 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "BombObject.h"
 #include "Global.h"
-
-#define BOMB_TIMER 50
+#include "Constant.h"
 
 BombObject::BombObject()
 {
@@ -25,8 +24,7 @@ BombObject::BombObject(Vertex pos)
 
 void BombObject::Update()
 {
-    _bombCount++;
-    if (_bombCount % BOMB_TIMER == 0) {
+    if (CheckTimer(_timer, (float)BOMB_TIME / _spriteCnt.x)) {
         _curFrame.x++;
     }
 

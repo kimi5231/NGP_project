@@ -1,7 +1,8 @@
-﻿#include "pch.h"
+#include "pch.h"
+#include <random>
 #include "Monster.h"
 #include "Global.h"
-#include <random>
+#include "Constant.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -9,8 +10,6 @@ std::mt19937 gen(rd());
 std::uniform_int_distribution<> randWidth(gBackgroundRect.left, gBackgroundRect.right);
 std::uniform_int_distribution<> randHeight(gBackgroundRect.top, gBackgroundRect.bottom);
 
-// 임시지정
-#define MONSTER_SPEED 2
 
 Monster::Monster()
     : GameObject()

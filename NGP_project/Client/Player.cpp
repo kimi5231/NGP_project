@@ -1,10 +1,8 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Player.h"
 #include "Global.h"
 #include "TimeManager.h"
-
-#define PLAYER_SPEED 3
-#define BULLET_TIMER 30
+#include "Constant.h"
 
 Player::Player()
 {
@@ -28,17 +26,6 @@ void Player::Update()
 {
 
 }
-
-
-bool Player::IsCanShoot()
-{
-    if (_bulletCnt++ % BULLET_TIMER == 0) {
-        return true;
-    }
-
-    return false;
-}
-
 void Player::Left()
 {
     _pos.x -= _status._speed;

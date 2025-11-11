@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "GameObject.h"
 
 class BombObject : public GameObject {
@@ -8,6 +8,5 @@ public:
 
 	void Update() override;
 private:
-	size_t _bombCount{};
 	bool _isBomb{};
 };

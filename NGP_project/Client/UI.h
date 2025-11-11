@@ -1,14 +1,12 @@
 #pragma once
 #include "BoundingBox.h"
 
+class BoundingBox;
+
 class UI {
 public:
-	UI(const Vertex& center, const Vertex& size, const DWORD color = {}, const std::wstring& text = {}, const bool isNumtext = false)
+	UI(const Vertex& center, const Vertex& size, const std::wstring& text = {}, const DWORD color = RGB(255, 255, 255), const bool isNumtext = false)
 		: _box{ BoundingBox{ center, size } }, _text{ text }, _penColor{ color }, _brushColor{ color }, _isNumText{ isNumtext }
-	{
-	}
-	UI(const Vertex& center, const Vertex& size, const std::wstring& text = {}, const bool isNumtext = false)
-		: _box{ BoundingBox{ center, size } }, _text{ text }, _isNumText{ isNumtext }
 	{
 	}
 
@@ -27,14 +25,26 @@ protected:
 
 class Button : public UI {
 public:
-	Button(const Vertex& center, const Vertex& size, const DWORD color = {}, const std::wstring& text = {}) : UI(center, size, color, text)
+	Button(const Vertex& center, const Vertex& size, const std::wstring& text = {}, const DWORD color = RGB(50, 50, 50))
+		: UI(center, size, text, color)
 	{
 		_type = ObjectType::Button;
 	}
-	Button(const Vertex& center, const Vertex& size, const std::wstring& text = {}) : UI(center, size, text)
+};
+
+class ProgressBar : public UI {
+public:
+	ProgressBar(const Vertex& center, const Vertex& size, UINT maxProgress)
+		: UI(center, size), _progress{maxProgress}, _maxProgress{ maxProgress }
 	{
-		_type = ObjectType::Button;
-		_penColor = {};
-		_brushColor = { RGB(50, 50, 50) };
+		_text = L"time: ";
+		_brushColor = RGB(0, 255, 0);
+		_isNumText = true;
+		_maxSize = _box._halfSize.x;
 	}
+
+	void Update(float& currentTime);
+private:
+	UINT _maxProgress, _progress;
+	int _maxSize;
 };

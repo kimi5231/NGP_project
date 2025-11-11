@@ -26,7 +26,13 @@ GameScene::GameScene()
 	_monsters.push_back(std::make_shared <TankMonster>());
 	_monsters.push_back(std::make_shared <ObstacleMonster>());
 	_monsters.push_back(std::make_shared <RespawnMonster>());
+
+	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
+	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 100 }, Vertex{100, 100}, L"Item UI"));
+	DWORD uiColor{ RGB(50, 50, 50) };
+	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 200 }, Vertex{100, 50}, uiColor, L"Life: ", true));
+	_ui.push_back(std::make_shared<UI>(Vertex{ FRAME_BUFFER_WIDTH / 2, 30}, Vertex{500, 20}, uiColor, L"time"));
 
 	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
@@ -112,7 +118,7 @@ void GameScene::Render(HDC hdc)
 	}
 
 	for (const auto ui : _ui) {
-		ui->Render(memDC, memDCImage);
+		ui->Render(memDC, memDCImage, _players[0]->GetLife());	// 나중에 수정
 	}
 
 	// hDC에 memDC 출력(최종화면 출력)

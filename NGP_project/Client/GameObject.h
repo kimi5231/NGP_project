@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "StateMachine.h"
 
 class BoundingBox;
@@ -8,6 +8,7 @@ using SpawnCallback = std::function<void(GameObject*)>;
 typedef struct Status {
 	int _speed{};
 	int _hp{};
+	int _life{ 1 };
 }Status;
 
 class GameObject
@@ -42,6 +43,9 @@ public:
 	ObjectType GetObjectType() { return _type; }
 	void SetPos(Vertex pos) { _pos = pos; }
 
+	// status
+	int GetLife() const { return _status._life; }
+
 	// stateMachine 필요 함수
 	StateMachine* GetStateMachine() { return _stateMachine.get(); }
 	Vertex GetTargetPos() { return _targetPos; }
@@ -75,7 +79,6 @@ protected:
 
 	std::unique_ptr<StateMachine> _stateMachine;
 
-	int _life{ 1 };
 	Status _status{0, 10};
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 };

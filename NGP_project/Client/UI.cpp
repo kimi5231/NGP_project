@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "UI.h"
+#include <string>
 
-void UI::Render(HDC hdc, HDC srcDC)
+void UI::Render(HDC hdc, HDC srcDC, int num)
 {
     HPEN hPen = CreatePen(PS_SOLID, 1, _penColor);
     HBRUSH hBrush = (HBRUSH)CreateSolidBrush(_brushColor);
@@ -17,7 +18,12 @@ void UI::Render(HDC hdc, HDC srcDC)
         SetBkMode(hdc, TRANSPARENT); // 배경 투명
         SetTextColor(hdc, RGB(0, 0, 0)); // 글자색
 
-        DrawText(hdc, _text.data(), -1, &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+        std::wstring text;
+        if(_isNumText)
+             text = { _text.data() + std::to_wstring(num) };
+        else 
+            text = { _text.data() };
+        DrawText(hdc, text.data(), -1, &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
     }
 
     // 객체 삭제

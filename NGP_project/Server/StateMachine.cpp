@@ -1,6 +1,9 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "StateMachine.h"
+#include "Monster.h"
 #include "GameObject.h"
+
+extern RECT gBackgroundRect;
 
 
 // Move
@@ -10,10 +13,18 @@ void MoveState::Enter(GameObject* self)
 
 void MoveState::Exit(GameObject* self)
 {
+	self->GetStateMachine()->ChangeState(new DeadState);
+	self->GetStateMachine()->Start();
 }
 
 void MoveState::Tick(GameObject* self, GameObject* other)
 {
+	self->Move();
+	Vertex pos = self->GetPos();
+	if (pos.x < gBackgroundRect.left || pos.x > gBackgroundRect.right ||
+		pos.y < gBackgroundRect.top || pos.y > gBackgroundRect.bottom) {
+		Exit(self);
+	}
 }
 
 // MoveToTarget
@@ -23,10 +34,20 @@ void MoveToTargetState::Enter(GameObject* self)
 
 void MoveToTargetState::Exit(GameObject* self)
 {
+	// if hp == 0
+	/*object->GetStateMachine()->ChangeState(new Dead);*/
+
+	self->GetStateMachine()->ChangeState(new SetTargetState);
+	self->GetStateMachine()->Start();
 }
 
 void MoveToTargetState::Tick(GameObject* self, GameObject* other)
 {
+	self->Move();
+	// 목표에 도달 시 아래 수행
+	/*if (self->IsArrive() || dynamic_cast<Monster*>(self)->GetIsFollow()) {
+		Exit(self);
+	}*/
 }
 
 // SetTarget
@@ -37,16 +58,19 @@ void SetTargetState::Enter(GameObject* self)
 
 void SetTargetState::Exit(GameObject* self)
 {
+	self->GetStateMachine()->ChangeState(new UseSkillState);
+	self->GetStateMachine()->Start();
 }
 
 void SetTargetState::Tick(GameObject* self, GameObject* other)
 {
+	self->FindTarget(other);
+	Exit(self);
 }
-
-
 // Dead
 void DeadState::Enter(GameObject* self)
 {
+	self->SetState(ObjectState::Dead);
 }
 
 void DeadState::Exit(GameObject* self)
@@ -55,9 +79,10 @@ void DeadState::Exit(GameObject* self)
 
 void DeadState::Tick(GameObject* self, GameObject* other)
 {
+	//Exit(self);
 }
 
-// UseItem - item 효과 발동 이후 바로 종료
+// UseItem
 void UseItemState::Enter(GameObject* self)
 {
 }
@@ -78,10 +103,14 @@ void UseSkillState::Enter(GameObject* self)
 
 void UseSkillState::Exit(GameObject* self)
 {
+	self->GetStateMachine()->ChangeState(new MoveToTargetState);
+	self->GetStateMachine()->Start();
 }
 
 void UseSkillState::Tick(GameObject* self, GameObject* other)
 {
+	if (dynamic_cast<Monster*>(self)->UseSkill()) return;
+	Exit(self);
 }
 
 // StateMachine
@@ -92,16 +121,30 @@ StateMachine::StateMachine(GameObject* object, State* state)
 
 StateMachine::~StateMachine()
 {
+	if (!_curState) {
+		delete _curState;
+	}
 }
 
 void StateMachine::Start()
 {
+	_curState->Enter(_object);
 }
 
 void StateMachine::Update(GameObject* other)
 {
+	_curState->Tick(_object, other);
+	if (_object->IsState(ObjectState::Dead)) {
+		ChangeState(new DeadState);
+		Start();
+	}
 }
 
 void StateMachine::ChangeState(State* state)
 {
+	if (_curState) {
+		delete _curState;
+	}
+
+	_curState = state;
 }

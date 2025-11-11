@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Player.h"
 #include "InputManager.h"
 #include "GameScene.h"
@@ -7,7 +7,7 @@
 #include "projectile.h"
 #include "BombObject.h"
 #include "BoundingBox.h"
-#include "Button.h"
+#include "UI.h"
 
 // Monster
 #include "BomberMonster.h"
@@ -26,7 +26,7 @@ GameScene::GameScene()
 	_monsters.push_back(std::make_shared <TankMonster>());
 	_monsters.push_back(std::make_shared <ObstacleMonster>());
 	_monsters.push_back(std::make_shared <RespawnMonster>());
-	_objects.push_back(std::make_shared<Button>(Vertex{ 400, 300 }, Vertex{100, 100}));
+	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
 
 	gBackgroundBitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "sand_background.bmp").wstring().c_str() , IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
@@ -111,6 +111,10 @@ void GameScene::Render(HDC hdc)
 		object->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
 	}
 
+	for (const auto ui : _ui) {
+		ui->Render(memDC, memDCImage);
+	}
+
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hdc, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);
 
@@ -164,11 +168,9 @@ void GameScene::ProcessInput()
 	}
 
 	if (input->GetButtonDown(KeyType::LeftMouse)) {
-		for (const auto object : _objects) {
-			if (object->GetObjectType() == ObjectType::Button) {
-				if (object->IsClick(input->GetMousePos())) {
-					_monsters.push_back(std::make_shared<TankMonster>());	// test
-				}
+		for (const auto button : _ui) {
+			if (button->GetObjectType() == ObjectType::Button && button->Intersects(input->GetMousePos())) {
+				_monsters.push_back(std::make_shared<TankMonster>());	// test
 			}
 		}
 	}

@@ -36,6 +36,9 @@
     <Filter Include="소스 파일\Main">
       <UniqueIdentifier>{23d4d0b0-3505-43e5-bfcc-886a38542a87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Game\UI">
+      <UniqueIdentifier>{a1baed5a-23d9-49cb-a600-c08baa8ed7f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -110,8 +113,8 @@
     <ClInclude Include="Projectile.h">
       <Filter>소스 파일\Game\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>소스 파일\Game\Object</Filter>
+    <ClInclude Include="UI.h">
+      <Filter>소스 파일\Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -178,14 +181,11 @@
     <ClCompile Include="BombObject.cpp">
       <Filter>소스 파일\Game\Object</Filter>
     </ClCompile>
-    <ClCompile Include="BoundingBox.cpp">
-      <Filter>소스 파일\Game\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>소스 파일\Game\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>소스 파일\Game\Object</Filter>
+    <ClCompile Include="UI.cpp">
+      <Filter>소스 파일\Game\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,22 +1,23 @@
 #include "pch.h"
 #include "GameNetwork.h"
 
-char* SERVERIP = (char*)"61.255.49.141";
+//char* SERVERIP = (char*)"61.255.49.141";
+char* SERVERIP = (char*)"192.168.35.52";
 #define SERVERPORT 7777
 #define BUFSIZE 512
 
 GameNetwork::GameNetwork()
 {
-	// À©¼Ó ÃÊ±âÈ­
+	// ìœˆì† ì´ˆê¸°í™”
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 		return;
 
-	// ¼ÒÄÏ »ı¼º
+	// ì†Œì¼“ ìƒì„±
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket == INVALID_SOCKET)
 		return;
-		// err_quit("socket()");	// Áö±İÀº ¼­¹ö¿Í Á¢¼Ó ¾È µÅµµ Å¬¶ó ½ÇÇàµÇµµ·Ï µÇ¾îÀÖÀ½
+		// err_quit("socket()");	// ì§€ê¸ˆì€ ì„œë²„ì™€ ì ‘ì† ì•ˆ ë¼ë„ í´ë¼ ì‹¤í–‰ë˜ë„ë¡ ë˜ì–´ìˆìŒ
 
 	// connect()
 	int retval;
@@ -34,20 +35,20 @@ GameNetwork::GameNetwork()
 
 GameNetwork::~GameNetwork()
 {
-	// ¼ÒÄÏ ´İ±â
+	// ì†Œì¼“ ë‹«ê¸°
 	closesocket(_socket);
 
-	// À©¼Ó Á¾·á
+	// ìœˆì† ì¢…ë£Œ
 	WSACleanup();
 }
 
 void GameNetwork::Update()
 {
-	// socket set ÃÊ±âÈ­
+	// socket set ì´ˆê¸°í™”
 	FD_ZERO(&_readSet);
 	FD_ZERO(&_writeSet);
 
-	// readSet, wirteSet¿¡ socket µî·Ï
+	// readSet, wirteSetì— socket ë“±ë¡
 	FD_SET(_socket, &_readSet);
 	FD_SET(_socket, &_writeSet);
 
@@ -65,7 +66,7 @@ void GameNetwork::Update()
 
 	if (FD_ISSET(_socket, &_writeSet))
 	{
-		// Move Packet Àü¼Û Å×½ºÆ®
+		// Move Packet ì „ì†¡ í…ŒìŠ¤íŠ¸
 		C_Move_Packet movePacket;
 		movePacket.objectID = 1;
 		movePacket.type = ObjectType::Player;
@@ -78,13 +79,13 @@ void GameNetwork::Update()
 template<class T>
 void GameNetwork::ProcessSend(PacketID id, const T& packet)
 {
-	// ÆĞÅ¶ »ı¼º
+	// íŒ¨í‚· ìƒì„±
 	std::vector<char> sendPacket = CreatePacket(id, packet);
 
 	int retval;
 	int packetSize = static_cast<int>(sendPacket.size());
 
-	// °íÁ¤ ±æÀÌ µ¥ÀÌÅÍ Àü¼Û
+	// ê³ ì • ê¸¸ì´ ë°ì´í„° ì „ì†¡
 	retval = send(_socket, (char*)&packetSize, sizeof(int), 0);
 	if (retval == SOCKET_ERROR)
 	{
@@ -92,7 +93,7 @@ void GameNetwork::ProcessSend(PacketID id, const T& packet)
 		return;
 	}
 
-	// °¡º¯ ±æÀÌ
+	// ê°€ë³€ ê¸¸ì´
 	retval = send(_socket, sendPacket.data(), packetSize, 0);
 	if (retval == SOCKET_ERROR)
 	{
@@ -110,16 +111,16 @@ std::vector<char> GameNetwork::CreatePacket(PacketID id, T& packet)
 {
 	std::vector<char> retPacket;
 
-	// Çì´õ
+	// í—¤ë”
 	Header header;
 	header.id = id;
 	header.dataSize = sizeof(T);
 
-	// ÀüÃ¼ ÆĞÅ¶ Å©±â
+	// ì „ì²´ íŒ¨í‚· í¬ê¸°
 	int totalSize = sizeof(Header) + sizeof(T);
 	retPacket.resize(totalSize);
 
-	// ÆĞÅ¶ ³Ö±â
+	// íŒ¨í‚· ë„£ê¸°
 	memcpy(retPacket.data(), &header, sizeof(Header));
 	memcpy(retPacket.data() + sizeof(Header), &packet, sizeof(packet));
 

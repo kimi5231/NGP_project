@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -43,6 +43,7 @@ enum class ObjectType
     Item,
     Bullet,
     Bomb,
+    UI,
 };
 
 enum class ItemType

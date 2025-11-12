@@ -43,9 +43,6 @@ public:
 	ObjectType GetObjectType() { return _type; }
 	void SetPos(Vertex pos) { _pos = pos; }
 
-	// status
-	int GetLife() const { return _status._life; }
-
 	// stateMachine 필요 함수
 	StateMachine* GetStateMachine() { return _stateMachine.get(); }
 	Vertex GetTargetPos() { return _targetPos; }
@@ -66,6 +63,7 @@ public:
 	void ResetCurFrame();
 
 	float _timer{};	// 총알, 폭탄 등에 사용
+	Status _status{0, 10};
 protected:
 	HBITMAP _bitmap{};
 	HBITMAP _bitmapMask{};
@@ -80,6 +78,5 @@ protected:
 
 	std::unique_ptr<StateMachine> _stateMachine;
 
-	Status _status{0, 10};
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 };

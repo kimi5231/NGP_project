@@ -9,6 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <utility>
 
 #include <tchar.h> // _T(), ...
 #include <stdio.h> // printf(), ...

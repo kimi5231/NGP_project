@@ -16,7 +16,9 @@
 
 
 HBITMAP gBackgroundBitmap;
-
+float bulletSpeed{ BULLET_TIME };
+// 아이템 사용 관련 전역 변수
+bool useLightning{}, useWaterWheel{}, useShotgun{}, useHourglass{};
 
 GameScene::GameScene()
 {
@@ -25,6 +27,13 @@ GameScene::GameScene()
 	_monsters.push_back(std::make_shared <TankMonster>());
 	_monsters.push_back(std::make_shared <ObstacleMonster>());
 	_monsters.push_back(std::make_shared <RespawnMonster>());
+	_objects.push_back(std::make_shared<Item>(ItemType::Life, Vertex{ 400, 100 }));
+	_objects.push_back(std::make_shared<Item>(ItemType::Magazine, Vertex{ 400, 200 }));
+	_objects.push_back(std::make_shared<Item>(ItemType::Lightning, Vertex{ 400, 300 }));
+	_objects.push_back(std::make_shared<Item>(ItemType::Waterwheel, Vertex{ 400, 500 }));
+	_objects.push_back(std::make_shared<Item>(ItemType::Coffee, Vertex{ 300, 500 }));
+	_objects.push_back(std::make_shared<Item>(ItemType::Shotgun, Vertex{ 500, 500 }));
+	_objects.push_back(std::make_shared<Item>(ItemType::Hourglass, Vertex{ 400, 600 }));
 
 	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
@@ -48,7 +57,11 @@ void GameScene::Update()
 {
 	for (const auto& object : _objects) {
 		object->Update();
-
+		// 아이템 충돌 처리
+		if (object->GetObjectType() == ObjectType::Item && _players[0]->IsCollision(object.get())) {
+			_players[0]->SetItem(dynamic_pointer_cast<Item>(object));
+			
+		}
 	}
 	for (const auto& monster : _monsters) {
 		monster->Update(_players[0].get());
@@ -64,6 +77,18 @@ void GameScene::Update()
 				}
 			}
 		}
+
+		// 시계 아이템 사용 시
+		if (useHourglass)
+			monster->_status._speed = 0;
+		else
+			monster->_status._speed = MONSTER_SPEED;
+	}
+	_players[0]->Update();
+
+	if (useLightning) {	// 번개 아이템 사용 시
+		_monsters.clear();
+		useLightning = false;
 	}
 
 	_monsters.erase(std::remove_if(_monsters.begin(), _monsters.end(), [](const MonsterRef& o) {
@@ -119,7 +144,7 @@ void GameScene::Render(HDC hdc)
 
 	// UI
 	for (const auto ui : _ui) {
-		ui->Render(memDC, memDCImage, _players[0]->GetLife());	// 나중에 수정
+		ui->Render(memDC, memDCImage, _players[0]->_status._life);	// 나중에 수정
 	}
 	_timerUI.Render(memDC, memDCImage, _stagetime);
 
@@ -148,27 +173,82 @@ void GameScene::ProcessInput()
 	if (input->GetButton(KeyType::S))  _players[0]->Down();
 
 	// 총알 발사
-	if (prevKeyUp || CheckTimer(_players[0]->_timer, BULLET_TIME)) {
+	if (prevKeyUp || CheckTimer(_players[0]->_timer, bulletSpeed)) {
 		Vertex playerPos = _players[0]->GetPos();
 		if (input->GetButton(KeyType::Up)) {
-			if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-			else if (input->GetButton(KeyType::Left)) _objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-			else _objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+			if (input->GetButton(KeyType::Right)) { 
+				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos)); 
+				if (useShotgun) {
+					_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+					_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+				}
+			}
+			else if (input->GetButton(KeyType::Left)) {
+				_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+				if (useShotgun) {
+					_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+					_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+				}
+			}
+			else {
+				_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+				if (useShotgun) {
+					_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+					_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+				}
+			}
 			prevKeyUp = false;
 		}
 		else if (input->GetButton(KeyType::Down)) {
-			if (input->GetButton(KeyType::Right)) _objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-			else if (input->GetButton(KeyType::Left)) _objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-			else _objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+			if (input->GetButton(KeyType::Right)) {
+				_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+				if (useShotgun) {
+					_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+					_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+				}
+			}
+			else if (input->GetButton(KeyType::Left)) {
+				_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+				if (useShotgun) {
+					_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+					_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+				}
+			}
+			else {
+				_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+				if (useShotgun) {
+					_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+					_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+				}
+			}
 			prevKeyUp = false;
 		}
 		else if (input->GetButton(KeyType::Right)) {
 			_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+			_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+			_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+
 			prevKeyUp = false;
 		}
 		else if (input->GetButton(KeyType::Left)) {
 			_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+			_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+			_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
 			prevKeyUp = false;
+		}
+
+		// 물래방아 아이템 8방향으로 발사
+		if (useWaterWheel) {
+			if (input->GetButton(KeyType::Right) || input->GetButton(KeyType::Up) || input->GetButton(KeyType::Down) || input->GetButton(KeyType::Left)) {
+				_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+			}
 		}
 	}
 
@@ -187,6 +267,12 @@ void GameScene::ProcessInput()
 				_monsters.push_back(std::make_shared<TankMonster>());	// test
 			}
 		}
+	}
+
+	// 아이템 사용
+	if (input->GetButtonDown(KeyType::SpaceBar)) {
+		_players[0]->GetStateMachine()->ChangeState(new UseItemState);
+		_players[0]->GetStateMachine()->Start();
 	}
 
 }

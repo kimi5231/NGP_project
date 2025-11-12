@@ -1,10 +1,12 @@
 #include "pch.h"
+#include "Item.h"
 #include "Player.h"
 #include "Global.h"
 #include "TimeManager.h"
 #include "Constant.h"
 
 Player::Player()
+    : GameObject(new IdleState)
 {
     if (!_bitmap || !_bitmapMask) 
     {
@@ -24,8 +26,32 @@ Player::Player()
 
 void Player::Update()
 {
+    _stateMachine->Update(this);
 
+    if (_item.second) {
+        if (CheckTimer(_itemTimer, ITEM_TIME)) {
+            _item.second->Expired(this);
+            _item.second = nullptr;
+        }
+    }
 }
+
+void Player::UseItem()
+{
+    if (_item.first) {
+        _item.second = _item.first;
+        _item.first = nullptr;
+        _item.second->ChangeState(this);
+        _stateMachine->ChangeState(new IdleState);
+        _stateMachine->Start();
+    }
+}
+
+void Player::SetItem(ItemRef item)
+{
+    _item.first = item;
+}
+
 void Player::Left()
 {
     _pos.x -= _status._speed;

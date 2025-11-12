@@ -1,9 +1,10 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "StateMachine.h"
 #include "GameObject.h"
 #include "Monster.h"
 #include "BombObject.h"
 #include "Global.h"
+#include "Player.h"
 
 // Move
 void MoveState::Enter(GameObject* self)
@@ -87,10 +88,13 @@ void UseItemState::Enter(GameObject* self)
 
 void UseItemState::Exit(GameObject* self)
 {
+	self->GetStateMachine()->ChangeState(new IdleState);
+	self->GetStateMachine()->Start();
 }
 
 void UseItemState::Tick(GameObject* self, GameObject* other)
 {
+	dynamic_cast<Player*>(self)->UseItem();
 }
 
 // UseSkill

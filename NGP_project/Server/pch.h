@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -11,6 +11,7 @@
 
 #pragma comment(lib, "ws2_32")
 
+// 임시적으로 정의
 #define FRAME_BUFFER_WIDTH 800
 #define FRAME_BUFFER_HEIGHT 600
 #define CELL_SIZE 30

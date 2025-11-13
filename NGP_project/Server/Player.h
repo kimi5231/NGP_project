@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "GameObject.h"
 //#include "Item"
 
@@ -10,6 +10,5 @@ public:
 	void Update();
 
 private:
-	//std::shared_ptr<Item> _item;
 };
 

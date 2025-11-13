@@ -1,15 +1,18 @@
-﻿#pragma once
+#pragma once
 #include "GameObject.h"
 
 class Monster : public GameObject
 {
 public:
 	Monster();
-	Monster(State* state);
+	Monster(ObjectState state);
 	virtual ~Monster() {};
 public:
-	virtual void FindTarget(GameObject* other) override;	// 랜덤 타겟 지정
+	// stateMachine 필요 함수
+	StateMachine* GetStateMachine() { return _stateMachine.get(); }
+	virtual void FindTarget(GameObject* other);	// 랜덤 타겟 지정
 	bool GetIsFollow() const { return _isFollow; }
+	bool CanUseSkill() const { return _canUseSkill; }
 	virtual void Move() override;
 
 	virtual void Update(GameObject* other);
@@ -21,4 +24,7 @@ public:
 protected:
 	SpawnCallback _spawnCallback;
 	bool _isFollow{ true };
+	bool _canUseSkill{ false };
+
+	std::unique_ptr<StateMachine> _stateMachine;
 };

@@ -29,9 +29,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>소스 파일\Game\Object</Filter>
     </ClInclude>
-    <ClInclude Include="StateMachine.h">
-      <Filter>소스 파일\Game\Object\Monster</Filter>
-    </ClInclude>
     <ClInclude Include="ServerFramework.h">
       <Filter>소스 파일\Game</Filter>
     </ClInclude>
@@ -44,6 +41,9 @@
     <ClInclude Include="Monster.h">
       <Filter>소스 파일\Game\Object\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -51,9 +51,6 @@
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>소스 파일\Game\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="StateMachine.cpp">
-      <Filter>소스 파일\Game\Object\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Server.cpp">
       <Filter>소스 파일\Main</Filter>
@@ -68,6 +65,9 @@
       <Filter>소스 파일\Game\Object</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\Game\Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
       <Filter>소스 파일\Game\Object\Monster</Filter>
     </ClCompile>
   </ItemGroup>

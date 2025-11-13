@@ -25,6 +25,9 @@ public:
 	Vertex GetTargetPos() { return _targetPos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
+
+	void SetState(ObjectState state) { _state = state; }
+	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
 protected:
 	ObjectType _type{};
 	ObjectState _state{};

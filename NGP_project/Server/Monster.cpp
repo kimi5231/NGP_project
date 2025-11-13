@@ -1,38 +1,35 @@
-﻿#include "pch.h"
-#include "Monster.h"
+#include "pch.h"
 #include <random>
-
-RECT gBackgroundRect{ 150, 50, FRAME_BUFFER_WIDTH - 150, FRAME_BUFFER_HEIGHT - 50 };	// 이 수치를 조정해서 배경화면 그리기
+#include "Monster.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
 
+RECT gBackgroundRect{ 150, 50, FRAME_BUFFER_WIDTH - 150, FRAME_BUFFER_HEIGHT - 50 }; // 임시
+
 std::uniform_int_distribution<> randWidth(gBackgroundRect.left, gBackgroundRect.right);
 std::uniform_int_distribution<> randHeight(gBackgroundRect.top, gBackgroundRect.bottom);
-
-// 임시지정
-#define MONSTER_SPEED 2
+#define MONSTER_SPEED 3 // 임시
 
 Monster::Monster()
-    : GameObject()
+    : _stateMachine{ new StateMachine{this, new FindTargetState}}
 {
     _status._hp = 10;
     _status._speed = MONSTER_SPEED;
     _pos = { randWidth(gen), randHeight(gen) };
 
     _stateMachine->Start();
-    _type = ObjectType::Monster;
 }
 
-Monster::Monster(State* state)
-    : GameObject(state)
+Monster::Monster(ObjectState state)
+    : _stateMachine{ new StateMachine{this, state} }, GameObject(state)
 {
     _status._hp = 10;
     _status._speed = MONSTER_SPEED;
     _pos = { randWidth(gen), randHeight(gen) };
+    SetState(state);
 
     _stateMachine->Start();
-    _type = ObjectType::Monster;
 }
 
 void Monster::FindTarget(GameObject* other)
@@ -57,20 +54,6 @@ void Monster::Move()
         _pos.x += static_cast<int>(dx * ratio);
         _pos.y += static_cast<int>(dy * ratio);
     }
-
-    if (direct.x <= 0) {
-        _curFrame.y = 3;
-    }
-    else if (direct.x > 0) {
-        _curFrame.y = 1;
-    }
-    if (direct.y <= 0) {
-        _curFrame.y = 0;
-    }
-    else if (direct.y > 0) {
-        _curFrame.y = 2;
-    }
-    _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 
 void Monster::Update(GameObject* other)

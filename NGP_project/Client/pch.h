@@ -109,6 +109,8 @@ enum PacketID
     C_UseItem,
     C_StayGame,
     C_EndGame,
+
+	S_AddObject,
 };
 
 struct Header
@@ -117,7 +119,15 @@ struct Header
     int dataSize;
 };
 
-// Packet
+// Server Packet
+struct S_AddObject_Packet
+{
+	int objectID;
+	ObjectType type;
+	Vertex pos;
+};
+
+// Client Packet
 struct C_UpdateObjectState_Packet
 {
     int objectID;

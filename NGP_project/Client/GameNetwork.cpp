@@ -2,7 +2,9 @@
 #include "GameNetwork.h"
 
 //char* SERVERIP = (char*)"61.255.49.141";
-char* SERVERIP = (char*)"192.168.35.52";
+//char* SERVERIP = (char*)"192.168.35.52";
+char* SERVERIP = (char*)"127.0.0.1";
+
 #define SERVERPORT 7777
 #define BUFSIZE 512
 
@@ -61,7 +63,7 @@ void GameNetwork::Update()
 
 	if (FD_ISSET(_socket, &_readSet))
 	{
-		// ProcessRecv();
+		ProcessRecv();
 	}
 
 	if (FD_ISSET(_socket, &_writeSet))
@@ -102,8 +104,28 @@ void GameNetwork::ProcessSend(PacketID id, const T& packet)
 	}
 }
 
-void GameNetwork::processRecv()
+void GameNetwork::ProcessRecv()
 {
+	// PacketSize 수신(고정 길이)
+	int packetSize{};
+	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
+
+	// Packet 수신(가변 데이터)
+	std::vector<char> packet(BUFSIZ);
+	recv(_socket, packet.data(), packetSize, MSG_WAITALL);
+
+	// Header 추출
+	Header header;
+	memcpy(&header, packet.data(), sizeof(Header));
+
+	// Data 추출
+	switch (header.id)
+	{
+	case S_AddObject:
+		S_AddObject_Packet addObjectPacket;
+		memcpy(&addObjectPacket, packet.data() + sizeof(Header), sizeof(S_AddObject));
+		break;
+	}
 }
 
 template<class T>

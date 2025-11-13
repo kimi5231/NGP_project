@@ -11,6 +11,7 @@ Player::Player()
     _status._hp = 10;
     _status._speed = PLAYER_SPEED;
 	_type = ObjectType::Player;
+	_spriteCnt = { 8,10 };
 }
 
 void Player::Update()

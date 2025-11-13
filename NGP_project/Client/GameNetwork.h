@@ -13,7 +13,7 @@ private:
 	template<class T>
 	void ProcessSend(PacketID id, const T& packet);
 
-	void processRecv();
+	void ProcessRecv();
 
 public:
 	template <class T>

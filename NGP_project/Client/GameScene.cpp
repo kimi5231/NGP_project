@@ -34,6 +34,7 @@ GameScene::GameScene()
 	_objects.push_back(std::make_shared<Item>(ItemType::Coffee, Vertex{ 300, 500 }));
 	_objects.push_back(std::make_shared<Item>(ItemType::Shotgun, Vertex{ 500, 500 }));
 	_objects.push_back(std::make_shared<Item>(ItemType::Hourglass, Vertex{ 400, 600 }));
+	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{200, 200}));
 
 	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
@@ -60,7 +61,7 @@ void GameScene::Update()
 		// 아이템 충돌 처리
 		if (object->GetObjectType() == ObjectType::Item && _players[0]->IsCollision(object.get())) {
 			_players[0]->SetItem(dynamic_pointer_cast<Item>(object));
-			
+			object->SetState(ObjectState::Dead);
 		}
 	}
 	for (const auto& monster : _monsters) {

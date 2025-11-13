@@ -176,3 +176,10 @@ struct C_EndGame_Packet
 {
     int objectID;
 };
+
+// Sound
+enum class SoundType
+{
+    BGM,
+    Normal,
+};

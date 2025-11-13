@@ -4,6 +4,7 @@
 #include "GameScene.h"
 #include "InputManager.h"
 #include "TimeManager.h"
+#include "SoundManager.h"
 #include "Global.h"
 #include "GameNetwork.h"
 
@@ -20,9 +21,14 @@ void GameFramework::Init()
 {
 	// Get Resource Path
 	g_resourcePath = std::filesystem::current_path().parent_path() / "Resource\\Bitmap";
+	std::filesystem::path soundPath = std::filesystem::current_path().parent_path() / "Resource\\Sound";
 
 	GET_SINGLE(InputManager)->Init(hWnd);
 	GET_SINGLE(TimeManager)->Init();
+	
+	// Sound
+	GET_SINGLE(SoundManager)->Init(hWnd, soundPath);
+	GET_SINGLE(SoundManager)->LoadSound(L"main_music", L"main_music.wav", SoundType::BGM);
 
 	_scene = new GameScene;
 	_gameNetwork = new GameNetwork;

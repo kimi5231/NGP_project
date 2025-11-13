@@ -39,6 +39,9 @@
     <Filter Include="소스 파일\Game\UI">
       <UniqueIdentifier>{a1baed5a-23d9-49cb-a600-c08baa8ed7f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Game\Sound">
+      <UniqueIdentifier>{554e34c5-fbbd-422b-ab44-8f63a583f73b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -119,6 +122,12 @@
     <ClInclude Include="Constant.h">
       <Filter>소스 파일\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>소스 파일\Game\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>소스 파일\Game\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">
@@ -189,6 +198,12 @@
     </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>소스 파일\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>소스 파일\Game\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>소스 파일\Game\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Player.h"
 #include "InputManager.h"
+#include "SoundManager.h"
 #include "GameScene.h"
 #include "Global.h"
 #include "Item.h"
@@ -34,7 +35,9 @@ GameScene::GameScene()
 	_objects.push_back(std::make_shared<Item>(ItemType::Coffee, Vertex{ 300, 500 }));
 	_objects.push_back(std::make_shared<Item>(ItemType::Shotgun, Vertex{ 500, 500 }));
 	_objects.push_back(std::make_shared<Item>(ItemType::Hourglass, Vertex{ 400, 600 }));
-	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{200, 200}));
+
+	// Sound
+	GET_SINGLE(SoundManager)->Play(L"main_music", true);
 
 	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));

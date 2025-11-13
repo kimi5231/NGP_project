@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Monster.h"
 
 class BomberMonster : public Monster

@@ -71,7 +71,7 @@ void GameScene::Update()
 		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			if (object->GetObjectType() == ObjectType::Bullet) {
-				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && !monster->IsState(ObjectState::Revive)) {
+				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) {
 					monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
 					object->SetState(ObjectState::Dead);
 				}
@@ -225,15 +225,18 @@ void GameScene::ProcessInput()
 		}
 		else if (input->GetButton(KeyType::Right)) {
 			_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-			_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-			_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-
+			if (useShotgun) {
+				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+			}
 			prevKeyUp = false;
 		}
 		else if (input->GetButton(KeyType::Left)) {
 			_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-			_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-			_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+			if (useShotgun) {
+				_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+				_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+			}
 			prevKeyUp = false;
 		}
 
@@ -271,8 +274,7 @@ void GameScene::ProcessInput()
 
 	// 아이템 사용
 	if (input->GetButtonDown(KeyType::SpaceBar)) {
-		_players[0]->GetStateMachine()->ChangeState(new UseItemState);
-		_players[0]->GetStateMachine()->Start();
+		_players[0]->UseItem();
 	}
 
 }

@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Projectile.h"
 #include "Global.h"
 #include "StateMachine.h"
@@ -6,12 +6,8 @@
 #define BULLET_SIZE 5
 
 Projectile::Projectile(Dir dir, const Vertex& pos)
-	: GameObject(new MoveState)
+	: GameObject()
 {
-	// 임시
-	_bitmap = (HBITMAP)LoadImage(hInst, L"Resource\\Bitmap\\Life.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	_bitmapMask = (HBITMAP)LoadImage(hInst, L"Resource\\Bitmap\\Life_mask.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-
 	_dir = dir;
 	_status._speed = 3;
 	_pos = pos;
@@ -21,7 +17,10 @@ Projectile::Projectile(Dir dir, const Vertex& pos)
 
 void Projectile::Update()
 {
-	_stateMachine->Update(nullptr);
+	Move();
+	if (_pos.x < gBackgroundRect.left || _pos.x > gBackgroundRect.right ||
+		_pos.y < gBackgroundRect.top || _pos.y > gBackgroundRect.bottom) {
+	}
 }
 
 void Projectile::Render(HDC hdc, HDC srcDC)

@@ -16,30 +16,29 @@ RespawnMonster::RespawnMonster() : Monster()
 void RespawnMonster::Update(GameObject* other)
 {
     Monster::Update(other);
-    if (IsState(ObjectState::Revive)) {
-        if (CheckTimer(_timer, RESPAWN_TIME)) {
-            SetState(ObjectState::Alive);
 
-            _stateMachine->ChangeState(new SetTargetState);
+    if (_canUseSkill) {
+        if (CheckTimer(_timer, RESPAWN_TIME)) {
+            SetState(ObjectState::Move);
+
+            _stateMachine->ChangeState(new FindTargetState);
             _stateMachine->Start();
+            _canUseSkill = false;
+            _invincible = false;
         }
     }
 }
 
 bool RespawnMonster::UseSkill()
 {
-    if (IsState(ObjectState::Revive)) {
-        _curFrame.x = 0;
-        _curFrame.y = 5;
-        _status._hp = 10;   // 회복
+    _curFrame.x = 0;
+    _curFrame.y = 5;
+    _status._hp = 10;   // 회복
 
-        _stateMachine->ChangeState(new IdleState);
-        _stateMachine->Start();
+    _stateMachine->ChangeState(new IdleState);
+    _stateMachine->Start();
 
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 void RespawnMonster::Damaged(int damage)
@@ -48,8 +47,10 @@ void RespawnMonster::Damaged(int damage)
 
     if (_status._hp <= 0) {
         --_status._life;
-        if(_status._life > 0)
-            SetState(ObjectState::Revive);
+        if (_status._life > 0) {
+            _canUseSkill = true;
+            _invincible = true;
+        }
         else
             SetState(ObjectState::Dead);
     }

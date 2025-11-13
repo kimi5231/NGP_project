@@ -12,7 +12,7 @@ std::uniform_int_distribution<> randHeight(gBackgroundRect.top, gBackgroundRect.
 
 
 Monster::Monster()
-    : GameObject()
+    : _stateMachine{ new StateMachine{this, new FindTargetState}}
 {
     _status._hp = 10;
     _status._speed = MONSTER_SPEED;
@@ -21,12 +21,13 @@ Monster::Monster()
     _stateMachine->Start();
 }
 
-Monster::Monster(State* state)
-    : GameObject(state)
+Monster::Monster(ObjectState state)
+    : _stateMachine{ new StateMachine{this, state} }, GameObject(state)
 {
     _status._hp = 10;
     _status._speed = MONSTER_SPEED;
     _pos = { randWidth(gen), randHeight(gen) };
+    SetState(state);
 
     _stateMachine->Start();
 }

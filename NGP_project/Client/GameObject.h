@@ -15,7 +15,7 @@ class GameObject
 {
 public:
 	GameObject();
-	GameObject(State* state);
+	GameObject(ObjectState);
 	virtual ~GameObject();
 
 public:
@@ -42,13 +42,9 @@ public:
 	void SetObjectType(ObjectType type) { _type = type; }
 	ObjectType GetObjectType() { return _type; }
 	void SetPos(Vertex pos) { _pos = pos; }
-
-	// stateMachine 필요 함수
-	StateMachine* GetStateMachine() { return _stateMachine.get(); }
 	Vertex GetTargetPos() { return _targetPos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
-	virtual void FindTarget(GameObject* other) {};
 
 	// 충돌 관련
 	BoundingBox GetBoundingBox() const;
@@ -59,6 +55,7 @@ public:
 
 	void SetState(ObjectState state) { _state = state; }
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
+	bool CanDamage() const { return !_invincible; }
 public:
 	void ResetCurFrame();
 
@@ -76,7 +73,7 @@ protected:
 	Vertex _targetPos{};
 	Vertex _curFrame{};
 
-	std::unique_ptr<StateMachine> _stateMachine;
+	bool _invincible{};	// 무적 판정
 
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 };

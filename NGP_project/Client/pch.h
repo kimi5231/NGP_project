@@ -31,8 +31,9 @@ void err_display(int errcode);
 
 enum class ObjectState
 {
-    Alive,
-    Revive,
+    Idle,
+    Move,
+    UseSkill,
     Dead,
 };
 

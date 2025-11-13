@@ -6,7 +6,7 @@
 #include "Constant.h"
 
 Player::Player()
-    : GameObject(new IdleState)
+    : GameObject(ObjectState::Idle)
 {
     if (!_bitmap || !_bitmapMask) 
     {
@@ -26,8 +26,6 @@ Player::Player()
 
 void Player::Update()
 {
-    _stateMachine->Update(this);
-
     if (_item.second) {
         if (CheckTimer(_itemTimer, ITEM_TIME)) {
             _item.second->Expired(this);
@@ -42,8 +40,6 @@ void Player::UseItem()
         _item.second = _item.first;
         _item.first = nullptr;
         _item.second->ChangeState(this);
-        _stateMachine->ChangeState(new IdleState);
-        _stateMachine->Start();
     }
 }
 

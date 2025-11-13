@@ -6,119 +6,108 @@
 #include "Global.h"
 #include "Player.h"
 
-// Move
-void MoveState::Enter(GameObject* self)
-{
-}
-
-void MoveState::Exit(GameObject* self)
-{
-	self->GetStateMachine()->ChangeState(new DeadState);
-	self->GetStateMachine()->Start();
-}
-
-void MoveState::Tick(GameObject* self, GameObject* other)
-{
-	self->Move();
-	Vertex pos = self->GetPos();
-	if (pos.x < gBackgroundRect.left || pos.x > gBackgroundRect.right||
-		pos.y < gBackgroundRect.top|| pos.y > gBackgroundRect.bottom) {
-		Exit(self);
-	}
-}
-
 // MoveToTarget
-void MoveToTargetState::Enter(GameObject* self)
+void MoveToTargetState::Enter(Monster* self)
 {
+	self->SetState(ObjectState::Move);
 }
 
-void MoveToTargetState::Exit(GameObject* self)
-{
-	// if hp == 0
-	/*object->GetStateMachine()->ChangeState(new Dead);*/
-	
-	self->GetStateMachine()->ChangeState(new SetTargetState);
+void MoveToTargetState::Exit(Monster* self)
+{	
+	self->GetStateMachine()->ChangeState(new FindTargetState);
 	self->GetStateMachine()->Start();
 }
 
-void MoveToTargetState::Tick(GameObject* self, GameObject* other)
+void MoveToTargetState::Tick(Monster* self, GameObject* other)
 {
 	self->Move();
-	if (self->IsArrive() || dynamic_cast<Monster*>(self)->GetIsFollow()) {
+	if (self->IsArrive() || self->GetIsFollow()) {
 		Exit(self);
 	}
 }
 
 // SetTarget
-void SetTargetState::Enter(GameObject* self)
+void FindTargetState::Enter(Monster* self)
 {
-
+	self->SetState(ObjectState::Move);
 }
 
-void SetTargetState::Exit(GameObject* self)
+void FindTargetState::Exit(Monster* self)
 {
-	self->GetStateMachine()->ChangeState(new UseSkillState);
-	self->GetStateMachine()->Start();
+	if (self->CanUseSkill()) {
+		self->GetStateMachine()->ChangeState(new UseSkillState);
+		self->GetStateMachine()->Start();
+	}
+	else {
+		self->GetStateMachine()->ChangeState(new MoveToTargetState);
+		self->GetStateMachine()->Start();
+	}
 }
 
-void SetTargetState::Tick(GameObject* self, GameObject* other)
+void FindTargetState::Tick(Monster* self, GameObject* other)
 {
 	self->FindTarget(other);
 	Exit(self);
 }
 // Dead
-void DeadState::Enter(GameObject* self)
+void DeadState::Enter(Monster* self)
 {
 	self->SetState(ObjectState::Dead);
 }
 
-void DeadState::Exit(GameObject* self)
+void DeadState::Exit(Monster* self)
 {
+
 }
 
-void DeadState::Tick(GameObject* self, GameObject* other)
+void DeadState::Tick(Monster* self, GameObject* other)
 {
 	//Exit(self);
 }
 
-// UseItem
-void UseItemState::Enter(GameObject* self)
-{
-}
-
-void UseItemState::Exit(GameObject* self)
-{
-	self->GetStateMachine()->ChangeState(new IdleState);
-	self->GetStateMachine()->Start();
-}
-
-void UseItemState::Tick(GameObject* self, GameObject* other)
-{
-	dynamic_cast<Player*>(self)->UseItem();
-}
-
 // UseSkill
-void UseSkillState::Enter(GameObject* self)
+void UseSkillState::Enter(Monster* self)
 {
-
+	self->SetState(ObjectState::UseSkill);
 }
 
-void UseSkillState::Exit(GameObject* self)
+void UseSkillState::Exit(Monster* self)
 {
 	self->GetStateMachine()->ChangeState(new MoveToTargetState);
 	self->GetStateMachine()->Start();
 }
 
-void UseSkillState::Tick(GameObject* self, GameObject* other)
+void UseSkillState::Tick(Monster* self, GameObject* other)
 {
-	if (dynamic_cast<Monster*>(self)->UseSkill()) return;
+	if (self->UseSkill()) return;
 	Exit(self);
 }
 
 // StateMachine
-StateMachine::StateMachine(GameObject* object, State* state)
+StateMachine::StateMachine(Monster* object, State* state)
 	: _object{ object }, _curState{ state }
 {
+}
+
+StateMachine::StateMachine(Monster* object, ObjectState state)
+	: _object{ object }
+{
+	switch (state) {
+	case ObjectState::Idle:
+		_curState = new IdleState;
+		break;
+	case ObjectState::Move:
+		_curState = new MoveToTargetState;
+		break;
+	case ObjectState::UseSkill:
+		_curState = new UseSkillState;
+		break;
+	case ObjectState::Dead:
+		_curState = new DeadState;
+		break;
+	default:
+		break;
+	}
 }
 
 StateMachine::~StateMachine()

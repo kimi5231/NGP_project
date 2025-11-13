@@ -27,6 +27,9 @@ Player::Player()
 void Player::Update()
 {
     if (_item.second) {
+        if (useLightning) {   // 번개 아이템 사용 시 바로 제거
+            _item.second = nullptr;
+        }
         if (CheckTimer(_itemTimer, ITEM_TIME)) {
             _item.second->Expired(this);
             _item.second = nullptr;
@@ -45,6 +48,11 @@ void Player::UseItem()
 
 void Player::SetItem(ItemRef item)
 {
+    // 목숨은 먹으면 바로 획득
+    if (item->GetItemType() == ItemType::Life) {
+        item->ChangeState(this);
+        return;
+    }
     _item.first = item;
 }
 

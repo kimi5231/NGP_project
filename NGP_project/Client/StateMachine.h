@@ -1,6 +1,7 @@
 #pragma once
 
 class GameObject;
+class Monster;
 class StateMachine;
 
 class State {

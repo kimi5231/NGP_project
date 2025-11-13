@@ -3,8 +3,6 @@
 #include "Global.h"
 #include "Constant.h"
 
-extern float bulletSpeed;
-extern bool useLightning, useWaterWheel, useShotgun, useHourglass;
 
 Item::Item(ItemType type)
 {

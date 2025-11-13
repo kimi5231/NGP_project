@@ -65,13 +65,13 @@ protected:
 	HBITMAP _bitmap{};
 	HBITMAP _bitmapMask{};
 	Vertex _spriteCnt{};	// 스프라이트 시트의 가로/세로 칸 개수
+	Vertex _curFrame{};
 
 	ObjectType _type{};
 	ObjectState _state;
 	Dir _dir{};
 	Vertex _pos{};
 	Vertex _targetPos{};
-	Vertex _curFrame{};
 
 	bool _invincible{};	// 무적 판정
 

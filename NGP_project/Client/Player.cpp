@@ -53,6 +53,7 @@ void Player::Left()
     _pos.x -= _status._speed;
     _curFrame.y = 1;    // 시간 되면 대각선 백터로 구현
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+    SetState(ObjectState::Move);
 }
 
 void Player::Right()
@@ -60,6 +61,7 @@ void Player::Right()
     _pos.x += _status._speed;
     _curFrame.y = 0;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+    SetState(ObjectState::Move);
 }
 
 void Player::Up()
@@ -67,6 +69,7 @@ void Player::Up()
     _pos.y -= _status._speed;
     _curFrame.y = 5;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+    SetState(ObjectState::Move);
 }
 
 void Player::Down()
@@ -74,4 +77,5 @@ void Player::Down()
     _pos.y += _status._speed;
     _curFrame.y = 9;
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+    SetState(ObjectState::Move);
 }

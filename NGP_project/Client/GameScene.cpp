@@ -255,9 +255,10 @@ void GameScene::ProcessInput()
 		}
 	}
 
-	// 키 Up
+	// 이동 키 Up
 	if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
 		_players[0]->ResetCurFrame();
+		_players[0]->SetState(ObjectState::Idle);
 	}
 	if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down) || input->GetButtonUp(KeyType::Right)) {
 		prevKeyUp = true;

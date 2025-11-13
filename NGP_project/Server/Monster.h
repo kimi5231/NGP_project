@@ -13,6 +13,7 @@ public:
 	virtual void FindTarget(GameObject* other);	// 랜덤 타겟 지정
 	bool GetIsFollow() const { return _isFollow; }
 	bool CanUseSkill() const { return _canUseSkill; }
+	bool IsArrive() const;
 	virtual void Move() override;
 
 	virtual void Update(GameObject* other);

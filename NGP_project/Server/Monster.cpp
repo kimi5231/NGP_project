@@ -37,6 +37,14 @@ void Monster::FindTarget(GameObject* other)
     SetTargetPos({ randWidth(gen), randHeight(gen) });
 }
 
+bool Monster::IsArrive() const
+{
+    if (_pos.x - _targetPos.x <= 0.1 && _pos.y - _targetPos.y <= 0.1) {
+        return true;
+    }
+    return false;
+}
+
 void Monster::Move()
 {
     int dx = _targetPos.x - _pos.x;

@@ -1,7 +1,6 @@
 #include "pch.h"
-#include "StateMachine.h"
-#include "GameObject.h"
 #include "Monster.h"
+#include "StateMachine.h"
 #include "Player.h"
 
 // MoveToTarget

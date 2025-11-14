@@ -4,6 +4,7 @@
 #include "Global.h"
 #include "TimeManager.h"
 #include "Constant.h"
+#include <algorithm>
 
 Player::Player()
     : GameObject(ObjectState::Idle)
@@ -35,6 +36,9 @@ void Player::Update()
             _item.second = nullptr;
         }
     }
+
+    /*std::clamp(_pos.x, (int)(gBackgroundRect.left), (int)(gBackgroundRect.right));
+    std::clamp(_pos.y, (int)(gBackgroundRect.top), (int)(gBackgroundRect.bottom));*/
 }
 
 void Player::UseItem()

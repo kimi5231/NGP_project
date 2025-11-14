@@ -39,6 +39,7 @@ void Monster::FindTarget(GameObject* other)
 
 void Monster::Move()
 {
+    _prevPos = _pos;
     int dx = _targetPos.x - _pos.x;
     int dy = _targetPos.y - _pos.y;
     Vertex direct{ dx, dy };
@@ -57,15 +58,19 @@ void Monster::Move()
 
     if (direct.x <= 0) {
         _curFrame.y = 3;
+        _dir = Dir::Left;
     }
     else if (direct.x > 0) {
         _curFrame.y = 1;
+        _dir = Dir::Right;
     }
     if (direct.y <= 0) {
         _curFrame.y = 0;
+        _dir = Dir::Up;
     }
     else if (direct.y > 0) {
         _curFrame.y = 2;
+        _dir = Dir::Down;
     }
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }

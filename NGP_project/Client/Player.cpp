@@ -56,34 +56,31 @@ void Player::SetItem(ItemRef item)
     _item.first = item;
 }
 
-void Player::Left()
+void Player::Move(Vertex dir)
 {
-    _pos.x -= _status._speed;
-    _curFrame.y = 1;    // 시간 되면 대각선 백터로 구현
-    _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
-    SetState(ObjectState::Move);
-}
+    _prevPos = _pos;
+    // 방향 벡터를 정규화해서 대각선 이동 시 속도 보정
+    dir.Normalize();
 
-void Player::Right()
-{
-    _pos.x += _status._speed;
-    _curFrame.y = 0;
-    _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
-    SetState(ObjectState::Move);
-}
+    // 위치 업데이트
+    _pos.x += dir.x * _status._speed;
+    _pos.y += dir.y * _status._speed;
 
-void Player::Up()
-{
-    _pos.y -= _status._speed;
-    _curFrame.y = 5;
-    _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
-    SetState(ObjectState::Move);
-}
-
-void Player::Down()
-{
-    _pos.y += _status._speed;
-    _curFrame.y = 9;
-    _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
-    SetState(ObjectState::Move);
+    if (dir.x <= 0) {
+        _curFrame.y = 1;
+        _dir = Dir::Left;
+    }
+    else if (dir.x > 0) {
+        _curFrame.y = 0;
+        _dir = Dir::Right;
+    }
+    if (dir.y <= 0) {
+        _curFrame.y = 5;
+        _dir = Dir::Up;
+    }
+    else if (dir.y > 0) {
+        _curFrame.y = 9;
+        _dir = Dir::Down;
+    }
+        _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }

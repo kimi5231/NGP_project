@@ -16,6 +16,7 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 	void AddObject(GameObject*) override;
+	void InitObstalce();
 public:
 	virtual void ProcessInput() override;
 private:
@@ -28,4 +29,5 @@ private:
 	std::vector<std::shared_ptr<UI>> _ui;
 	ProgressBar _timerUI{ Vertex{ FRAME_BUFFER_WIDTH / 2, 30}, Vertex{500, 20}, GAME_TIME };
 	float _stagetime{};
+	int _curStage{1};
 };

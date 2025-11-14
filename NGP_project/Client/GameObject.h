@@ -16,6 +16,7 @@ class GameObject
 public:
 	GameObject();
 	GameObject(ObjectState);
+	GameObject(ObjectType, Vertex);
 	virtual ~GameObject();
 
 public:
@@ -23,10 +24,6 @@ public:
 	virtual void Render(HDC hdc, HDC srcDC);
 
 public:
-	virtual void Left();
-	virtual void Right();
-	virtual void Up();
-	virtual void Down();
 	virtual void Move() {}
 
 private:
@@ -45,6 +42,8 @@ public:
 	Vertex GetTargetPos() { return _targetPos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
+
+	void UndoPos() { _pos = _prevPos; }
 
 	// 충돌 관련
 	BoundingBox GetBoundingBox() const;
@@ -71,6 +70,7 @@ protected:
 	ObjectState _state;
 	Dir _dir{};
 	Vertex _pos{};
+	Vertex _prevPos{};
 	Vertex _targetPos{};
 
 	bool _invincible{};	// 무적 판정

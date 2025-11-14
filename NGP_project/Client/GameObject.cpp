@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "BoundingBox.h"
 #include "GameObject.h"
+#include "Global.h"
 
 GameObject::GameObject()
     : _state{ObjectState::Idle}
@@ -10,6 +11,15 @@ GameObject::GameObject()
 GameObject::GameObject(ObjectState state)
     : _state{ state }
 {
+}
+
+GameObject::GameObject(ObjectType type, Vertex pos)
+    : _type{type}, _pos{ pos }
+{
+    if (type == ObjectType::Obstacle) {
+        _bitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "wall_wood_block.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        _bitmapMask = (HBITMAP)LoadImage(hInst, (g_resourcePath / "wood_block_mask.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+    }
 }
 
 GameObject::~GameObject()
@@ -35,21 +45,6 @@ void GameObject::Render(HDC hdc, HDC srcDC)
     BitBlt(hdc, _pos.x - _size.x / 2, _pos.y - _size.y / 2, _size.x, _size.y, srcDC, _curFrame.x * _size.x, _curFrame.y * _size.y, SRCPAINT);
 }
 
-void GameObject::Left()
-{
-}
-
-void GameObject::Right()
-{
-}
-
-void GameObject::Up()
-{
-}
-
-void GameObject::Down()
-{
-}
 
 BoundingBox GameObject::GetBoundingBox() const
 {

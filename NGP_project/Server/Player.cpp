@@ -21,31 +21,6 @@ void Player::Update()
         _item.second = nullptr;
     }*/
 
-    switch (_state) {
-    case ObjectState::Idle:
-        break;
-    case ObjectState::Move:
-        switch (_dir) {
-        case Dir::Left:
-            _pos.x -= _status._speed;
-            break;
-        case Dir::Right:
-            _pos.x += _status._speed;
-            break;
-        case Dir::Up:
-            _pos.y -= _status._speed;
-            break;
-        case Dir::Down:
-            _pos.y += _status._speed;
-            break;
-        default:
-            break;
-        }
-        break;
-    case ObjectState::Dead:
-        break;
-    default:
-        break;
-    }
+
 }
 

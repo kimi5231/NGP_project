@@ -9,6 +9,7 @@
 #include "BombObject.h"
 
 // Monster
+#include "Monster.h"
 #include "BomberMonster.h"
 #include "NormalMonster.h"
 #include "ObstacleMonster.h"
@@ -23,7 +24,6 @@ bool useLightning{}, useWaterWheel{}, useShotgun{}, useHourglass{};
 
 GameScene::GameScene()
 {
-	_players.push_back(std::make_shared <Player>());
 	_monsters.push_back(std::make_shared <BomberMonster>());
 	_monsters.push_back(std::make_shared <TankMonster>());
 	_monsters.push_back(std::make_shared <ObstacleMonster>());
@@ -37,7 +37,7 @@ GameScene::GameScene()
 	_objects.push_back(std::make_shared<Item>(ItemType::Hourglass, Vertex{ 400, 600 }));
 
 	// Sound
-	GET_SINGLE(SoundManager)->Play(L"main_music", true);
+	// GET_SINGLE(SoundManager)->Play(L"main_music", true);
 
 	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
@@ -52,13 +52,11 @@ GameScene::~GameScene()
 {
 }
 
-void GameScene::AddObject(GameObject* obj)
-{
-	_objects.push_back(std::shared_ptr<GameObject>(obj));
-}
-
 void GameScene::Update()
 {
+	if (_players.empty())
+		return;
+
 	for (const auto& object : _objects) {
 		object->Update();
 		// 아이템 충돌 처리
@@ -69,9 +67,9 @@ void GameScene::Update()
 	}
 	for (const auto& monster : _monsters) {
 		monster->Update(_players[0].get());
-		monster->SetCallback([this](GameObject* obj) {
-			this->AddObject(obj);
-			});
+		//monster->SetCallback([this](GameObject* obj) {
+		//	this->AddObject(obj);
+		//	});
 		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			if (object->GetObjectType() == ObjectType::Bullet) {
@@ -148,7 +146,7 @@ void GameScene::Render(HDC hdc)
 
 	// UI
 	for (const auto ui : _ui) {
-		ui->Render(memDC, memDCImage, _players[0]->_status._life);	// 나중에 수정
+		//ui->Render(memDC, memDCImage, _players[0]->_status._life);	// 나중에 수정
 	}
 	_timerUI.Render(memDC, memDCImage, _stagetime);
 
@@ -162,6 +160,20 @@ void GameScene::Render(HDC hdc)
 	DeleteDC(memDCImage);
 }
 
+void GameScene::AddPlayer(Player* player)
+{
+	_players.push_back(std::shared_ptr<Player>(player));
+}
+
+void GameScene::AddMonster(Monster* monster)
+{
+	_monsters.push_back(std::shared_ptr<Monster>(monster));
+}
+
+void GameScene::AddObject(GameObject* object)
+{	
+	_objects.push_back(std::shared_ptr<GameObject>(object));
+}
 
 void GameScene::ProcessInput()
 {
@@ -283,3 +295,5 @@ void GameScene::ProcessInput()
 	}
 
 }
+
+

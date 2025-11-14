@@ -46,9 +46,9 @@ void Room::Update()
 	}
 
 	// 상태가 Dead면 삭제
-	_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {
+	/*_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {
 		return o->IsState(ObjectState::Dead);
-		}), _objects.end());
+		}), _objects.end());*/
 
 }
 

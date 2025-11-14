@@ -3,8 +3,9 @@
 #include "UI.h"
 #include "Constant.h"
 
-class GameObject;
+class Player;
 class Monster;
+class GameObject;
 
 class GameScene : public Scene
 {
@@ -15,9 +16,14 @@ public:
 public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
-	void AddObject(GameObject*) override;
+
+	void AddPlayer(Player* player);
+	void AddMonster(Monster* monster);
+	void AddObject(GameObject* object);
+
 public:
 	virtual void ProcessInput() override;
+
 private:
 	std::vector<PlayerRef> _players;
 	std::vector<MonsterRef> _monsters;

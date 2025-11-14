@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-class Scene;
 class InputManager;
 class GameNetwork;
+class GameScene;
 
 class GameFramework
 {
@@ -19,6 +19,6 @@ public:
 	void ChangeScene();
 
 private:
-	Scene* _scene{};
+	GameScene* _scene{};
 	GameNetwork* _gameNetwork{};
 };

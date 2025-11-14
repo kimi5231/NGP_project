@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "GameNetwork.h"
+#include "GameScene.h"
+#include "Player.h"
 
 //char* SERVERIP = (char*)"61.255.49.141";
 //char* SERVERIP = (char*)"192.168.35.52";
@@ -111,7 +113,7 @@ void GameNetwork::ProcessRecv()
 	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
 
 	// Packet 수신(가변 데이터)
-	std::vector<char> packet(BUFSIZ);
+	std::vector<char> packet(BUFSIZE);
 	recv(_socket, packet.data(), packetSize, MSG_WAITALL);
 
 	// Header 추출
@@ -123,7 +125,21 @@ void GameNetwork::ProcessRecv()
 	{
 	case S_AddObject:
 		S_AddObject_Packet addObjectPacket;
-		memcpy(&addObjectPacket, packet.data() + sizeof(Header), sizeof(S_AddObject));
+		memcpy(&addObjectPacket, packet.data() + sizeof(Header), sizeof(S_AddObject_Packet));
+		
+		if (addObjectPacket.type == ObjectType::Player)
+		{
+			Player* player = new Player();
+			player->SetId(addObjectPacket.objectID);
+			player->SetObjectType(ObjectType::Player);
+			player->SetPos(addObjectPacket.pos);
+			_gameScene->AddPlayer(player);
+		}
+		else if (addObjectPacket.type == ObjectType::Monster)
+		{
+
+		}
+
 		break;
 	}
 }

@@ -39,6 +39,8 @@ public:
 	void SetBitmap(HBITMAP bitmap) { _bitmap = bitmap; }
 	void SetSpriteVertex(Vertex Vertex) { _spriteCnt = Vertex; }
 
+	void SetId(int id) { _id = id; }
+	int GetId() { return _id; }
 	void SetObjectType(ObjectType type) { _type = type; }
 	ObjectType GetObjectType() { return _type; }
 	void SetPos(Vertex pos) { _pos = pos; }
@@ -67,6 +69,7 @@ protected:
 	Vertex _spriteCnt{};	// 스프라이트 시트의 가로/세로 칸 개수
 	Vertex _curFrame{};
 
+	int _id{};
 	ObjectType _type{};
 	ObjectState _state;
 	Dir _dir{};

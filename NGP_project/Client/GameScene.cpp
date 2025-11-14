@@ -67,9 +67,9 @@ void GameScene::Update()
 	}
 	for (const auto& monster : _monsters) {
 		monster->Update(_players[0].get());
-		//monster->SetCallback([this](GameObject* obj) {
-		//	this->AddObject(obj);
-		//	});
+		monster->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj);
+			});
 		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			if (object->GetObjectType() == ObjectType::Bullet) {

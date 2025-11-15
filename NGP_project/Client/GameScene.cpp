@@ -66,7 +66,7 @@ GameScene::GameScene()
 	_objects.push_back(std::make_shared<Item>(ItemType::Hourglass, Vertex{ 400, 600 }));
 	//_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ 400, 400 }));
 	InitObstalce();
-	// Sound
+	// Sound        
 	GET_SINGLE(SoundManager)->Play(L"main_music", true);
 
 	// UI

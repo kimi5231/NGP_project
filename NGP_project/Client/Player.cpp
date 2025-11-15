@@ -59,14 +59,12 @@ void Player::SetItem(ItemRef item)
 void Player::Move(Vertex dir)
 {
     _prevPos = _pos;
-    // 방향 벡터를 정규화해서 대각선 이동 시 속도 보정
-    dir.Normalize();
 
     // 위치 업데이트
     _pos.x += dir.x * _status._speed;
     _pos.y += dir.y * _status._speed;
 
-    if (dir.x <= 0) {
+    if (dir.x < 0) {
         _curFrame.y = 1;
         _dir = Dir::Left;
     }
@@ -74,7 +72,7 @@ void Player::Move(Vertex dir)
         _curFrame.y = 0;
         _dir = Dir::Right;
     }
-    if (dir.y <= 0) {
+    if (dir.y < 0) {
         _curFrame.y = 5;
         _dir = Dir::Up;
     }
@@ -82,5 +80,5 @@ void Player::Move(Vertex dir)
         _curFrame.y = 9;
         _dir = Dir::Down;
     }
-        _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+    _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }

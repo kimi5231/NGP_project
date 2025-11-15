@@ -36,9 +36,6 @@ void Player::Update()
             _item.second = nullptr;
         }
     }
-
-    /*std::clamp(_pos.x, (int)(gBackgroundRect.left), (int)(gBackgroundRect.right));
-    std::clamp(_pos.y, (int)(gBackgroundRect.top), (int)(gBackgroundRect.bottom));*/
 }
 
 void Player::UseItem()
@@ -85,4 +82,9 @@ void Player::Move(Vertex dir)
         _dir = Dir::Down;
     }
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+
+
+    _pos.x = std::clamp(_pos.x, (int)(gBackgroundRect.left), (int)(gBackgroundRect.right));
+    _pos.y = std::clamp(_pos.y, (int)(gBackgroundRect.top), (int)(gBackgroundRect.bottom));
+
 }

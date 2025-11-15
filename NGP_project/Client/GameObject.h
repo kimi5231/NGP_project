@@ -42,6 +42,7 @@ public:
 	Vertex GetTargetPos() { return _targetPos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
+	Vertex GetPrevPos() { return _prevPos; }
 
 	void UndoPos() { _pos = _prevPos; }
 

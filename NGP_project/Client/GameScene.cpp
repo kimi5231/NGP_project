@@ -20,32 +20,31 @@ HBITMAP gBackgroundBitmap;
 float bulletSpeed{ BULLET_TIME };
 // 아이템 사용 관련 전역 변수
 bool useLightning{}, useWaterWheel{}, useShotgun{}, useHourglass{};
-#define BOARD_SIZE 16
 
 void GameScene::InitObstalce()
 {
 	// 이미 배열이 있으면 해제 후 재할당
 
+	int sizeOffset{ CELL_SIZE / 2 };
 	switch (_curStage) {
 	case 1:
 		// 가로
-		
-		for (int i = 0; i < 16; ++i) {
+		for (int i = 0; i < BOARD_SIZE; ++i) {
 			if (i >= 7 && i <= 9) continue;
-			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + i * CELL_SIZE, gBackgroundRect.top + 0 }));
+			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ (gBackgroundRect.left + sizeOffset) + i * CELL_SIZE, gBackgroundRect.top + sizeOffset }));
 		}
-		for (int i = 0; i < 16; ++i) {
+		for (int i = 0; i < BOARD_SIZE; ++i) {
 			if (i >= 7 && i <= 9) continue;
-			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + i * CELL_SIZE, gBackgroundRect.top + (BOARD_SIZE - 1) * CELL_SIZE }));
+			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + i * CELL_SIZE, gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE }));
 		}
 		// 세로
-		for (int i = 1; i < 15; ++i) {
+		for (int i = 1; i < BOARD_SIZE - 1; ++i) {
 			if (i >= 7 && i <= 9) continue;
-			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 0, gBackgroundRect.top + i * CELL_SIZE }));
+			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
 		}
-		for (int i = 1; i < 15; ++i) {
+		for (int i = 1; i < BOARD_SIZE - 1; ++i) {
 			if (i >= 7 && i <= 9) continue;
-			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top+ i * CELL_SIZE }));
+			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
 		}
 		break;
 	}
@@ -105,6 +104,7 @@ void GameScene::Update()
 	}
 	for (const auto& monster : _monsters) {
 		monster->Update(_players[0].get());
+
 		monster->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj);
 			});
@@ -116,8 +116,20 @@ void GameScene::Update()
 					object->SetState(ObjectState::Dead);
 				}
 			}
+			// 장애물
+			if (object->GetObjectType() == ObjectType::Obstacle && monster->IsCollision(object.get())) {
+				monster->UndoPos();
+			}
 		}
 
+		// 몬스터끼리 충돌 처리
+		for (const auto& otherMonster : _monsters) {
+			if (otherMonster == monster) continue;
+			if (monster->IsCollision(otherMonster.get())) {
+				if(monster->GetPos() != monster->GetPrevPos())
+				monster->UndoPos();
+			}
+		}
 		// 시계 아이템 사용 시
 		if (useHourglass)
 			monster->_status._speed = 0;

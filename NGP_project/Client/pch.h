@@ -97,6 +97,10 @@ struct Vertex
         x /= len;
         y /= len;
     }
+
+    bool operator!=(const Vertex& other) {
+        return (x != other.x && y != other.y);
+    }
 };
 
 using GameObjectRef = std::shared_ptr<class GameObject>;

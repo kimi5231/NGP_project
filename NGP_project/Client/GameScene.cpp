@@ -65,8 +65,9 @@ GameScene::GameScene()
 	_objects.push_back(std::make_shared<Item>(ItemType::Hourglass, Vertex{ 400, 600 }));
 	//_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ 400, 400 }));
 	InitObstalce();
+	
 	// Sound        
-	GET_SINGLE(SoundManager)->Play(L"main_music", true);
+	//GET_SINGLE(SoundManager)->Play(L"main_music", true);
 
 	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
@@ -209,7 +210,12 @@ void GameScene::Render(HDC hdc)
 
 void GameScene::AddPlayer(Player* player)
 {
-	_players.push_back(std::shared_ptr<Player>(player));
+	std::shared_ptr<Player> p(player);
+	_players.push_back(p);
+
+	// MyPlayer 설정
+	if (!_localPlayer)
+		_localPlayer = p;
 }
 
 void GameScene::AddMonster(Monster* monster)
@@ -224,6 +230,9 @@ void GameScene::AddObject(GameObject* object)
 
 void GameScene::ProcessInput()
 {
+	if (!_localPlayer)
+		return;
+
 	// 코드 길어져서 포인터로 받기
 	InputManager* input = GET_SINGLE(InputManager);
 
@@ -237,12 +246,12 @@ void GameScene::ProcessInput()
 	if (input->GetButton(KeyType::S)) direction.y += 1;
 
 	if (direction.x != 0 || direction.y != 0) {
-		_players[0]->Move(direction);
+		_localPlayer->Move(direction);
 	}
 
 	// 총알 발사
-	if (prevKeyUp || CheckTimer(_players[0]->_timer, bulletSpeed)) {
-		Vertex playerPos = _players[0]->GetPos();
+	if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
+		Vertex playerPos = _localPlayer->GetPos();
 		if (input->GetButton(KeyType::Up)) {
 			if (input->GetButton(KeyType::Right)) { 
 				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos)); 
@@ -325,12 +334,12 @@ void GameScene::ProcessInput()
 
 	// 이동 키 Up
 	if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
-		_players[0]->ResetCurFrame();
-		_players[0]->SetState(ObjectState::Idle);
+		_localPlayer->ResetCurFrame();
+		_localPlayer->SetState(ObjectState::Idle);
 	}
 	if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down) || input->GetButtonUp(KeyType::Right)) {
 		prevKeyUp = true;
-		_players[0]->_timer = 0.0f;
+		_localPlayer->_timer = 0.0f;
 	}
 
 	if (input->GetButtonDown(KeyType::LeftMouse)) {
@@ -343,7 +352,7 @@ void GameScene::ProcessInput()
 
 	// 아이템 사용
 	if (input->GetButtonDown(KeyType::SpaceBar)) {
-		_players[0]->UseItem();
+		_localPlayer->UseItem();
 	}
 
 }

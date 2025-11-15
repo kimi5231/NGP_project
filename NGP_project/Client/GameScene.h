@@ -26,6 +26,7 @@ public:
 	virtual void ProcessInput() override;
 
 private:
+	PlayerRef _localPlayer;	// MyPlayer
 	std::vector<PlayerRef> _players;
 	std::vector<MonsterRef> _monsters;
 	std::vector<GameObjectRef> _objects;	// obstacle, bomb, projectile 등

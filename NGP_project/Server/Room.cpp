@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Room.h"
 #include "Monster.h"
 #include "Player.h"

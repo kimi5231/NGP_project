@@ -11,3 +11,5 @@
 // 임시지정
 #define MONSTER_SPEED 2
 #define PLAYER_SPEED 3
+#define BOARD_SIZE 16
+#define CELL_SIZE 30

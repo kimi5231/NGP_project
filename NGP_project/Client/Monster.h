@@ -8,6 +8,7 @@ public:
 	Monster(ObjectState state);
 	virtual ~Monster() {};
 public:
+	void Init();
 	// stateMachine 필요 함수
 	StateMachine* GetStateMachine() { return _stateMachine.get(); }
 	virtual void FindTarget(GameObject* other);	// 랜덤 타겟 지정

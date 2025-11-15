@@ -46,6 +46,7 @@ enum class ObjectType
     Bullet,
     Bomb,
     UI,
+    Obstacle,
 };
 
 enum class ItemType
@@ -81,6 +82,25 @@ enum class CollisionType
 struct Vertex
 {
     int x, y;
+
+    float Length() const {
+        return std::sqrt(x * x + y * y);
+    }
+
+    void Normalize() {
+        float len = Length();
+        if (len == 0) {
+            x = 0;
+            y = 0;
+            return;
+        }
+        x /= len;
+        y /= len;
+    }
+
+    bool operator!=(const Vertex& other) {
+        return (x != other.x && y != other.y);
+    }
 };
 
 using GameObjectRef = std::shared_ptr<class GameObject>;

@@ -22,6 +22,34 @@ float bulletSpeed{ BULLET_TIME };
 // 아이템 사용 관련 전역 변수
 bool useLightning{}, useWaterWheel{}, useShotgun{}, useHourglass{};
 
+void GameScene::InitObstalce()
+{
+	// 이미 배열이 있으면 해제 후 재할당
+
+	int sizeOffset{ CELL_SIZE / 2 };
+	switch (_curStage) {
+	case 1:
+		// 가로
+		for (int i = 0; i < BOARD_SIZE; ++i) {
+			if (i >= 7 && i <= 9) continue;
+			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ (gBackgroundRect.left + sizeOffset) + i * CELL_SIZE, gBackgroundRect.top + sizeOffset }));
+		}
+		for (int i = 0; i < BOARD_SIZE; ++i) {
+			if (i >= 7 && i <= 9) continue;
+			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + i * CELL_SIZE, gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE }));
+		}
+		// 세로
+		for (int i = 1; i < BOARD_SIZE - 1; ++i) {
+			if (i >= 7 && i <= 9) continue;
+			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
+		}
+		for (int i = 1; i < BOARD_SIZE - 1; ++i) {
+			if (i >= 7 && i <= 9) continue;
+			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
+		}
+		break;
+	}
+}
 GameScene::GameScene()
 {
 	_monsters.push_back(std::make_shared <BomberMonster>());
@@ -35,9 +63,10 @@ GameScene::GameScene()
 	_objects.push_back(std::make_shared<Item>(ItemType::Coffee, Vertex{ 300, 500 }));
 	_objects.push_back(std::make_shared<Item>(ItemType::Shotgun, Vertex{ 500, 500 }));
 	_objects.push_back(std::make_shared<Item>(ItemType::Hourglass, Vertex{ 400, 600 }));
-
-	// Sound
-	// GET_SINGLE(SoundManager)->Play(L"main_music", true);
+	//_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ 400, 400 }));
+	InitObstalce();
+	// Sound        
+	GET_SINGLE(SoundManager)->Play(L"main_music", true);
 
 	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
@@ -64,9 +93,15 @@ void GameScene::Update()
 			_players[0]->SetItem(dynamic_pointer_cast<Item>(object));
 			object->SetState(ObjectState::Dead);
 		}
+
+		// 장애물
+		if (object->GetObjectType() == ObjectType::Obstacle && _players[0]->IsCollision(object.get())) {
+			_players[0]->UndoPos();
+		}
 	}
 	for (const auto& monster : _monsters) {
 		monster->Update(_players[0].get());
+
 		monster->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj);
 			});
@@ -78,8 +113,20 @@ void GameScene::Update()
 					object->SetState(ObjectState::Dead);
 				}
 			}
+			// 장애물
+			if (object->GetObjectType() == ObjectType::Obstacle && monster->IsCollision(object.get())) {
+				monster->UndoPos();
+			}
 		}
 
+		// 몬스터끼리 충돌 처리
+		for (const auto& otherMonster : _monsters) {
+			if (otherMonster == monster) continue;
+			if (monster->IsCollision(otherMonster.get())) {
+				if(monster->GetPos() != monster->GetPrevPos())
+				monster->UndoPos();
+			}
+		}
 		// 시계 아이템 사용 시
 		if (useHourglass)
 			monster->_status._speed = 0;
@@ -183,10 +230,15 @@ void GameScene::ProcessInput()
 	static bool prevKeyUp{};
 	// 키 입력은 첫 번째 플레이어(자기자신)만 받음
 	// 이동
-	if (input->GetButton(KeyType::A))  _players[0]->Left();
-	if (input->GetButton(KeyType::D)) _players[0]->Right();
-	if (input->GetButton(KeyType::W))    _players[0]->Up();
-	if (input->GetButton(KeyType::S))  _players[0]->Down();
+	Vertex direction{};
+	if (input->GetButton(KeyType::A)) direction.x -= 1;
+	if (input->GetButton(KeyType::D)) direction.x += 1;
+	if (input->GetButton(KeyType::W)) direction.y -= 1;
+	if (input->GetButton(KeyType::S)) direction.y += 1;
+
+	if (direction.x != 0 || direction.y != 0) {
+		_players[0]->Move(direction);
+	}
 
 	// 총알 발사
 	if (prevKeyUp || CheckTimer(_players[0]->_timer, bulletSpeed)) {

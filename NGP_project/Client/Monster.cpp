@@ -7,30 +7,54 @@
 std::random_device rd;
 std::mt19937 gen(rd());
 
-std::uniform_int_distribution<> randWidth(gBackgroundRect.left, gBackgroundRect.right);
-std::uniform_int_distribution<> randHeight(gBackgroundRect.top, gBackgroundRect.bottom);
+std::uniform_int_distribution<> randWidth(gBackgroundRect.left + CELL_SIZE, gBackgroundRect.right - CELL_SIZE);
+std::uniform_int_distribution<> randHeight(gBackgroundRect.top + CELL_SIZE, gBackgroundRect.bottom - CELL_SIZE);
 
 
 Monster::Monster()
     : _stateMachine{ new StateMachine{this, new FindTargetState}}
 {
-    _status._hp = 10;
-    _status._speed = MONSTER_SPEED;
-    _pos = { randWidth(gen), randHeight(gen) };
-
-    _stateMachine->Start();
+    Init();
 }
 
 Monster::Monster(ObjectState state)
     : _stateMachine{ new StateMachine{this, state} }, GameObject(state)
 {
+    SetState(state);
+    Init();
+}
+
+void Monster::Init()
+{
     _status._hp = 10;
     _status._speed = MONSTER_SPEED;
-    _pos = { randWidth(gen), randHeight(gen) };
-    SetState(state);
 
+    std::uniform_int_distribution<> randSpawn(0, 3);
+    int cellOffset = 8 * CELL_SIZE;
+    switch (randSpawn(gen)) {
+    case 0:
+        // 북쪽
+        _pos = { gBackgroundRect.left + cellOffset, gBackgroundRect.top + CELL_SIZE / 2 };
+        break;
+    case 1:
+        // 동쪽
+        _pos = { gBackgroundRect.right - CELL_SIZE / 2, gBackgroundRect.top + cellOffset };
+        break;
+    case 2:
+        // 남쪽
+        _pos = { gBackgroundRect.left + cellOffset, gBackgroundRect.bottom - CELL_SIZE / 2 };
+        break;
+    case 3:
+        // 서쪽
+        _pos = { gBackgroundRect.left + CELL_SIZE / 2, gBackgroundRect.top + cellOffset };
+        break;
+    default:
+        break;
+    }
+    _prevPos = _pos;
     _stateMachine->Start();
 }
+
 
 void Monster::FindTarget(GameObject* other)
 {
@@ -39,6 +63,7 @@ void Monster::FindTarget(GameObject* other)
 
 void Monster::Move()
 {
+    _prevPos = _pos;
     int dx = _targetPos.x - _pos.x;
     int dy = _targetPos.y - _pos.y;
     Vertex direct{ dx, dy };
@@ -57,15 +82,19 @@ void Monster::Move()
 
     if (direct.x <= 0) {
         _curFrame.y = 3;
+        _dir = Dir::Left;
     }
     else if (direct.x > 0) {
         _curFrame.y = 1;
+        _dir = Dir::Right;
     }
     if (direct.y <= 0) {
         _curFrame.y = 0;
+        _dir = Dir::Up;
     }
     else if (direct.y > 0) {
         _curFrame.y = 2;
+        _dir = Dir::Down;
     }
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }

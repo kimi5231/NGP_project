@@ -70,13 +70,7 @@ void GameNetwork::Update()
 
 	if (FD_ISSET(_socket, &_writeSet))
 	{
-		// Move Packet 전송 테스트
-		C_Move_Packet movePacket;
-		movePacket.objectID = 1;
-		movePacket.type = ObjectType::Player;
-		movePacket.pos = { 100, 100 };
 
-		ProcessSend(PacketID::C_Move, movePacket);
 	}
 }
 
@@ -163,4 +157,73 @@ std::vector<char> GameNetwork::CreatePacket(PacketID id, T& packet)
 	memcpy(retPacket.data() + sizeof(Header), &packet, sizeof(packet));
 
 	return retPacket;
+}
+
+void GameNetwork::SendUpdateObjectStatePacket(int id, ObjectType type, ObjectState state)
+{
+	C_UpdateObjectState_Packet packet;
+	packet.objectID = id;
+	packet.type = type;
+	packet.state = state;
+
+	ProcessSend(PacketID::C_UpdateObjectState, packet);
+}
+
+void GameNetwork::SendUpdateDirPacket(int id, ObjectType type, Dir dir)
+{
+	C_UpdateDir_Packet packet;
+	packet.objectID = id;
+	packet.type = type;
+	packet.dir = dir;
+
+	ProcessSend(PacketID::C_UpdateDir, packet);
+}
+
+void GameNetwork::SendMovePacket(int id, ObjectType type, Vertex pos)
+{
+	C_Move_Packet packet;
+	packet.objectID = id;
+	packet.type = type;
+	packet.pos = pos;
+
+	ProcessSend(PacketID::C_Move, packet);
+}
+
+void GameNetwork::SendCollisionPacket(CollisionType c_type, int id1, ObjectType type1, Vertex pos1, int id2, ObjectType type2, Vertex pos2)
+{
+	C_Collision_Packet packet;
+	packet.collisionType = c_type;
+	packet.objectID1 = id1;
+	packet.type1 = type1;
+	packet.pos1 = pos1;
+	packet.objectID2 = id2;
+	packet.type2 = type2;
+	packet.pos2 = pos2;
+
+	ProcessSend(PacketID::C_Collision, packet);
+}
+
+void GameNetwork::SendUseItemPacket(int id, ObjectType itemType)
+{
+	C_UseItem_Packet packet;
+	packet.objectID = id;
+	packet.itemType = itemType;
+
+	ProcessSend(PacketID::C_UseItem, packet);
+}
+
+void GameNetwork::SendStayGamePacket(int id)
+{
+	C_StayGame_Packet packet;
+	packet.objectID = id;
+
+	ProcessSend(PacketID::C_StayGame, packet);
+}
+
+void GameNetwork::SendEndGamePacket(int id)
+{
+	C_EndGame_Packet packet;
+	packet.objectID = id;
+
+	ProcessSend(PacketID::C_EndGame, packet);
 }

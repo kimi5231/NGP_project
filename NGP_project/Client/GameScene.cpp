@@ -27,26 +27,38 @@ void GameScene::InitObstalce()
 	// 이미 배열이 있으면 해제 후 재할당
 
 	int sizeOffset{ CELL_SIZE / 2 };
+	// 가로
+	for (int i = 0; i < BOARD_SIZE; ++i) {
+		if (i >= 7 && i <= 9) continue;
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ (gBackgroundRect.left + sizeOffset) + i * CELL_SIZE, gBackgroundRect.top + sizeOffset }));
+	}
+	for (int i = 0; i < BOARD_SIZE; ++i) {
+		if (i >= 7 && i <= 9) continue;
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + i * CELL_SIZE, gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE }));
+	}
+	// 세로
+	for (int i = 1; i < BOARD_SIZE - 1; ++i) {
+		if (i >= 7 && i <= 9) continue;
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
+	}
+	for (int i = 1; i < BOARD_SIZE - 1; ++i) {
+		if (i >= 7 && i <= 9) continue;
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
+	}
+
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
 	switch (_curStage) {
 	case 1:
-		// 가로
-		for (int i = 0; i < BOARD_SIZE; ++i) {
-			if (i >= 7 && i <= 9) continue;
-			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ (gBackgroundRect.left + sizeOffset) + i * CELL_SIZE, gBackgroundRect.top + sizeOffset }));
-		}
-		for (int i = 0; i < BOARD_SIZE; ++i) {
-			if (i >= 7 && i <= 9) continue;
-			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + i * CELL_SIZE, gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE }));
-		}
-		// 세로
-		for (int i = 1; i < BOARD_SIZE - 1; ++i) {
-			if (i >= 7 && i <= 9) continue;
-			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
-		}
-		for (int i = 1; i < BOARD_SIZE - 1; ++i) {
-			if (i >= 7 && i <= 9) continue;
-			_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
-		}
+		break;
+	case 2:
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE, gBackgroundRect.top + 4 * CELL_SIZE }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE, gBackgroundRect.top + 4 * CELL_SIZE }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE, gBackgroundRect.bottom - 4 * CELL_SIZE }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE, gBackgroundRect.bottom - 4 * CELL_SIZE }));
+		break;
+	case 3:
+
 		break;
 	}
 }

@@ -130,10 +130,10 @@ void GameNetwork::ProcessRecv()
 			player->SetPos(addObjectPacket.pos);
 			_gameScene->AddPlayer(player);
 		}
-		else if (addObjectPacket.type == ObjectType::Monster)
+		/*else if (addObjectPacket.type == ObjectType::Monster)
 		{
 
-		}
+		}*/
 
 		break;
 	}

@@ -40,7 +40,11 @@ enum class ObjectState
 enum class ObjectType
 {
     Player,
-    Monster,
+    NormalMonster,
+    TankMonster, 
+    BomberMonster,
+    RespawnMonster,
+    ObstacleMonster,
     Button,
     Item,
     Bullet,

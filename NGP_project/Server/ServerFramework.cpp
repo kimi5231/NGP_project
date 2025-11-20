@@ -90,14 +90,9 @@ void ServerFramework::Update()
 
 		std::cout << "Client 접속" << std::endl;
 
-		_clientSockets.push_back(clientSocket);
+		AddPlayer(clientSocket);
 
-		// 접속한 Client를 나타낼 Player 추가
-		GameObjectRef player = _room->AddObject(ObjectType::Player);
-		// Player 추가 BroadCast
-		C_AddObject_Packet packetData{ 1, ObjectType::Player, player->GetPos() };
-		for (SOCKET client : _clientSockets)
-			ProcessSend(S_AddObject, packetData, client);
+		_clientSockets.push_back(clientSocket);
 	}
 
 	for (SOCKET client : _clientSockets)
@@ -177,4 +172,30 @@ std::vector<char> ServerFramework::CreatePakcet(PacketID id, const T& packetData
 	memcpy(packet.data() + sizeof(Header), &packetData, header.dataSize);
 
 	return packet;
+}
+
+void ServerFramework::AddPlayer(SOCKET newClient)
+{
+	AddObject(ObjectType::Player);
+
+	// 새로 접속한 Client에게 Room에 있는 모든 Object 정보 송신
+	std::vector<GameObjectRef>& objects = _room->GetObjects();
+	for (GameObjectRef object : objects)
+	{
+		C_AddObject_Packet packetData{ 1, object->GetObjectType(), object->GetPos()};
+		ProcessSend(S_AddObject, packetData, newClient);
+	}
+}
+
+void ServerFramework::AddObject(ObjectType type)
+{
+	// ObjcetType별로 처리하기
+	
+	// 접속한 Client를 나타낼 Player 추가
+	GameObjectRef player = _room->AddObject(type);
+	// Packet Data 생성
+	C_AddObject_Packet packetData{ 1, type, player->GetPos() };
+	// 새로운 Player가 추가됨을 기존에 있던 Client들에게 알림
+	for (SOCKET client : _clientSockets)
+		ProcessSend(S_AddObject, packetData, client);
 }

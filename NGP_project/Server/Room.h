@@ -13,6 +13,9 @@ public:
 public:
 	GameObjectRef AddObject(ObjectType type);
 
+public:
+	std::vector<GameObjectRef>& GetObjects() { return _objects; }
+
 private:
 	std::vector<GameObjectRef> _objects;
 

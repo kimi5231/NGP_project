@@ -5,14 +5,17 @@
 
 Room::Room()
 {
+	InitializeCriticalSection(&_cs);
 }
 
 Room::~Room()
 {
+	DeleteCriticalSection(&_cs);
 }
 
 void Room::Update()
 {
+	EnterCriticalSection(&_cs);
 	for (const auto& object : _objects) {
 		switch (object->GetObjectType()) {
 		case ObjectType::Player:
@@ -40,8 +43,6 @@ void Room::Update()
 			}
 			object->Update();
 			break;
-		default:
-			break;
 		}
 	}
 
@@ -49,16 +50,19 @@ void Room::Update()
 	/*_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {
 		return o->IsState(ObjectState::Dead);
 		}), _objects.end());*/
-
+	LeaveCriticalSection(&_cs);
 }
 
 GameObjectRef Room::AddObject(ObjectType type)
 {
+
 	if (type == ObjectType::Player)
 	{
 		// Player 생성
 		PlayerRef player = std::make_shared<Player>();
+		EnterCriticalSection(&_cs);
 		_objects.push_back(player);
+		LeaveCriticalSection(&_cs);
 		return player;
 	}
 

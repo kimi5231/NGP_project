@@ -90,18 +90,18 @@ void GameScene::Update()
 	for (const auto& object : _objects) {
 		object->Update();
 		// 아이템 충돌 처리
-		if (object->GetObjectType() == ObjectType::Item && _players[0]->IsCollision(object.get())) {
-			_players[0]->SetItem(dynamic_pointer_cast<Item>(object));
+		if (object->GetObjectType() == ObjectType::Item && _localPlayer->IsCollision(object.get())) {
+			_localPlayer->SetItem(dynamic_pointer_cast<Item>(object));
 			object->SetState(ObjectState::Dead);
 		}
 
 		// 장애물
-		if (object->GetObjectType() == ObjectType::Obstacle && _players[0]->IsCollision(object.get())) {
-			_players[0]->UndoPos();
+		if (object->GetObjectType() == ObjectType::Obstacle && _localPlayer->IsCollision(object.get())) {
+			_localPlayer->UndoPos();
 		}
 	}
 	for (const auto& monster : _monsters) {
-		monster->Update(_players[0].get());
+		monster->Update(_localPlayer.get());
 
 		monster->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj);
@@ -134,7 +134,7 @@ void GameScene::Update()
 		else
 			monster->_status._speed = MONSTER_SPEED;
 	}
-	_players[0]->Update();
+	_localPlayer->Update();
 
 	if (useLightning) {	// 번개 아이템 사용 시
 		_monsters.clear();
@@ -194,7 +194,7 @@ void GameScene::Render(HDC hdc)
 
 	// UI
 	for (const auto ui : _ui) {
-		//ui->Render(memDC, memDCImage, _players[0]->_status._life);	// 나중에 수정
+		//ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
 	}
 	_timerUI.Render(memDC, memDCImage, _stagetime);
 

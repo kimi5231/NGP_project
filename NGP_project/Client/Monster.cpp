@@ -1,8 +1,9 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include <random>
 #include "Monster.h"
 #include "Global.h"
 #include "Constant.h"
+#include "Item.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -15,6 +16,7 @@ Monster::Monster()
     : _stateMachine{ new StateMachine{this, new FindTargetState}}
 {
     Init();
+
 }
 
 Monster::Monster(ObjectState state)
@@ -104,11 +106,20 @@ void Monster::Update(GameObject* other)
     _stateMachine->Update(other);
 }
 
+void Monster::DropItem()
+{
+    std::uniform_int_distribution<> randSpawn(static_cast<int>(ItemType::Life), static_cast<int>(ItemType::Hourglass));
+
+    GameObject* item = new Item(static_cast<ItemType>(randSpawn(gen)), _pos);
+    _spawnCallback(item);
+}
+
 void Monster::Damaged(int damage)
 {
     _status._hp -= damage;
 
     if (_status._hp <= 0) {
-        SetState(ObjectState::Dead);
+        _stateMachine->ChangeState(new DeadState);
+        _stateMachine->Start();
     }
 }

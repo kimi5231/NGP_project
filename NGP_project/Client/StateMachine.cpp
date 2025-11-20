@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "StateMachine.h"
 #include "GameObject.h"
 #include "Monster.h"
@@ -52,17 +52,17 @@ void FindTargetState::Tick(Monster* self, GameObject* other)
 // Dead
 void DeadState::Enter(Monster* self)
 {
-	self->SetState(ObjectState::Dead);
 }
 
 void DeadState::Exit(Monster* self)
 {
-
+	self->SetState(ObjectState::Dead);
 }
 
 void DeadState::Tick(Monster* self, GameObject* other)
 {
-	//Exit(self);
+	self->DropItem();
+	Exit(self);
 }
 
 // UseSkill

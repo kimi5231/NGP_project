@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Monster.h"
 #include "RespawnMonster.h"
 #include "Global.h"
@@ -52,8 +52,10 @@ void RespawnMonster::Damaged(int damage)
             _canUseSkill = true;
             _invincible = true;
         }
-        else
-            SetState(ObjectState::Dead);
+        else {
+            _stateMachine->ChangeState(new DeadState);
+            _stateMachine->Start();
+        }
     }
 }
 

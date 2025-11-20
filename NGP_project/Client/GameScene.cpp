@@ -26,7 +26,7 @@ void GameScene::InitObstalce()
 {
 	// 이미 배열이 있으면 해제 후 재할당
 
-	int sizeOffset{ CELL_SIZE / 2 };
+	int sizeOffset{ CELL_SIZE / 2 };	// 위치를 맞추기 위한 값
 	// 가로
 	for (int i = 0; i < BOARD_SIZE; ++i) {
 		if (i >= 7 && i <= 9) continue;
@@ -46,19 +46,42 @@ void GameScene::InitObstalce()
 		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
 	}
 
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
 	switch (_curStage) {
 	case 1:
 		break;
 	case 2:
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE, gBackgroundRect.top + 4 * CELL_SIZE }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE, gBackgroundRect.top + 4 * CELL_SIZE }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE, gBackgroundRect.bottom - 4 * CELL_SIZE }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE, gBackgroundRect.bottom - 4 * CELL_SIZE }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
 		break;
 	case 3:
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset }));
 
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset }));
+
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+		break;
+	case 4:
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
 		break;
 	}
 }
@@ -68,18 +91,18 @@ GameScene::GameScene()
 	_monsters.push_back(std::make_shared <TankMonster>());
 	_monsters.push_back(std::make_shared <ObstacleMonster>());
 	_monsters.push_back(std::make_shared <RespawnMonster>());
-	_objects.push_back(std::make_shared<Item>(ItemType::Life, Vertex{ 400, 100 }));
-	_objects.push_back(std::make_shared<Item>(ItemType::Magazine, Vertex{ 400, 200 }));
-	_objects.push_back(std::make_shared<Item>(ItemType::Lightning, Vertex{ 400, 300 }));
-	_objects.push_back(std::make_shared<Item>(ItemType::Waterwheel, Vertex{ 400, 500 }));
-	_objects.push_back(std::make_shared<Item>(ItemType::Coffee, Vertex{ 300, 500 }));
-	_objects.push_back(std::make_shared<Item>(ItemType::Shotgun, Vertex{ 500, 500 }));
-	_objects.push_back(std::make_shared<Item>(ItemType::Hourglass, Vertex{ 400, 600 }));
-	//_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ 400, 400 }));
+
 	InitObstalce();
 	
 	// Sound        
 	//GET_SINGLE(SoundManager)->Play(L"main_music", true);
+
+	// item, bomb 생성을 위한 콜백함수 설정
+	for (const auto& monster : _monsters) {
+		monster->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj);
+			});
+	}
 
 	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
@@ -115,9 +138,6 @@ void GameScene::Update()
 	for (const auto& monster : _monsters) {
 		monster->Update(_localPlayer.get());
 
-		monster->SetCallback([this](GameObject* obj) {
-			this->AddObject(obj);
-			});
 		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			if (object->GetObjectType() == ObjectType::Bullet) {
@@ -211,7 +231,7 @@ void GameScene::Render(HDC hdc)
 
 	// UI
 	for (const auto ui : _ui) {
-		ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
+		//ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
 	}
 	_timerUI.Render(memDC, memDCImage, _stagetime);
 

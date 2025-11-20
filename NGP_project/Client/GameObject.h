@@ -1,9 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "StateMachine.h"
 
 class BoundingBox;
 
-using SpawnCallback = std::function<void(GameObject*)>;
 
 typedef struct Status {
 	int _speed{};

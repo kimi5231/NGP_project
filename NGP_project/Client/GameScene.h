@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h"
 #include "UI.h"
 #include "Constant.h"
@@ -22,6 +22,8 @@ public:
 	void AddObject(GameObject* object);
 
 	void InitObstalce();
+	void InitStage();
+	void SpawnMonster();
 public:
 	virtual void ProcessInput() override;
 

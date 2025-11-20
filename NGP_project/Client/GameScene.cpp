@@ -85,24 +85,58 @@ void GameScene::InitObstalce()
 		break;
 	}
 }
-GameScene::GameScene()
-{
-	_monsters.push_back(std::make_shared <BomberMonster>());
-	_monsters.push_back(std::make_shared <TankMonster>());
-	_monsters.push_back(std::make_shared <ObstacleMonster>());
-	_monsters.push_back(std::make_shared <RespawnMonster>());
 
+void GameScene::InitStage()
+{
+	// 초기화
+	_monsters.clear();
+	_objects.clear();
+	_timerUI = ProgressBar{ Vertex{ FRAME_BUFFER_WIDTH / 2, 30}, Vertex{500, 20}, GAME_TIME };
+
+	// 생성
 	InitObstalce();
-	
-	// Sound        
-	//GET_SINGLE(SoundManager)->Play(L"main_music", true);
+}
+
+void GameScene::SpawnMonster()
+{
+	// 시간에 따라 몬스터 추가
+	static float monsterSpawnTimer{};
+	std::shared_ptr<Monster> monster;
+	if (CheckTimer(monsterSpawnTimer, MONSTER_SPAWN_TIME)) {
+		int type = static_cast<int>(ObjectType::NormalMonster) + rand() % 5;
+		switch (static_cast<ObjectType>(type)) {
+		case ObjectType::NormalMonster:
+			monster = std::make_shared<NormalMonster>();
+			break;
+		case ObjectType::TankMonster:
+			monster = std::make_shared<TankMonster>();
+			break;
+		case ObjectType::BomberMonster:
+			monster = std::make_shared<BomberMonster>();
+			break;
+		case ObjectType::RespawnMonster:
+			monster = std::make_shared<RespawnMonster>();
+			break;
+		case ObjectType::ObstacleMonster:
+			monster = std::make_shared<ObstacleMonster>();
+			break;
+		}
+	}
+	if (!monster) return;
 
 	// item, bomb 생성을 위한 콜백함수 설정
-	for (const auto& monster : _monsters) {
-		monster->SetCallback([this](GameObject* obj) {
-			this->AddObject(obj);
-			});
-	}
+	monster->SetCallback([this](GameObject* obj) {
+		this->AddObject(obj);
+		});
+
+	_monsters.push_back(monster);
+}
+
+GameScene::GameScene()
+{
+	// Sound        
+	//GET_SINGLE(SoundManager)->Play(L"main_music", true);
+	InitStage();
 
 	// UI
 	_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
@@ -119,8 +153,11 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
-	if (_players.empty())
+	if (!_localPlayer.get())
 		return;
+
+	if(_timerUI._progress != 0)	// 0초이면 생성x
+		SpawnMonster();
 
 	for (const auto& object : _objects) {
 		object->Update();
@@ -140,14 +177,15 @@ void GameScene::Update()
 
 		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
-			if (object->GetObjectType() == ObjectType::Bullet) {
+			ObjectType type = object->GetObjectType();
+			if (type == ObjectType::Bullet || (type == ObjectType::Bomb && dynamic_cast<BombObject*>(object.get())->_isBomb)) {
 				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) {
-					monster->Damaged(dynamic_cast<Projectile*>(object.get())->GetDamage());
+					monster->Damaged(object.get()->GetDamage());
 					object->SetState(ObjectState::Dead);
 				}
 			}
 			// 장애물
-			if (object->GetObjectType() == ObjectType::Obstacle && monster->IsCollision(object.get())) {
+			if (type == ObjectType::Obstacle && monster->IsCollision(object.get())) {
 				ObjectType monsterType = monster->GetObjectType();
 				// 폭탄/장애물 몬스터는 장애물에 걸리면 경로 다시 탐색
 				if (monsterType == ObjectType::BomberMonster || monsterType == ObjectType::ObstacleMonster) {
@@ -178,6 +216,7 @@ void GameScene::Update()
 		useLightning = false;
 	}
 
+	// 삭제
 	_monsters.erase(std::remove_if(_monsters.begin(), _monsters.end(), [](const MonsterRef& o) {
 		return o->IsState(ObjectState::Dead);
 		}), _monsters.end());
@@ -186,6 +225,7 @@ void GameScene::Update()
 			return o->IsState(ObjectState::Dead);
 		}),	_objects.end());
 
+	// 타이머 UI
 	_timerUI.Update(_stagetime);
 
 	ProcessInput();
@@ -230,8 +270,10 @@ void GameScene::Render(HDC hdc)
 	}
 
 	// UI
-	for (const auto ui : _ui) {
-		//ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
+	if (_localPlayer.get()) {
+		for (const auto ui : _ui) {
+			ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
+		}
 	}
 	_timerUI.Render(memDC, memDCImage, _stagetime);
 
@@ -379,10 +421,29 @@ void GameScene::ProcessInput()
 		_localPlayer->_timer = 0.0f;
 	}
 
+	// 버튼 클릭
 	if (input->GetButtonDown(KeyType::LeftMouse)) {
-		for (const auto button : _ui) {
+		for (const auto& button : _ui) {
 			if (button->GetObjectType() == ObjectType::Button && button->Intersects(input->GetMousePos())) {
 				_monsters.push_back(std::make_shared<TankMonster>());	// test
+			}
+		}
+	}
+
+	// 폭탄 발로 차기
+	if (input->GetButtonDown(KeyType::LeftShift)) {
+		for (const auto& object : _objects) {
+			if (object->GetObjectType() == ObjectType::Bomb && !dynamic_cast<BombObject*>(object.get())->_isBomb && _localPlayer->IsCollision(object.get())) {
+				object->SetDir(_localPlayer->GetDir());
+				for (int i = 0; i < BOMB_MOVE; ++i) {
+					object->Move(); // CELLSIZE만큼씩 이동
+					for (const auto& otherObject : _objects) {	// 장애물에 걸리면 이동X
+						if (otherObject->GetObjectType() == ObjectType::Obstacle && object->IsCollision(otherObject.get())) {
+							object->UndoPos();
+							i = BOMB_MOVE;
+						}
+					}
+				}
 			}
 		}
 	}

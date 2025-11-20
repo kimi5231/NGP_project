@@ -39,11 +39,17 @@ public:
 	int GetId() { return _id; }
 	void SetObjectType(ObjectType type) { _type = type; }
 	ObjectType GetObjectType() { return _type; }
+
 	void SetPos(Vertex pos) { _pos = pos; }
 	Vertex GetTargetPos() { return _targetPos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetPos() { return _pos; }
 	Vertex GetPrevPos() { return _prevPos; }
+
+	Dir GetDir() const { return _dir; }
+	void SetDir(Dir dir) { _dir = dir; }
+
+	int GetDamage() const { return _damage; }
 
 	void UndoPos() { _pos = _prevPos; }
 
@@ -71,6 +77,7 @@ protected:
 	int _id{};
 	ObjectType _type{};
 	ObjectState _state;
+	int _damage{ 10 };
 	Dir _dir{};
 	Vertex _pos{};
 	Vertex _prevPos{};

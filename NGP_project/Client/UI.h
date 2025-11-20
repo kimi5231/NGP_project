@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "BoundingBox.h"
 
 class BoundingBox;
@@ -44,7 +44,7 @@ public:
 	}
 
 	void Update(float& currentTime);
-private:
+
 	UINT _maxProgress, _progress;
 	int _maxSize;
 };

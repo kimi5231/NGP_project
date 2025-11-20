@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 
 class BombObject : public GameObject {
@@ -7,6 +7,6 @@ public:
 	BombObject(Vertex pos);
 
 	void Update() override;
-private:
+	void Move() override;
 	bool _isBomb{};
 };

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "BombObject.h"
 #include "Global.h"
 #include "Constant.h"
@@ -44,4 +44,27 @@ void BombObject::Update()
             SetState(ObjectState::Dead);
         }
     }
+}
+
+void BombObject::Move()
+{
+    _prevPos = _pos;
+    switch (_dir)
+    {
+    case Dir::Left:
+        _pos.x -= CELL_SIZE;
+        break;
+    case Dir::Right:
+        _pos.x += CELL_SIZE;
+        break;
+    case Dir::Up:
+        _pos.y -= CELL_SIZE;
+        break;
+    case Dir::Down:
+        _pos.y += CELL_SIZE;
+        break;
+    }
+
+    _pos.x = std::clamp(_pos.x, (int)(gBackgroundRect.left), (int)(gBackgroundRect.right));
+    _pos.y = std::clamp(_pos.y, (int)(gBackgroundRect.top), (int)(gBackgroundRect.bottom));
 }

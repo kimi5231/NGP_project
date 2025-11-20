@@ -17,6 +17,10 @@ public:
 	template <class T>
 	std::vector<char> CreatePakcet(PacketID id, const T& packetData);
 
+private:
+	void AddPlayer(SOCKET newClient);
+	void AddObject(ObjectType type);
+
 public:
 	Room* GetRoom() { return _room; }
 

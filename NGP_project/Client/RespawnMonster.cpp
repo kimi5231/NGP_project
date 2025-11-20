@@ -11,6 +11,7 @@ RespawnMonster::RespawnMonster() : Monster()
 
     _spriteCnt = { 8, 6 };
     _status._life = 2;
+    _type = ObjectType::RespawnMonster;
 }
 
 void RespawnMonster::Update(GameObject* other)

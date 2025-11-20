@@ -11,6 +11,7 @@ BomberMonster::BomberMonster()
     _spriteCnt = { 8, 4 };
     _isFollow = false;
     _canUseSkill = true;
+    _type = ObjectType::BomberMonster;
 }
 bool BomberMonster::UseSkill()
 {

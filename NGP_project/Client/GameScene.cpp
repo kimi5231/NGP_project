@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Player.h"
 #include "InputManager.h"
 #include "SoundManager.h"
@@ -128,6 +128,11 @@ void GameScene::Update()
 			}
 			// 장애물
 			if (object->GetObjectType() == ObjectType::Obstacle && monster->IsCollision(object.get())) {
+				ObjectType monsterType = monster->GetObjectType();
+				// 폭탄/장애물 몬스터는 장애물에 걸리면 경로 다시 탐색
+				if (monsterType == ObjectType::BomberMonster || monsterType == ObjectType::ObstacleMonster) {
+					monster->FindTarget(nullptr);
+				}
 				monster->UndoPos();
 			}
 		}
@@ -206,7 +211,7 @@ void GameScene::Render(HDC hdc)
 
 	// UI
 	for (const auto ui : _ui) {
-		//ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
+		ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
 	}
 	_timerUI.Render(memDC, memDCImage, _stagetime);
 

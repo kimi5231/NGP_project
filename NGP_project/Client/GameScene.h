@@ -21,9 +21,12 @@ public:
 	void AddMonster(Monster* monster);
 	void AddObject(GameObject* object);
 
+	PlayerRef GetLocalPlayer() const { return _localPlayer; }
+
 	void InitObstalce();
 	void InitStage();
 	void SpawnMonster();
+
 public:
 	virtual void ProcessInput() override;
 

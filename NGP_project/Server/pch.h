@@ -28,7 +28,6 @@ enum class ObjectType
 {
     Player,
     Monster,
-    Button,
     Item,
     Bullet,
 };
@@ -57,19 +56,20 @@ enum class Dir
    RightDown,
 };
 
-struct Vertex
-{
-    int x, y;
-};
-
 enum class CollisionType
 {
     Monster,
     Item,
 };
 
+struct Vertex
+{
+    int x, y;
+};
+
 enum PacketID
 {
+    // Client
     C_UpdateObjectState,
     C_UpdateDir,
     C_Move,
@@ -78,8 +78,16 @@ enum PacketID
     C_StayGame,
     C_EndGame,
 
+    // Server
     S_AddObject,
+    S_RemoveObject,
+    S_UpdateObjectState,
+    S_UpdateDir,
     S_Move,
+    S_ChangeNextStage,
+    S_CollisionResult,
+    S_MonsterDemaged,
+    S_ItemUseResult,
 };
 
 struct Header

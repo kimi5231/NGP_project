@@ -62,6 +62,12 @@ struct Vertex
     int x, y;
 };
 
+enum class CollisionType
+{
+    Monster,
+    Item,
+};
+
 enum PacketID
 {
     C_UpdateObjectState,
@@ -81,7 +87,78 @@ struct Header
     int dataSize;
 };
 
+// Server Packet
+struct S_AddObject_Packet
+{
+    int objectID;
+    ObjectType type;
+    Vertex pos;
+};
+
+struct S_RemoveObject_Packet
+{
+    int objectID;
+    ObjectType type;
+};
+
+struct S_UpdateObjectState_Packet
+{
+    int objectID;
+    ObjectType type;
+    ObjectState state;
+};
+
+struct S_UpdateDir_Packet
+{
+    int objectID;
+    ObjectType type;
+    Dir dir;
+};
+
+struct S_Move_Packet
+{
+    int objectID;
+    ObjectType type;
+    Vertex pos;
+};
+
+struct S_ChangeNextStage_Packet
+{
+    int stageNum;
+};
+
+struct S_CollisionResult_Packet
+{
+    bool result;
+};
+
+struct S_MonsterDamaged_Packet
+{
+    int objectID;
+    ObjectType type;
+    int monsterHP;
+};
+
+struct S_ItemUseResult_Packet
+{
+    bool result;
+};
+
 // Client Packet
+struct C_UpdateObjectState_Packet
+{
+    int objectID;
+    ObjectType type;
+    ObjectState state;
+};
+
+struct C_UpdateDir_Packet
+{
+    int objectID;
+    ObjectType type;
+    Dir dir;
+};
+
 struct C_Move_Packet
 {
     int objectID;
@@ -89,12 +166,31 @@ struct C_Move_Packet
     Vertex pos;
 };
 
-// Server Packet
-struct C_AddObject_Packet
+struct C_Collision_Packet
+{
+    CollisionType collisionType;
+    int objectID1;
+    ObjectType type1;
+    Vertex pos1;
+    int objectID2;
+    ObjectType type2;
+    Vertex pos2;
+};
+
+struct C_UseItem_Packet
 {
     int objectID;
-    ObjectType type;
-    Vertex pos;
+    ObjectType itemType;
+};
+
+struct C_StayGame_Packet
+{
+    int objectID;
+};
+
+struct C_EndGame_Packet
+{
+    int objectID;
 };
 
 using GameObjectRef = std::shared_ptr<class GameObject>;

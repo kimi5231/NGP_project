@@ -182,7 +182,7 @@ void ServerFramework::AddPlayer(SOCKET newClient)
 	std::vector<GameObjectRef>& objects = _room->GetObjects();
 	for (GameObjectRef object : objects)
 	{
-		C_AddObject_Packet packetData{ 1, object->GetObjectType(), object->GetPos()};
+		S_AddObject_Packet packetData{ 1, object->GetObjectType(), object->GetPos()};
 		ProcessSend(S_AddObject, packetData, newClient);
 	}
 }
@@ -194,7 +194,7 @@ void ServerFramework::AddObject(ObjectType type)
 	// 접속한 Client를 나타낼 Player 추가
 	GameObjectRef player = _room->AddObject(type);
 	// Packet Data 생성
-	C_AddObject_Packet packetData{ 1, type, player->GetPos() };
+	S_AddObject_Packet packetData{ 1, type, player->GetPos() };
 	// 새로운 Player가 추가됨을 기존에 있던 Client들에게 알림
 	for (SOCKET client : _clientSockets)
 		ProcessSend(S_AddObject, packetData, client);

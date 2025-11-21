@@ -152,6 +152,55 @@ struct S_AddObject_Packet
 	Vertex pos;
 };
 
+struct S_RemoveObject_Packet
+{
+    int objectID;
+    ObjectType type;
+};
+
+struct S_UpdateObjectState_Packet
+{
+    int objectID;
+    ObjectType type;
+    ObjectState state;
+};
+
+struct S_UpdateDir_Packet
+{
+    int objectID;
+    ObjectType type;
+    Dir dir;
+};
+
+struct S_Move_Packet
+{
+    int objectID;
+    ObjectType type;
+    Vertex pos;
+};
+
+struct S_ChangeNextStage_Packet
+{
+    int stageNum;
+};
+
+struct S_CollisionResult_Packet
+{
+    bool result;
+};
+
+struct S_MonsterDamaged_Packet
+{
+    int objectID;
+    ObjectType type;
+    int monsterHP;
+};
+
+struct S_ItemUseResult_Packet
+{
+    bool result;
+};
+
 // Client Packet
 struct C_UpdateObjectState_Packet
 {

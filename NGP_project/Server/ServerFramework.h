@@ -18,11 +18,16 @@ public:
 	std::vector<char> CreatePakcet(PacketID id, const T& packetData);
 
 private:
-	void AddPlayer(SOCKET newClient);
+	// Send
 	void AddObject(ObjectType type);
+
+	template <class T>
+	void Broadcast(PacketID id, const T& packetData);
 	
 private:
-	void ProcessMove(C_Move_Packet packet);
+	// Recv
+	void ProcessAccept(SOCKET newClient);
+	void ProcessMovePacket(C_Move_Packet packet);
 
 public:
 	Room* GetRoom() { return _room; }

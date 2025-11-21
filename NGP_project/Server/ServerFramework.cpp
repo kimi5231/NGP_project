@@ -90,7 +90,7 @@ void ServerFramework::Update()
 
 		std::cout << "Client 접속" << std::endl;
 
-		AddPlayer(clientSocket);
+		ProcessAccept(clientSocket);
 
 		_clientSockets.push_back(clientSocket);
 	}
@@ -134,7 +134,7 @@ void ServerFramework::ProcessRecv(SOCKET clientSocket)
 	case C_Move:
 		C_Move_Packet movePacket;
 		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(C_Move_Packet));
-		ProcessMove(movePacket);
+		ProcessMovePacket(movePacket);
 		break;
 	case C_Collision:
 		break;
@@ -175,33 +175,40 @@ std::vector<char> ServerFramework::CreatePakcet(PacketID id, const T& packetData
 	return packet;
 }
 
-void ServerFramework::AddPlayer(SOCKET newClient)
+template<class T>
+void ServerFramework::Broadcast(PacketID id, const T& packetData)
 {
+	// Room에 있는 모든 Client에게 Packet 송신
+	for (SOCKET client : _clientSockets)
+		ProcessSend(id, packetData, client);
+}
+
+void ServerFramework::AddObject(ObjectType type)
+{
+	// Object 생성
+	GameObjectRef object = _room->AddObject(type);
+	// Packet Data 생성
+	S_AddObject_Packet packetData{ object->GetID(), type, object->GetPos() };
+	// 새로운 Object가 추가됨을 Room에 있는 모든 Client에게 알림
+	Broadcast(S_AddObject, packetData);
+}
+
+void ServerFramework::ProcessAccept(SOCKET newClient)
+{
+	// 접속한 Client를 나타낼 Player 추가
 	AddObject(ObjectType::Player);
 
 	// 새로 접속한 Client에게 Room에 있는 모든 Object 정보 송신
 	std::vector<GameObjectRef>& objects = _room->GetObjects();
 	for (GameObjectRef object : objects)
 	{
-		S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos()};
+		// AddObject 함수는 Object 생성까지하기 때문에 사용하지 않음
+		S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos() };
 		ProcessSend(S_AddObject, packetData, newClient);
 	}
 }
 
-void ServerFramework::AddObject(ObjectType type)
-{
-	// ObjcetType별로 처리하기
-	
-	// 접속한 Client를 나타낼 Player 추가
-	GameObjectRef player = _room->AddObject(type);
-	// Packet Data 생성
-	S_AddObject_Packet packetData{ player->GetID(), type, player->GetPos()};
-	// 새로운 Player가 추가됨을 기존에 있던 Client들에게 알림
-	for (SOCKET client : _clientSockets)
-		ProcessSend(S_AddObject, packetData, client);
-}
-
-void ServerFramework::ProcessMove(C_Move_Packet packet)
+void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 {
 	std::vector<GameObjectRef>& objects = _room->GetObjects();
 	for (GameObjectRef object : objects)

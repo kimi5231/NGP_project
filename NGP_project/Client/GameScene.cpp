@@ -95,6 +95,8 @@ void GameScene::InitStage()
 
 	// 생성
 	InitObstalce();
+	// 플레이어 위치도 초기화하기
+	// stage == 5면 UI 띄우기
 }
 
 void GameScene::SpawnMonster()
@@ -163,7 +165,7 @@ void GameScene::Update()
 		Vertex playerPos{ _localPlayer->GetPos() };
 		if (playerPos.x >= rect.left && playerPos.x <= rect.right && playerPos.y >= rect.top && playerPos.y <= rect.bottom) {
 			_curStage++;
-			
+			InitStage();
 		}
 	}
 
@@ -186,11 +188,13 @@ void GameScene::Update()
 		// 몬스터-총알 충돌 처리
 		for (const auto& object : _objects) {
 			ObjectType type = object->GetObjectType();
-			if (type == ObjectType::Bullet || (type == ObjectType::Bomb && dynamic_cast<BombObject*>(object.get())->_isBomb)) {
+			if (type == ObjectType::Bullet ) {
 				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) {
 					monster->Damaged(object.get()->GetDamage());
 					object->SetState(ObjectState::Dead);
 				}
+			} if ((type == ObjectType::Bomb && dynamic_cast<BombObject*>(object.get())->_isBomb)) {
+				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) monster->Damaged(object.get()->GetDamage());
 			}
 			// 장애물
 			if (type == ObjectType::Obstacle && monster->IsCollision(object.get())) {

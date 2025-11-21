@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Item.h"
 #include "Player.h"
 #include "Global.h"
@@ -41,6 +41,12 @@ void Player::Update()
 void Player::UseItem()
 {
     if (_item.first) {
+        // 사용 중이던 아이템 Expired
+        if (_item.second) {
+            _item.second->Expired(this);
+            _item.second = nullptr;
+        }
+
         _item.second = _item.first;
         _item.first = nullptr;
         _item.second->ChangeState(this);

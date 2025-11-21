@@ -1,5 +1,13 @@
 #pragma once
 class Room;
+class Player;
+
+struct Client
+{
+	int id;
+	SOCKET socket;
+	PlayerRef player;
+};
 
 class ServerFramework
 {
@@ -9,7 +17,7 @@ public:
 
 public:
 	void Update();
-	void ProcessRecv(SOCKET clientSocket);
+	void ProcessRecv(ClientRef client);
 
 	template <class T>
 	void ProcessSend(PacketID id, const T& packetData, SOCKET clientSocket);
@@ -19,14 +27,16 @@ public:
 
 private:
 	// Send
-	void AddObject(ObjectType type);
+	GameObjectRef AddObject(ObjectType type);
+	void RemoveObject(int id);
 
 	template <class T>
 	void Broadcast(PacketID id, const T& packetData);
 	
 private:
 	// Recv
-	void ProcessAccept(SOCKET newClient);
+	void ProcessAccept(SOCKET clientSocket);
+	void ProcessDisconnect(ClientRef client);
 	void ProcessMovePacket(C_Move_Packet packet);
 
 public:
@@ -36,9 +46,11 @@ private:
 	fd_set _readSet{};
 	fd_set _writeSet{};
 
-	SOCKET _listenSocket;
-	std::vector<SOCKET> _clientSockets;
+	SOCKET _listenSocket{};
+	std::vector<ClientRef> _clients;
+
+	int _generateClientID{};
 
 private:
-	Room* _room;
+	Room* _room{};
 };

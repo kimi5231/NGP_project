@@ -202,6 +202,7 @@ struct C_EndGame_Packet
     int objectID;
 };
 
+using ClientRef = std::shared_ptr<class Client>;
 using GameObjectRef = std::shared_ptr<class GameObject>;
 using PlayerRef = std::shared_ptr<class Player>;
 using ItemRef = std::shared_ptr<class Item>;

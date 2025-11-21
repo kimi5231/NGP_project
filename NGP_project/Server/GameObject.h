@@ -21,6 +21,8 @@ public:
 	void SetObjectType(ObjectType type) { _type = type; }
 	ObjectType GetObjectType() { return _type; }
 
+	void SetID(int id) { _id = id; }
+	int GetID() const { return _id; }
 	void SetPos(Vertex pos);
 	Vertex GetPos() { return _pos; }
 	Vertex GetTargetPos() { return _targetPos; }
@@ -29,6 +31,7 @@ public:
 	void SetState(ObjectState state) { _state = state; }
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
 protected:
+	int _id{};
 	ObjectType _type{};
 	ObjectState _state{};
 

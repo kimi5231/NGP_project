@@ -158,6 +158,14 @@ void GameScene::Update()
 
 	if(_timerUI._progress != 0)	// 0초이면 생성x
 		SpawnMonster();
+	else {	// 스테이지 끝난 뒤 바깥으로 가보면
+		RECT rect{ gBackgroundRect.left + CELL_SIZE * 7, gBackgroundRect.bottom - CELL_SIZE, gBackgroundRect.left + CELL_SIZE * 9, gBackgroundRect.bottom };
+		Vertex playerPos{ _localPlayer->GetPos() };
+		if (playerPos.x >= rect.left && playerPos.x <= rect.right && playerPos.y >= rect.top && playerPos.y <= rect.bottom) {
+			_curStage++;
+			
+		}
+	}
 
 	for (const auto& object : _objects) {
 		object->Update();

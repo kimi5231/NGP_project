@@ -72,7 +72,8 @@ void GameNetwork::Update()
 
 	if (FD_ISSET(_socket, &_writeSet))
 	{
-
+		PlayerRef player = _gameScene->GetLocalPlayer();
+		SendMovePacket(player->GetId(), ObjectType::Player, player->GetPos());
 	}
 }
 

@@ -79,6 +79,7 @@ enum PacketID
     C_EndGame,
 
     S_AddObject,
+    S_Move,
 };
 
 struct Header

@@ -20,4 +20,6 @@ private:
 	std::vector<GameObjectRef> _objects;
 
 	CRITICAL_SECTION _cs;
+
+	int _generateID;
 };

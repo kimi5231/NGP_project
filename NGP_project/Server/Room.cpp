@@ -6,6 +6,8 @@
 Room::Room()
 {
 	InitializeCriticalSection(&_cs);
+
+	_generateID = 1;
 }
 
 Room::~Room()
@@ -55,11 +57,11 @@ void Room::Update()
 
 GameObjectRef Room::AddObject(ObjectType type)
 {
-
 	if (type == ObjectType::Player)
 	{
 		// Player 생성
 		PlayerRef player = std::make_shared<Player>();
+		player->SetID(_generateID++);
 		EnterCriticalSection(&_cs);
 		_objects.push_back(player);
 		LeaveCriticalSection(&_cs);

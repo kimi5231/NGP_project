@@ -20,6 +20,9 @@ public:
 private:
 	void AddPlayer(SOCKET newClient);
 	void AddObject(ObjectType type);
+	
+private:
+	void ProcessMove(C_Move_Packet packet);
 
 public:
 	Room* GetRoom() { return _room; }

@@ -134,6 +134,7 @@ void ServerFramework::ProcessRecv(SOCKET clientSocket)
 	case C_Move:
 		C_Move_Packet movePacket;
 		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(C_Move_Packet));
+		ProcessMove(movePacket);
 		break;
 	case C_Collision:
 		break;
@@ -182,7 +183,7 @@ void ServerFramework::AddPlayer(SOCKET newClient)
 	std::vector<GameObjectRef>& objects = _room->GetObjects();
 	for (GameObjectRef object : objects)
 	{
-		S_AddObject_Packet packetData{ 1, object->GetObjectType(), object->GetPos()};
+		S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos()};
 		ProcessSend(S_AddObject, packetData, newClient);
 	}
 }
@@ -194,8 +195,25 @@ void ServerFramework::AddObject(ObjectType type)
 	// 접속한 Client를 나타낼 Player 추가
 	GameObjectRef player = _room->AddObject(type);
 	// Packet Data 생성
-	S_AddObject_Packet packetData{ 1, type, player->GetPos() };
+	S_AddObject_Packet packetData{ player->GetID(), type, player->GetPos()};
 	// 새로운 Player가 추가됨을 기존에 있던 Client들에게 알림
 	for (SOCKET client : _clientSockets)
 		ProcessSend(S_AddObject, packetData, client);
+}
+
+void ServerFramework::ProcessMove(C_Move_Packet packet)
+{
+	std::vector<GameObjectRef>& objects = _room->GetObjects();
+	for (GameObjectRef object : objects)
+	{
+		if (object->GetID() == packet.objectID)
+		{
+			object->SetPos(packet.pos);
+			S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos()};
+			
+			// 모든 클라이언트에게 알리기
+			for (SOCKET client : _clientSockets)
+				ProcessSend(S_Move, packetData, client);
+		}
+	}
 }

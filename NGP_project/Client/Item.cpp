@@ -97,8 +97,3 @@ void Item::Expired(GameObject* player)
 		break;
 	}
 }
-
-void Item::Render(HDC hdc, HDC srcDC)
-{
-	GameObject::Render(hdc, srcDC);
-}

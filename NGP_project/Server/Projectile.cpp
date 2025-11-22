@@ -1,24 +1,28 @@
 ﻿#include "pch.h"
 #include "Projectile.h"
 #include "StateMachine.h"
+#include "Constant.h"
 
-#define BULLET_SIZE 5
 
 Projectile::Projectile(Dir dir, const Vertex& pos)
-	: GameObject(new MoveState)
+	: GameObject()
 {
 	_dir = dir;
-	_status._speed = 1;
+	_status._speed = 3;
 	_pos = pos;
 	_type = ObjectType::Bullet;
+	_size = { 10, 10 };
 }
 
 void Projectile::Update()
 {
-	_stateMachine->Update();
+	Move();
+	if (_pos.x < gBackgroundRect.left || _pos.x > gBackgroundRect.right ||
+		_pos.y < gBackgroundRect.top || _pos.y > gBackgroundRect.bottom) {
+	}
 }
 
-void Projectile::Move()
+bool Projectile::Move()
 {
 	switch (_dir)
 	{
@@ -51,4 +55,6 @@ void Projectile::Move()
 		_pos.y += _status._speed;
 		break;
 	}
+
+	return true;
 }

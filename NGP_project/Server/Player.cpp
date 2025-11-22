@@ -1,7 +1,6 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Player.h"
-
-#define PLAYER_SPEED 3
+#include "Constant.h"
 
 Player::Player()
 	: GameObject(ObjectState::Idle)	// 플레이어는 아이템 사용 시 외에는 State 필요 X

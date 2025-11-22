@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Room.h"
 #include "Monster.h"
 #include "Player.h"
@@ -23,7 +23,11 @@ void Room::Update()
 		case ObjectType::Player:
 			object->Update();
 			break;
-		case ObjectType::Monster:
+		case ObjectType::ObstacleMonster:
+		case ObjectType::NormalMonster:
+		case ObjectType::RespawnMonster:
+		case ObjectType::TankMonster:
+		case ObjectType::BomberMonster:
 			// bomb object 생성 callBack 함수
 			/*dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
 				this->AddObject(obj);
@@ -34,10 +38,6 @@ void Room::Update()
 					dynamic_cast<Monster*>(object.get())->Update(otherObject.get());
 					break;
 				case ObjectType::Bullet:	// 충알 충돌처리
-					/*if (object->IsCollision(otherObject.get()) && !object->IsState(ObjectState::Dead) && !object->IsState(ObjectState::Revive)) {
-						object->Damaged(dynamic_cast<Projectile*>(otherObject.get())->GetDamage());
-						otherObject->SetState(ObjectState::Dead);
-					}*/
 					break;
 				default:
 					break;

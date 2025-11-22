@@ -8,5 +8,5 @@ public:
 public:
 	virtual void Update();
 private:
-	virtual void Move();
+	virtual bool Move();
 };

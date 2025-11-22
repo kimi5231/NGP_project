@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameNetwork.h"
 #include "GameScene.h"
 #include "Player.h"
@@ -6,6 +6,7 @@
 // 수영 데스크탑
 //char* SERVERIP = (char*)"61.255.49.141";
 //char* SERVERIP = (char*)"192.168.64.118";
+//char* SERVERIP = (char*)"192.168.35.52";	// 미나 데스크탑
 // 루프백
 char* SERVERIP = (char*)"127.0.0.1";
 

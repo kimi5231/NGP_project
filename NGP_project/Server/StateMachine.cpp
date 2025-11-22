@@ -1,6 +1,8 @@
-#include "pch.h"
-#include "Monster.h"
+﻿#include "pch.h"
 #include "StateMachine.h"
+#include "GameObject.h"
+#include "Monster.h"
+#include "BombObject.h"
 #include "Player.h"
 
 // MoveToTarget
@@ -17,9 +19,10 @@ void MoveToTargetState::Exit(Monster* self)
 
 void MoveToTargetState::Tick(Monster* self, GameObject* other)
 {
-	self->Move();
-	if (self->IsArrive() || self->GetIsFollow()) {
-		Exit(self);
+	if (self->Move()) {
+		if (self->GetIsFollow()) {
+			Exit(self);
+		}
 	}
 }
 
@@ -49,17 +52,17 @@ void FindTargetState::Tick(Monster* self, GameObject* other)
 // Dead
 void DeadState::Enter(Monster* self)
 {
-	self->SetState(ObjectState::Dead);
 }
 
 void DeadState::Exit(Monster* self)
 {
-
+	self->SetState(ObjectState::Dead);
 }
 
 void DeadState::Tick(Monster* self, GameObject* other)
 {
-	//Exit(self);
+	self->DropItem();
+	Exit(self);
 }
 
 // UseSkill

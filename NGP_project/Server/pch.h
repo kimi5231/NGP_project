@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <algorithm>
 
 #pragma comment(lib, "ws2_32")
 
@@ -27,9 +28,17 @@ enum class ObjectState
 enum class ObjectType
 {
     Player,
-    Monster,
+    NormalMonster,
+    TankMonster,
+    BomberMonster,
+    RespawnMonster,
+    ObstacleMonster,
+    Button,
     Item,
     Bullet,
+    Bomb,
+    UI,
+    Obstacle,
 };
 
 enum class ItemType

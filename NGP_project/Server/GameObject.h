@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "StateMachine.h"
 
 using SpawnCallback = std::function<void(GameObject*)>;
@@ -6,6 +6,7 @@ using SpawnCallback = std::function<void(GameObject*)>;
 typedef struct Status {
 	int _speed{};
 	int _hp{};
+	int _life{ 1 };
 }Status;
 
 class GameObject
@@ -14,7 +15,7 @@ public:
 	GameObject();
 	GameObject(ObjectState state);
 
-	virtual void Move() {};
+	virtual bool Move() { return true; };
 	virtual void Update() {};
 	virtual void FindTarget(GameObject* other) {};
 
@@ -30,6 +31,8 @@ public:
 
 	void SetState(ObjectState state) { _state = state; }
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
+
+	Status _status{};
 protected:
 	int _id{};
 	ObjectType _type{};
@@ -42,7 +45,5 @@ protected:
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 
 	bool _invincible{};	// 무적 판정
-
-	Status _status{};
 };
 

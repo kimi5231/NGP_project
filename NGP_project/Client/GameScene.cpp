@@ -24,66 +24,66 @@ bool useLightning{}, useWaterWheel{}, useShotgun{}, useHourglass{};
 
 void GameScene::InitObstalce()
 {
-	// 이미 배열이 있으면 해제 후 재할당
+	//// 이미 배열이 있으면 해제 후 재할당
 
-	int sizeOffset{ CELL_SIZE / 2 };	// 위치를 맞추기 위한 값
-	// 가로
-	for (int i = 0; i < BOARD_SIZE; ++i) {
-		if (i >= 7 && i <= 9) continue;
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ (gBackgroundRect.left + sizeOffset) + i * CELL_SIZE, gBackgroundRect.top + sizeOffset }));
-	}
-	for (int i = 0; i < BOARD_SIZE; ++i) {
-		if (i >= 7 && i <= 9) continue;
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + i * CELL_SIZE, gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE }));
-	}
-	// 세로
-	for (int i = 1; i < BOARD_SIZE - 1; ++i) {
-		if (i >= 7 && i <= 9) continue;
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
-	}
-	for (int i = 1; i < BOARD_SIZE - 1; ++i) {
-		if (i >= 7 && i <= 9) continue;
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
-	}
+	//int sizeOffset{ CELL_SIZE / 2 };	// 위치를 맞추기 위한 값
+	//// 가로
+	//for (int i = 0; i < BOARD_SIZE; ++i) {
+	//	if (i >= 7 && i <= 9) continue;
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ (gBackgroundRect.left + sizeOffset) + i * CELL_SIZE, gBackgroundRect.top + sizeOffset }));
+	//}
+	//for (int i = 0; i < BOARD_SIZE; ++i) {
+	//	if (i >= 7 && i <= 9) continue;
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + i * CELL_SIZE, gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE }));
+	//}
+	//// 세로
+	//for (int i = 1; i < BOARD_SIZE - 1; ++i) {
+	//	if (i >= 7 && i <= 9) continue;
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
+	//}
+	//for (int i = 1; i < BOARD_SIZE - 1; ++i) {
+	//	if (i >= 7 && i <= 9) continue;
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
+	//}
 
-	switch (_curStage) {
-	case 1:
-		break;
-	case 2:
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
-		break;
-	case 3:
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset }));
+	//switch (_curStage) {
+	//case 1:
+	//	break;
+	//case 2:
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+	//	break;
+	//case 3:
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset }));
 
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset }));
 
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
 
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
-		break;
-	case 4:
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+	//	break;
+	//case 4:
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
 
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
-		_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
-		break;
-	}
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+	//	break;
+	//}
 }
 
 void GameScene::InitStage()
@@ -101,37 +101,37 @@ void GameScene::InitStage()
 
 void GameScene::SpawnMonster()
 {
-	// 시간에 따라 몬스터 추가
-	static float monsterSpawnTimer{};
-	std::shared_ptr<Monster> monster;
-	if (CheckTimer(monsterSpawnTimer, MONSTER_SPAWN_TIME)) {
-		int type = static_cast<int>(ObjectType::NormalMonster) + rand() % 5;
-		switch (static_cast<ObjectType>(type)) {
-		case ObjectType::NormalMonster:
-			monster = std::make_shared<NormalMonster>();
-			break;
-		case ObjectType::TankMonster:
-			monster = std::make_shared<TankMonster>();
-			break;
-		case ObjectType::BomberMonster:
-			monster = std::make_shared<BomberMonster>();
-			break;
-		case ObjectType::RespawnMonster:
-			monster = std::make_shared<RespawnMonster>();
-			break;
-		case ObjectType::ObstacleMonster:
-			monster = std::make_shared<ObstacleMonster>();
-			break;
-		}
-	}
-	if (!monster) return;
+	//// 시간에 따라 몬스터 추가
+	//static float monsterSpawnTimer{};
+	//std::shared_ptr<Monster> monster;
+	//if (CheckTimer(monsterSpawnTimer, MONSTER_SPAWN_TIME)) {
+	//	int type = static_cast<int>(ObjectType::NormalMonster) + rand() % 5;
+	//	switch (static_cast<ObjectType>(type)) {
+	//	case ObjectType::NormalMonster:
+	//		monster = std::make_shared<NormalMonster>();
+	//		break;
+	//	case ObjectType::TankMonster:
+	//		monster = std::make_shared<TankMonster>();
+	//		break;
+	//	case ObjectType::BomberMonster:
+	//		monster = std::make_shared<BomberMonster>();
+	//		break;
+	//	case ObjectType::RespawnMonster:
+	//		monster = std::make_shared<RespawnMonster>();
+	//		break;
+	//	case ObjectType::ObstacleMonster:
+	//		monster = std::make_shared<ObstacleMonster>();
+	//		break;
+	//	}
+	//}
+	//if (!monster) return;
 
-	// item, bomb 생성을 위한 콜백함수 설정
-	monster->SetCallback([this](GameObject* obj) {
-		this->AddObject(obj);
-		});
+	//// item, bomb 생성을 위한 콜백함수 설정
+	//monster->SetCallback([this](GameObject* obj) {
+	//	this->AddObject(obj);
+	//	});
 
-	_monsters.push_back(monster);
+	//_monsters.push_back(monster);
 }
 
 GameScene::GameScene()
@@ -158,87 +158,87 @@ void GameScene::Update()
 	if (!_localPlayer.get())
 		return;
 
-	if(_timerUI._progress != 0)	// 0초이면 생성x
-		SpawnMonster();
-	else {	// 스테이지 끝난 뒤 바깥으로 가보면
-		RECT rect{ gBackgroundRect.left + CELL_SIZE * 7, gBackgroundRect.bottom - CELL_SIZE, gBackgroundRect.left + CELL_SIZE * 9, gBackgroundRect.bottom };
-		Vertex playerPos{ _localPlayer->GetPos() };
-		if (playerPos.x >= rect.left && playerPos.x <= rect.right && playerPos.y >= rect.top && playerPos.y <= rect.bottom) {
-			_curStage++;
-			InitStage();
-		}
-	}
+	//if(_timerUI._progress != 0)	// 0초이면 생성x
+	//	SpawnMonster();
+	//else {	// 스테이지 끝난 뒤 바깥으로 가보면
+	//	RECT rect{ gBackgroundRect.left + CELL_SIZE * 7, gBackgroundRect.bottom - CELL_SIZE, gBackgroundRect.left + CELL_SIZE * 9, gBackgroundRect.bottom };
+	//	Vertex playerPos{ _localPlayer->GetPos() };
+	//	if (playerPos.x >= rect.left && playerPos.x <= rect.right && playerPos.y >= rect.top && playerPos.y <= rect.bottom) {
+	//		_curStage++;
+	//		InitStage();
+	//	}
+	//}
 
-	for (const auto& object : _objects) {
-		object->Update();
-		// 아이템 충돌 처리
-		if (object->GetObjectType() == ObjectType::Item && _localPlayer->IsCollision(object.get())) {
-			_localPlayer->SetItem(dynamic_pointer_cast<Item>(object));
-			object->SetState(ObjectState::Dead);
-		}
+	//for (const auto& object : _objects) {
+	//	object->Update();
+	//	// 아이템 충돌 처리
+	//	if (object->GetObjectType() == ObjectType::Item && _localPlayer->IsCollision(object.get())) {
+	//		_localPlayer->SetItem(dynamic_pointer_cast<Item>(object));
+	//		object->SetState(ObjectState::Dead);
+	//	}
 
-		// 장애물
-		if (object->GetObjectType() == ObjectType::Obstacle && _localPlayer->IsCollision(object.get())) {
-			_localPlayer->UndoPos();
-		}
-	}
-	for (const auto& monster : _monsters) {
-		monster->Update(_localPlayer.get());
+	//	// 장애물
+	//	if (object->GetObjectType() == ObjectType::Obstacle && _localPlayer->IsCollision(object.get())) {
+	//		_localPlayer->UndoPos();
+	//	}
+	//}
+	//for (const auto& monster : _monsters) {
+	//	monster->Update(_localPlayer.get());
 
-		// 몬스터-총알 충돌 처리
-		for (const auto& object : _objects) {
-			ObjectType type = object->GetObjectType();
-			if (type == ObjectType::Bullet ) {
-				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) {
-					monster->Damaged(object.get()->GetDamage());
-					object->SetState(ObjectState::Dead);
-				}
-			} if ((type == ObjectType::Bomb && dynamic_cast<BombObject*>(object.get())->_isBomb)) {
-				if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) monster->Damaged(object.get()->GetDamage());
-			}
-			// 장애물
-			if (type == ObjectType::Obstacle && monster->IsCollision(object.get())) {
-				ObjectType monsterType = monster->GetObjectType();
-				// 폭탄/장애물 몬스터는 장애물에 걸리면 경로 다시 탐색
-				if (monsterType == ObjectType::BomberMonster || monsterType == ObjectType::ObstacleMonster) {
-					monster->FindTarget(nullptr);
-				}
-				monster->UndoPos();
-			}
-		}
+	//	// 몬스터-총알 충돌 처리
+	//	for (const auto& object : _objects) {
+	//		ObjectType type = object->GetObjectType();
+	//		if (type == ObjectType::Bullet ) {
+	//			if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) {
+	//				monster->Damaged(object.get()->GetDamage());
+	//				object->SetState(ObjectState::Dead);
+	//			}
+	//		} if ((type == ObjectType::Bomb && dynamic_cast<BombObject*>(object.get())->_isBomb)) {
+	//			if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) monster->Damaged(object.get()->GetDamage());
+	//		}
+	//		// 장애물
+	//		if (type == ObjectType::Obstacle && monster->IsCollision(object.get())) {
+	//			ObjectType monsterType = monster->GetObjectType();
+	//			// 폭탄/장애물 몬스터는 장애물에 걸리면 경로 다시 탐색
+	//			if (monsterType == ObjectType::BomberMonster || monsterType == ObjectType::ObstacleMonster) {
+	//				monster->FindTarget(nullptr);
+	//			}
+	//			monster->UndoPos();
+	//		}
+	//	}
 
-		// 몬스터끼리 충돌 처리
-		for (const auto& otherMonster : _monsters) {
-			if (otherMonster == monster) continue;
-			if (monster->IsCollision(otherMonster.get())) {
-				if(monster->GetPos() != monster->GetPrevPos())
-				monster->UndoPos();
-			}
-		}
-		// 시계 아이템 사용 시
-		if (useHourglass)
-			monster->_status._speed = 0;
-		else
-			monster->_status._speed = MONSTER_SPEED;
-	}
+	//	// 몬스터끼리 충돌 처리
+	//	for (const auto& otherMonster : _monsters) {
+	//		if (otherMonster == monster) continue;
+	//		if (monster->IsCollision(otherMonster.get())) {
+	//			if(monster->GetPos() != monster->GetPrevPos())
+	//			monster->UndoPos();
+	//		}
+	//	}
+	//	// 시계 아이템 사용 시
+	//	if (useHourglass)
+	//		monster->_status._speed = 0;
+	//	else
+	//		monster->_status._speed = MONSTER_SPEED;
+	//}
 	_localPlayer->Update();
 
-	if (useLightning) {	// 번개 아이템 사용 시
-		_monsters.clear();
-		useLightning = false;
-	}
+	//if (useLightning) {	// 번개 아이템 사용 시
+	//	_monsters.clear();
+	//	useLightning = false;
+	//}
 
-	// 삭제
-	_monsters.erase(std::remove_if(_monsters.begin(), _monsters.end(), [](const MonsterRef& o) {
-		return o->IsState(ObjectState::Dead);
-		}), _monsters.end());
+	//// 삭제
+	//_monsters.erase(std::remove_if(_monsters.begin(), _monsters.end(), [](const MonsterRef& o) {
+	//	return o->IsState(ObjectState::Dead);
+	//	}), _monsters.end());
 
-	_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
-			return o->IsState(ObjectState::Dead);
-		}),	_objects.end());
+	//_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
+	//		return o->IsState(ObjectState::Dead);
+	//	}),	_objects.end());
 
-	// 타이머 UI
-	_timerUI.Update(_stagetime);
+	//// 타이머 UI
+	//_timerUI.Update(_stagetime);
 
 	ProcessInput();
 }
@@ -264,19 +264,19 @@ void GameScene::Render(HDC hdc)
 	StretchBlt(memDC, gBackgroundRect.left, gBackgroundRect.top, gBackgroundRect.right- gBackgroundRect.left, gBackgroundRect.bottom - gBackgroundRect.top, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
 
 	// GameObject
-	for (const auto& player : _players) {
+	for (const auto& [id, player] : _players) {
 		player->Render(memDC, memDCImage);
 		player->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
 	}
 
 	//_merchant->Render(memDC, memDCImage);
 
-	for (const auto& monster : _monsters) {
+	for (const auto& [id, monster] : _monsters) {
 		monster->Render(memDC, memDCImage);
 		monster->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
 	}
 
-	for (const auto object : _objects) {
+	for (const auto [id, object] : _objects) {
 		object->Render(memDC, memDCImage);
 		object->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
 	}
@@ -299,24 +299,26 @@ void GameScene::Render(HDC hdc)
 	DeleteDC(memDCImage);
 }
 
-void GameScene::AddPlayer(Player* player)
+void GameScene::AddPlayer(int id, PlayerRef player)
 {
-	std::shared_ptr<Player> p(player);
-	_players.push_back(p);
-
+	_players[id] = player;
+	_players[id]->SetId(id);
+	
 	// MyPlayer 설정
 	if (!_localPlayer)
-		_localPlayer = p;
+		_localPlayer = player;
 }
 
-void GameScene::AddMonster(Monster* monster)
+void GameScene::AddMonster(int id, MonsterRef monster)
 {
-	_monsters.push_back(std::shared_ptr<Monster>(monster));
+	_monsters[id] = monster;
+	_monsters[id]->SetId(id);
 }
 
-void GameScene::AddObject(GameObject* object)
+void GameScene::AddObject(int id, GameObjectRef object)
 {	
-	_objects.push_back(std::shared_ptr<GameObject>(object));
+	_objects[id] = object;
+	_objects[id]->SetId(id);
 }
 
 void GameScene::ProcessInput()
@@ -340,88 +342,88 @@ void GameScene::ProcessInput()
 		_localPlayer->Move(direction);
 	}
 
-	// 총알 발사
-	if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
-		Vertex playerPos = _localPlayer->GetPos();
-		if (input->GetButton(KeyType::Up)) {
-			if (input->GetButton(KeyType::Right)) { 
-				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos)); 
-				if (useShotgun) {
-					_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-					_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-				}
-			}
-			else if (input->GetButton(KeyType::Left)) {
-				_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-				if (useShotgun) {
-					_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-					_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-				}
-			}
-			else {
-				_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-				if (useShotgun) {
-					_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-					_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-				}
-			}
-			prevKeyUp = false;
-		}
-		else if (input->GetButton(KeyType::Down)) {
-			if (input->GetButton(KeyType::Right)) {
-				_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-				if (useShotgun) {
-					_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-					_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-				}
-			}
-			else if (input->GetButton(KeyType::Left)) {
-				_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-				if (useShotgun) {
-					_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-					_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-				}
-			}
-			else {
-				_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-				if (useShotgun) {
-					_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-					_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-				}
-			}
-			prevKeyUp = false;
-		}
-		else if (input->GetButton(KeyType::Right)) {
-			_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-			if (useShotgun) {
-				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-			}
-			prevKeyUp = false;
-		}
-		else if (input->GetButton(KeyType::Left)) {
-			_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-			if (useShotgun) {
-				_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-			}
-			prevKeyUp = false;
-		}
+	//// 총알 발사
+	//if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
+	//	Vertex playerPos = _localPlayer->GetPos();
+	//	if (input->GetButton(KeyType::Up)) {
+	//		if (input->GetButton(KeyType::Right)) { 
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos)); 
+	//			if (useShotgun) {
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+	//			}
+	//		}
+	//		else if (input->GetButton(KeyType::Left)) {
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+	//			if (useShotgun) {
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+	//			}
+	//		}
+	//		else {
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+	//			if (useShotgun) {
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+	//			}
+	//		}
+	//		prevKeyUp = false;
+	//	}
+	//	else if (input->GetButton(KeyType::Down)) {
+	//		if (input->GetButton(KeyType::Right)) {
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+	//			if (useShotgun) {
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+	//			}
+	//		}
+	//		else if (input->GetButton(KeyType::Left)) {
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+	//			if (useShotgun) {
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+	//			}
+	//		}
+	//		else {
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+	//			if (useShotgun) {
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+	//				_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+	//			}
+	//		}
+	//		prevKeyUp = false;
+	//	}
+	//	else if (input->GetButton(KeyType::Right)) {
+	//		_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+	//		if (useShotgun) {
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+	//		}
+	//		prevKeyUp = false;
+	//	}
+	//	else if (input->GetButton(KeyType::Left)) {
+	//		_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+	//		if (useShotgun) {
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+	//		}
+	//		prevKeyUp = false;
+	//	}
 
-		// 물래방아 아이템 8방향으로 발사
-		if (useWaterWheel) {
-			if (input->GetButton(KeyType::Right) || input->GetButton(KeyType::Up) || input->GetButton(KeyType::Down) || input->GetButton(KeyType::Left)) {
-				_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-				_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-			}
-		}
-	}
+	//	// 물래방아 아이템 8방향으로 발사
+	//	if (useWaterWheel) {
+	//		if (input->GetButton(KeyType::Right) || input->GetButton(KeyType::Up) || input->GetButton(KeyType::Down) || input->GetButton(KeyType::Left)) {
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+	//		}
+	//	}
+	//}
 
 	// 이동 키 Up
 	if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
@@ -433,32 +435,32 @@ void GameScene::ProcessInput()
 		_localPlayer->_timer = 0.0f;
 	}
 
-	// 버튼 클릭
-	if (input->GetButtonDown(KeyType::LeftMouse)) {
-		for (const auto& button : _ui) {
-			if (button->GetObjectType() == ObjectType::Button && button->Intersects(input->GetMousePos())) {
-				_monsters.push_back(std::make_shared<TankMonster>());	// test
-			}
-		}
-	}
+	//// 버튼 클릭
+	//if (input->GetButtonDown(KeyType::LeftMouse)) {
+	//	for (const auto& button : _ui) {
+	//		if (button->GetObjectType() == ObjectType::Button && button->Intersects(input->GetMousePos())) {
+	//			_monsters.push_back(std::make_shared<TankMonster>());	// test
+	//		}
+	//	}
+	//}
 
-	// 폭탄 발로 차기
-	if (input->GetButtonDown(KeyType::LeftShift)) {
-		for (const auto& object : _objects) {
-			if (object->GetObjectType() == ObjectType::Bomb && !dynamic_cast<BombObject*>(object.get())->_isBomb && _localPlayer->IsCollision(object.get())) {
-				object->SetDir(_localPlayer->GetDir());
-				for (int i = 0; i < BOMB_MOVE; ++i) {
-					object->Move(); // CELLSIZE만큼씩 이동
-					for (const auto& otherObject : _objects) {	// 장애물에 걸리면 이동X
-						if (otherObject->GetObjectType() == ObjectType::Obstacle && object->IsCollision(otherObject.get())) {
-							object->UndoPos();
-							i = BOMB_MOVE;
-						}
-					}
-				}
-			}
-		}
-	}
+	//// 폭탄 발로 차기
+	//if (input->GetButtonDown(KeyType::LeftShift)) {
+	//	for (const auto& object : _objects) {
+	//		if (object->GetObjectType() == ObjectType::Bomb && !dynamic_cast<BombObject*>(object.get())->_isBomb && _localPlayer->IsCollision(object.get())) {
+	//			object->SetDir(_localPlayer->GetDir());
+	//			for (int i = 0; i < BOMB_MOVE; ++i) {
+	//				object->Move(); // CELLSIZE만큼씩 이동
+	//				for (const auto& otherObject : _objects) {	// 장애물에 걸리면 이동X
+	//					if (otherObject->GetObjectType() == ObjectType::Obstacle && object->IsCollision(otherObject.get())) {
+	//						object->UndoPos();
+	//						i = BOMB_MOVE;
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 
 	// 아이템 사용
 	if (input->GetButtonDown(KeyType::SpaceBar)) {

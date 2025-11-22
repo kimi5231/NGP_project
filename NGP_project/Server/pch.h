@@ -95,7 +95,7 @@ enum PacketID
     S_Move,
     S_ChangeNextStage,
     S_CollisionResult,
-    S_MonsterDemaged,
+    S_MonsterDamaged,
     S_ItemUseResult,
 };
 

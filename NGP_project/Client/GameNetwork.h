@@ -25,8 +25,6 @@ private:
 	void SendStayGamePacket(int id);
 	void SendEndGamePacket(int id);
 
-	// Recv packet
-
 public:
 	template <class T>
 	std::vector<char> CreatePacket(PacketID id, T& packet);

@@ -127,6 +127,7 @@ public:                                     \
 
 enum PacketID
 {
+    // Client
     C_UpdateObjectState,
     C_UpdateDir,
     C_Move,
@@ -135,7 +136,16 @@ enum PacketID
     C_StayGame,
     C_EndGame,
 
-	S_AddObject,
+    // Server
+    S_AddObject,
+    S_RemoveObject,
+    S_UpdateObjectState,
+    S_UpdateDir,
+    S_Move,
+    S_ChangeNextStage,
+    S_CollisionResult,
+    S_MonsterDamaged,
+    S_ItemUseResult,
 };
 
 struct Header

@@ -2,6 +2,11 @@
 #include "GameNetwork.h"
 #include "GameScene.h"
 #include "Player.h"
+#include "NormalMonster.h"
+#include "TankMonster.h"
+#include "BomberMonster.h"
+#include "RespawnMonster.h"
+#include "ObstacleMonster.h"
 
 // 수영 데스크탑
 //char* SERVERIP = (char*)"61.255.49.141";
@@ -124,20 +129,99 @@ void GameNetwork::ProcessRecv()
 	case S_AddObject:
 		S_AddObject_Packet addObjectPacket;
 		memcpy(&addObjectPacket, packet.data() + sizeof(Header), sizeof(S_AddObject_Packet));
-		
-		if (addObjectPacket.type == ObjectType::Player)
+
+		switch (addObjectPacket.type)
 		{
-			Player* player = new Player();
-			player->SetId(addObjectPacket.objectID);
+		case ObjectType::Player:
+		{
+			PlayerRef player = std::make_shared<Player>();
 			player->SetObjectType(ObjectType::Player);
 			player->SetPos(addObjectPacket.pos);
-			_gameScene->AddPlayer(player);
+			_gameScene->AddPlayer(addObjectPacket.objectID, player);
 		}
-		/*else if (addObjectPacket.type == ObjectType::Monster)
+		break;
+
+		case ObjectType::NormalMonster:
 		{
+			MonsterRef monster = std::make_shared<NormalMonster>();
+			monster->SetObjectType(ObjectType::NormalMonster);
+			monster->SetPos(addObjectPacket.pos);
+			_gameScene->AddMonster(addObjectPacket.objectID, monster);
+		}
+		break;
+		case ObjectType::TankMonster:
+		{
+			MonsterRef monster = std::make_shared<TankMonster>();
+			monster->SetObjectType(ObjectType::TankMonster);
+			monster->SetPos(addObjectPacket.pos);
+			_gameScene->AddMonster(addObjectPacket.objectID, monster);
+		}
+		break;
+		case ObjectType::BomberMonster:
+		{
+			MonsterRef monster = std::make_shared<BomberMonster>();
+			monster->SetObjectType(ObjectType::BomberMonster);
+			monster->SetPos(addObjectPacket.pos);
+			_gameScene->AddMonster(addObjectPacket.objectID, monster);
+		}
+		break;
+		case ObjectType::RespawnMonster:
+		{
+			MonsterRef monster = std::make_shared<RespawnMonster>();
+			monster->SetObjectType(ObjectType::RespawnMonster);
+			monster->SetPos(addObjectPacket.pos);
+			_gameScene->AddMonster(addObjectPacket.objectID, monster);
+		}
+		break;
+		case ObjectType::ObstacleMonster:
+		{
+			MonsterRef monster = std::make_shared<ObstacleMonster>();
+			monster->SetObjectType(ObjectType::ObstacleMonster);
+			monster->SetPos(addObjectPacket.pos);
+			_gameScene->AddMonster(addObjectPacket.objectID, monster);
+		}
+		break;
+		}
+	
+		break;
+	case S_RemoveObject:
+		S_RemoveObject_Packet removeObjectPacket;
+		memcpy(&removeObjectPacket, packet.data() + sizeof(Header), sizeof(S_RemoveObject_Packet));
 
-		}*/
+		//switch (removeObjectPacket.type)
+		//{
+		//	case 
+		//}
+		break;
+	case S_UpdateObjectState:
+		break;
+	case S_UpdateDir:
+		break;
+	case S_Move:
+		S_Move_Packet movePacket;
+		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(S_Move_Packet));
 
+		switch (movePacket.type)
+		{
+		case ObjectType::Player:
+			_gameScene->GetLocalPlayer()->SetPos(movePacket.pos);
+			break;
+		case ObjectType::NormalMonster:
+		case ObjectType::TankMonster:
+		case ObjectType::BomberMonster:
+		case ObjectType::RespawnMonster:
+		case ObjectType::ObstacleMonster:
+			_gameScene->GetMonster(movePacket.objectID)->SetPos(movePacket.pos);
+			break;
+		}
+		break;
+	case S_ChangeNextStage:
+		break;
+	case S_CollisionResult:
+		break;
+	case S_MonsterDamaged:
+		break;
+	case S_ItemUseResult:
 		break;
 	}
 }

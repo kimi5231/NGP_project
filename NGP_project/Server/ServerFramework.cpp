@@ -239,13 +239,21 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 	std::cout << "Client" << newClient->id << " 접속" << std::endl;
 
+	// 새로 접속한 Client에게 자기 자신을 나타내는 Player 정보 송신
+	S_AddObject_Packet packetData{ player->GetID(), player->GetObjectType(), player->GetPos() };
+	ProcessSend(S_AddObject, packetData, newClient->socket);
+
 	// 새로 접속한 Client에게 Room에 있는 모든 Object 정보 송신
 	std::vector<GameObjectRef>& objects = _room->GetObjects();
 	for (GameObjectRef object : objects)
 	{
-		// AddObject 함수는 Object 생성까지하기 때문에 사용하지 않음
-		S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos() };
-		ProcessSend(S_AddObject, packetData, newClient->socket);
+		// 자기 자신 제외
+		if (newClient->player->GetID() != object->GetID())
+		{
+			// AddObject 함수는 Object 생성까지하기 때문에 사용하지 않음
+			S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos() };
+			ProcessSend(S_AddObject, packetData, newClient->socket);
+		}
 	}
 }
 
@@ -268,13 +276,19 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 	{
 		if (object->GetID() == packet.objectID)
 		{
+			// 나중에 bool값 받기
 			object->SetPos(packet.pos);
-			S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos()};
-			
-			// 모든 클라이언트에게 알리기
-			for (ClientRef client : _clients)
-				ProcessSend(S_Move, packetData, client->socket);
 
+			std::cout << "Object " << packet.objectID << ": Move " << packet.pos.x << ", " << packet.pos.y << std::endl;
+
+			S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos()};
+			// 자신을 제외한 모든 클라이언트에게 알리기
+			for (ClientRef client : _clients)
+			{
+				if(client->player->GetID() != packet.objectID)
+					ProcessSend(S_Move, packetData, client->socket);
+			}
+			
 			return;
 		}
 	}

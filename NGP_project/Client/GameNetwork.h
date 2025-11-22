@@ -25,6 +25,17 @@ private:
 	void SendStayGamePacket(int id);
 	void SendEndGamePacket(int id);
 
+	// Recv µø¿€
+	void RecvAddObject(S_AddObject_Packet addObjectPacket);
+	void RecvRemoveObject(S_RemoveObject_Packet removeObjectPacket);
+	void RecvUpdateObjectState(S_UpdateObjectState_Packet updateObjectStatePacket);
+	void RecvUpdateDir(S_UpdateDir_Packet updateDirPacket);
+	void RecvMovePacket(S_Move_Packet movePacket);
+	void RecvChangeNextStagePacket(S_ChangeNextStage_Packet changeNextStagePacket);
+	void RecvCollisionResultPacket(S_CollisionResult_Packet collisionResultPacket);
+	void RecvMonsterDamagedPacket(S_MonsterDamaged_Packet monsterDamagedPacket);
+	void RecvItemUseResultPacket(S_ItemUseResult_Packet itemUseResultPacket);
+
 public:
 	template <class T>
 	std::vector<char> CreatePacket(PacketID id, T& packet);

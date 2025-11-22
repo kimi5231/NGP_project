@@ -17,17 +17,27 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
+	void InitObstalce();
+	void InitStage();
+	void SpawnMonster();
+
+	// Add Object
 	void AddPlayer(int id, PlayerRef player);
 	void AddMonster(int id, MonsterRef monster);
 	void AddObject(int id, GameObjectRef object);
 
+	// Get Object
 	PlayerRef GetLocalPlayer() const { return _localPlayer; }
 	MonsterRef GetMonster(int id) { return _monsters[id]; }
 	GameObjectRef GetGameObject(int id){ return _objects[id]; }
+	std::unordered_map<int, PlayerRef> GetPlayers() { return _players; }
+	std::unordered_map<int, MonsterRef> GetMonsters() { return _monsters; }
+	std::unordered_map<int, GameObjectRef> GetObjects() { return _objects; }
 
-	void InitObstalce();
-	void InitStage();
-	void SpawnMonster();
+	// Remove Object
+	void RemovePlayer(int id) { _players.erase(id); }
+	void RemoveMonster(int id) { _monsters.erase(id); }
+	void RemoveObject(int id) { _objects.erase(id); }
 
 public:
 	virtual void ProcessInput() override;

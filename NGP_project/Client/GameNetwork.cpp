@@ -129,69 +129,12 @@ void GameNetwork::ProcessRecv()
 	case S_AddObject:
 		S_AddObject_Packet addObjectPacket;
 		memcpy(&addObjectPacket, packet.data() + sizeof(Header), sizeof(S_AddObject_Packet));
-
-		switch (addObjectPacket.type)
-		{
-		case ObjectType::Player:
-		{
-			PlayerRef player = std::make_shared<Player>();
-			player->SetObjectType(ObjectType::Player);
-			player->SetPos(addObjectPacket.pos);
-			_gameScene->AddPlayer(addObjectPacket.objectID, player);
-		}
-		break;
-
-		case ObjectType::NormalMonster:
-		{
-			MonsterRef monster = std::make_shared<NormalMonster>();
-			monster->SetObjectType(ObjectType::NormalMonster);
-			monster->SetPos(addObjectPacket.pos);
-			_gameScene->AddMonster(addObjectPacket.objectID, monster);
-		}
-		break;
-		case ObjectType::TankMonster:
-		{
-			MonsterRef monster = std::make_shared<TankMonster>();
-			monster->SetObjectType(ObjectType::TankMonster);
-			monster->SetPos(addObjectPacket.pos);
-			_gameScene->AddMonster(addObjectPacket.objectID, monster);
-		}
-		break;
-		case ObjectType::BomberMonster:
-		{
-			MonsterRef monster = std::make_shared<BomberMonster>();
-			monster->SetObjectType(ObjectType::BomberMonster);
-			monster->SetPos(addObjectPacket.pos);
-			_gameScene->AddMonster(addObjectPacket.objectID, monster);
-		}
-		break;
-		case ObjectType::RespawnMonster:
-		{
-			MonsterRef monster = std::make_shared<RespawnMonster>();
-			monster->SetObjectType(ObjectType::RespawnMonster);
-			monster->SetPos(addObjectPacket.pos);
-			_gameScene->AddMonster(addObjectPacket.objectID, monster);
-		}
-		break;
-		case ObjectType::ObstacleMonster:
-		{
-			MonsterRef monster = std::make_shared<ObstacleMonster>();
-			monster->SetObjectType(ObjectType::ObstacleMonster);
-			monster->SetPos(addObjectPacket.pos);
-			_gameScene->AddMonster(addObjectPacket.objectID, monster);
-		}
-		break;
-		}
-	
+		RecvAddObject(addObjectPacket);
 		break;
 	case S_RemoveObject:
 		S_RemoveObject_Packet removeObjectPacket;
 		memcpy(&removeObjectPacket, packet.data() + sizeof(Header), sizeof(S_RemoveObject_Packet));
-
-		//switch (removeObjectPacket.type)
-		//{
-		//	case 
-		//}
+		RecvRemoveObject(removeObjectPacket);
 		break;
 	case S_UpdateObjectState:
 		break;
@@ -200,20 +143,7 @@ void GameNetwork::ProcessRecv()
 	case S_Move:
 		S_Move_Packet movePacket;
 		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(S_Move_Packet));
-
-		switch (movePacket.type)
-		{
-		case ObjectType::Player:
-			_gameScene->GetLocalPlayer()->SetPos(movePacket.pos);
-			break;
-		case ObjectType::NormalMonster:
-		case ObjectType::TankMonster:
-		case ObjectType::BomberMonster:
-		case ObjectType::RespawnMonster:
-		case ObjectType::ObstacleMonster:
-			_gameScene->GetMonster(movePacket.objectID)->SetPos(movePacket.pos);
-			break;
-		}
+		RecvMovePacket(movePacket);
 		break;
 	case S_ChangeNextStage:
 		break;
@@ -314,4 +244,130 @@ void GameNetwork::SendEndGamePacket(int id)
 	packet.objectID = id;
 
 	ProcessSend(PacketID::C_EndGame, packet);
+}
+
+void GameNetwork::RecvAddObject(S_AddObject_Packet addObjectPacket)
+{
+	switch (addObjectPacket.type)
+	{
+	case ObjectType::Player:
+	{
+		PlayerRef player = std::make_shared<Player>();
+		player->SetObjectType(ObjectType::Player);
+		player->SetPos(addObjectPacket.pos);
+		_gameScene->AddPlayer(addObjectPacket.objectID, player);
+	}
+	break;
+
+	case ObjectType::NormalMonster:
+	{
+		MonsterRef monster = std::make_shared<NormalMonster>();
+		monster->SetObjectType(ObjectType::NormalMonster);
+		monster->SetPos(addObjectPacket.pos);
+		_gameScene->AddMonster(addObjectPacket.objectID, monster);
+	}
+	break;
+
+	case ObjectType::TankMonster:
+	{
+		MonsterRef monster = std::make_shared<TankMonster>();
+		monster->SetObjectType(ObjectType::TankMonster);
+		monster->SetPos(addObjectPacket.pos);
+		_gameScene->AddMonster(addObjectPacket.objectID, monster);
+	}
+	break;
+
+	case ObjectType::BomberMonster:
+	{
+		MonsterRef monster = std::make_shared<BomberMonster>();
+		monster->SetObjectType(ObjectType::BomberMonster);
+		monster->SetPos(addObjectPacket.pos);
+		_gameScene->AddMonster(addObjectPacket.objectID, monster);
+	}
+	break;
+
+	case ObjectType::RespawnMonster:
+	{
+		MonsterRef monster = std::make_shared<RespawnMonster>();
+		monster->SetObjectType(ObjectType::RespawnMonster);
+		monster->SetPos(addObjectPacket.pos);
+		_gameScene->AddMonster(addObjectPacket.objectID, monster);
+	}
+	break;
+
+	case ObjectType::ObstacleMonster:
+	{
+		MonsterRef monster = std::make_shared<ObstacleMonster>();
+		monster->SetObjectType(ObjectType::ObstacleMonster);
+		monster->SetPos(addObjectPacket.pos);
+		_gameScene->AddMonster(addObjectPacket.objectID, monster);
+	}
+	break;
+	}
+}
+
+void GameNetwork::RecvRemoveObject(S_RemoveObject_Packet removeObjectPacket)
+{
+	switch (removeObjectPacket.type)
+	{
+	case ObjectType::Player:
+		_gameScene->RemovePlayer(removeObjectPacket.objectID);
+		break;
+
+	case ObjectType::NormalMonster:
+	case ObjectType::TankMonster:
+	case ObjectType::BomberMonster:
+	case ObjectType::RespawnMonster:
+	case ObjectType::ObstacleMonster:
+		_gameScene->RemoveMonster(removeObjectPacket.objectID);
+		break;
+
+	case ObjectType::Bomb:
+	case ObjectType::Bullet:
+	case ObjectType::Item:
+	case ObjectType::Obstacle:
+		_gameScene->RemoveObject(removeObjectPacket.objectID);
+		break;
+	}
+}
+
+void GameNetwork::RecvUpdateObjectState(S_UpdateObjectState_Packet updateObjectStatePacket)
+{
+}
+
+void GameNetwork::RecvUpdateDir(S_UpdateDir_Packet updateDirPacket)
+{
+}
+
+void GameNetwork::RecvMovePacket(S_Move_Packet movePacket)
+{
+	switch (movePacket.type)
+	{
+	case ObjectType::Player:
+		_gameScene->GetLocalPlayer()->SetPos(movePacket.pos);
+		break;
+	case ObjectType::NormalMonster:
+	case ObjectType::TankMonster:
+	case ObjectType::BomberMonster:
+	case ObjectType::RespawnMonster:
+	case ObjectType::ObstacleMonster:
+		_gameScene->GetMonster(movePacket.objectID)->SetPos(movePacket.pos);
+		break;
+	}
+}
+
+void GameNetwork::RecvChangeNextStagePacket(S_ChangeNextStage_Packet changeNextStagePacket)
+{
+}
+
+void GameNetwork::RecvCollisionResultPacket(S_CollisionResult_Packet collisionResultPacket)
+{
+}
+
+void GameNetwork::RecvMonsterDamagedPacket(S_MonsterDamaged_Packet monsterDamagedPacket)
+{
+}
+
+void GameNetwork::RecvItemUseResultPacket(S_ItemUseResult_Packet itemUseResultPacket)
+{
 }

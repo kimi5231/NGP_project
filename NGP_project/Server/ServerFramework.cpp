@@ -1,23 +1,23 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ServerFramework.h"
 #include "Room.h"
 #include "Player.h"
 
 ServerFramework::ServerFramework()
 {
-	// À©¼Ó ÃÊ±âÈ­
+	// ìœˆì† ì´ˆê¸°í™”
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
-		std::cout << "À©¼Ó ÃÊ±âÈ­ ½ÇÆĞ" << std::endl;
+		std::cout << "ìœˆì† ì´ˆê¸°í™” ì‹¤íŒ¨" << std::endl;
 		return;
 	}
 
-	// listenSocket »ı¼º
+	// listenSocket ìƒì„±
 	_listenSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_listenSocket == INVALID_SOCKET)
 	{
-		std::cout << "listenSocket »ı¼º ½ÇÆĞ" << std::endl;
+		std::cout << "listenSocket ìƒì„± ì‹¤íŒ¨" << std::endl;
 		return;
 	}
 
@@ -29,43 +29,46 @@ ServerFramework::ServerFramework()
 	addr.sin_port = htons(7777);
 	if (bind(_listenSocket, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
 	{
-		std::cout << "bind ½ÇÆĞ" << std::endl;
+		std::cout << "bind ì‹¤íŒ¨" << std::endl;
 		return;
 	}
 
 	// listen
 	if (listen(_listenSocket, SOMAXCONN) == SOCKET_ERROR)
 	{
-		std::cout << "listen ½ÇÆĞ" << std::endl;
+		std::cout << "listen ì‹¤íŒ¨" << std::endl;
 		return;
 	}
 
-	// Room »ı¼º
+	// Room ìƒì„±
 	_room = new Room();
 
-	// Client ID »ı¼º±â ÃÊ±âÈ­
+	// Client ID ìƒì„±ê¸° ì´ˆê¸°í™”
 	_generateClientID = 1;
 }
 
 ServerFramework::~ServerFramework()
 {
-	// listenSocket Á¾·á
+	delete _room;
+
+	// listenSocket ì¢…ë£Œ
 	closesocket(_listenSocket);
 
-	// À©¼Ó Á¾·á
+	// ìœˆì† ì¢…ë£Œ
 	WSACleanup();
+
 }
 
 void ServerFramework::Update()
 {
-	// socket set ÃÊ±âÈ­
+	// socket set ì´ˆê¸°í™”
 	FD_ZERO(&_readSet);
 	FD_ZERO(&_writeSet);
 
-	// readSet¿¡ listenSocket µî·Ï
+	// readSetì— listenSocket ë“±ë¡
 	FD_SET(_listenSocket, &_readSet);
 
-	// readSet, writeSet¿¡ clientSocket µî·Ï
+	// readSet, writeSetì— clientSocket ë“±ë¡
 	for (ClientRef client : _clients)
 	{
 		FD_SET(client->socket, &_readSet);
@@ -75,11 +78,11 @@ void ServerFramework::Update()
 	// select
 	if (select(0, &_readSet, &_writeSet, NULL, NULL) == SOCKET_ERROR)
 	{
-		std::cout << "select ½ÇÆĞ" << std::endl;
+		std::cout << "select ì‹¤íŒ¨" << std::endl;
 		return;
 	}
 
-	// listenSocekt accept È®ÀÎ
+	// listenSocekt accept í™•ì¸
 	if (FD_ISSET(_listenSocket, &_readSet))
 	{
 		// accept
@@ -89,7 +92,7 @@ void ServerFramework::Update()
 		clientSocket = accept(_listenSocket, (sockaddr*)&clientAddr, &addrLen);
 		if (clientSocket == INVALID_SOCKET)
 		{
-			std::cout << "clientSocket »ı¼º ½ÇÆĞ" << std::endl;
+			std::cout << "clientSocket ìƒì„± ì‹¤íŒ¨" << std::endl;
 		}
 
 		ProcessAccept(clientSocket);
@@ -102,7 +105,7 @@ void ServerFramework::Update()
 			ProcessRecv(client);
 		}
 
-		// send°¡ °¡´ÉÇÒ ¶§¸¶´Ù true
+		// sendê°€ ê°€ëŠ¥í•  ë•Œë§ˆë‹¤ true
 		if (FD_ISSET(client->socket, &_writeSet))
 		{
 			
@@ -112,7 +115,7 @@ void ServerFramework::Update()
 
 void ServerFramework::ProcessRecv(ClientRef client)
 {
-	// PacketSize ¼ö½Å(°íÁ¤ ±æÀÌ)
+	// PacketSize ìˆ˜ì‹ (ê³ ì • ê¸¸ì´)
 	int packetSize{};
 	if (recv(client->socket, (char*)&packetSize, sizeof(int), MSG_WAITALL) <= 0)
 	{
@@ -120,7 +123,7 @@ void ServerFramework::ProcessRecv(ClientRef client)
 		return;
 	}
 		
-	// Packet ¼ö½Å(°¡º¯ µ¥ÀÌÅÍ)
+	// Packet ìˆ˜ì‹ (ê°€ë³€ ë°ì´í„°)
 	std::vector<char> packet(512);
 	if(recv(client->socket, packet.data(), packetSize, MSG_WAITALL) <= 0)
 	{
@@ -128,11 +131,11 @@ void ServerFramework::ProcessRecv(ClientRef client)
 		return;
 	}
 
-	// Header ÃßÃâ
+	// Header ì¶”ì¶œ
 	Header header;
 	memcpy(&header, packet.data(), sizeof(Header));
 
-	// Data ÃßÃâ
+	// Data ì¶”ì¶œ
 	switch (header.id)
 	{
 	case C_UpdateObjectState:
@@ -161,9 +164,9 @@ void ServerFramework::ProcessSend(PacketID id, const T& packetData, SOCKET clien
 	std::vector<char> packet = CreatePakcet(id, packetData);
 	int packetSize = sizeof(packet);
 
-	// packetSize ¼Û½Å(°íÁ¤ ±æÀÌ)
+	// packetSize ì†¡ì‹ (ê³ ì • ê¸¸ì´)
 	send(clientSocket, (char*)&packetSize, sizeof(int), 0);
-	// packet ¼Û½Å(°¡º¯ µ¥ÀÌÅÍ)
+	// packet ì†¡ì‹ (ê°€ë³€ ë°ì´í„°)
 	send(clientSocket, packet.data(), packetSize, 0);
 }
 
@@ -186,18 +189,18 @@ std::vector<char> ServerFramework::CreatePakcet(PacketID id, const T& packetData
 template<class T>
 void ServerFramework::Broadcast(PacketID id, const T& packetData)
 {
-	// Room¿¡ ÀÖ´Â ¸ğµç Client¿¡°Ô Packet ¼Û½Å
+	// Roomì— ìˆëŠ” ëª¨ë“  Clientì—ê²Œ Packet ì†¡ì‹ 
 	for (ClientRef client : _clients)
 		ProcessSend(id, packetData, client->socket);
 }
 
 GameObjectRef ServerFramework::AddObject(ObjectType type)
 {
-	// Object »ı¼º
+	// Object ìƒì„±
 	GameObjectRef object = _room->AddObject(type);
-	// Packet Data »ı¼º
+	// Packet Data ìƒì„±
 	S_AddObject_Packet packetData{ object->GetID(), type, object->GetPos() };
-	// »õ·Î¿î Object°¡ Ãß°¡µÊÀ» Room¿¡ ÀÖ´Â ¸ğµç Client¿¡°Ô ¾Ë¸²
+	// ìƒˆë¡œìš´ Objectê°€ ì¶”ê°€ë¨ì„ Roomì— ìˆëŠ” ëª¨ë“  Clientì—ê²Œ ì•Œë¦¼
 	Broadcast(S_AddObject, packetData);
 
 	return object;
@@ -210,11 +213,11 @@ void ServerFramework::RemoveObject(int id)
 	{
 		if (object->GetID() == id)
 		{
-			// Packet Data »ı¼º
+			// Packet Data ìƒì„±
 			S_RemoveObject_Packet packetData{ object->GetID(), object->GetObjectType() };
-			// Object »èÁ¦
+			// Object ì‚­ì œ
 			objects.erase(std::find(objects.begin(), objects.end(), object));
-			// Object°¡ »èÁ¦µÊÀ» Room¿¡ ÀÖ´Â ¸ğµç Client¿¡°Ô ¾Ë¸²
+			// Objectê°€ ì‚­ì œë¨ì„ Roomì— ìˆëŠ” ëª¨ë“  Clientì—ê²Œ ì•Œë¦¼
 			Broadcast(S_RemoveObject, packetData);
 
 			return;
@@ -224,7 +227,7 @@ void ServerFramework::RemoveObject(int id)
 
 void ServerFramework::ProcessAccept(SOCKET clientSocket)
 {
-	// Á¢¼ÓÇÑ Client¸¦ ³ªÅ¸³¾ Player Ãß°¡
+	// ì ‘ì†í•œ Clientë¥¼ ë‚˜íƒ€ë‚¼ Player ì¶”ê°€
 	GameObjectRef player = AddObject(ObjectType::Player);
 
 	ClientRef newClient = std::make_shared<Client>();
@@ -234,13 +237,13 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 	_clients.push_back(newClient);
 
-	std::cout << "Client" << newClient->id << " Á¢¼Ó" << std::endl;
+	std::cout << "Client" << newClient->id << " ì ‘ì†" << std::endl;
 
-	// »õ·Î Á¢¼ÓÇÑ Client¿¡°Ô Room¿¡ ÀÖ´Â ¸ğµç Object Á¤º¸ ¼Û½Å
+	// ìƒˆë¡œ ì ‘ì†í•œ Clientì—ê²Œ Roomì— ìˆëŠ” ëª¨ë“  Object ì •ë³´ ì†¡ì‹ 
 	std::vector<GameObjectRef>& objects = _room->GetObjects();
 	for (GameObjectRef object : objects)
 	{
-		// AddObject ÇÔ¼ö´Â Object »ı¼º±îÁöÇÏ±â ¶§¹®¿¡ »ç¿ëÇÏÁö ¾ÊÀ½
+		// AddObject í•¨ìˆ˜ëŠ” Object ìƒì„±ê¹Œì§€í•˜ê¸° ë•Œë¬¸ì— ì‚¬ìš©í•˜ì§€ ì•ŠìŒ
 		S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos() };
 		ProcessSend(S_AddObject, packetData, newClient->socket);
 	}
@@ -248,12 +251,12 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 void ServerFramework::ProcessDisconnect(ClientRef client)
 {
-	// ¿¬°á ²÷±ä Client¸¦ ³ªÅ¸³»´Â Player Á¦°Å
+	// ì—°ê²° ëŠê¸´ Clientë¥¼ ë‚˜íƒ€ë‚´ëŠ” Player ì œê±°
 	RemoveObject(client->player->GetID());
 	
-	std::cout << "Client" << client->id << " ¿¬°á ²÷±è" << std::endl;
+	std::cout << "Client" << client->id << " ì—°ê²° ëŠê¹€" << std::endl;
 
-	// ¿¬°á ²÷±ä Client Á¦°Å
+	// ì—°ê²° ëŠê¸´ Client ì œê±°
 	closesocket(client->socket);
 	_clients.erase(std::find(_clients.begin(), _clients.end(), client));
 }
@@ -268,7 +271,7 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 			object->SetPos(packet.pos);
 			S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos()};
 			
-			// ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡°Ô ¾Ë¸®±â
+			// ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì—ê²Œ ì•Œë¦¬ê¸°
 			for (ClientRef client : _clients)
 				ProcessSend(S_Move, packetData, client->socket);
 

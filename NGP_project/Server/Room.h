@@ -9,7 +9,9 @@ public:
 
 public:
 	void Update();
-
+	void InitObstalce();
+	void InitStage();
+	void SpawnMonster();
 public:
 	GameObjectRef AddObject(ObjectType type);
 
@@ -18,6 +20,7 @@ public:
 
 private:
 	std::vector<GameObjectRef> _objects;
+	int _curStage{ 1 };
 
 	CRITICAL_SECTION _cs;
 

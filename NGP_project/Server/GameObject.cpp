@@ -13,6 +13,11 @@ GameObject::GameObject(ObjectState state)
 {
 }
 
+GameObject::GameObject(ObjectType type, Vertex pos)
+    : _type{ type }, _pos{ pos }
+{
+}
+
 void GameObject::SetPos(Vertex pos)
 {
     // speed + a 차이 안나면 셋

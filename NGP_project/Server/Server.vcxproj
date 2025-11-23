@@ -149,6 +149,7 @@
     <ClInclude Include="ServerFramework.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="TankMonster.h" />
+    <ClInclude Include="TimeManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BomberMonster.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="ServerFramework.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="TankMonster.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

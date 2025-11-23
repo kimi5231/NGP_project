@@ -17,10 +17,6 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
-	void InitObstalce();
-	void InitStage();
-	void SpawnMonster();
-
 	// Add Object
 	void AddPlayer(int id, PlayerRef player);
 	void AddMonster(int id, MonsterRef monster);

@@ -14,20 +14,21 @@ class GameObject
 public:
 	GameObject();
 	GameObject(ObjectState state);
+	GameObject(ObjectType, Vertex);
 
 	virtual bool Move() { return true; };
 	virtual void Update() {};
 	virtual void FindTarget(GameObject* other) {};
 
 	void SetObjectType(ObjectType type) { _type = type; }
-	ObjectType GetObjectType() { return _type; }
+	ObjectType GetObjectType()const { return _type; }
 
 	void SetID(int id) { _id = id; }
 	int GetID() const { return _id; }
 	void SetPos(Vertex pos);
-	Vertex GetPos() { return _pos; }
-	Vertex GetTargetPos() { return _targetPos; }
+	Vertex GetPos() const { return _pos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
+	Vertex GetTargetPos() const { return _targetPos; }
 
 	void SetState(ObjectState state) { _state = state; }
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }

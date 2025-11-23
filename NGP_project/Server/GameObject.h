@@ -25,7 +25,7 @@ public:
 
 	void SetID(int id) { _id = id; }
 	int GetID() const { return _id; }
-	void SetPos(Vertex pos);
+	bool SetPos(Vertex pos);
 	Vertex GetPos() const { return _pos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetTargetPos() const { return _targetPos; }

@@ -18,11 +18,14 @@ GameObject::GameObject(ObjectType type, Vertex pos)
 {
 }
 
-void GameObject::SetPos(Vertex pos)
+bool GameObject::SetPos(Vertex pos)
 {
     // speed + a 차이 안나면 셋
     if (_status._speed + DIFF>= abs(_prevPos.x - _pos.x) && _status._speed + DIFF >= abs(_prevPos.y - _pos.y)) {
         _prevPos = _pos;
         _pos = pos;
+        return true;
     }
+
+    return false;
 }

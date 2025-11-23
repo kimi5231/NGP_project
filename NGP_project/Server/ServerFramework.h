@@ -54,6 +54,3 @@ private:
 private:
 	Room* _room{};
 };
-
-// 스레드 함수 선언
-inline DWORD WINAPI ProcessGameData(LPVOID arg);	// 인자에 ROOM 객체 포인터로 넘겨주기

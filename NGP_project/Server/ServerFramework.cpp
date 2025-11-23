@@ -47,8 +47,6 @@ ServerFramework::ServerFramework()
 	// Client ID 생성기 초기화
 	_generateClientID = 1;
 
-	// 스레드 생성
-	HANDLE hThread = CreateThread(nullptr, 0, ProcessGameData, &_room, 0, nullptr);
 }
 
 ServerFramework::~ServerFramework()
@@ -296,12 +294,4 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 			return;
 		}
 	}
-}
-
-DWORD WINAPI ProcessGameData(LPVOID arg)
-{
-	Room* room = (Room*)arg;
-	room->Update();
-
-	return 0;
 }

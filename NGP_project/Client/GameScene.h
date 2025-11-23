@@ -6,6 +6,7 @@
 class Player;
 class Monster;
 class GameObject;
+class GameNetwork;
 
 class GameScene : public Scene
 {
@@ -35,6 +36,11 @@ public:
 	void RemoveMonster(int id) { _monsters.erase(id); }
 	void RemoveObject(int id) { _objects.erase(id); }
 
+	void SetGameNetwork(GameNetwork* gameNetwork) { _gameNetwork = gameNetwork; }
+
+	// Input
+	Dir ConvertVecToDir(const Vertex& dir);		// Vec -> Dir
+
 public:
 	virtual void ProcessInput() override;
 
@@ -50,4 +56,6 @@ private:
 	ProgressBar _timerUI{ Vertex{ FRAME_BUFFER_WIDTH / 2, 30}, Vertex{500, 20}, GAME_TIME };
 	float _stagetime{};
 	int _curStage{1};
+
+	GameNetwork* _gameNetwork{};
 };

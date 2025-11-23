@@ -16,6 +16,7 @@
 #include "RespawnMonster.h"
 #include "TankMonster.h"
 
+#include "GameNetwork.h"
 
 HBITMAP gBackgroundBitmap;
 float bulletSpeed{ BULLET_TIME };
@@ -208,6 +209,21 @@ void GameScene::AddObject(int id, GameObjectRef object)
 	_objects[id]->SetId(id);
 }
 
+Dir GameScene::ConvertVecToDir(const Vertex& dir)
+{
+	// 상하좌우
+	if (dir.x == -1 && dir.y == 0) return Dir::Left;
+	if (dir.x == 1 && dir.y == 0) return Dir::Right;
+	if (dir.x == 0 && dir.y == -1) return Dir::Up;
+	if (dir.x == 0 && dir.y == 1) return Dir::Down;
+
+	// 대각선
+	if (dir.x == -1 && dir.y == -1) return Dir::LeftUp;
+	if (dir.x == -1 && dir.y == 1) return Dir::LeftDown;
+	if (dir.x == 1 && dir.y == -1) return Dir::RightUp;
+	if (dir.x == 1 && dir.y == 1) return Dir::RightDown;
+}
+
 void GameScene::ProcessInput()
 {
 	if (!_localPlayer)
@@ -219,14 +235,20 @@ void GameScene::ProcessInput()
 	static bool prevKeyUp{};
 	// 키 입력은 첫 번째 플레이어(자기자신)만 받음
 	// 이동
-	Vertex direction{};
-	if (input->GetButton(KeyType::A)) direction.x -= 1;
-	if (input->GetButton(KeyType::D)) direction.x += 1;
-	if (input->GetButton(KeyType::W)) direction.y -= 1;
-	if (input->GetButton(KeyType::S)) direction.y += 1;
+	Vertex vecDir{};
+	if (input->GetButton(KeyType::A)) vecDir.x -= 1;
+	if (input->GetButton(KeyType::D)) vecDir.x += 1;
+	if (input->GetButton(KeyType::W)) vecDir.y -= 1;
+	if (input->GetButton(KeyType::S)) vecDir.y += 1;
 
-	if (direction.x != 0 || direction.y != 0) {
-		_localPlayer->Move(direction);
+	Dir dir = ConvertVecToDir(vecDir);
+	
+	if (vecDir.x != 0 || vecDir.y != 0) {
+		_localPlayer->Move(vecDir, dir);
+
+		// 서버로 Move, Dir 패킷 Send
+		_gameNetwork->SendUpdateDirPacket(_localPlayer->GetId(), ObjectType::Player, dir);
+		_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos());
 	}
 
 	//// 총알 발사

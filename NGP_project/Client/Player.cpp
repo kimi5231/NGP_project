@@ -63,34 +63,36 @@ void Player::SetItem(ItemRef item)
     _item.first = item;
 }
 
-void Player::Move(Vertex dir)
+void Player::Move(Vertex vecDir, Dir dir)
 {
     _prevPos = _pos;
 
+    // 대각선 정규화
+    float length = sqrt(vecDir.x * vecDir.x + vecDir.y * vecDir.y);
+    float nx = vecDir.x / length;
+    float ny = vecDir.y / length;
+    
     // 위치 업데이트
-    _pos.x += dir.x * _status._speed;
-    _pos.y += dir.y * _status._speed;
+    _pos.x += nx * _status._speed;
+    _pos.y += ny * _status._speed;
 
-    if (dir.x < 0) {
-        _curFrame.y = 1;
-        _dir = Dir::Left;
+    // 방향 설정
+    _dir = dir;
+
+    switch (_dir)
+    {
+    case Dir::Left:        _curFrame.y = 1; break;
+    case Dir::Right:       _curFrame.y = 0; break;
+    case Dir::Up:          _curFrame.y = 5; break;
+    case Dir::Down:        _curFrame.y = 9; break;
+    case Dir::LeftUp:      _curFrame.y = 6; break;
+    case Dir::LeftDown:    _curFrame.y = 8; break;
+    case Dir::RightUp:     _curFrame.y = 4; break;
+    case Dir::RightDown:   _curFrame.y = 2; break;
     }
-    else if (dir.x > 0) {
-        _curFrame.y = 0;
-        _dir = Dir::Right;
-    }
-    if (dir.y < 0) {
-        _curFrame.y = 5;
-        _dir = Dir::Up;
-    }
-    else if (dir.y > 0) {
-        _curFrame.y = 9;
-        _dir = Dir::Down;
-    }
+
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
-
 
     _pos.x = std::clamp(_pos.x, (int)(gBackgroundRect.left), (int)(gBackgroundRect.right));
     _pos.y = std::clamp(_pos.y, (int)(gBackgroundRect.top), (int)(gBackgroundRect.bottom));
-
 }

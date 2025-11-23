@@ -11,7 +11,7 @@ public:
 public:
 	void Update();
 
-private:
+public:
 	template<class T>
 	void ProcessSend(PacketID id, const T& packet);
 	void ProcessRecv();

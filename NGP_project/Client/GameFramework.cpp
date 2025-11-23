@@ -31,8 +31,8 @@ void GameFramework::Init()
 	GET_SINGLE(SoundManager)->LoadSound(L"main_music", L"main_music.wav", SoundType::BGM);
 
 	_gameNetwork = new GameNetwork;
-
 	_scene = new GameScene;
+	_scene->SetGameNetwork(_gameNetwork);
 	_gameNetwork->SetGameScene(_scene);
 }
 

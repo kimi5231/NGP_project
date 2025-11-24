@@ -343,7 +343,7 @@ void GameNetwork::RecvMovePacket(S_Move_Packet movePacket)
 	switch (movePacket.type)
 	{
 	case ObjectType::Player:
-		_gameScene->GetLocalPlayer()->SetPos(movePacket.pos);
+		_gameScene->SyncPlayerPos(movePacket.objectID, movePacket.pos);
 		break;
 	case ObjectType::NormalMonster:
 	case ObjectType::TankMonster:

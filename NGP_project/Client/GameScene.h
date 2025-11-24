@@ -41,6 +41,9 @@ public:
 	// Input
 	Dir ConvertVecToDir(const Vertex& dir);		// Vec -> Dir
 
+	// Sync
+	void SyncPlayerPos(int id, const Vertex& pos);
+
 public:
 	virtual void ProcessInput() override;
 

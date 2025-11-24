@@ -224,6 +224,14 @@ Dir GameScene::ConvertVecToDir(const Vertex& dir)
 	if (dir.x == 1 && dir.y == 1) return Dir::RightDown;
 }
 
+void GameScene::SyncPlayerPos(int id, const Vertex& pos)
+{
+	if (_players.find(id) != _players.end()) 
+	{
+		_players[id]->SetPos(pos);
+	}
+}
+
 void GameScene::ProcessInput()
 {
 	if (!_localPlayer)

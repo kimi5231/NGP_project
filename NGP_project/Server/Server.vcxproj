@@ -137,6 +137,7 @@
     <ClInclude Include="BombObject.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="NormalMonster.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="BomberMonster.cpp" />
     <ClCompile Include="BombObject.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="NormalMonster.cpp" />

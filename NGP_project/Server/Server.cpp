@@ -1,14 +1,17 @@
 #include "pch.h"
 #include "ServerFramework.h"
 #include "Room.h"
-
-ServerFramework* g_framework;
+#include "Global.h"
+#include "TimeManager.h"
 
 DWORD WINAPI ProcessGameData(LPVOID client)
 {
+	GET_SINGLE(TimeManager)->Init();
+
 	while (true)
 	{
 		g_framework->GetRoom()->Update();
+		GET_SINGLE(TimeManager)->Update();
 	}
 	
 	return 0;

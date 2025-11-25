@@ -191,7 +191,7 @@ void ServerFramework::Broadcast(PacketID id, const T& packetData)
 		ProcessSend(id, packetData, client->socket);
 }
 
-GameObjectRef ServerFramework::AddObject(ObjectType type)
+GameObjectRef ServerFramework::SendAddObjectPacket(ObjectType type)
 {
 	// Object 생성
 	GameObjectRef object = _room->AddObject(type);
@@ -203,7 +203,7 @@ GameObjectRef ServerFramework::AddObject(ObjectType type)
 	return object;
 }
 
-void ServerFramework::RemoveObject(int id)
+void ServerFramework::SendRemoveObjectPacket(int id)
 {
 	std::vector<GameObjectRef>& objects = _room->GetObjects();
 	for (GameObjectRef object : objects)
@@ -225,7 +225,7 @@ void ServerFramework::RemoveObject(int id)
 void ServerFramework::ProcessAccept(SOCKET clientSocket)
 {
 	// 접속한 Client를 나타낼 Player 추가
-	GameObjectRef player = AddObject(ObjectType::Player);
+	GameObjectRef player = SendAddObjectPacket(ObjectType::Player);
 
 	ClientRef newClient = std::make_shared<Client>();
 	newClient->id = _generateClientID++;
@@ -261,7 +261,7 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 void ServerFramework::ProcessDisconnect(ClientRef client)
 {
 	// 연결 끊긴 Client를 나타내는 Player 제거
-	RemoveObject(client->player->GetID());
+	SendRemoveObjectPacket(client->player->GetID());
 	
 	std::cout << "Client" << client->id << " 연결 끊김" << std::endl;
 

@@ -42,7 +42,10 @@ public:
 	Dir ConvertVecToDir(const Vertex& dir);		// Vec -> Dir
 
 	// Sync
-	void SyncPlayerPos(int id, const Vertex& pos);
+	void SyncPlayer(int id, const Vertex& pos, const Dir dir, const ObjectState state);
+
+	void SyncMonsterPos(int id, const Vertex& pos);
+	void SyncMonsterDir(int id, const Dir dir);
 
 public:
 	virtual void ProcessInput() override;

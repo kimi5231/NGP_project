@@ -61,6 +61,7 @@ public:
 	bool IsArrive() const;
 
 	void SetState(ObjectState state) { _state = state; }
+	ObjectState GetState() { return _state; }
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
 	bool CanDamage() const { return !_invincible; }
 public:

@@ -96,3 +96,20 @@ void Player::Move(Vertex vecDir, Dir dir)
     _pos.x = std::clamp(_pos.x, (int)(gBackgroundRect.left), (int)(gBackgroundRect.right));
     _pos.y = std::clamp(_pos.y, (int)(gBackgroundRect.top), (int)(gBackgroundRect.bottom));
 }
+
+void Player::SetDirAndFrame(Dir dir)
+{
+    switch (dir)
+    {
+    case Dir::Left:        _curFrame.y = 1; break;
+    case Dir::Right:       _curFrame.y = 0; break;
+    case Dir::Up:          _curFrame.y = 5; break;
+    case Dir::Down:        _curFrame.y = 9; break;
+    case Dir::LeftUp:      _curFrame.y = 6; break;
+    case Dir::LeftDown:    _curFrame.y = 8; break;
+    case Dir::RightUp:     _curFrame.y = 4; break;
+    case Dir::RightDown:   _curFrame.y = 2; break;
+    }
+
+    _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+}

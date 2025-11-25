@@ -17,9 +17,7 @@ public:
 	void ProcessRecv();
 	
 	// Send Packet
-	void SendUpdateObjectStatePacket(int id, ObjectType type, ObjectState state);
-	void SendUpdateDirPacket(int id, ObjectType type, Dir dir);
-	void SendMovePacket(int id, ObjectType type, Vertex pos);
+	void SendMovePacket(int id, ObjectType type, Vertex pos, Dir dir, ObjectState state);
 	void SendCollisionPacket(CollisionType c_type, int id1, ObjectType type1, Vertex pos1, int id2, ObjectType type2, Vertex pos2);
 	void SendUseItemPacket(int id, ObjectType itemType);
 	void SendStayGamePacket(int id);
@@ -30,7 +28,7 @@ public:
 	void RecvRemoveObject(S_RemoveObject_Packet removeObjectPacket);
 	void RecvUpdateObjectState(S_UpdateObjectState_Packet updateObjectStatePacket);
 	void RecvUpdateDir(S_UpdateDir_Packet updateDirPacket);
-	void RecvMovePacket(S_Move_Packet movePacket);
+	void RecvMove(S_Move_Packet movePacket);
 	void RecvChangeNextStagePacket(S_ChangeNextStage_Packet changeNextStagePacket);
 	void RecvCollisionResultPacket(S_CollisionResult_Packet collisionResultPacket);
 	void RecvMonsterDamagedPacket(S_MonsterDamaged_Packet monsterDamagedPacket);

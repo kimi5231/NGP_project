@@ -224,11 +224,29 @@ Dir GameScene::ConvertVecToDir(const Vertex& dir)
 	if (dir.x == 1 && dir.y == 1) return Dir::RightDown;
 }
 
-void GameScene::SyncPlayerPos(int id, const Vertex& pos)
+void GameScene::SyncPlayer(int id, const Vertex& pos, const Dir dir, const ObjectState state)
 {
 	if (_players.find(id) != _players.end()) 
 	{
 		_players[id]->SetPos(pos);
+		_players[id]->SetDirAndFrame(dir);
+		_players[id]->SetState(state);
+	}
+}
+
+void GameScene::SyncMonsterPos(int id, const Vertex& pos)
+{
+	if (_monsters.find(id) != _monsters.end())
+	{
+		_monsters[id]->SetPos(pos);
+	}
+}
+
+void GameScene::SyncMonsterDir(int id, const Dir dir)
+{
+	if (_monsters.find(id) != _monsters.end())
+	{
+		_monsters[id]->SetDir(dir);
 	}
 }
 
@@ -254,9 +272,8 @@ void GameScene::ProcessInput()
 	if (vecDir.x != 0 || vecDir.y != 0) {
 		_localPlayer->Move(vecDir, dir);
 
-		// 서버로 Move, Dir 패킷 Send
-		_gameNetwork->SendUpdateDirPacket(_localPlayer->GetId(), ObjectType::Player, dir);
-		_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos());
+		// 이동 후 서버로 Move 패킷 Send
+		_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());
 	}
 
 	//// 총알 발사

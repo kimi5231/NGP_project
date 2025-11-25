@@ -128,8 +128,6 @@ public:                                     \
 enum PacketID
 {
     // Client
-    C_UpdateObjectState,
-    C_UpdateDir,
     C_Move,
     C_Collision,
     C_UseItem,
@@ -187,6 +185,8 @@ struct S_Move_Packet
     int objectID;
     ObjectType type;
     Vertex pos;
+    Dir dir;
+    ObjectState state;
 };
 
 struct S_ChangeNextStage_Packet
@@ -212,25 +212,13 @@ struct S_ItemUseResult_Packet
 };
 
 // Client Packet
-struct C_UpdateObjectState_Packet
-{
-    int objectID;
-    ObjectType type;
-    ObjectState state;
-};
-
-struct C_UpdateDir_Packet
-{
-    int objectID;
-    ObjectType type;
-    Dir dir;
-};
-
 struct C_Move_Packet
 {
     int objectID;
     ObjectType type;
     Vertex pos;
+    Dir dir;
+    ObjectState state;
 };
 
 struct C_Collision_Packet

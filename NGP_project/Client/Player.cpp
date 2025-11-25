@@ -65,6 +65,8 @@ void Player::SetItem(ItemRef item)
 
 void Player::Move(Vertex vecDir, Dir dir)
 {
+    SetState(ObjectState::Move);
+
     _prevPos = _pos;
 
     // 대각선 정규화

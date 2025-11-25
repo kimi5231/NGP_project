@@ -85,8 +85,6 @@ struct Vertex
 enum PacketID
 {
     // Client
-    C_UpdateObjectState,
-    C_UpdateDir,
     C_Move,
     C_Collision,
     C_UseItem,

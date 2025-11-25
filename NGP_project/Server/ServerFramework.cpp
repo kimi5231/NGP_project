@@ -45,7 +45,6 @@ ServerFramework::ServerFramework()
 
 	// Client ID 생성기 초기화
 	_generateClientID = 1;
-
 }
 
 ServerFramework::~ServerFramework()
@@ -57,7 +56,6 @@ ServerFramework::~ServerFramework()
 
 	// 윈속 종료
 	WSACleanup();
-
 }
 
 void ServerFramework::Update()
@@ -205,21 +203,10 @@ GameObjectRef ServerFramework::SendAddObjectPacket(ObjectType type)
 
 void ServerFramework::SendRemoveObjectPacket(int id)
 {
-	std::vector<GameObjectRef>& objects = _room->GetObjects();
-	for (GameObjectRef object : objects)
-	{
-		if (object->GetID() == id)
-		{
-			// Packet Data 생성
-			S_RemoveObject_Packet packetData{ object->GetID(), object->GetObjectType() };
-			// Object 삭제
-			objects.erase(std::find(objects.begin(), objects.end(), object));
-			// Object가 삭제됨을 Room에 있는 모든 Client에게 알림
-			Broadcast(S_RemoveObject, packetData);
-
-			return;
-		}
-	}
+	// Object 삭제 
+	S_RemoveObject_Packet packetData = _room->RemoveObject(id);
+	// Object가 삭제됨을 Room에 있는 모든 Client에게 알림
+	Broadcast(S_RemoveObject, packetData);
 }
 
 void ServerFramework::ProcessAccept(SOCKET clientSocket)

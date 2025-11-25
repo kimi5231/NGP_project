@@ -15,6 +15,7 @@ public:
 
 public:
 	GameObjectRef AddObject(ObjectType type);
+	S_RemoveObject_Packet RemoveObject(int id);
 
 public:
 	std::vector<GameObjectRef>& GetObjects() { return _objects; }

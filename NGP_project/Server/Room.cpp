@@ -119,6 +119,27 @@ GameObjectRef Room::AddObject(ObjectType type)
 	return object;
 }
 
+S_RemoveObject_Packet Room::RemoveObject(int id)
+{
+	for (GameObjectRef object : _objects)
+	{
+		if (object->GetID() == id)
+		{
+			// Packet Data 생성
+			S_RemoveObject_Packet packetData{ object->GetID(), object->GetObjectType() };
+
+			// Object 삭제
+			EnterCriticalSection(&_cs);
+			_objects.erase(std::find(_objects.begin(), _objects.end(), object));
+			LeaveCriticalSection(&_cs);
+			
+			g_framework->SendRemoveObjectPacket(id);
+
+			return packetData;
+		}
+	}
+}
+
 void Room::InitObstalce()
 {
 	// 이미 배열이 있으면 해제 후 재할당

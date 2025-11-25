@@ -139,10 +139,6 @@ void ServerFramework::ProcessRecv(ClientRef client)
 	// Data 추출
 	switch (header.id)
 	{
-	case C_UpdateObjectState:
-		break;
-	case C_UpdateDir:
-		break;
 	case C_Move:
 		C_Move_Packet movePacket;
 		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(C_Move_Packet));

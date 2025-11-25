@@ -29,8 +29,11 @@ public:
 	Vertex GetPos() const { return _pos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetTargetPos() const { return _targetPos; }
+	void SetDir(Dir dir) { _dir = dir; }
+	Dir GetDir() { return _dir; }
 
 	void SetState(ObjectState state) { _state = state; }
+	ObjectState GetState() { return _state; }
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
 
 	Status _status{};

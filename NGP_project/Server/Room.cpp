@@ -203,4 +203,6 @@ void Room::SpawnMonster()
 	EnterCriticalSection(&_cs);
 	_objects.push_back(monster);
 	LeaveCriticalSection(&_cs);
+
+
 }

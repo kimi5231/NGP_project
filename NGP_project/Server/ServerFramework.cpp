@@ -283,10 +283,12 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 		{
 			// 나중에 bool값 받기
 			object->SetPos(packet.pos);
+			object->SetDir(packet.dir);
+			object->SetState(packet.state);
 
 			std::cout << "Object " << packet.objectID << ": Move " << packet.pos.x << ", " << packet.pos.y << std::endl;
 
-			S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos()};
+			S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState()};
 			// 자신을 제외한 모든 클라이언트에게 알리기
 			for (ClientRef client : _clients)
 			{

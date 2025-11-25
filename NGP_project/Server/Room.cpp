@@ -17,6 +17,8 @@ Room::Room()
 	InitializeCriticalSection(&_cs);
 
 	_generateID = 1;
+	_playerCount = 0;
+	_state = RoomState::Idle;
 }
 
 Room::~Room()
@@ -26,6 +28,11 @@ Room::~Room()
 
 void Room::Update()
 {
+	if (_state != RoomState::Playing)
+		return;
+
+	SpawnMonster();
+
 	EnterCriticalSection(&_cs);
 	for (const auto& object : _objects) {
 		switch (object->GetObjectType()) {
@@ -74,6 +81,7 @@ GameObjectRef Room::AddObject(ObjectType type)
 		EnterCriticalSection(&_cs);
 		_objects.push_back(player);
 		LeaveCriticalSection(&_cs);
+		_playerCount++;
 		return player;
 	}
 

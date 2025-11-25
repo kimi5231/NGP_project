@@ -71,6 +71,12 @@ enum class CollisionType
     Item,
 };
 
+enum class RoomState
+{
+    Idle,
+    Playing,
+};
+
 struct Vertex
 {
     int x, y;

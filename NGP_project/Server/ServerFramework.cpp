@@ -3,7 +3,6 @@
 #include "Room.h"
 #include "Player.h"
 
-
 ServerFramework::ServerFramework()
 {
 	// 윈속 초기화
@@ -257,6 +256,10 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 			ProcessSend(S_AddObject, packetData, newClient->socket);
 		}
 	}
+
+	// 게임 시작 인원이 되면 게임중으로 RoomState 변경
+	if (_room->GetPlayerCount() == 3)
+		_room->SetRoomState(RoomState::Playing);
 }
 
 void ServerFramework::ProcessDisconnect(ClientRef client)

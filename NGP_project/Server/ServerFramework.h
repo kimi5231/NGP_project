@@ -25,10 +25,10 @@ public:
 	template <class T>
 	std::vector<char> CreatePakcet(PacketID id, const T& packetData);
 
-private:
+public:
 	// Send
-	GameObjectRef AddObject(ObjectType type);
-	void RemoveObject(int id);
+	GameObjectRef SendAddObjectPacket(ObjectType type);
+	void SendRemoveObjectPacket(int id);
 
 	template <class T>
 	void Broadcast(PacketID id, const T& packetData);

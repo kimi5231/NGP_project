@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "TimeManager.h"
 #include "Constant.h"
+#include "Global.h"
+#include "ServerFramework.h"
 
 // Monster
 #include "Monster.h"
@@ -73,19 +75,48 @@ void Room::Update()
 
 GameObjectRef Room::AddObject(ObjectType type)
 {
-	if (type == ObjectType::Player)
+	GameObjectRef object;
+
+	switch (type)
 	{
-		// Player 생성
-		PlayerRef player = std::make_shared<Player>();
-		player->SetID(_generateID++);
-		EnterCriticalSection(&_cs);
-		_objects.push_back(player);
-		LeaveCriticalSection(&_cs);
+	case ObjectType::Player:
+		object = std::make_shared<Player>();
 		_playerCount++;
-		return player;
+		break;
+	case ObjectType::NormalMonster:
+		object = std::make_shared<NormalMonster>();
+		break;
+	case ObjectType::TankMonster:
+		object = std::make_shared<TankMonster>();
+		break;
+	case ObjectType::BomberMonster:
+		object = std::make_shared<BomberMonster>();
+		break;
+	case ObjectType::RespawnMonster:
+		object = std::make_shared<RespawnMonster>();
+		break;
+	case ObjectType::ObstacleMonster:
+		object = std::make_shared<ObstacleMonster>();
+		break;
+	case ObjectType::Item:
+		break;
+	case ObjectType::Bullet:
+		break;
+	case ObjectType::Bomb:
+		break;
+	case ObjectType::UI:
+		break;
+	case ObjectType::Obstacle:
+		break;
 	}
 
-	// 추후 다른 객체 클래스 추가되면 코드 추가 예정
+	object->SetID(_generateID++);
+
+	EnterCriticalSection(&_cs);
+	_objects.push_back(object);
+	LeaveCriticalSection(&_cs);
+
+	return object;
 }
 
 void Room::InitObstalce()
@@ -172,37 +203,16 @@ void Room::SpawnMonster()
 {
 	// 시간에 따라 몬스터 추가
 	static float monsterSpawnTimer{};
-	std::shared_ptr<Monster> monster;
-	if (GET_SINGLE(TimeManager)->CheckTimer(monsterSpawnTimer, MONSTER_SPAWN_TIME)) {
-		int type = static_cast<int>(ObjectType::NormalMonster) + rand() % 5;
-		switch (static_cast<ObjectType>(type)) {
-		case ObjectType::NormalMonster:
-			monster = std::make_shared<NormalMonster>();
-			break;
-		case ObjectType::TankMonster:
-			monster = std::make_shared<TankMonster>();
-			break;
-		case ObjectType::BomberMonster:
-			monster = std::make_shared<BomberMonster>();
-			break;
-		case ObjectType::RespawnMonster:
-			monster = std::make_shared<RespawnMonster>();
-			break;
-		case ObjectType::ObstacleMonster:
-			monster = std::make_shared<ObstacleMonster>();
-			break;
-		}
-	}
-	if (!monster) return;
 
+	if (GET_SINGLE(TimeManager)->CheckTimer(monsterSpawnTimer, MONSTER_SPAWN_TIME))
+	{
+		int type = static_cast<int>(ObjectType::NormalMonster) + rand() % 5;
+		GameObjectRef monster = g_framework->SendAddObjectPacket(static_cast<ObjectType>(type));
+		if (!monster) return;
+	}
+	
 	//// item, bomb 생성을 위한 콜백함수 설정
 	//monster->SetCallback([this](GameObject* obj) {
 	//	this->AddObject(obj);
 	//	});
-
-	EnterCriticalSection(&_cs);
-	_objects.push_back(monster);
-	LeaveCriticalSection(&_cs);
-
-
 }

@@ -350,18 +350,18 @@ void GameNetwork::RecvMove(S_Move_Packet movePacket)
 	}
 }
 
-void GameNetwork::RecvChangeNextStagePacket(S_ChangeNextStage_Packet changeNextStagePacket)
+void GameNetwork::RecvChangeNextStage(S_ChangeNextStage_Packet changeNextStagePacket)
 {
 }
 
-void GameNetwork::RecvCollisionResultPacket(S_CollisionResult_Packet collisionResultPacket)
+void GameNetwork::RecvCollisionResult(S_CollisionResult_Packet collisionResultPacket)
 {
 }
 
-void GameNetwork::RecvMonsterDamagedPacket(S_MonsterDamaged_Packet monsterDamagedPacket)
+void GameNetwork::RecvMonsterDamaged(S_MonsterDamaged_Packet monsterDamagedPacket)
 {
 }
 
-void GameNetwork::RecvItemUseResultPacket(S_ItemUseResult_Packet itemUseResultPacket)
+void GameNetwork::RecvItemUseResult(S_ItemUseResult_Packet itemUseResultPacket)
 {
 }

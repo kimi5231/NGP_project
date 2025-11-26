@@ -29,10 +29,10 @@ public:
 	void RecvUpdateObjectState(S_UpdateObjectState_Packet updateObjectStatePacket);
 	void RecvUpdateDir(S_UpdateDir_Packet updateDirPacket);
 	void RecvMove(S_Move_Packet movePacket);
-	void RecvChangeNextStagePacket(S_ChangeNextStage_Packet changeNextStagePacket);
-	void RecvCollisionResultPacket(S_CollisionResult_Packet collisionResultPacket);
-	void RecvMonsterDamagedPacket(S_MonsterDamaged_Packet monsterDamagedPacket);
-	void RecvItemUseResultPacket(S_ItemUseResult_Packet itemUseResultPacket);
+	void RecvChangeNextStage(S_ChangeNextStage_Packet changeNextStagePacket);
+	void RecvCollisionResult(S_CollisionResult_Packet collisionResultPacket);
+	void RecvMonsterDamaged(S_MonsterDamaged_Packet monsterDamagedPacket);
+	void RecvItemUseResult(S_ItemUseResult_Packet itemUseResultPacket);
 
 public:
 	template <class T>

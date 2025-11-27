@@ -143,6 +143,9 @@ void ServerFramework::ProcessRecv(ClientRef client)
 		ProcessMovePacket(movePacket);
 		break;
 	case C_Collision:
+		C_Collision_Packet collisionPacket;
+		memcpy(&collisionPacket, packet.data() + sizeof(Header), sizeof(C_Collision_Packet));
+		ProcessCollisionPacket(collisionPacket);
 		break;
 	case C_UseItem:
 		break;
@@ -197,6 +200,12 @@ void ServerFramework::SendRemoveObjectPacket(GameObjectRef object)
 	Broadcast(S_RemoveObject, packetData);
 }
 
+void ServerFramework::SendMovePacket(GameObjectRef object)
+{
+	S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState()};
+	Broadcast(S_Move, packetData);
+}
+
 void ServerFramework::SendUpdateTimerPacket()
 {
 	S_UpdateTimer_Packet packetData{ _room->GetTimer() };
@@ -224,9 +233,6 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 	_clients.push_back(newClient);
 
 	std::cout << "Client" << newClient->id << " 접속" << std::endl;
-
-	// 새로 접속한 Client에게 자기 자신을 나타내는 Player 정보 송신
-	SendAddObjectPacket(player);
 
 	// 새로 접속한 Client에게 Room에 있는 모든 Object 정보 송신
 	std::unordered_map<int, GameObjectRef> objects = _room->GetObjects();
@@ -272,4 +278,9 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 		if (client->player->GetID() != packet.objectID)
 			ProcessSend(S_Move, packetData, client->socket);
 	}
+}
+
+void ServerFramework::ProcessCollisionPacket(C_Collision_Packet packet)
+{
+
 }

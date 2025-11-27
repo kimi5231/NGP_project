@@ -29,6 +29,7 @@ public:
 	// Send
 	void SendAddObjectPacket(GameObjectRef object);
 	void SendRemoveObjectPacket(GameObjectRef object);
+	void SendMovePacket(GameObjectRef object);
 	void SendUpdateTimerPacket();
 
 	template <class T>
@@ -39,6 +40,7 @@ private:
 	void ProcessAccept(SOCKET clientSocket);
 	void ProcessDisconnect(ClientRef client);
 	void ProcessMovePacket(C_Move_Packet packet);
+	void ProcessCollisionPacket(C_Collision_Packet packet);
 
 public:
 	Room* GetRoom() { return _room; }

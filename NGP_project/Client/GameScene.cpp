@@ -271,6 +271,7 @@ void GameScene::ProcessInput()
 	
 	if (vecDir.x != 0 || vecDir.y != 0) {
 		_localPlayer->Move(vecDir, dir);
+		_players[_localPlayer->GetId()]->Move(vecDir, dir);
 
 		// 이동 후 서버로 Move 패킷 Send
 		_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());

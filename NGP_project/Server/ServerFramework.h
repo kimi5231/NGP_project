@@ -27,8 +27,8 @@ public:
 
 public:
 	// Send
-	GameObjectRef SendAddObjectPacket(ObjectType type);
-	void SendRemoveObjectPacket(int id);
+	void SendAddObjectPacket(GameObjectRef object);
+	void SendRemoveObjectPacket(GameObjectRef object);
 	void SendUpdateTimerPacket();
 
 	template <class T>
@@ -47,7 +47,7 @@ private:
 	fd_set _readSet{};
 	fd_set _writeSet{};
 
-	SOCKET _listenSocket{};
+	SOCKET _listenSocket{}; 
 	std::vector<ClientRef> _clients;
 
 	int _generateClientID{};

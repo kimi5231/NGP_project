@@ -15,19 +15,18 @@ public:
 
 public:
 	GameObjectRef AddObject(ObjectType type);
-	S_RemoveObject_Packet RemoveObject(int id);
+	void RemoveObject(int id);
 
 public:
-	std::vector<GameObjectRef>& GetObjects() { return _objects; }
+	std::unordered_map<int, GameObjectRef>& GetObjects() { return _objects; }
+	GameObjectRef GetObject(int id) { return _objects[id]; }
 	int GetPlayerCount() { return _playerCount; }
 	void SetRoomState(RoomState state) { _state = state; }
 	int GetTimer() { return _timer; }
 
 private:
-	std::vector<GameObjectRef> _objects;
+	std::unordered_map<int, GameObjectRef> _objects;
 	int _curStage{ 1 };
-
-	CRITICAL_SECTION _cs;
 
 	int _generateID;
 	int _playerCount;
@@ -35,4 +34,6 @@ private:
 	RoomState _state;
 
 	int _timer;
+
+	CRITICAL_SECTION _cs;
 };

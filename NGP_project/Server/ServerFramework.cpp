@@ -181,22 +181,18 @@ std::vector<char> ServerFramework::CreatePakcet(PacketID id, const T& packetData
 	return packet;
 }
 
-GameObjectRef ServerFramework::SendAddObjectPacket(ObjectType type)
+void ServerFramework::SendAddObjectPacket(GameObjectRef object)
 {
-	// Object 생성
-	GameObjectRef object = _room->AddObject(type);
 	// Packet Data 생성
-	S_AddObject_Packet packetData{ object->GetID(), type, object->GetPos() };
+	S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos() };
 	// 새로운 Object가 추가됨을 Room에 있는 모든 Client에게 알림
 	Broadcast(S_AddObject, packetData);
-
-	return object;
 }
 
-void ServerFramework::SendRemoveObjectPacket(int id)
+void ServerFramework::SendRemoveObjectPacket(GameObjectRef object)
 {
-	// Object 삭제 
-	S_RemoveObject_Packet packetData = _room->RemoveObject(id);
+	// Packet Data 생성
+	S_RemoveObject_Packet packetData{ object->GetID(), object->GetObjectType() };
 	// Object가 삭제됨을 Room에 있는 모든 Client에게 알림
 	Broadcast(S_RemoveObject, packetData);
 }
@@ -218,7 +214,7 @@ void ServerFramework::Broadcast(PacketID id, const T& packetData)
 void ServerFramework::ProcessAccept(SOCKET clientSocket)
 {
 	// 접속한 Client를 나타낼 Player 추가
-	GameObjectRef player = SendAddObjectPacket(ObjectType::Player);
+	GameObjectRef player = _room->AddObject(ObjectType::Player);
 
 	ClientRef newClient = std::make_shared<Client>();
 	newClient->id = _generateClientID++;
@@ -230,20 +226,15 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 	std::cout << "Client" << newClient->id << " 접속" << std::endl;
 
 	// 새로 접속한 Client에게 자기 자신을 나타내는 Player 정보 송신
-	S_AddObject_Packet packetData{ player->GetID(), player->GetObjectType(), player->GetPos() };
-	ProcessSend(S_AddObject, packetData, newClient->socket);
+	SendAddObjectPacket(player);
 
 	// 새로 접속한 Client에게 Room에 있는 모든 Object 정보 송신
-	std::vector<GameObjectRef>& objects = _room->GetObjects();
-	for (GameObjectRef object : objects)
+	std::unordered_map<int, GameObjectRef> objects = _room->GetObjects();
+	for (const auto& item : objects)
 	{
 		// 자기 자신 제외
-		if (newClient->player->GetID() != object->GetID())
-		{
-			// AddObject 함수는 Object 생성까지하기 때문에 사용하지 않음
-			S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos() };
-			ProcessSend(S_AddObject, packetData, newClient->socket);
-		}
+		if (newClient->player->GetID() != item.first)
+			SendAddObjectPacket(item.second);
 	}
 
 	// 게임 시작 인원이 되면 게임중으로 RoomState 변경
@@ -254,9 +245,9 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 void ServerFramework::ProcessDisconnect(ClientRef client)
 {
 	// 연결 끊긴 Client를 나타내는 Player 제거
-	SendRemoveObjectPacket(client->player->GetID());
+	_room->RemoveObject(client->player->GetID());
 	
-	std::cout << "Client" << client->id << " 연결 끊김" << std::endl;
+	std::cout << "Client" << client->id << " 접속 종료" << std::endl;
 
 	// 연결 끊긴 Client 제거
 	closesocket(client->socket);
@@ -265,27 +256,20 @@ void ServerFramework::ProcessDisconnect(ClientRef client)
 
 void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 {
-	std::vector<GameObjectRef>& objects = _room->GetObjects();
-	for (GameObjectRef object : objects)
+	GameObjectRef object = _room->GetObject(packet.objectID);
+
+	// 나중에 bool값 받기
+	object->SetPos(packet.pos);
+	object->SetDir(packet.dir);
+	object->SetState(packet.state);
+
+	std::cout << "Object " << packet.objectID << ": Move " << packet.pos.x << ", " << packet.pos.y << std::endl;
+
+	S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState() };
+	// 자신을 제외한 모든 클라이언트에게 알리기
+	for (ClientRef client : _clients)
 	{
-		if (object->GetID() == packet.objectID)
-		{
-			// 나중에 bool값 받기
-			object->SetPos(packet.pos);
-			object->SetDir(packet.dir);
-			object->SetState(packet.state);
-
-			std::cout << "Object " << packet.objectID << ": Move " << packet.pos.x << ", " << packet.pos.y << std::endl;
-
-			S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState()};
-			// 자신을 제외한 모든 클라이언트에게 알리기
-			for (ClientRef client : _clients)
-			{
-				if(client->player->GetID() != packet.objectID)
-					ProcessSend(S_Move, packetData, client->socket);
-			}
-			
-			return;
-		}
+		if (client->player->GetID() != packet.objectID)
+			ProcessSend(S_Move, packetData, client->socket);
 	}
 }

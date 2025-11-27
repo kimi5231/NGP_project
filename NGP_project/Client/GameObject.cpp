@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "BoundingBox.h"
 #include "GameObject.h"
 #include "Global.h"
@@ -44,7 +44,6 @@ void GameObject::Render(HDC hdc, HDC srcDC)
     SelectObject(srcDC, _bitmap);
     BitBlt(hdc, _pos.x - _size.x / 2, _pos.y - _size.y / 2, _size.x, _size.y, srcDC, _curFrame.x * _size.x, _curFrame.y * _size.y, SRCPAINT);
 }
-
 
 BoundingBox GameObject::GetBoundingBox() const
 {

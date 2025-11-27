@@ -29,3 +29,12 @@ bool GameObject::SetPos(Vertex pos)
 
     return false;
 }
+
+bool GameObject::IsArrive() const
+{
+    if (_status._speed + DIFF >= abs(_targetPos.x - _pos.x) && _status._speed + DIFF >= abs(_targetPos.y - _pos.y)) {
+        return true;
+    }
+
+    return false;
+}

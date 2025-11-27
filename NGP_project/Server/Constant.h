@@ -10,7 +10,7 @@
 #define MONSTER_SPAWN_TIME 3
 
 // 임시지정
-#define MONSTER_SPEED 2
+#define MONSTER_SPEED 100
 #define PLAYER_SPEED 3
 #define BOARD_SIZE 16
 #define CELL_SIZE 30

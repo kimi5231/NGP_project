@@ -56,7 +56,7 @@ public:
 private:
 	PlayerRef _localPlayer;	// MyPlayer
 
-	std::unordered_map<int, PlayerRef> _players;
+	std::unordered_map<int, PlayerRef> _players;	// Other Player(local과 분리)
 	std::unordered_map<int, MonsterRef> _monsters;
 	std::unordered_map<int, GameObjectRef> _objects; // obstacle, bomb, projectile 등
 

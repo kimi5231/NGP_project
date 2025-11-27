@@ -152,21 +152,26 @@ void GameScene::Render(HDC hdc)
 	StretchBlt(memDC, gBackgroundRect.left, gBackgroundRect.top, gBackgroundRect.right- gBackgroundRect.left, gBackgroundRect.bottom - gBackgroundRect.top, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
 
 	// GameObject
+	// Local Player
+	{
+		_localPlayer->Render(memDC, memDCImage);
+		_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
+	}
 	for (const auto& [id, player] : _players) {
 		player->Render(memDC, memDCImage);
-		player->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
+		player->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 255, 0));	// 디버깅용
 	}
 
 	//_merchant->Render(memDC, memDCImage);
 
 	for (const auto& [id, monster] : _monsters) {
 		monster->Render(memDC, memDCImage);
-		monster->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
+		monster->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
 	}
 
 	for (const auto [id, object] : _objects) {
 		object->Render(memDC, memDCImage);
-		object->GetBoundingBox().Render(memDC, memDCImage);	// 디버깅용
+		object->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
 	}
 
 	// UI
@@ -188,13 +193,22 @@ void GameScene::Render(HDC hdc)
 }
 
 void GameScene::AddPlayer(int id, PlayerRef player)
-{
-	_players[id] = player;
-	_players[id]->SetId(id);
-	
+{	
 	// MyPlayer 설정
 	if (!_localPlayer)
+	{
 		_localPlayer = player;
+		_localPlayer->SetId(id);
+
+		return;
+	}
+
+	// 다른 Player 설정
+	if (id == _localPlayer->GetId())	// 이거 안 하면 클라 두개 실행시 첫 번째 클라에서 플레이어 3명 그려짐
+		return;
+
+	_players[id] = player;
+	_players[id]->SetId(id);
 }
 
 void GameScene::AddMonster(int id, MonsterRef monster)
@@ -271,7 +285,6 @@ void GameScene::ProcessInput()
 	
 	if (vecDir.x != 0 || vecDir.y != 0) {
 		_localPlayer->Move(vecDir, dir);
-		_players[_localPlayer->GetId()]->Move(vecDir, dir);
 
 		// 이동 후 서버로 Move 패킷 Send
 		_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());

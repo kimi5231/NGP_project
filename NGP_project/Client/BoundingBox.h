@@ -28,13 +28,19 @@ public:
             );
     }
 
-    void Render(HDC hdc, HDC srcDC)
+    void Render(HDC hdc, HDC srcDC, COLORREF color)
     {
+        HPEN hPen = CreatePen(PS_SOLID, 2, color);
+        HPEN oldPen = (HPEN)SelectObject(hdc, hPen);
+
         HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
-        SelectObject(hdc, hBrush);
+        HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
 
         Rectangle(hdc, Left(), Top(), Right(), Bottom());
 
-        DeleteObject(hBrush);
+        SelectObject(hdc, oldPen);
+        SelectObject(hdc, oldBrush);
+
+        DeleteObject(hPen);
     }
 };

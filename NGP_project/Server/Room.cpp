@@ -214,24 +214,6 @@ void Room::InitObstalce()
 	//}
 }
 
-void Room::InitStage()
-{
-	// ChangeStage에서 처리할 작업
-	
-	//// 플레이어 말고 초기화
-	//EnterCriticalSection(&_cs);
-	//_objects.erase(
-	//	std::remove_if(_objects.begin(), _objects.end(),
-	//		[](const auto& obj) { return (obj->GetObjectType() != ObjectType::Player); }),
-	//	_objects.end()
-	//);
-
-	//// 생성
-	//InitObstalce();
-	//LeaveCriticalSection(&_cs);
-	//// 플레이어 위치도 초기화하기
-}
-
 void Room::SpawnMonster()
 {
 	// 시간에 따라 몬스터 추가

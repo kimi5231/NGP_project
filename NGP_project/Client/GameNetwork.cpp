@@ -135,9 +135,9 @@ void GameNetwork::ProcessRecv()
 		memcpy(&removeObjectPacket, packet.data() + sizeof(Header), sizeof(S_RemoveObject_Packet));
 		RecvRemoveObject(removeObjectPacket);
 		break;
-	case S_UpdateObjectState:	// Monster, Object 전용
+	case S_UpdateObjectState:	
 		break;
-	case S_UpdateDir:	// Monster 전용
+	case S_UpdateDir:
 		S_UpdateDir_Packet dirPacket;
 		memcpy(&dirPacket, packet.data() + sizeof(Header), sizeof(S_UpdateDir_Packet));
 		RecvUpdateDir(dirPacket);
@@ -325,16 +325,6 @@ void GameNetwork::RecvUpdateObjectState(S_UpdateObjectState_Packet updateObjectS
 
 void GameNetwork::RecvUpdateDir(S_UpdateDir_Packet updateDirPacket)
 {
-	switch (updateDirPacket.type)
-	{
-	case ObjectType::NormalMonster:
-	case ObjectType::TankMonster:
-	case ObjectType::BomberMonster:
-	case ObjectType::RespawnMonster:
-	case ObjectType::ObstacleMonster:
-		_gameScene->SyncMonsterDir(updateDirPacket.objectID, updateDirPacket.dir);
-		break;
-	}
 }
 
 void GameNetwork::RecvMove(S_Move_Packet movePacket)
@@ -349,7 +339,7 @@ void GameNetwork::RecvMove(S_Move_Packet movePacket)
 	case ObjectType::BomberMonster:
 	case ObjectType::RespawnMonster:
 	case ObjectType::ObstacleMonster:
-		_gameScene->SyncMonsterPos(movePacket.objectID, movePacket.pos);
+		_gameScene->SyncMonster(movePacket.objectID, movePacket.pos, movePacket.dir, movePacket.state);
 		break;
 	}
 }

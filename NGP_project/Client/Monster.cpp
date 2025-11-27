@@ -123,3 +123,16 @@ void Monster::Damaged(int damage)
         _stateMachine->Start();
     }
 }
+
+void Monster::SetDirAndFrame(Dir dir)
+{
+    switch (dir)
+    {
+    case Dir::Left:        _curFrame.y = 3; break;
+    case Dir::Right:       _curFrame.y = 1; break;
+    case Dir::Up:          _curFrame.y = 0; break;
+    case Dir::Down:        _curFrame.y = 2; break;
+    }
+
+    _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+}

@@ -25,6 +25,9 @@ public:
 	virtual void Damaged(int damage);
 
 	void SetCallback(SpawnCallback cb) { _spawnCallback = cb; }
+
+	void SetDirAndFrame(Dir dir);
+
 protected:
 	SpawnCallback _spawnCallback;
 	bool _isFollow{ true };

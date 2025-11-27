@@ -225,9 +225,6 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 	std::cout << "Client" << newClient->id << " 접속" << std::endl;
 
-	// 새로 접속한 Client에게 자기 자신을 나타내는 Player 정보 송신
-	SendAddObjectPacket(player);
-
 	// 새로 접속한 Client에게 Room에 있는 모든 Object 정보 송신
 	std::unordered_map<int, GameObjectRef> objects = _room->GetObjects();
 	for (const auto& item : objects)

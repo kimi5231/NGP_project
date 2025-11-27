@@ -29,6 +29,7 @@ public:
 	// Send
 	void SendAddObjectPacket(GameObjectRef object);
 	void SendRemoveObjectPacket(GameObjectRef object);
+	void SendMovePacket(GameObjectRef object);
 	void SendUpdateTimerPacket();
 
 	template <class T>

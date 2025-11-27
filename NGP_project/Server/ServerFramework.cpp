@@ -197,6 +197,12 @@ void ServerFramework::SendRemoveObjectPacket(GameObjectRef object)
 	Broadcast(S_RemoveObject, packetData);
 }
 
+void ServerFramework::SendMovePacket(GameObjectRef object)
+{
+	S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState()};
+	Broadcast(S_Move, packetData);
+}
+
 void ServerFramework::SendUpdateTimerPacket()
 {
 	S_UpdateTimer_Packet packetData{ _room->GetTimer() };

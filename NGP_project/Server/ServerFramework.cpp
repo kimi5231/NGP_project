@@ -143,6 +143,9 @@ void ServerFramework::ProcessRecv(ClientRef client)
 		ProcessMovePacket(movePacket);
 		break;
 	case C_Collision:
+		C_Collision_Packet collisionPacket;
+		memcpy(&collisionPacket, packet.data() + sizeof(Header), sizeof(C_Collision_Packet));
+		ProcessCollisionPacket(collisionPacket);
 		break;
 	case C_UseItem:
 		break;
@@ -275,4 +278,9 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 		if (client->player->GetID() != packet.objectID)
 			ProcessSend(S_Move, packetData, client->socket);
 	}
+}
+
+void ServerFramework::ProcessCollisionPacket(C_Collision_Packet packet)
+{
+
 }

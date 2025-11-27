@@ -46,6 +46,8 @@ void GameScene::Update()
 	if (!_localPlayer.get())
 		return;
 
+	ProcessInput();
+
 	//if(_timerUI._progress != 0)	// 0초이면 생성x
 	//	SpawnMonster();
 	//else {	// 스테이지 끝난 뒤 바깥으로 가보면
@@ -109,7 +111,7 @@ void GameScene::Update()
 	//	else
 	//		monster->_status._speed = MONSTER_SPEED;
 	//}
-	_localPlayer->Update();
+	//_localPlayer->Update();
 
 	//if (useLightning) {	// 번개 아이템 사용 시
 	//	_monsters.clear();
@@ -127,8 +129,6 @@ void GameScene::Update()
 
 	//// 타이머 UI
 	//_timerUI.Update(_stagetime);
-
-	ProcessInput();
 }
 
 void GameScene::Render(HDC hdc)
@@ -248,19 +248,13 @@ void GameScene::SyncPlayer(int id, const Vertex& pos, const Dir dir, const Objec
 	}
 }
 
-void GameScene::SyncMonsterPos(int id, const Vertex& pos)
+void GameScene::SyncMonster(int id, const Vertex& pos, const Dir dir, const ObjectState state)
 {
 	if (_monsters.find(id) != _monsters.end())
 	{
 		_monsters[id]->SetPos(pos);
-	}
-}
-
-void GameScene::SyncMonsterDir(int id, const Dir dir)
-{
-	if (_monsters.find(id) != _monsters.end())
-	{
-		_monsters[id]->SetDir(dir);
+		_monsters[id]->SetDirAndFrame(dir);
+		_monsters[id]->SetState(state);
 	}
 }
 

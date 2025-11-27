@@ -21,6 +21,7 @@ public:
 	std::vector<GameObjectRef>& GetObjects() { return _objects; }
 	int GetPlayerCount() { return _playerCount; }
 	void SetRoomState(RoomState state) { _state = state; }
+	int GetTimer() { return _timer; }
 
 private:
 	std::vector<GameObjectRef> _objects;
@@ -32,4 +33,6 @@ private:
 	int _playerCount;
 
 	RoomState _state;
+
+	int _timer;
 };

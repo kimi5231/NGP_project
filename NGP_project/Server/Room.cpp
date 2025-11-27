@@ -21,6 +21,7 @@ Room::Room()
 	_generateID = 1;
 	_playerCount = 0;
 	_state = RoomState::Idle;
+	_timer = 50;
 }
 
 Room::~Room()
@@ -33,6 +34,16 @@ void Room::Update()
 	if (_state != RoomState::Playing)
 		return;
 
+	// Timer Update
+	static float sumTime;
+	sumTime += GET_SINGLE(TimeManager)->GetDeltaTime();
+	if (sumTime > 1)
+	{
+		sumTime = 0;
+		_timer -= 1;
+		g_framework->SendUpdateTimerPacket();
+	}
+	
 	SpawnMonster();
 
 	EnterCriticalSection(&_cs);

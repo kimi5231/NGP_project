@@ -29,6 +29,7 @@ public:
 	// Send
 	GameObjectRef SendAddObjectPacket(ObjectType type);
 	void SendRemoveObjectPacket(int id);
+	void SendUpdateTimerPacket();
 
 	template <class T>
 	void Broadcast(PacketID id, const T& packetData);

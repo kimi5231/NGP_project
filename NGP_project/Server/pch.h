@@ -100,6 +100,7 @@ enum PacketID
     S_CollisionResult,
     S_MonsterDamaged,
     S_ItemUseResult,
+    S_UpdateTimer,
 };
 
 struct Header
@@ -165,6 +166,11 @@ struct S_MonsterDamaged_Packet
 struct S_ItemUseResult_Packet
 {
     bool result;
+};
+
+struct S_UpdateTimer_Packet
+{
+    int time;
 };
 
 // Client Packet

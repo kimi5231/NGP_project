@@ -181,14 +181,6 @@ std::vector<char> ServerFramework::CreatePakcet(PacketID id, const T& packetData
 	return packet;
 }
 
-template<class T>
-void ServerFramework::Broadcast(PacketID id, const T& packetData)
-{
-	// Room에 있는 모든 Client에게 Packet 송신
-	for (ClientRef client : _clients)
-		ProcessSend(id, packetData, client->socket);
-}
-
 GameObjectRef ServerFramework::SendAddObjectPacket(ObjectType type)
 {
 	// Object 생성
@@ -207,6 +199,20 @@ void ServerFramework::SendRemoveObjectPacket(int id)
 	S_RemoveObject_Packet packetData = _room->RemoveObject(id);
 	// Object가 삭제됨을 Room에 있는 모든 Client에게 알림
 	Broadcast(S_RemoveObject, packetData);
+}
+
+void ServerFramework::SendUpdateTimerPacket()
+{
+	S_UpdateTimer_Packet packetData{ _room->GetTimer() };
+	Broadcast(S_UpdateTimer, packetData);
+}
+
+template<class T>
+void ServerFramework::Broadcast(PacketID id, const T& packetData)
+{
+	// Room에 있는 모든 Client에게 Packet 송신
+	for (ClientRef client : _clients)
+		ProcessSend(id, packetData, client->socket);
 }
 
 void ServerFramework::ProcessAccept(SOCKET clientSocket)

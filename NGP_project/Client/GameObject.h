@@ -67,7 +67,7 @@ public:
 public:
 	void ResetCurFrame();
 
-	float _timer{};	// 총알, 폭탄 등에 사용
+	int _timer{};	// 총알, 폭탄 등에 사용
 	Status _status{0, 10};
 protected:
 	HBITMAP _bitmap{};

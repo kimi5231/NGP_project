@@ -17,6 +17,6 @@ public:
 public:
 
 	std::pair<ItemRef, ItemRef> _item;	// first: 가지고 있는 아이템, second: 사용 중인 아이템
-	float _itemTimer{};
+	int _itemTimer{};
 };
 

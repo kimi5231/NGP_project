@@ -43,7 +43,7 @@ public:
 		_maxSize = _box._halfSize.x;
 	}
 
-	void Update(float& currentTime);
+	void Update(int& currentTime);
 
 	UINT _maxProgress, _progress;
 	int _maxSize;

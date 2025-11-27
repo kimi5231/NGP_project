@@ -13,7 +13,9 @@
 //char* SERVERIP = (char*)"192.168.64.118";
 //char* SERVERIP = (char*)"192.168.35.52";	// 미나 데스크탑
 // 루프백
-char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"127.0.0.1";
+
+char* SERVERIP = (char*)"192.168.70.32";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512
@@ -155,6 +157,10 @@ void GameNetwork::ProcessRecv()
 		break;
 	case S_ItemUseResult:
 		break;
+	case S_UpdateTimer:
+		S_UpdateTimer_Packet updateTimerPacket;
+		memcpy(&updateTimerPacket, packet.data() + sizeof(Header), sizeof(S_UpdateTimer_Packet));
+		RecvUpdateTimer(updateTimerPacket);
 	}
 }
 
@@ -364,4 +370,9 @@ void GameNetwork::RecvMonsterDamaged(S_MonsterDamaged_Packet monsterDamagedPacke
 
 void GameNetwork::RecvItemUseResult(S_ItemUseResult_Packet itemUseResultPacket)
 {
+}
+
+void GameNetwork::RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket)
+{
+	_gameScene->GetTimerUI().Update(updateTimerPacket.time);
 }

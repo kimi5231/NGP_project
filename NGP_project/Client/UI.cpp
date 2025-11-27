@@ -32,7 +32,7 @@ void UI::Render(HDC hdc, HDC srcDC, int num)
     DeleteObject(hBrush);
 }
 
-void ProgressBar::Update(float& currentTime)
+void ProgressBar::Update(int& currentTime)
 {
     // 0이 아니면 진행
     if (_progress == 0) {

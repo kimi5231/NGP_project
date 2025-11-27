@@ -9,4 +9,4 @@ extern HWND hWnd;
 extern bool useLightning, useWaterWheel, useShotgun, useHourglass;
 extern float bulletSpeed;
 
-bool CheckTimer(float& currentTime, float targetTime);
+bool CheckTimer(int& currentTime, int targetTime);

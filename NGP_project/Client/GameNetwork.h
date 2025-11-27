@@ -33,6 +33,7 @@ public:
 	void RecvCollisionResult(S_CollisionResult_Packet collisionResultPacket);
 	void RecvMonsterDamaged(S_MonsterDamaged_Packet monsterDamagedPacket);
 	void RecvItemUseResult(S_ItemUseResult_Packet itemUseResultPacket);
+	void RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket);
 
 public:
 	template <class T>

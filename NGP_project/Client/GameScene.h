@@ -47,6 +47,9 @@ public:
 	void SyncMonsterPos(int id, const Vertex& pos);
 	void SyncMonsterDir(int id, const Dir dir);
 
+	// Get UI
+	ProgressBar& GetTimerUI() { return _timerUI; }
+
 public:
 	virtual void ProcessInput() override;
 

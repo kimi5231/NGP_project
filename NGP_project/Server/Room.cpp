@@ -52,34 +52,34 @@ void Room::Update()
 	}
 
 	EnterCriticalSection(&_cs);
-	for (const auto& object : _objects) {
-		switch (object.second->GetObjectType()) {
-		case ObjectType::Player:
-			object.second->Update();
-			break;
-		case ObjectType::ObstacleMonster:
-		case ObjectType::NormalMonster:
-		case ObjectType::RespawnMonster:
-		case ObjectType::TankMonster:
-		case ObjectType::BomberMonster:
-			// bomb object 생성 callBack 함수
-			/*dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
-				this->AddObject(obj);
-				});*/
-			for (const auto& otherObject : _objects) {
-				switch (otherObject.second->GetObjectType()) {
-				case ObjectType::Player:	// player 객체를 몬스터 update에 넘겨줌
-					dynamic_cast<Monster*>(object.second.get())->Update(otherObject.second.get());
-					break;
-				case ObjectType::Bullet:	// 충알 충돌처리
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-		}
-	}
+	//for (const auto& object : _objects) {
+	//	switch (object.second->GetObjectType()) {
+	//	case ObjectType::Player:
+	//		object.second->Update();
+	//		break;
+	//	case ObjectType::ObstacleMonster:
+	//	case ObjectType::NormalMonster:
+	//	case ObjectType::RespawnMonster:
+	//	case ObjectType::TankMonster:
+	//	case ObjectType::BomberMonster:
+	//		// bomb object 생성 callBack 함수
+	//		/*dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+	//			this->AddObject(obj);
+	//			});*/
+	//		for (const auto& otherObject : _objects) {
+	//			switch (otherObject.second->GetObjectType()) {
+	//			case ObjectType::Player:	// player 객체를 몬스터 update에 넘겨줌
+	//				dynamic_cast<Monster*>(object.second.get())->Update(otherObject.second.get());
+	//				break;
+	//			case ObjectType::Bullet:	// 충알 충돌처리
+	//				break;
+	//			default:
+	//				break;
+	//			}
+	//		}
+	//		break;
+	//	}
+	//}
 
 	//// 상태가 Dead면 클라 연결 끊으면 오류남
 	///*_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {

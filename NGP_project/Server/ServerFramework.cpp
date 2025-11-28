@@ -232,6 +232,9 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 	_clients.push_back(newClient);
 
+	S_AddObject_Packet packetData{ player->GetID(), player->GetObjectType(), player->GetPos() };
+	ProcessSend(S_AddObject, packetData, newClient->socket);
+
 	std::cout << "Client" << newClient->id << " 접속" << std::endl;
 
 	// 새로 접속한 Client에게 Room에 있는 모든 Object 정보 송신
@@ -240,11 +243,14 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 	{
 		// 자기 자신 제외
 		if (newClient->player->GetID() != item.first)
-			SendAddObjectPacket(item.second);
+		{
+			S_AddObject_Packet packetData{ item.second->GetID(), item.second->GetObjectType(), item.second->GetPos() };
+			ProcessSend(S_AddObject, packetData, newClient->socket);
+		}
 	}
 
 	// 게임 시작 인원이 되면 게임중으로 RoomState 변경
-	//if (_room->GetPlayerCount() == 3)
+	if (_room->GetPlayerCount() == 3)
 		_room->SetRoomState(RoomState::Playing);
 }
 

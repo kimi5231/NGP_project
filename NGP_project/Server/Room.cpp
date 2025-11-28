@@ -34,16 +34,16 @@ void Room::Update()
 	if (_state != RoomState::Playing)
 		return;
 
-	//// Timer Update
-	//static float sumTime;
-	//sumTime += GET_SINGLE(TimeManager)->GetDeltaTime();
-	//if (sumTime > 1)
-	//{
-	//	sumTime = 0;
-	//	_timer -= 1;
-	//	g_framework->SendUpdateTimerPacket();
-	//}
-	//
+	// Timer Update
+	static float sumTime;
+	sumTime += GET_SINGLE(TimeManager)->GetDeltaTime();
+	if (sumTime > 1)
+	{
+		sumTime = 0;
+		_timer -= 1;
+		g_framework->SendUpdateTimerPacket();
+	}
+	
 	SpawnMonster();
 
 	for (const auto& item : _objects)
@@ -51,11 +51,12 @@ void Room::Update()
 		//item.second->Update();
 	}
 
-	EnterCriticalSection(&_cs);
+
+	//EnterCriticalSection(&_cs);
 	//for (const auto& object : _objects) {
-	//	switch (object.second->GetObjectType()) {
+	//	switch (object->GetObjectType()) {
 	//	case ObjectType::Player:
-	//		object.second->Update();
+	//		object->Update();
 	//		break;
 	//	case ObjectType::ObstacleMonster:
 	//	case ObjectType::NormalMonster:
@@ -70,6 +71,9 @@ void Room::Update()
 	//			switch (otherObject.second->GetObjectType()) {
 	//			case ObjectType::Player:	// player 객체를 몬스터 update에 넘겨줌
 	//				dynamic_cast<Monster*>(object.second.get())->Update(otherObject.second.get());
+	//			switch (object->GetObjectType()) {
+	//			case ObjectType::Player:	// player 객체를 몬스터 update에 넘겨줌
+	//				dynamic_cast<Monster*>(object.get())->Update(otherObject.get());
 	//				break;
 	//			case ObjectType::Bullet:	// 충알 충돌처리
 	//				break;
@@ -77,15 +81,12 @@ void Room::Update()
 	//				break;
 	//			}
 	//		}
-	//		break;
-	//	}
-	//}
 
 	//// 상태가 Dead면 클라 연결 끊으면 오류남
 	///*_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {
 	//	return o->IsState(ObjectState::Dead);
 	//	}), _objects.end());*/
-	LeaveCriticalSection(&_cs);
+	//LeaveCriticalSection(&_cs);
 }
 
 GameObjectRef Room::AddObject(ObjectType type)
@@ -147,6 +148,71 @@ void Room::RemoveObject(int id)
 	g_framework->SendRemoveObjectPacket(object);
 }
 
+void Room::InitObstalce()
+{
+	// 클라이언트에서 해도 되는 작업
+
+	// 이미 배열이 있으면 해제 후 재할당
+
+	//int sizeOffset{ CELL_SIZE / 2 };	// 위치를 맞추기 위한 값
+	//// 가로
+	//for (int i = 0; i < BOARD_SIZE; ++i) {
+	//	if (i >= 7 && i <= 9) continue;
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ (gBackgroundRect.left + sizeOffset) + i * CELL_SIZE, gBackgroundRect.top + sizeOffset }));
+	//}
+	//for (int i = 0; i < BOARD_SIZE; ++i) {
+	//	if (i >= 7 && i <= 9) continue;
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + i * CELL_SIZE, gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE }));
+	//}
+	//// 세로
+	//for (int i = 1; i < BOARD_SIZE - 1; ++i) {
+	//	if (i >= 7 && i <= 9) continue;
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
+	//}
+	//for (int i = 1; i < BOARD_SIZE - 1; ++i) {
+	//	if (i >= 7 && i <= 9) continue;
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 1) * CELL_SIZE, gBackgroundRect.top + sizeOffset + i * CELL_SIZE }));
+	//}
+
+	//switch (_curStage) {
+	//case 1:
+	//	break;
+	//case 2:
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+	//	break;
+	//case 3:
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset }));
+
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset }));
+
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+	//	break;
+	//case 4:
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset }));
+
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+	//	_objects.push_back(std::make_shared<GameObject>(ObjectType::Obstacle, Vertex{ gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset }));
+	//	break;
+	//}
+}
 
 void Room::SpawnMonster()
 {
@@ -155,7 +221,6 @@ void Room::SpawnMonster()
 
 	if (GET_SINGLE(TimeManager)->CheckTimer(monsterSpawnTimer, MONSTER_SPAWN_TIME))
 	{
-		g_framework->SendUpdateTimerPacket();
 		int type = static_cast<int>(ObjectType::NormalMonster) + rand() % 5;
 		GameObjectRef monster = AddObject(static_cast<ObjectType>(type));
 		if (!monster) 

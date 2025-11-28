@@ -39,7 +39,7 @@ void GameFramework::Init()
 void GameFramework::Update()
 {
 	GET_SINGLE(InputManager)->Update();
-	GET_SINGLE(TimeManager)->Update();
+	GET_SINGLE(TimeManager)->Tick(60);
 
 	_scene->Update();
 	_gameNetwork->Update();

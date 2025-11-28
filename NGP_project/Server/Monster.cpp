@@ -3,9 +3,6 @@
 #include "Monster.h"
 #include "Item.h"
 #include "Constant.h"
-#include "Global.h"
-#include "ServerFramework.h"
-#include "TimeManager.h"
 
 RECT gBackgroundRect{ 150, 50, FRAME_BUFFER_WIDTH - 170, FRAME_BUFFER_HEIGHT - 70 };	// 변경 시 클라도 동일하게 변경 필요
 
@@ -40,19 +37,19 @@ void Monster::Init()
     switch (randSpawn(gen)) {
     case 0:
         // 북쪽
-        _pos = { float(gBackgroundRect.left + cellOffset), float(gBackgroundRect.top + CELL_SIZE / 2) };
+        _pos = { gBackgroundRect.left + cellOffset, gBackgroundRect.top + CELL_SIZE / 2 };
         break;
     case 1:
         // 동쪽
-        _pos = { float(gBackgroundRect.right - CELL_SIZE / 2), float(gBackgroundRect.top + cellOffset) };
+        _pos = { gBackgroundRect.right - CELL_SIZE / 2, gBackgroundRect.top + cellOffset };
         break;
     case 2:
         // 남쪽
-        _pos = { float(gBackgroundRect.left + cellOffset), float(gBackgroundRect.bottom - CELL_SIZE / 2) };
+        _pos = { gBackgroundRect.left + cellOffset, gBackgroundRect.bottom - CELL_SIZE / 2 };
         break;
     case 3:
         // 서쪽
-        _pos = { float(gBackgroundRect.left + CELL_SIZE / 2), float(gBackgroundRect.top + cellOffset) };
+        _pos = { gBackgroundRect.left + CELL_SIZE / 2, gBackgroundRect.top + cellOffset };
         break;
     default:
         break;
@@ -64,7 +61,7 @@ void Monster::Init()
 
 void Monster::FindTarget(GameObject* other)
 {
-    SetTargetPos({ float(randWidth(gen)), float(randHeight(gen)) });
+    SetTargetPos({ randWidth(gen), randHeight(gen) });
 }
 
 bool Monster::Move()
@@ -78,30 +75,15 @@ bool Monster::Move()
     if (distance <= _status._speed) {
         // 목표 위치에 도달했을 경우
         _pos = _targetPos;
+        return true;
     }
 
     // 일정한 속도로 이동
     double ratio = _status._speed / distance;
-    float delta = GET_SINGLE(TimeManager)->GetDeltaTime();
-    _pos.x += (dx * ratio) * delta;
-    _pos.y += (dy * ratio) * delta;
+    _pos.x += static_cast<int>(dx * ratio);
+    _pos.y += static_cast<int>(dy * ratio);
     
-    if (direct.x <= 0) {
-        _dir = Dir::Left;
-    }
-    else if (direct.x > 0) {
-        _dir = Dir::Right;
-    }
-    if (direct.y <= 0) {
-        _dir = Dir::Up;
-    }
-    else if (direct.y > 0) {
-        _dir = Dir::Down;
-    }
-
-    g_framework->SendMovePacket(shared_from_this());
-
-    return true;
+    return false;
 }
 
 void Monster::Update(GameObject* other)

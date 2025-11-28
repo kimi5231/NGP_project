@@ -75,9 +75,8 @@ void Player::Move(Vertex vecDir, Dir dir)
     float ny = vecDir.y / length;
     
     // 위치 업데이트
-    float delta = GET_SINGLE(TimeManager)->GetDeltaTime();
-    _pos.x += nx * _status._speed * delta;
-    _pos.y += ny * _status._speed * delta;
+    _pos.x += nx * _status._speed;
+    _pos.y += ny * _status._speed;
 
     // 방향 설정
     _dir = dir;
@@ -96,8 +95,8 @@ void Player::Move(Vertex vecDir, Dir dir)
 
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 
-    _pos.x = std::clamp(_pos.x, (float)(gBackgroundRect.left), (float)(gBackgroundRect.right));
-    _pos.y = std::clamp(_pos.y, (float)(gBackgroundRect.top), (float)(gBackgroundRect.bottom));
+    _pos.x = std::clamp(_pos.x, (int)(gBackgroundRect.left), (int)(gBackgroundRect.right));
+    _pos.y = std::clamp(_pos.y, (int)(gBackgroundRect.top), (int)(gBackgroundRect.bottom));
 }
 
 void Player::SetDirAndFrame(Dir dir)

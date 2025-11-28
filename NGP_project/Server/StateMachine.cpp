@@ -19,9 +19,10 @@ void MoveToTargetState::Exit(Monster* self)
 
 void MoveToTargetState::Tick(Monster* self, GameObject* other)
 {
-	self->Move();
-	if (self->IsArrive() || self->GetIsFollow()) {
-		Exit(self);
+	if (self->Move()) {
+		if (self->GetIsFollow()) {
+			Exit(self);
+		}
 	}
 }
 
@@ -48,7 +49,6 @@ void FindTargetState::Tick(Monster* self, GameObject* other)
 	self->FindTarget(other);
 	Exit(self);
 }
-
 // Dead
 void DeadState::Enter(Monster* self)
 {

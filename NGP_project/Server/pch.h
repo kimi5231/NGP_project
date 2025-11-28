@@ -79,7 +79,7 @@ enum class RoomState
 
 struct Vertex
 {
-    float x, y;
+    int x, y;
 };
 
 enum PacketID

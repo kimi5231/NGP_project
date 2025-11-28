@@ -1,4 +1,4 @@
-ï»¿#include "pch.h"
+#include "pch.h"
 #include "ServerFramework.h"
 #include "Room.h"
 #include "Global.h"
@@ -19,10 +19,10 @@ DWORD WINAPI ProcessGameData(LPVOID client)
 
 int main(void)
 {	
-	// ServerFramework ìƒì„±
+	// ServerFramework »ı¼º
 	g_framework = new ServerFramework();
 
-	// ë¡œì§ ì²˜ë¦¬ Thread ìƒì„±
+	// ·ÎÁ÷ Ã³¸® Thread »ı¼º
 	CreateThread(NULL, 0, ProcessGameData, NULL, 0, nullptr);
 
 	while (true)

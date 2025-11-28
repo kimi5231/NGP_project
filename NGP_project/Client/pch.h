@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -85,7 +85,7 @@ enum class CollisionType
 
 struct Vertex
 {
-    float x, y;
+    int x, y;
 
     float Length() const {
         return std::sqrt(x * x + y * y);

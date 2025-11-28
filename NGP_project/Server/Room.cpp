@@ -53,34 +53,45 @@ void Room::Update()
 
 
 	//EnterCriticalSection(&_cs);
-	//for (const auto& object : _objects) {
-	//	switch (object->GetObjectType()) {
-	//	case ObjectType::Player:
-	//		object->Update();
-	//		break;
-	//	case ObjectType::ObstacleMonster:
-	//	case ObjectType::NormalMonster:
-	//	case ObjectType::RespawnMonster:
-	//	case ObjectType::TankMonster:
-	//	case ObjectType::BomberMonster:
-	//		// bomb object 생성 callBack 함수
-	//		/*dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
-	//			this->AddObject(obj);
-	//			});*/
-	//		for (const auto& otherObject : _objects) {
-	//			switch (otherObject.second->GetObjectType()) {
-	//			case ObjectType::Player:	// player 객체를 몬스터 update에 넘겨줌
-	//				dynamic_cast<Monster*>(object.second.get())->Update(otherObject.second.get());
-	//			switch (object->GetObjectType()) {
-	//			case ObjectType::Player:	// player 객체를 몬스터 update에 넘겨줌
-	//				dynamic_cast<Monster*>(object.get())->Update(otherObject.get());
-	//				break;
-	//			case ObjectType::Bullet:	// 충알 충돌처리
-	//				break;
-	//			default:
-	//				break;
-	//			}
-	//		}
+	for (const auto& object : _objects) {
+		switch (object.second->GetObjectType()) {
+		case ObjectType::Player:
+			//object.second->Update();
+			break;
+		case ObjectType::ObstacleMonster:
+		case ObjectType::NormalMonster:
+		case ObjectType::RespawnMonster:
+		case ObjectType::TankMonster:
+		case ObjectType::BomberMonster:
+		{
+			Monster* monster = dynamic_cast<Monster*>(object.second.get());
+			if (!monster) break;
+
+			GameObject* closestPlayer = nullptr;
+			float minDistance = std::numeric_limits<float>::infinity();
+
+			// 가장 가까운 플레이어 탐색
+			for (const auto& otherObject : _objects) {
+				if (otherObject.second->GetObjectType() == ObjectType::Player) {
+					float dx = otherObject.second->GetPos().x - monster->GetPos().x;
+					float dy = otherObject.second->GetPos().y - monster->GetPos().y;
+					float distance = sqrt(dx * dx + dy * dy);
+
+					if (distance < minDistance) {
+						minDistance = distance;
+						closestPlayer = otherObject.second.get();
+					}
+				}
+			}
+
+			// 가장 가까운 플레이어에게만 이동
+			if (closestPlayer) {
+				monster->Update(closestPlayer);
+			}
+			break;
+		}
+		}
+	}
 
 	//// 상태가 Dead면 클라 연결 끊으면 오류남
 	///*_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {

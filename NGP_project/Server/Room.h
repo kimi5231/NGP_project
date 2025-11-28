@@ -9,8 +9,6 @@ public:
 
 public:
 	void Update();
-	void InitObstalce();
-	void InitStage();
 	void SpawnMonster();
 
 public:

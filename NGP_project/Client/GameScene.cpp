@@ -154,8 +154,10 @@ void GameScene::Render(HDC hdc)
 	// GameObject
 	// Local Player
 	{
-		_localPlayer->Render(memDC, memDCImage);
-		_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
+		if (_localPlayer) {
+			_localPlayer->Render(memDC, memDCImage);
+			_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
+		}
 	}
 	// Other Player
 	for (const auto& [id, player] : _players) {

@@ -11,9 +11,9 @@
 // 수영 데스크탑
 //char* SERVERIP = (char*)"61.255.49.141";
 // 미나 데스크탑
-//char* SERVERIP = (char*)"192.168.35.52";	
+char* SERVERIP = (char*)"192.168.35.52";	
 // 루프백
-char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"127.0.0.1";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512

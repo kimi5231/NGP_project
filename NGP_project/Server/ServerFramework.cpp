@@ -203,7 +203,6 @@ void ServerFramework::SendRemoveObjectPacket(GameObjectRef object)
 void ServerFramework::SendMovePacket(GameObjectRef object)
 {
 	S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState()};
-	std::cout << "Object " << packetData.objectID << ": Move " << packetData.pos.x << ", " << packetData.pos.y << std::endl;
 	Broadcast(S_Move, packetData);
 }
 

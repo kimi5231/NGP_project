@@ -195,6 +195,17 @@ void GameNetwork::SendMovePacket(int id, ObjectType type, Vertex pos, Dir dir, O
 	ProcessSend(PacketID::C_Move, packet);
 }
 
+void GameNetwork::SendCreateProjectilePacket(int id, Vertex pos, Dir dir)
+{
+	C_CreateProjectile_Packet packet;
+	packet.objectID = id;
+	packet.type = ObjectType::Bullet;
+	packet.pos = pos;
+	packet.dir = dir;
+
+	ProcessSend(PacketID::C_CreateProjectile, packet);
+}
+
 void GameNetwork::SendCollisionPacket(CollisionType c_type, int id1, ObjectType type1, Vertex pos1, int id2, ObjectType type2, Vertex pos2)
 {
 	C_Collision_Packet packet;

@@ -157,18 +157,19 @@ void GameScene::Render(HDC hdc)
 		_localPlayer->Render(memDC, memDCImage);
 		_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
 	}
+	// Other Player
 	for (const auto& [id, player] : _players) {
 		player->Render(memDC, memDCImage);
 		player->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 255, 0));	// 디버깅용
 	}
 
-	//_merchant->Render(memDC, memDCImage);
-
+	// Monster
 	for (const auto& [id, monster] : _monsters) {
 		monster->Render(memDC, memDCImage);
 		monster->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
 	}
 
+	// Objects
 	for (const auto [id, object] : _objects) {
 		object->Render(memDC, memDCImage);
 		object->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
@@ -267,7 +268,7 @@ void GameScene::ProcessInput()
 	InputManager* input = GET_SINGLE(InputManager);
 
 	static bool prevKeyUp{};
-	// 키 입력은 첫 번째 플레이어(자기자신)만 받음
+
 	// 이동
 	Vertex vecDir{};
 	if (input->GetButton(KeyType::A)) vecDir.x -= 1;
@@ -284,73 +285,66 @@ void GameScene::ProcessInput()
 		_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());
 	}
 
-	//// 총알 발사
-	//if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
-	//	Vertex playerPos = _localPlayer->GetPos();
-	//	if (input->GetButton(KeyType::Up)) {
-	//		if (input->GetButton(KeyType::Right)) { 
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos)); 
-	//			if (useShotgun) {
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-	//			}
-	//		}
-	//		else if (input->GetButton(KeyType::Left)) {
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-	//			if (useShotgun) {
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-	//			}
-	//		}
-	//		else {
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-	//			if (useShotgun) {
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-	//			}
-	//		}
-	//		prevKeyUp = false;
-	//	}
-	//	else if (input->GetButton(KeyType::Down)) {
-	//		if (input->GetButton(KeyType::Right)) {
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-	//			if (useShotgun) {
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-	//			}
-	//		}
-	//		else if (input->GetButton(KeyType::Left)) {
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-	//			if (useShotgun) {
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-	//			}
-	//		}
-	//		else {
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-	//			if (useShotgun) {
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-	//				_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-	//			}
-	//		}
-	//		prevKeyUp = false;
-	//	}
-	//	else if (input->GetButton(KeyType::Right)) {
-	//		_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-	//		if (useShotgun) {
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-	//		}
-	//		prevKeyUp = false;
-	//	}
-	//	else if (input->GetButton(KeyType::Left)) {
-	//		_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-	//		if (useShotgun) {
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-	//		}
-	//		prevKeyUp = false;
-	//	}
+	// 총알 발사
+	if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
+		Vertex playerPos = _localPlayer->GetPos();
+		Dir shootDir = Dir::Down;
+
+		bool up = input->GetButton(KeyType::Up);
+		bool down = input->GetButton(KeyType::Down);
+		bool left = input->GetButton(KeyType::Left);
+		bool right = input->GetButton(KeyType::Right);
+
+		if (up)
+		{
+			if (right) shootDir = Dir::RightUp;
+			else if (left) shootDir = Dir::LeftUp;
+			else shootDir = Dir::Up;
+		}
+		else if (down)
+		{
+			if (right) shootDir = Dir::RightDown;
+			else if (left) shootDir = Dir::LeftDown;
+			else shootDir = Dir::Down;
+		}
+		else if (left)
+		{
+			shootDir = Dir::Left;
+		}
+		else if (right)
+		{
+			shootDir = Dir::Right;
+		}
+
+		// 방향에 따른 총알 생성 in Local - 생성을 서버에서 받은 후에 해야하나???
+		switch (shootDir)
+		{
+		case Dir::Up:
+			//_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+			if (useShotgun) {
+				//_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+				//_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+			}
+			prevKeyUp = false;
+			_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
+			break;
+		}
+		//
+		//else if (input->GetButton(KeyType::Left)) {
+		//	_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
+		//	if (useShotgun) {
+		//		_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+		//		_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
+		//	}
+		//	prevKeyUp = false;
+		//}
+
+		// 서버로 Create Projectile 패킷 Send
+		//_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
+
+	}
+
+
 
 	//	// 물래방아 아이템 8방향으로 발사
 	//	if (useWaterWheel) {

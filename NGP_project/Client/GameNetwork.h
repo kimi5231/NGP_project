@@ -18,6 +18,7 @@ public:
 	
 	// Send Packet
 	void SendMovePacket(int id, ObjectType type, Vertex pos, Dir dir, ObjectState state);
+	void SendCreateProjectilePacket(int id, Vertex pos, Dir dir);
 	void SendCollisionPacket(CollisionType c_type, int id1, ObjectType type1, Vertex pos1, int id2, ObjectType type2, Vertex pos2);
 	void SendUseItemPacket(int id, ObjectType itemType);
 	void SendStayGamePacket(int id);

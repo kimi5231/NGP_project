@@ -37,19 +37,23 @@ void Monster::Init()
     switch (randSpawn(gen)) {
     case 0:
         // 북쪽
-        _pos = { gBackgroundRect.left + cellOffset, gBackgroundRect.top + CELL_SIZE / 2 };
+        _pos = { float(gBackgroundRect.left + cellOffset),
+                 float(gBackgroundRect.top + CELL_SIZE / 2) };
         break;
     case 1:
         // 동쪽
-        _pos = { gBackgroundRect.right - CELL_SIZE / 2, gBackgroundRect.top + cellOffset };
+        _pos = { float(gBackgroundRect.right - CELL_SIZE / 2),
+                 float(gBackgroundRect.top + cellOffset) };
         break;
     case 2:
         // 남쪽
-        _pos = { gBackgroundRect.left + cellOffset, gBackgroundRect.bottom - CELL_SIZE / 2 };
+        _pos = { float(gBackgroundRect.left + cellOffset),
+                 float(gBackgroundRect.bottom - CELL_SIZE / 2) };
         break;
     case 3:
         // 서쪽
-        _pos = { gBackgroundRect.left + CELL_SIZE / 2, gBackgroundRect.top + cellOffset };
+        _pos = { float(gBackgroundRect.left + CELL_SIZE / 2),
+                 float(gBackgroundRect.top + cellOffset) };
         break;
     default:
         break;
@@ -58,10 +62,10 @@ void Monster::Init()
     _stateMachine->Start();
 }
 
-
 void Monster::FindTarget(GameObject* other)
 {
-    SetTargetPos({ randWidth(gen), randHeight(gen) });
+    SetTargetPos({ float(randWidth(gen)),
+                   float(randHeight(gen)) });
 }
 
 bool Monster::Move()

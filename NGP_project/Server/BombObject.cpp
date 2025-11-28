@@ -56,8 +56,8 @@ bool BombObject::Move()
         break;
     }
 
-    _pos.x = std::clamp(_pos.x, (int)(gBackgroundRect.left), (int)(gBackgroundRect.right));
-    _pos.y = std::clamp(_pos.y, (int)(gBackgroundRect.top), (int)(gBackgroundRect.bottom));
+    _pos.x = std::clamp(_pos.x, (float)(gBackgroundRect.left), (float)(gBackgroundRect.right));
+    _pos.y = std::clamp(_pos.y, (float)(gBackgroundRect.top), (float)(gBackgroundRect.bottom));
 
     return true;
 }

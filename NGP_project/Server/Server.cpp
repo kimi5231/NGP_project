@@ -23,11 +23,14 @@ int main(void)
 	g_framework = new ServerFramework();
 
 	// 로직 처리 Thread 생성
-	CreateThread(NULL, 0, ProcessGameData, NULL, 0, nullptr);
+	//CreateThread(NULL, 0, ProcessGameData, NULL, 0, nullptr);
+	GET_SINGLE(TimeManager)->Init();
 
 	while (true)
 	{
 		g_framework->Update();
+		/*GET_SINGLE(TimeManager)->Update();
+		g_framework->GetRoom()->Update();*/
 	}
 
 	return 0;

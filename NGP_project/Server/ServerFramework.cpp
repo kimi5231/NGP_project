@@ -160,7 +160,8 @@ template <class T>
 void ServerFramework::ProcessSend(PacketID id, const T& packetData, SOCKET clientSocket)
 {
 	std::vector<char> packet = CreatePakcet(id, packetData);
-	int packetSize = sizeof(packet);
+	int packetSize = packet.size();
+	std::cout << "packet Type: " << id << " packetSize: " << packetSize << std::endl;
 
 	// packetSize 송신(고정 길이)
 	send(clientSocket, (char*)&packetSize, sizeof(int), 0);
@@ -251,7 +252,7 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 	}
 
 	// 게임 시작 인원이 되면 게임중으로 RoomState 변경
-	if (_room->GetPlayerCount() == 3)
+	if (_room->GetPlayerCount() == 2)
 		_room->SetRoomState(RoomState::Playing);
 }
 

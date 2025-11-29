@@ -3,6 +3,8 @@
 #include "Room.h"
 #include "Player.h"
 
+CRITICAL_SECTION g_cs;
+
 ServerFramework::ServerFramework()
 {
 	// 윈속 초기화
@@ -45,6 +47,7 @@ ServerFramework::ServerFramework()
 
 	// Client ID 생성기 초기화
 	_generateClientID = 1;
+	InitializeCriticalSection(&g_cs);
 }
 
 ServerFramework::~ServerFramework()
@@ -54,6 +57,7 @@ ServerFramework::~ServerFramework()
 	// listenSocket 종료
 	closesocket(_listenSocket);
 
+	DeleteCriticalSection(&g_cs);
 	// 윈속 종료
 	WSACleanup();
 }
@@ -160,13 +164,16 @@ template <class T>
 void ServerFramework::ProcessSend(PacketID id, const T& packetData, SOCKET clientSocket)
 {
 	std::vector<char> packet = CreatePakcet(id, packetData);
+	// 서버 ProcessSend
 	int packetSize = packet.size();
-	std::cout << "packet Type: " << id << " packetSize: " << packetSize << std::endl;
 
+	EnterCriticalSection(&g_cs);
 	// packetSize 송신(고정 길이)
-	send(clientSocket, (char*)&packetSize, sizeof(int), 0);
+	int res = send(clientSocket, (char*)&packetSize, sizeof(int), 0); // 변환된 값 송신
 	// packet 송신(가변 데이터)
 	send(clientSocket, packet.data(), packetSize, 0);
+	LeaveCriticalSection(&g_cs);
+	std::cout << "packet Type: " << id << " res: " << res << std::endl;
 }
 
 template<class T>

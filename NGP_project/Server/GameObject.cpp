@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "GameObject.h"
 
-#define DIFF 5  // 임시 상수
+#define DIFF 5.001  // 임시 상수
 
 GameObject::GameObject()
     : _state{ ObjectState::Idle }
@@ -16,6 +16,15 @@ GameObject::GameObject(ObjectState state)
 GameObject::GameObject(ObjectType type, Vertex pos)
     : _type{ type }, _pos{ pos }
 {
+}
+
+bool GameObject::IsArrive()
+{
+    if (_status._speed + DIFF >= abs(_targetPos.x - _pos.x) && _status._speed + DIFF >= abs(_targetPos.y - _pos.y)) {
+        return true;
+    }
+
+    return false;
 }
 
 bool GameObject::SetPos(Vertex pos)

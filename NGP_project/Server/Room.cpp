@@ -43,11 +43,10 @@ void Room::Update()
 		_timer -= 1;
 		g_framework->SendUpdateTimerPacket();
 	}
-	static int cnt{};
-	if (cnt == 0) {
+	//if (cnt == 0) {
 		SpawnMonster();
-		++cnt;
-	}
+	/*	++cnt;
+	}*/
 
 	for (const auto& item : _objects)
 	{
@@ -165,9 +164,9 @@ void Room::RemoveObject(int id)
 void Room::SpawnMonster()
 {
 	// 시간에 따라 몬스터 추가
-	//static float monsterSpawnTimer{};
+	static float monsterSpawnTimer{};
 
-	//if (GET_SINGLE(TimeManager)->CheckTimer(monsterSpawnTimer, MONSTER_SPAWN_TIME))
+	if (GET_SINGLE(TimeManager)->CheckTimer(monsterSpawnTimer, MONSTER_SPAWN_TIME))
 	{
 		int type = static_cast<int>(ObjectType::NormalMonster) + rand() % 5;
 		GameObjectRef monster = AddObject(static_cast<ObjectType>(type));

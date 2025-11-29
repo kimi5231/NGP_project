@@ -104,13 +104,12 @@ enum PacketID
     S_ItemUseResult,
     S_UpdateTimer,
 };
-#pragma pack(push, 1)
+
 struct Header
 {
     PacketID id;
     int dataSize;
 };
-#pragma pack(pop)
 
 // Server Packet
 struct S_AddObject_Packet

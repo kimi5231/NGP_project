@@ -19,10 +19,9 @@ void MoveToTargetState::Exit(Monster* self)
 
 void MoveToTargetState::Tick(Monster* self, GameObject* other)
 {
-	if (self->Move()) {
-		if (self->GetIsFollow()) {
-			Exit(self);
-		}
+	self->Move();
+	if (self->IsArrive() || self->GetIsFollow()) {
+		Exit(self);
 	}
 }
 

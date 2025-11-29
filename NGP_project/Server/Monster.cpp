@@ -78,11 +78,11 @@ bool Monster::Move()
     float dy = _targetPos.y - _pos.y;
     double distance = sqrt(dx * dx + dy * dy);
 
-    //if (distance <= _status._speed) {
-    //    // 목표 위치에 도달했을 경우
-    //    _pos = _targetPos;
-    //    return true;
-    //}
+    if (distance <= _status._speed) {
+        // 목표 위치에 도달했을 경우
+        _pos = _targetPos;
+        return true;
+    }
 
     // 일정한 속도로 이동
     int dirX = (dx > 0) ? 1 : (dx < 0 ? -1 : 0);

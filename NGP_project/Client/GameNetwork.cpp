@@ -30,8 +30,6 @@ void InitConsole()
 	std::cout << "콘솔 로그 시작!" << std::endl;
 }
 
-
-
 GameNetwork::GameNetwork()
 {
 	// 윈속 초기화
@@ -57,8 +55,7 @@ GameNetwork::GameNetwork()
 		return;
 		// err_quit("connect()");
 
-	InitConsole();
-
+	//InitConsole();
 }
 
 GameNetwork::~GameNetwork()

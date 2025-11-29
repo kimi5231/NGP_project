@@ -142,6 +142,11 @@ void ServerFramework::ProcessRecv(ClientRef client)
 		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(C_Move_Packet));
 		ProcessMovePacket(movePacket);
 		break;
+	case C_CreateProjectile:
+		C_CreateProjectile_Packet createProcjecilePacket;
+		memcpy(&createProcjecilePacket, packet.data() + sizeof(Header), sizeof(C_CreateProjectile_Packet));
+		ProcessCreateProjectilePacket(createProcjecilePacket);
+		break;
 	case C_Collision:
 		C_Collision_Packet collisionPacket;
 		memcpy(&collisionPacket, packet.data() + sizeof(Header), sizeof(C_Collision_Packet));
@@ -284,6 +289,13 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 		if (client->player->GetID() != packet.objectID)
 			ProcessSend(S_Move, packetData, client->socket);
 	}
+}
+
+void ServerFramework::ProcessCreateProjectilePacket(C_CreateProjectile_Packet packet)
+{
+	GameObjectRef projectile = _room->AddObject(packet.type, packet.pos, packet.dir);
+
+	std::cout << "Create Object " << packet.objectID << std::endl;
 }
 
 void ServerFramework::ProcessCollisionPacket(C_Collision_Packet packet)

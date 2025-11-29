@@ -40,6 +40,7 @@ private:
 	void ProcessAccept(SOCKET clientSocket);
 	void ProcessDisconnect(ClientRef client);
 	void ProcessMovePacket(C_Move_Packet packet);
+	void ProcessCreateProjectilePacket(C_CreateProjectile_Packet packet);
 	void ProcessCollisionPacket(C_Collision_Packet packet);
 
 public:

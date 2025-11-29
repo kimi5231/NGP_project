@@ -45,12 +45,13 @@ enum class ObjectType
     BomberMonster,
     RespawnMonster,
     ObstacleMonster,
-    Button,
     Item,
     Bullet,
     Bomb,
     UI,
     Obstacle,
+
+    Button,
 };
 
 enum class ItemType

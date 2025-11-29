@@ -14,7 +14,7 @@ public:
 	void SpawnMonster();
 
 public:
-	GameObjectRef AddObject(ObjectType type);
+	GameObjectRef AddObject(ObjectType type, Vertex pos = {-1, -1}, Dir dir = Dir::None);
 	void RemoveObject(int id);
 
 public:

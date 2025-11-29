@@ -63,6 +63,8 @@ enum class Dir
    LeftDown,
    RightUp,
    RightDown,
+
+   None,
 };
 
 enum class CollisionType

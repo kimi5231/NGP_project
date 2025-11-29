@@ -5,6 +5,7 @@
 #include "Constant.h"
 #include "Global.h"
 #include "ServerFramework.h"
+#include "Projectile.h"
 
 // Monster
 #include "Monster.h"
@@ -89,7 +90,7 @@ void Room::Update()
 	//LeaveCriticalSection(&_cs);
 }
 
-GameObjectRef Room::AddObject(ObjectType type)
+GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 {
 	GameObjectRef object;
 
@@ -117,6 +118,7 @@ GameObjectRef Room::AddObject(ObjectType type)
 	case ObjectType::Item:
 		break;
 	case ObjectType::Bullet:
+		object = std::make_shared<Projectile>(dir, pos);
 		break;
 	case ObjectType::Bomb:
 		break;

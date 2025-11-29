@@ -286,49 +286,88 @@ void GameScene::ProcessInput()
 	}
 
 	// 총알 발사
-	if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
-		Vertex playerPos = _localPlayer->GetPos();
-		Dir shootDir = Dir::Down;
+	{
+		bool downUp = input->GetButtonDown(KeyType::Up);
+		bool downDown = input->GetButtonDown(KeyType::Down);
+		bool downLeft = input->GetButtonDown(KeyType::Left);
+		bool downRight = input->GetButtonDown(KeyType::Right);
 
-		bool up = input->GetButton(KeyType::Up);
-		bool down = input->GetButton(KeyType::Down);
-		bool left = input->GetButton(KeyType::Left);
-		bool right = input->GetButton(KeyType::Right);
+		if (downUp || downDown || downLeft || downRight)
+		{
+			Vertex playerPos = _localPlayer->GetPos();
+			Dir shootDir = Dir::Down;
 
-		if (up)
-		{
-			if (right) shootDir = Dir::RightUp;
-			else if (left) shootDir = Dir::LeftUp;
-			else shootDir = Dir::Up;
-		}
-		else if (down)
-		{
-			if (right) shootDir = Dir::RightDown;
-			else if (left) shootDir = Dir::LeftDown;
-			else shootDir = Dir::Down;
-		}
-		else if (left)
-		{
-			shootDir = Dir::Left;
-		}
-		else if (right)
-		{
-			shootDir = Dir::Right;
-		}
-
-		// 방향에 따른 총알 생성 in Local - 생성을 서버에서 받은 후에 해야하나???
-		switch (shootDir)
-		{
-		case Dir::Up:
-			//_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-			if (useShotgun) {
-				//_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-				//_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+			// shootDir 결정
+			if (downUp)
+			{
+				if (downRight) shootDir = Dir::RightUp;
+				else if (downLeft) shootDir = Dir::LeftUp;
+				else shootDir = Dir::Up;
 			}
-			prevKeyUp = false;
+			else if (downDown)
+			{
+				if (downRight) shootDir = Dir::RightDown;
+				else if (downLeft) shootDir = Dir::LeftDown;
+				else shootDir = Dir::Down;
+			}
+			else if (downLeft)
+			{
+				shootDir = Dir::Left;
+			}
+			else if (downRight)
+			{
+				shootDir = Dir::Right;
+			}
+
+			// 패킷 1회 전송
 			_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
-			break;
 		}
+	}
+
+		// 
+		//if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
+		//	Vertex playerPos = _localPlayer->GetPos();
+		//	Dir shootDir = Dir::Down;
+
+		//	bool up = input->GetButton(KeyType::Up);
+		//	bool down = input->GetButton(KeyType::Down);
+		//	bool left = input->GetButton(KeyType::Left);
+		//	bool right = input->GetButton(KeyType::Right);
+
+		//	if (up)
+		//	{
+		//		if (right) shootDir = Dir::RightUp;
+		//		else if (left) shootDir = Dir::LeftUp;
+		//		else shootDir = Dir::Up;
+		//	}
+		//	else if (down)
+		//	{
+		//		if (right) shootDir = Dir::RightDown;
+		//		else if (left) shootDir = Dir::LeftDown;
+		//		else shootDir = Dir::Down;
+		//	}
+		//	else if (left)
+		//	{
+		//		shootDir = Dir::Left;
+		//	}
+		//	else if (right)
+		//	{
+		//		shootDir = Dir::Right;
+		//	}
+
+		//	// 방향에 따른 총알 생성 in Local - 생성을 서버에서 받은 후에 해야하나???
+		//	switch (shootDir)
+		//	{
+		//	case Dir::Up:
+		//		//_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
+		//		if (useShotgun) {
+		//			//_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
+		//			//_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
+		//		}
+		//		prevKeyUp = false;
+		//		_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
+		//		break;
+		//	}
 		//
 		//else if (input->GetButton(KeyType::Left)) {
 		//	_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
@@ -341,9 +380,6 @@ void GameScene::ProcessInput()
 
 		// 서버로 Create Projectile 패킷 Send
 		//_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
-
-	}
-
 
 
 	//	// 물래방아 아이템 8방향으로 발사

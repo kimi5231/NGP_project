@@ -7,6 +7,7 @@
 #include "BomberMonster.h"
 #include "RespawnMonster.h"
 #include "ObstacleMonster.h"
+#include "Projectile.h"
 
 // 수영 데스크탑
 //char* SERVERIP = (char*)"61.255.49.141";
@@ -255,6 +256,15 @@ void GameNetwork::RecvAddObject(S_AddObject_Packet addObjectPacket)
 		player->SetObjectType(ObjectType::Player);
 		player->SetPos(addObjectPacket.pos);
 		_gameScene->AddPlayer(addObjectPacket.objectID, player);
+	}
+	break;
+
+	case ObjectType::Bullet:
+	{
+		ProjectileRef projectile = std::make_shared<Projectile>();
+		projectile->SetObjectType(ObjectType::Bullet);
+		projectile->SetPos(addObjectPacket.pos);
+		_gameScene->AddObject(addObjectPacket.objectID, projectile);
 	}
 	break;
 

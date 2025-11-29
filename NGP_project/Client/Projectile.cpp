@@ -5,19 +5,28 @@
 
 #define BULLET_SIZE 5
 
-Projectile::Projectile(Dir dir, const Vertex& pos)
-	: GameObject()
+//Projectile::Projectile(Dir dir, const Vertex& pos)
+//	: GameObject()
+//{
+//	_dir = dir;
+//	_status._speed = 3;
+//	_pos = pos;
+//	_type = ObjectType::Bullet;
+//	_size = { 10, 10 };
+//}
+
+Projectile::Projectile() : GameObject()
 {
-	_dir = dir;
-	_status._speed = 3;
-	_pos = pos;
 	_type = ObjectType::Bullet;
 	_size = { 10, 10 };
 }
 
+
+
 void Projectile::Update()
 {
-	Move();
+	//Move();	// Move는 서버에서 함
+	
 	if (_pos.x < gBackgroundRect.left || _pos.x > gBackgroundRect.right ||
 		_pos.y < gBackgroundRect.top || _pos.y > gBackgroundRect.bottom) {
 	}

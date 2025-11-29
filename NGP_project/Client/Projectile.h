@@ -4,7 +4,9 @@
 class Projectile : public GameObject
 {
 public:
-	Projectile(Dir dir, const Vertex& pos);
+	//Projectile(Dir dir, const Vertex& pos);	// 기존 프로젝타일
+	Projectile();
+
 public:
 	virtual void Update();
 	virtual void Render(HDC hdc, HDC srcDC);

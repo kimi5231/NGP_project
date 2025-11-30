@@ -32,16 +32,18 @@ void UI::Render(HDC hdc, HDC srcDC, int num)
     DeleteObject(hBrush);
 }
 
-void ProgressBar::Update(int& currentTime)
+void ProgressBar::Update(int serverTimer)
 {
+    _text = std::to_wstring(serverTimer);
+    _progress = serverTimer;
+
     // 0이 아니면 진행
     if (_progress == 0) {
         _box._halfSize.x = 0;
         return;
     }
-    if(CheckTimer(currentTime, 1)) {
-        _progress--;
-        _box._halfSize.x -= _maxSize / _maxProgress;
-        _box._center.x -= _maxSize / _maxProgress;
-    }
+    
+    _box._halfSize.x -= _maxSize / _maxProgress;
+    _box._center.x -= _maxSize / _maxProgress;
+
 }

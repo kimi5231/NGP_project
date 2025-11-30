@@ -3,6 +3,9 @@
 #include "Monster.h"
 #include "Item.h"
 #include "Constant.h"
+#include "Global.h"
+#include "ServerFramework.h"
+#include "TimeManager.h"
 
 RECT gBackgroundRect{ 150, 50, FRAME_BUFFER_WIDTH - 170, FRAME_BUFFER_HEIGHT - 70 };	// 변경 시 클라도 동일하게 변경 필요
 
@@ -71,9 +74,8 @@ void Monster::FindTarget(GameObject* other)
 bool Monster::Move()
 {
     _prevPos = _pos;
-    int dx = _targetPos.x - _pos.x;
-    int dy = _targetPos.y - _pos.y;
-    Vertex direct{ dx, dy };
+    float dx = _targetPos.x - _pos.x;
+    float dy = _targetPos.y - _pos.y;
     double distance = sqrt(dx * dx + dy * dy);
 
     if (distance <= _status._speed) {
@@ -83,11 +85,23 @@ bool Monster::Move()
     }
 
     // 일정한 속도로 이동
-    double ratio = _status._speed / distance;
-    _pos.x += static_cast<int>(dx * ratio);
-    _pos.y += static_cast<int>(dy * ratio);
+    int dirX = (dx > 0) ? 1 : (dx < 0 ? -1 : 0);
+    int dirY = (dy > 0) ? 1 : (dy < 0 ? -1 : 0);
+
+    //float delta = GET_SINGLE(TimeManager)->GetDeltaTime();
+    _pos.x += dirX * _status._speed;
+    _pos.y += dirY * _status._speed;
     
-    return false;
+    // 방향 설정
+    if (dx < 0) _dir = Dir::Left;
+    else if (dx > 0) _dir = Dir::Right;
+    if (dy < 0) _dir = Dir::Up;
+    else if (dy > 0) _dir = Dir::Down;
+
+    //Sleep(300);
+    g_framework->SendMovePacket(shared_from_this(), true);
+
+    return true;
 }
 
 void Monster::Update(GameObject* other)

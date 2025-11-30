@@ -316,7 +316,7 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 	}
 
 	// 게임 시작 인원이 되면 게임중으로 RoomState 변경
-	if (_room->GetPlayerCount() == 1)
+	if (_room->GetPlayerCount() == 2)
 		_room->SetRoomState(RoomState::Playing);
 }
 

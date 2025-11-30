@@ -49,6 +49,7 @@ void FindTargetState::Tick(Monster* self, GameObject* other)
 	self->FindTarget(other);
 	Exit(self);
 }
+
 // Dead
 void DeadState::Enter(Monster* self)
 {

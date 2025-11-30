@@ -19,6 +19,7 @@ public:
 	virtual bool Move() { return true; };
 	virtual void Update() {};
 	virtual void FindTarget(GameObject* other) {};
+	bool IsArrive();
 
 	void SetObjectType(ObjectType type) { _type = type; }
 	ObjectType GetObjectType()const { return _type; }

@@ -12,12 +12,24 @@
 // 수영 데스크탑
 //char* SERVERIP = (char*)"61.255.49.141";
 // 미나 데스크탑
-//char* SERVERIP = (char*)"192.168.35.52";	
+char* SERVERIP = (char*)"192.168.35.52";	
 // 루프백
-char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"127.0.0.1";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512
+
+
+void InitConsole()
+{
+	AllocConsole();
+
+	FILE* fp;
+	freopen_s(&fp, "CONOUT$", "w", stdout);
+	freopen_s(&fp, "CONOUT$", "w", stderr);
+
+	std::cout << "콘솔 로그 시작!" << std::endl;
+}
 
 GameNetwork::GameNetwork()
 {
@@ -44,6 +56,7 @@ GameNetwork::GameNetwork()
 		return;
 		// err_quit("connect()");
 
+	//InitConsole();
 }
 
 GameNetwork::~GameNetwork()
@@ -112,11 +125,15 @@ void GameNetwork::ProcessSend(PacketID id, const T& packet)
 void GameNetwork::ProcessRecv()
 {
 	// PacketSize 수신(고정 길이)
-	int packetSize{};
+	/*int packetSize{};
 	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
+	*/
+	int packetSize;
+	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
+	std::cout << "packetSize: " << packetSize << std::endl;
 
 	// Packet 수신(가변 데이터)
-	std::vector<char> packet(BUFSIZE);
+	std::vector<char> packet(packetSize);
 	recv(_socket, packet.data(), packetSize, MSG_WAITALL);
 
 	// Header 추출

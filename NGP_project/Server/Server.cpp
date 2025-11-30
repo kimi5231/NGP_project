@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ServerFramework.h"
 #include "Room.h"
 #include "Global.h"
@@ -10,8 +10,9 @@ DWORD WINAPI ProcessGameData(LPVOID client)
 
 	while (true)
 	{
+		GET_SINGLE(TimeManager)->Tick(60.0f);
 		g_framework->GetRoom()->Update();
-		GET_SINGLE(TimeManager)->Tick(60.0);
+		GET_SINGLE(TimeManager)->Update();
 	}
 	
 	return 0;
@@ -19,14 +20,14 @@ DWORD WINAPI ProcessGameData(LPVOID client)
 
 int main(void)
 {	
-	// ServerFramework »ı¼º
+	// ServerFramework ìƒì„±
 	g_framework = new ServerFramework();
 
 	//GET_SINGLE(TimeManager)->Init();
 
 	InitializeCriticalSection(&g_cs);
 
-	// ·ÎÁ÷ Ã³¸® Thread »ı¼º
+	// ë¡œì§ ì²˜ë¦¬ Thread ìƒì„±
 	CreateThread(NULL, 0, ProcessGameData, NULL, 0, nullptr);
 
 	while (true)

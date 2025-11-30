@@ -261,6 +261,14 @@ void GameScene::SyncMonster(int id, const Vertex& pos, const Dir dir, const Obje
 	}
 }
 
+void GameScene::SyncBullet(int id, const Vertex& pos)
+{
+	if (_objects.find(id) != _objects.end())
+	{
+		_objects[id]->SetPos(pos);
+	}
+}
+
 void GameScene::ProcessInput()
 {
 	if (!_localPlayer)

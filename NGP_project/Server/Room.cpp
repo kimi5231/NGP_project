@@ -6,6 +6,7 @@
 #include "Global.h"
 #include "ServerFramework.h"
 #include "Projectile.h"
+#include "BombObject.h"
 
 // Monster
 #include "Monster.h"
@@ -114,18 +115,34 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		break;
 	case ObjectType::NormalMonster:
 		object = std::make_shared<NormalMonster>();
+		// item, bomb 생성을 위한 콜백함수 설정
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::TankMonster:
 		object = std::make_shared<TankMonster>();
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::BomberMonster:
 		object = std::make_shared<BomberMonster>();
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::RespawnMonster:
 		object = std::make_shared<RespawnMonster>();
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::ObstacleMonster:
 		object = std::make_shared<ObstacleMonster>();
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::Item:
 		break;
@@ -133,6 +150,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		object = std::make_shared<Projectile>(dir, pos);
 		break;
 	case ObjectType::Bomb:
+		object = std::make_shared<BombObject>(pos);
 		break;
 	case ObjectType::UI:
 		break;
@@ -173,10 +191,8 @@ void Room::SpawnMonster()
 		GameObjectRef monster = AddObject(static_cast<ObjectType>(type));
 		if (!monster) 
 			return;
+
+		
 	}
 	
-	//// item, bomb 생성을 위한 콜백함수 설정
-	//monster->SetCallback([this](GameObject* obj) {
-	//	this->AddObject(obj);
-	//	});
 }

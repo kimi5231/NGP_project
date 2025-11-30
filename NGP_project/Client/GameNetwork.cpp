@@ -8,11 +8,14 @@
 #include "RespawnMonster.h"
 #include "ObstacleMonster.h"
 #include "Projectile.h"
+#include "BombObject.h"
 
 // 수영 데스크탑
 //char* SERVERIP = (char*)"61.255.49.141";
 // 미나 데스크탑
 char* SERVERIP = (char*)"192.168.35.52";	
+// 채은이 데스크탑
+//char* SERVERIP = (char*)"192.168.1.132";	
 // 루프백
 //char* SERVERIP = (char*)"127.0.0.1";
 
@@ -327,6 +330,13 @@ void GameNetwork::RecvAddObject(S_AddObject_Packet addObjectPacket)
 		monster->SetObjectType(ObjectType::ObstacleMonster);
 		monster->SetPos(addObjectPacket.pos);
 		_gameScene->AddMonster(addObjectPacket.objectID, monster);
+	}
+	break;
+	case ObjectType::Bomb:
+	{
+		std::shared_ptr<BombObject> object = std::make_shared<BombObject>();
+		object->SetPos(addObjectPacket.pos);
+		_gameScene->AddObject(addObjectPacket.objectID, object);
 	}
 	break;
 	}

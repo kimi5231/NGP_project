@@ -42,16 +42,17 @@ void Room::Update()
 	{
 		sumTime = 0;
 		_timer -= 1;
-		g_framework->SendUpdateTimerPacket();
+		g_framework->SendUpdateTimerPacket(true);
 	}
 	
-	SpawnMonster();
+	//SpawnMonster();
 
+	EnterCriticalSection(&_cs);
 	for (const auto& item : _objects)
 	{
-		//item.second->Update();
+		item.second->Update();
 	}
-
+	LeaveCriticalSection(&_cs);
 
 	//EnterCriticalSection(&_cs);
 	//for (const auto& object : _objects) {
@@ -134,7 +135,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 	_objects[object->GetID()] = object;
 	LeaveCriticalSection(&_cs);
 
-	g_framework->SendAddObjectPacket(object);
+	g_framework->SendAddObjectPacket(object, true);
 
 	return object;
 }
@@ -147,7 +148,7 @@ void Room::RemoveObject(int id)
 	_objects.erase(id);
 	LeaveCriticalSection(&_cs);
 
-	g_framework->SendRemoveObjectPacket(object);
+	g_framework->SendRemoveObjectPacket(object, true);
 }
 
 void Room::InitObstalce()

@@ -10,6 +10,7 @@
 #include <functional>
 #include <algorithm>
 #include <unordered_map>
+#include <variant>
 
 #pragma comment(lib, "ws2_32")
 
@@ -220,6 +221,14 @@ struct C_EndGame_Packet
 {
     int objectID;
 };
+
+template <class T>
+struct SendEvent;
+template <class T>
+using SendEventRef = std::shared_ptr<SendEvent<T>>;
+
+using EventType = std::variant<SendEventRef<S_AddObject_Packet>, SendEventRef<S_RemoveObject_Packet>,
+    SendEventRef<S_Move_Packet>, SendEventRef<S_UpdateTimer_Packet>>;
 
 using ClientRef = std::shared_ptr<class Client>;
 using GameObjectRef = std::shared_ptr<class GameObject>;

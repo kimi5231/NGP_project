@@ -2,6 +2,7 @@
 #include "ServerFramework.h"
 #include "Room.h"
 #include "Player.h"
+#include "Global.h"
 
 ServerFramework::ServerFramework()
 {
@@ -107,9 +108,40 @@ void ServerFramework::Update()
 		// send가 가능할 때마다 true
 		if (FD_ISSET(client->socket, &_writeSet))
 		{
-			
+			EnterCriticalSection(&g_cs);
+			for (auto& sendEvent : _sendEvents)
+			{
+				std::visit([this, client](auto& event) {
+					if (event->isBroadcast)
+					{
+						Broadcast(event->packetID, event->packetData);
+						event->isComplete = true;
+						return;
+					}
+					
+					if (client->socket == event->clientSocket)
+					{
+						ProcessSend(event->packetID, event->packetData, event->clientSocket);
+						event->isComplete = true;
+					}
+				}, sendEvent);
+			}
+			LeaveCriticalSection(&g_cs);
+
+			EnterCriticalSection(&g_cs);
+			_sendEvents.erase(std::remove_if(_sendEvents.begin(), _sendEvents.end(),
+					[](const auto& sendEvent) {
+						return std::visit([](const auto& event) {return event->isComplete;}, sendEvent);
+					}), _sendEvents.end());
+			LeaveCriticalSection(&g_cs);
 		}
 	}
+
+	// 삭제할 Object가 있으면 삭제
+	for (GameObjectRef object : _removeObjects)
+		_room->RemoveObject(object->GetID());
+
+	_removeObjects.clear();
 }
 
 void ServerFramework::ProcessRecv(ClientRef client)
@@ -189,32 +221,62 @@ std::vector<char> ServerFramework::CreatePakcet(PacketID id, const T& packetData
 	return packet;
 }
 
-void ServerFramework::SendAddObjectPacket(GameObjectRef object)
+void ServerFramework::SendAddObjectPacket(GameObjectRef object, bool broadcast, SOCKET client)
 {
 	// Packet Data 생성
 	S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos() };
-	// 새로운 Object가 추가됨을 Room에 있는 모든 Client에게 알림
-	Broadcast(S_AddObject, packetData);
+
+	// SendEvent 생성
+	SendEventRef<S_AddObject_Packet> event = std::make_shared<SendEvent<S_AddObject_Packet>>();
+	event->isBroadcast = broadcast;
+	event->clientSocket = client;
+	event->packetID = S_AddObject;
+	event->packetData = packetData;
+
+	EnterCriticalSection(&g_cs);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_cs);
 }
 
-void ServerFramework::SendRemoveObjectPacket(GameObjectRef object)
+void ServerFramework::SendRemoveObjectPacket(GameObjectRef object, bool broadcast, SOCKET client)
 {
 	// Packet Data 생성
 	S_RemoveObject_Packet packetData{ object->GetID(), object->GetObjectType() };
-	// Object가 삭제됨을 Room에 있는 모든 Client에게 알림
-	Broadcast(S_RemoveObject, packetData);
+	
+	// SendEvent 생성
+	SendEventRef<S_RemoveObject_Packet> event = std::make_shared<SendEvent<S_RemoveObject_Packet>>();
+	event->isBroadcast = broadcast;
+	event->clientSocket = client;
+	event->packetID = S_RemoveObject;
+	event->packetData = packetData;
+
+	EnterCriticalSection(&g_cs);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_cs);
 }
 
-void ServerFramework::SendMovePacket(GameObjectRef object)
+void ServerFramework::SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client)
 {
 	S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState()};
-	Broadcast(S_Move, packetData);
+	
+	// SendEvent 생성
+	SendEventRef<S_Move_Packet> event = std::make_shared<SendEvent<S_Move_Packet>>();
+	event->isBroadcast = broadcast;
+	event->clientSocket = client;
+	event->packetID = S_Move;
+	event->packetData = packetData;
+
+	std::cout << "Object " << packetData.objectID << ": Move " << packetData.pos.x << ", " << packetData.pos.y << std::endl;
+	
+	EnterCriticalSection(&g_cs);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_cs);
 }
 
-void ServerFramework::SendUpdateTimerPacket()
+void ServerFramework::SendUpdateTimerPacket(bool broadcast, SOCKET client)
 {
-	S_UpdateTimer_Packet packetData{ _room->GetTimer() };
-	Broadcast(S_UpdateTimer, packetData);
+	//S_UpdateTimer_Packet packetData{ _room->GetTimer() };
+	//Broadcast(S_UpdateTimer, packetData);
 }
 
 template<class T>
@@ -237,8 +299,8 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 	_clients.push_back(newClient);
 
-	S_AddObject_Packet packetData{ player->GetID(), player->GetObjectType(), player->GetPos() };
-	ProcessSend(S_AddObject, packetData, newClient->socket);
+	// 새로 접속한 Client에게 자신을 나타낼 Player 정보 송신
+	SendAddObjectPacket(player, false, newClient->socket);
 
 	std::cout << "Client" << newClient->id << " 접속" << std::endl;
 
@@ -249,13 +311,12 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 		// 자기 자신 제외
 		if (newClient->player->GetID() != item.first)
 		{
-			S_AddObject_Packet packetData{ item.second->GetID(), item.second->GetObjectType(), item.second->GetPos() };
-			ProcessSend(S_AddObject, packetData, newClient->socket);
+			SendAddObjectPacket(item.second, false, newClient->socket);
 		}
 	}
 
 	// 게임 시작 인원이 되면 게임중으로 RoomState 변경
-	if (_room->GetPlayerCount() == 3)
+	if (_room->GetPlayerCount() == 1)
 		_room->SetRoomState(RoomState::Playing);
 }
 
@@ -282,12 +343,11 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 
 	std::cout << "Object " << packet.objectID << ": Move " << packet.pos.x << ", " << packet.pos.y << std::endl;
 
-	S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState() };
 	// 자신을 제외한 모든 클라이언트에게 알리기
 	for (ClientRef client : _clients)
 	{
 		if (client->player->GetID() != packet.objectID)
-			ProcessSend(S_Move, packetData, client->socket);
+			SendMovePacket(object, false, client->socket);
 	}
 }
 

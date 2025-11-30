@@ -9,6 +9,16 @@ struct Client
 	PlayerRef player;
 };
 
+template <class T>
+struct SendEvent
+{
+	bool isComplete = false;
+	bool isBroadcast;
+	SOCKET clientSocket;
+	PacketID packetID;
+	T packetData;
+};
+
 class ServerFramework
 {
 public:
@@ -27,10 +37,10 @@ public:
 
 public:
 	// Send
-	void SendAddObjectPacket(GameObjectRef object);
-	void SendRemoveObjectPacket(GameObjectRef object);
-	void SendMovePacket(GameObjectRef object);
-	void SendUpdateTimerPacket();
+	void SendAddObjectPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
+	void SendRemoveObjectPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
+	void SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
+	void SendUpdateTimerPacket(bool broadcast, SOCKET client = 0);
 
 	template <class T>
 	void Broadcast(PacketID id, const T& packetData);
@@ -46,6 +56,8 @@ private:
 public:
 	Room* GetRoom() { return _room; }
 
+	void AddRemoveObject(GameObjectRef object) { _removeObjects.push_back(object); }
+
 private:
 	fd_set _readSet{};
 	fd_set _writeSet{};
@@ -57,4 +69,6 @@ private:
 
 private:
 	Room* _room{};
+	std::vector<GameObjectRef> _removeObjects;
+	std::vector<EventType> _sendEvents;
 };

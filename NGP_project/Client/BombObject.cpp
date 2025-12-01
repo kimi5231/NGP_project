@@ -24,13 +24,12 @@ BombObject::BombObject(Vertex pos)
 
 void BombObject::Update()
 {
-    if (CheckTimer(_timer, (float)BOMB_TIME / _spriteCnt.x)) {
+    if (_timer % (BOMB_TIME / _spriteCnt.x) == 0) {
         _curFrame.x++;
     }
 
     if (_curFrame.x >= _spriteCnt.x) {
         if (!_isBomb) {
-            _isBomb = true;
             DeleteObject(_bitmap);
             DeleteObject(_bitmapMask);
             _bitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "bomb_effect.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
@@ -39,9 +38,6 @@ void BombObject::Update()
             _curFrame = {};
             _size.x *= 3;
             _size.y *= 3;
-        }
-        else {
-            SetState(ObjectState::Dead);
         }
     }
 }

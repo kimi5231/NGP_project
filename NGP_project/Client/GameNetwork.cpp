@@ -410,5 +410,14 @@ void GameNetwork::RecvItemUseResult(S_ItemUseResult_Packet itemUseResultPacket)
 
 void GameNetwork::RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket)
 {
-	_gameScene->GetTimerUI().Update(updateTimerPacket.time);
+	switch (updateTimerPacket.type)
+	{
+	case ObjectType::UI:
+		_gameScene->GetTimerUI().Update(updateTimerPacket.time);
+		break;
+	case ObjectType::Bomb:
+		break;
+	default:
+		break;
+	}
 }

@@ -55,7 +55,7 @@ void Room::Update()
 	}
 	LeaveCriticalSection(&_cs);
 
-	//EnterCriticalSection(&_cs);
+	EnterCriticalSection(&_cs);
 	for (const auto& object : _objects) {
 		switch (object.second->GetObjectType()) {
 		case ObjectType::Player:
@@ -95,12 +95,13 @@ void Room::Update()
 		}
 		}
 	}
+	LeaveCriticalSection(&_cs);
 
-	//// 상태가 Dead면 클라 연결 끊으면 오류남
-	///*_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {
-	//	return o->IsState(ObjectState::Dead);
-	//	}), _objects.end());*/
-	//LeaveCriticalSection(&_cs);
+	EnterCriticalSection(&_cs);
+	std::erase_if(_objects, [](const auto& kv) {
+		return kv.second->IsState(ObjectState::Dead);
+		});
+	LeaveCriticalSection(&_cs);
 }
 
 GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)

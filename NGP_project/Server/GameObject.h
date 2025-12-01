@@ -50,5 +50,6 @@ protected:
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 
 	bool _invincible{};	// 무적 판정
+	float _timer{};	// 총알, 폭탄 등에 사용
 };
 

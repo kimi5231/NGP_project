@@ -9,4 +9,7 @@ public:
 	void Update() override;
 	bool Move() override;
 	bool _isBomb{};
+
+private:
+	int _maxCnt;	// 폭탄 터지는 카운트
 };

@@ -76,7 +76,7 @@ void ServerFramework::Update()
 	}
 	
 	// select
-	if (select(0, &_readSet, &_writeSet, NULL, NULL) == SOCKET_ERROR)
+	if (select(0, &_readSet, &_writeSet, NULL, 0) == SOCKET_ERROR)
 	{
 		std::cout << "select 실패" << std::endl;
 		return;

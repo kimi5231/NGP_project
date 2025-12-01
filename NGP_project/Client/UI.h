@@ -35,7 +35,7 @@ public:
 class ProgressBar : public UI {
 public:
 	ProgressBar(const Vertex& center, const Vertex& size, UINT maxProgress)
-		: UI(center, size), _progress{maxProgress}, _maxProgress{ maxProgress }
+		: UI(center, size), _progress{ maxProgress }, _maxProgress{ maxProgress }
 	{
 		_text = L"time: ";
 		_brushColor = RGB(0, 255, 0);
@@ -43,7 +43,7 @@ public:
 		_maxSize = _box._halfSize.x;
 	}
 
-	void Update(int& currentTime);
+	void Update(int severTimer);
 
 	UINT _maxProgress, _progress;
 	int _maxSize;

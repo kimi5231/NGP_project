@@ -18,6 +18,8 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
+	void CreateObstacle();
+
 	// Add Object
 	void AddPlayer(int id, PlayerRef player);
 	void AddMonster(int id, MonsterRef monster);
@@ -58,6 +60,7 @@ private:
 	std::unordered_map<int, PlayerRef> _players;	// Other Player(local과 분리)
 	std::unordered_map<int, MonsterRef> _monsters;
 	std::unordered_map<int, GameObjectRef> _objects; // obstacle, bomb, projectile 등
+	std::vector<GameObjectRef> _obstacles;
 
 	// UI
 	std::vector<std::shared_ptr<UI>> _ui;

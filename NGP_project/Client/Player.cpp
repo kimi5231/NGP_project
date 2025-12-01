@@ -96,8 +96,8 @@ void Player::Move(Vertex vecDir, Dir dir)
 
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 
-    _pos.x = std::clamp(_pos.x, (float)(gBackgroundRect.left), (float)(gBackgroundRect.right));
-    _pos.y = std::clamp(_pos.y, (float)(gBackgroundRect.top), (float)(gBackgroundRect.bottom));
+    // clamp
+    ClampPlayerArea();
 }
 
 void Player::SetDirAndFrame(Dir dir)
@@ -115,4 +115,18 @@ void Player::SetDirAndFrame(Dir dir)
     }
 
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
+}
+
+void Player::ClampPlayerArea()
+{    
+    int sizeOffset = CELL_SIZE / 2;
+
+    float minX = gBackgroundRect.left + sizeOffset + CELL_SIZE - 5;                      // 벽 오른쪽 한 칸
+    float maxX = gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 2) * CELL_SIZE + 5;   // 벽 왼쪽 한 칸 내부
+
+    float minY = gBackgroundRect.top + sizeOffset + CELL_SIZE;                       // 위쪽 벽 아래 한 칸
+    float maxY = gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 2) * CELL_SIZE;    // 아래쪽 벽 위 한 칸
+
+    _pos.x = std::clamp(_pos.x, minX, maxX);
+    _pos.y = std::clamp(_pos.y, minY, maxY);
 }

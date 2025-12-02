@@ -1,11 +1,11 @@
 #pragma once
 #include <filesystem>
 
-class GameNetwork;
-class GameFramework;
-
-extern GameNetwork* g_network;
-extern GameFramework* g_framework;
+//class GameNetwork;
+//class GameFramework;
+//
+//extern GameNetwork* g_network;
+//extern GameFramework* g_framework;
 
 extern CRITICAL_SECTION g_cs;
 

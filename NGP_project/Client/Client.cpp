@@ -17,17 +17,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름�
 HINSTANCE hInst;
 HWND hWnd;
 
-DWORD WINAPI ProcessGameNetwork(LPVOID arg)
-{
-    GameNetwork* network = (GameNetwork*)arg;
-    
-    while (true)
-    {
-        network->Update();
-    }
-
-    return 0;
-}
+GameFramework gameFramework;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -48,15 +38,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
+    gameFramework.Init();
+
     InitializeCriticalSection(&g_cs);
-
-    g_framework = new GameFramework();
-    g_framework->Init();
-
-    g_network = new GameNetwork();
-    
-    g_framework->GetGameScene()->SetGameNetwork(g_network);
-    g_network->SetGameScene(g_framework->GetGameScene());
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 
@@ -74,7 +58,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             }
         }
         else {
-            g_framework->Update();
+            gameFramework.Update();
         }
      }
 
@@ -102,8 +86,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
 
-        if (g_framework)
-            g_framework->Render(hDC);
+        gameFramework.Render(hDC);
 
         ReleaseDC(hWnd, hDC);
         EndPaint(hWnd, &ps);

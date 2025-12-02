@@ -2,8 +2,8 @@
 #include "Global.h"
 #include "TimeManager.h"
 
-GameNetwork* g_network = nullptr;
-GameFramework* g_framework = nullptr;
+//GameNetwork* g_network = nullptr;
+//GameFramework* g_framework = nullptr;
 
 CRITICAL_SECTION g_cs;
 

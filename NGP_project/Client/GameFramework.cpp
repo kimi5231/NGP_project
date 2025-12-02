@@ -30,7 +30,12 @@ void GameFramework::Init()
 	GET_SINGLE(SoundManager)->Init(hWnd, soundPath);
 	GET_SINGLE(SoundManager)->LoadSound(L"main_music", L"main_music.wav", SoundType::BGM);
 
+	_gameNetwork = new GameNetwork;
 	_scene = new GameScene;
+	_scene->SetGameNetwork(_gameNetwork);
+	_gameNetwork->SetGameScene(_scene);
+
+	_hNetworkThread = CreateThread(NULL, 0, GameFramework::ProcessNetwork, this, 0, NULL);
 }
 
 void GameFramework::Update()
@@ -38,8 +43,8 @@ void GameFramework::Update()
 	GET_SINGLE(InputManager)->Update();
 	GET_SINGLE(TimeManager)->Update();
 
-	_scene->Update();
-	g_network->Update();
+	_scene->Update(); 
+	//_gameNetwork->Update();
 
 	InvalidateRect(hWnd, NULL, false);
 }
@@ -48,6 +53,21 @@ void GameFramework::Render(HDC hdc)
 {
 	if(_scene)
 		_scene->Render(hdc);
+}
+
+DWORD __stdcall GameFramework::ProcessNetwork(LPVOID arg)
+{
+	GameFramework* framework = (GameFramework*)arg;
+
+	while (true)
+	{
+		if (framework && framework->_gameNetwork)
+		{
+			framework->_gameNetwork->Update();
+		}
+	}
+
+	return 0;
 }
 
 void GameFramework::ChangeScene()

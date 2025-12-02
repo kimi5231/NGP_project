@@ -136,58 +136,42 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		_monsters[_generateID] = std::make_shared<NormalMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::TankMonster:
 		_monsters[_generateID] = std::make_shared<TankMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::BomberMonster:
 		_monsters[_generateID] = std::make_shared<BomberMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::RespawnMonster:
 		_monsters[_generateID] = std::make_shared<RespawnMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::ObstacleMonster:
 		_monsters[_generateID] = std::make_shared<ObstacleMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
-
-	//	object = std::make_shared<NormalMonster>();
-	//	// item, bomb 생성을 위한 콜백함수 설정
-	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
-	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
-	//		});
-	//	break;
-	//case ObjectType::TankMonster:
-	//	object = std::make_shared<TankMonster>();
-	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
-	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
-	//		});
-	//	break;
-	//case ObjectType::BomberMonster:
-	//	object = std::make_shared<BomberMonster>();
-	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
-	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
-	//		});
-	//	break;
-	//case ObjectType::RespawnMonster:
-	//	object = std::make_shared<RespawnMonster>();
-	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
-	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
-	//		});
-	//	break;
-	//case ObjectType::ObstacleMonster:
-	//	object = std::make_shared<ObstacleMonster>();
-	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
-	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
-	//		});
-
 	case ObjectType::Item:
 		break;
 	case ObjectType::Bullet:

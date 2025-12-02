@@ -39,7 +39,8 @@ void GameFramework::Update()
 	GET_SINGLE(TimeManager)->Update();
 
 	_scene->Update();
-	
+	g_network->Update();
+
 	InvalidateRect(hWnd, NULL, false);
 }
 

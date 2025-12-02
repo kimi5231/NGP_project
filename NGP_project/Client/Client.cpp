@@ -62,7 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-    CreateThread(NULL, 0, ProcessGameNetwork, g_network, 0, nullptr);
+    //CreateThread(NULL, 0, ProcessGameNetwork, g_network, 0, nullptr);
 
     // 기본 메시지 루프입니다:
      while (true) {

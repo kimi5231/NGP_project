@@ -414,7 +414,7 @@ void GameNetwork::RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket)
 	switch (updateTimerPacket.type)
 	{
 	case ObjectType::UI:
-		//_gameScene->GetTimerUI().Update(intupdateTimerPacket.time);
+		_gameScene->GetTimerUI().Update(updateTimerPacket.time);
 		break;
 	case ObjectType::Bomb:
 		_gameScene->SyncObjectTimer(updateTimerPacket.time, updateTimerPacket.objectID);

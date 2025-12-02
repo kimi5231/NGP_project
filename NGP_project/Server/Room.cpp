@@ -37,14 +37,14 @@ void Room::Update()
 		return;
 
 	// Timer Update
-	/*static float sumTime;
+	static float sumTime;
 	sumTime += GET_SINGLE(TimeManager)->GetDeltaTime();
 	if (sumTime > 1)
 	{
 		sumTime = 0;
 		_timer -= 1;
 		g_framework->SendUpdateTimerPacket(true);
-	}*/
+	}
 	
 	SpawnMonster();
 
@@ -58,13 +58,10 @@ void Room::Update()
 	EnterCriticalSection(&_cs);
 	for (const auto& object : _objects) {
 		object.second->Update();
+		if (object.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(object.second);
+		}
 	}
-	LeaveCriticalSection(&_cs);
-
-	EnterCriticalSection(&_cs);
-	std::erase_if(_objects, [](const auto& kv) {
-		return kv.second->IsState(ObjectState::Dead);
-		});
 	LeaveCriticalSection(&_cs);
 }
 

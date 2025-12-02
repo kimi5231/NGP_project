@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 class BoundingBox {
 public:
@@ -26,21 +26,5 @@ public:
             Top() < point.y &&
             Bottom() > point.y
             );
-    }
-
-    void Render(HDC hdc, HDC srcDC, COLORREF color)
-    {
-        HPEN hPen = CreatePen(PS_SOLID, 2, color);
-        HPEN oldPen = (HPEN)SelectObject(hdc, hPen);
-
-        HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
-        HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-
-        Rectangle(hdc, Left(), Top(), Right(), Bottom());
-
-        SelectObject(hdc, oldPen);
-        SelectObject(hdc, oldBrush);
-
-        DeleteObject(hPen);
     }
 };

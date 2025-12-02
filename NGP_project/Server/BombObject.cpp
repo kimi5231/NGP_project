@@ -38,7 +38,6 @@ void BombObject::Update()
         }
         else {
             SetState(ObjectState::Dead);
-            // 상태 send
         }
     }
 }

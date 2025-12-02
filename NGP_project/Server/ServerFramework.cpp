@@ -286,9 +286,21 @@ void ServerFramework::SendUpdateTimerPacket(GameObjectRef object, bool broadcast
 	EnterCriticalSection(&g_cs);
 	_sendEvents.push_back(event);
 	LeaveCriticalSection(&g_cs);
+}
 
-	//S_UpdateTimer_Packet packetData{ _room->GetTimer() };
-	//Broadcast(S_UpdateTimer, packetData);
+void ServerFramework::SendUpdateTimerPacket(bool broadcast, SOCKET client)
+{
+	S_UpdateTimer_Packet packetData{ _room->GetTimer(), 0, ObjectType::UI };
+	// SendEvent 생성
+	SendEventRef<S_UpdateTimer_Packet> event = std::make_shared<SendEvent<S_UpdateTimer_Packet>>();
+	event->isBroadcast = broadcast;
+	event->clientSocket = client;
+	event->packetID = S_UpdateTimer;
+	event->packetData = packetData;
+
+	EnterCriticalSection(&g_cs);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_cs);
 }
 
 template<class T>

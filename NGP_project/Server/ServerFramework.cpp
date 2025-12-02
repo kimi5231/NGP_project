@@ -283,9 +283,9 @@ void ServerFramework::SendUpdateTimerPacket(GameObjectRef object, bool broadcast
 	event->packetID = S_UpdateTimer;
 	event->packetData = packetData;
 
-	EnterCriticalSection(&g_cs);
+	EnterCriticalSection(&g_sendCS);
 	_sendEvents.push_back(event);
-	LeaveCriticalSection(&g_cs);
+	LeaveCriticalSection(&g_sendCS);
 }
 
 void ServerFramework::SendUpdateTimerPacket(bool broadcast, SOCKET client)
@@ -298,9 +298,9 @@ void ServerFramework::SendUpdateTimerPacket(bool broadcast, SOCKET client)
 	event->packetID = S_UpdateTimer;
 	event->packetData = packetData;
 
-	EnterCriticalSection(&g_cs);
+	EnterCriticalSection(&g_sendCS);
 	_sendEvents.push_back(event);
-	LeaveCriticalSection(&g_cs);
+	LeaveCriticalSection(&g_sendCS);
 }
 
 template<class T>

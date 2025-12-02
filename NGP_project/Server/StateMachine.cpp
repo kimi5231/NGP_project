@@ -52,7 +52,7 @@ void FindTargetState::Tick(Monster* self)
 	float minDistance = std::numeric_limits<float>::infinity();
 
 	// 가장 가까운 플레이어 탐색
-	for (const auto& otherObject : g_framework->GetRoom()->GetObjects()) {
+	for (const auto& otherObject : g_framework->GetRoom()->GetPlayers()) {
 		if (otherObject.second->GetObjectType() == ObjectType::Player) {
 			float dx = otherObject.second->GetPos().x - self->GetPos().x;
 			float dy = otherObject.second->GetPos().y - self->GetPos().y;

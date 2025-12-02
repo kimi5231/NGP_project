@@ -1,7 +1,9 @@
 ﻿#include "pch.h"
 #include "Client.h"
-#include "GameFramework.h"
 #include "Global.h"
+#include "GameFramework.h"
+#include "GameNetwork.h"
+#include "GameScene.h"
 
 #define MAX_LOADSTRING 100
 
@@ -15,7 +17,17 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름�
 HINSTANCE hInst;
 HWND hWnd;
 
-GameFramework gameFramework;
+DWORD WINAPI ProcessGameNetwork(LPVOID arg)
+{
+    GameNetwork* network = (GameNetwork*)arg;
+    
+    while (true)
+    {
+        network->Update();
+    }
+
+    return 0;
+}
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -35,11 +47,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     if (!InitInstance(hInstance, nCmdShow)) {
         return FALSE;
     }
-    gameFramework.Init();
+
+    InitializeCriticalSection(&g_cs);
+
+    g_framework = new GameFramework();
+    g_framework->Init();
+
+    g_network = new GameNetwork();
+    
+    g_framework->GetGameScene()->SetGameNetwork(g_network);
+    g_network->SetGameScene(g_framework->GetGameScene());
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 
     MSG msg;
+
+    CreateThread(NULL, 0, ProcessGameNetwork, g_network, 0, nullptr);
 
     // 기본 메시지 루프입니다:
      while (true) {
@@ -51,9 +74,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             }
         }
         else {
-            gameFramework.Update();
+            g_framework->Update();
         }
      }
+
+     DeleteCriticalSection(&g_cs);
 
      return (int) msg.wParam;
 }
@@ -77,7 +102,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
 
-        gameFramework.Render(hDC);
+        if (g_framework)
+            g_framework->Render(hDC);
 
         ReleaseDC(hWnd, hDC);
         EndPaint(hWnd, &ps);

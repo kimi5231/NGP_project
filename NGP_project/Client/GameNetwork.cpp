@@ -80,7 +80,7 @@ void GameNetwork::Update()
 	FD_SET(_socket, &_writeSet);
 
 	// select
-	if (select(0, &_readSet, &_writeSet, NULL, NULL) == SOCKET_ERROR)
+	if (select(0, &_readSet, &_writeSet, NULL, 0) == SOCKET_ERROR)
 	{
 		//err_display("select");
 		return;

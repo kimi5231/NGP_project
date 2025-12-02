@@ -9,9 +9,9 @@ RespawnMonster::RespawnMonster() : Monster()
     _type = ObjectType::RespawnMonster;
 }
 
-void RespawnMonster::Update(GameObject* other)
+void RespawnMonster::Update()
 {
-    Monster::Update(other);
+    Monster::Update();
 
     if (_canUseSkill) {
         // 시간 재는 함수 추가 시 주석 풀기

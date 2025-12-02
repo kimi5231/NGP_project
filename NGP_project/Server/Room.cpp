@@ -48,52 +48,16 @@ void Room::Update()
 	
 	SpawnMonster();
 
-	EnterCriticalSection(&_cs);
+	/*EnterCriticalSection(&_cs);
 	for (const auto& item : _objects)
 	{
 		item.second->Update();
 	}
-	LeaveCriticalSection(&_cs);
+	LeaveCriticalSection(&_cs);*/
 
 	EnterCriticalSection(&_cs);
 	for (const auto& object : _objects) {
-		switch (object.second->GetObjectType()) {
-		case ObjectType::Player:
-			//object.second->Update();
-			break;
-		case ObjectType::ObstacleMonster:
-		case ObjectType::NormalMonster:
-		case ObjectType::RespawnMonster:
-		case ObjectType::TankMonster:
-		case ObjectType::BomberMonster:
-		{
-			Monster* monster = dynamic_cast<Monster*>(object.second.get());
-			if (!monster) break;
-
-			GameObject* closestPlayer = nullptr;
-			float minDistance = std::numeric_limits<float>::infinity();
-
-			// 가장 가까운 플레이어 탐색
-			for (const auto& otherObject : _objects) {
-				if (otherObject.second->GetObjectType() == ObjectType::Player) {
-					float dx = otherObject.second->GetPos().x - monster->GetPos().x;
-					float dy = otherObject.second->GetPos().y - monster->GetPos().y;
-					float distance = sqrt(dx * dx + dy * dy);
-
-					if (distance < minDistance) {
-						minDistance = distance;
-						closestPlayer = otherObject.second.get();
-					}
-				}
-			}
-
-			// 가장 가까운 플레이어에게만 이동
-			if (closestPlayer) {
-				monster->Update(closestPlayer);
-			}
-			break;
-		}
-		}
+		object.second->Update();
 	}
 	LeaveCriticalSection(&_cs);
 

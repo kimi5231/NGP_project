@@ -4,6 +4,9 @@
 #include "Monster.h"
 #include "BombObject.h"
 #include "Player.h"
+#include "ServerFramework.h"
+#include "Global.h"
+#include "Room.h"
 
 // MoveToTarget
 void MoveToTargetState::Enter(Monster* self)
@@ -17,7 +20,7 @@ void MoveToTargetState::Exit(Monster* self)
 	self->GetStateMachine()->Start();
 }
 
-void MoveToTargetState::Tick(Monster* self, GameObject* other)
+void MoveToTargetState::Tick(Monster* self)
 {
 	self->Move();
 	if (self->IsArrive() || self->GetIsFollow()) {
@@ -43,9 +46,26 @@ void FindTargetState::Exit(Monster* self)
 	}
 }
 
-void FindTargetState::Tick(Monster* self, GameObject* other)
+void FindTargetState::Tick(Monster* self)
 {
-	self->FindTarget(other);
+	GameObject* closestPlayer = nullptr;
+	float minDistance = std::numeric_limits<float>::infinity();
+
+	// 가장 가까운 플레이어 탐색
+	for (const auto& otherObject : g_framework->GetRoom()->GetObjects()) {
+		if (otherObject.second->GetObjectType() == ObjectType::Player) {
+			float dx = otherObject.second->GetPos().x - self->GetPos().x;
+			float dy = otherObject.second->GetPos().y - self->GetPos().y;
+			float distance = sqrt(dx * dx + dy * dy);
+
+			if (distance < minDistance) {
+				minDistance = distance;
+				closestPlayer = otherObject.second.get();
+			}
+		}
+	}
+
+	self->FindTarget(closestPlayer);
 	Exit(self);
 }
 // Dead
@@ -58,7 +78,7 @@ void DeadState::Exit(Monster* self)
 	self->SetState(ObjectState::Dead);
 }
 
-void DeadState::Tick(Monster* self, GameObject* other)
+void DeadState::Tick(Monster* self)
 {
 	self->DropItem();
 	Exit(self);
@@ -76,7 +96,7 @@ void UseSkillState::Exit(Monster* self)
 	self->GetStateMachine()->Start();
 }
 
-void UseSkillState::Tick(Monster* self, GameObject* other)
+void UseSkillState::Tick(Monster* self)
 {
 	if (self->UseSkill()) return;
 	Exit(self);
@@ -121,9 +141,9 @@ void StateMachine::Start()
 	_curState->Enter(_object);
 }
 
-void StateMachine::Update(GameObject* other)
+void StateMachine::Update()
 {
-	_curState->Tick(_object, other);
+	_curState->Tick(_object);
 	if (_object->IsState(ObjectState::Dead)) {
 		ChangeState(new DeadState);
 		Start();

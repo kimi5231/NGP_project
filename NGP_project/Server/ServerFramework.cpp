@@ -108,7 +108,7 @@ void ServerFramework::Update()
 		// send가 가능할 때마다 true
 		if (FD_ISSET(client->socket, &_writeSet))
 		{
-			EnterCriticalSection(&g_cs);
+			EnterCriticalSection(&g_sendCS);
 			for (auto& sendEvent : _sendEvents)
 			{
 				std::visit([this, client](auto& event) {
@@ -126,21 +126,21 @@ void ServerFramework::Update()
 					}
 				}, sendEvent);
 			}
-			LeaveCriticalSection(&g_cs);
+			LeaveCriticalSection(&g_sendCS);
 
-			EnterCriticalSection(&g_cs);
+			EnterCriticalSection(&g_sendCS);
 			_sendEvents.erase(std::remove_if(_sendEvents.begin(), _sendEvents.end(),
 					[](const auto& sendEvent) {
 						return std::visit([](const auto& event) {return event->isComplete;}, sendEvent);
 					}), _sendEvents.end());
-			LeaveCriticalSection(&g_cs);
+			LeaveCriticalSection(&g_sendCS);
 		}
 	}
 
 	// 삭제할 Object가 있으면 삭제
 	for (GameObjectRef object : _removeObjects)
-		_room->RemoveObject(object->GetID());
-
+		_room->RemoveObject(object->GetObjectType(), object->GetID());
+	
 	_removeObjects.clear();
 }
 
@@ -233,9 +233,9 @@ void ServerFramework::SendAddObjectPacket(GameObjectRef object, bool broadcast, 
 	event->packetID = S_AddObject;
 	event->packetData = packetData;
 
-	EnterCriticalSection(&g_cs);
+	EnterCriticalSection(&g_sendCS);
 	_sendEvents.push_back(event);
-	LeaveCriticalSection(&g_cs);
+	LeaveCriticalSection(&g_sendCS);
 }
 
 void ServerFramework::SendRemoveObjectPacket(GameObjectRef object, bool broadcast, SOCKET client)
@@ -250,9 +250,9 @@ void ServerFramework::SendRemoveObjectPacket(GameObjectRef object, bool broadcas
 	event->packetID = S_RemoveObject;
 	event->packetData = packetData;
 
-	EnterCriticalSection(&g_cs);
+	EnterCriticalSection(&g_sendCS);
 	_sendEvents.push_back(event);
-	LeaveCriticalSection(&g_cs);
+	LeaveCriticalSection(&g_sendCS);
 }
 
 void ServerFramework::SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client)
@@ -268,9 +268,9 @@ void ServerFramework::SendMovePacket(GameObjectRef object, bool broadcast, SOCKE
 
 	std::cout << "Object " << packetData.objectID << ": Move " << packetData.pos.x << ", " << packetData.pos.y << std::endl;
 	
-	EnterCriticalSection(&g_cs);
+	EnterCriticalSection(&g_sendCS);
 	_sendEvents.push_back(event);
-	LeaveCriticalSection(&g_cs);
+	LeaveCriticalSection(&g_sendCS);
 }
 
 void ServerFramework::SendUpdateTimerPacket(bool broadcast, SOCKET client)
@@ -304,9 +304,9 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 	std::cout << "Client" << newClient->id << " 접속" << std::endl;
 
-	// 새로 접속한 Client에게 Room에 있는 모든 Object 정보 송신
-	std::unordered_map<int, GameObjectRef> objects = _room->GetObjects();
-	for (const auto& item : objects)
+	// 새로 접속한 Client에게 Room에 있는 Player 정보 송신
+	std::unordered_map<int, PlayerRef> players = _room->GetPlayers();
+	for (const auto& item : players)
 	{
 		// 자기 자신 제외
 		if (newClient->player->GetID() != item.first)
@@ -323,7 +323,7 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 void ServerFramework::ProcessDisconnect(ClientRef client)
 {
 	// 연결 끊긴 Client를 나타내는 Player 제거
-	_room->RemoveObject(client->player->GetID());
+	_room->RemoveObject(ObjectType::Player, client->player->GetID());
 	
 	std::cout << "Client" << client->id << " 접속 종료" << std::endl;
 
@@ -334,7 +334,7 @@ void ServerFramework::ProcessDisconnect(ClientRef client)
 
 void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 {
-	GameObjectRef object = _room->GetObject(packet.objectID);
+	GameObjectRef object = _room->GetObject(packet.type, packet.objectID);
 
 	// 나중에 bool값 받기
 	object->SetPos(packet.pos);

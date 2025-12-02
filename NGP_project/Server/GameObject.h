@@ -39,7 +39,7 @@ public:
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
 
 	BoundingBox GetBoundingBox() const;
-	bool IsCollision(const GameObject* other) const;
+	bool IsCollision(const GameObjectRef other) const;
 
 	Status _status{};
 protected:

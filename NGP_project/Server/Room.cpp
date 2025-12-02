@@ -6,6 +6,7 @@
 #include "Global.h"
 #include "ServerFramework.h"
 #include "Projectile.h"
+#include "Item.h"
 
 // Monster
 #include "Monster.h"
@@ -17,17 +18,18 @@
 
 Room::Room()
 {
-	InitializeCriticalSection(&_cs);
+	InitializeCriticalSection(&_objectCS);
 
 	_generateID = 1;
 	_playerCount = 0;
+	_monsterCount = 0;
 	_state = RoomState::Idle;
 	_timer = 50;
 }
 
 Room::~Room()
 {
-	DeleteCriticalSection(&_cs);
+	DeleteCriticalSection(&_objectCS);
 }
 
 void Room::Update()
@@ -47,119 +49,184 @@ void Room::Update()
 	
 	SpawnMonster();
 
-	EnterCriticalSection(&_cs);
-	for (const auto& item : _objects)
-	{
+	EnterCriticalSection(&_objectCS);
+	for (const auto& item : _players)
 		item.second->Update();
-	}
-	LeaveCriticalSection(&_cs);
+	/*for (const auto& item : _monsters)
+		item.second->Update();*/
+	for (const auto& item : _items)
+		item.second->Update();
+	for (const auto& item : _projectiles)
+		item.second->Update();
+	LeaveCriticalSection(&_objectCS);
 
-	//EnterCriticalSection(&_cs);
-	for (const auto& object : _objects) {
-		switch (object.second->GetObjectType()) {
-		case ObjectType::Player:
-			//object.second->Update();
-			break;
-		case ObjectType::ObstacleMonster:
-		case ObjectType::NormalMonster:
-		case ObjectType::RespawnMonster:
-		case ObjectType::TankMonster:
-		case ObjectType::BomberMonster:
+	EnterCriticalSection(&_objectCS);
+	// Player 충돌 처리
+	for (const auto& playerItem : _players)
+	{
+		// Monster와 충돌 처리
+		for (const auto& monsterItem : _monsters)
 		{
-			Monster* monster = dynamic_cast<Monster*>(object.second.get());
-			if (!monster) break;
-
-			GameObject* closestPlayer = nullptr;
-			float minDistance = std::numeric_limits<float>::infinity();
-
-			// 가장 가까운 플레이어 탐색
-			for (const auto& otherObject : _objects) {
-				if (otherObject.second->GetObjectType() == ObjectType::Player) {
-					float dx = otherObject.second->GetPos().x - monster->GetPos().x;
-					float dy = otherObject.second->GetPos().y - monster->GetPos().y;
-					float distance = sqrt(dx * dx + dy * dy);
-
-					if (distance < minDistance) {
-						minDistance = distance;
-						closestPlayer = otherObject.second.get();
-					}
-				}
-			}
-
-			// 가장 가까운 플레이어에게만 이동
-			if (closestPlayer) {
-				monster->Update(closestPlayer);
-			}
-			break;
+			/*if (monsterItem.second->IsCollision(playerItem.second))
+				playerItem.second->SetState(ObjectState::Dead);*/
 		}
+
+		// Item과 충돌 처리
+		for (const auto& itemItem : _items)
+		{
+			if (itemItem.second->IsCollision(playerItem.second))
+			{
+
+			}
 		}
 	}
+	LeaveCriticalSection(&_objectCS);
 
-	//// 상태가 Dead면 클라 연결 끊으면 오류남
-	///*_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {
-	//	return o->IsState(ObjectState::Dead);
-	//	}), _objects.end());*/
-	//LeaveCriticalSection(&_cs);
+	EnterCriticalSection(&_objectCS);
+	// Monster 충돌 처리
+	for (const auto& monsterItem : _monsters)
+	{
+		// Projectile과 충돌 처리
+		for (const auto& projectileItem : _projectiles)
+		{
+			if (projectileItem.second->IsCollision(monsterItem.second))
+			{
+
+			}
+		}
+
+		// Monster와 충돌 처리
+		for (const auto& monsterItem2 : _monsters)
+		{
+			if (monsterItem2.first == monsterItem.first)
+				continue;
+
+			if (monsterItem2.second->IsCollision(monsterItem.second))
+			{
+
+			}
+		}
+	}
+	LeaveCriticalSection(&_objectCS);
 }
 
 GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 {
 	GameObjectRef object;
 
+	EnterCriticalSection(&_objectCS);
 	switch (type)
 	{
 	case ObjectType::Player:
-		object = std::make_shared<Player>();
+		_players[_generateID] = std::make_shared<Player>();
+		object = _players[_generateID];
 		_playerCount++;
 		break;
 	case ObjectType::NormalMonster:
-		object = std::make_shared<NormalMonster>();
+		_monsters[_generateID] = std::make_shared<NormalMonster>();
+		object = _monsters[_generateID];
+		_monsterCount++;
 		break;
 	case ObjectType::TankMonster:
-		object = std::make_shared<TankMonster>();
+		_monsters[_generateID] = std::make_shared<TankMonster>();
+		object = _monsters[_generateID];
+		_monsterCount++;
 		break;
 	case ObjectType::BomberMonster:
-		object = std::make_shared<BomberMonster>();
+		_monsters[_generateID] = std::make_shared<BomberMonster>();
+		object = _monsters[_generateID];
+		_monsterCount++;
 		break;
 	case ObjectType::RespawnMonster:
-		object = std::make_shared<RespawnMonster>();
+		_monsters[_generateID] = std::make_shared<RespawnMonster>();
+		object = _monsters[_generateID];
+		_monsterCount++;
 		break;
 	case ObjectType::ObstacleMonster:
-		object = std::make_shared<ObstacleMonster>();
+		_monsters[_generateID] = std::make_shared<ObstacleMonster>();
+		object = _monsters[_generateID];
+		_monsterCount++;
 		break;
 	case ObjectType::Item:
 		break;
 	case ObjectType::Bullet:
-		object = std::make_shared<Projectile>(dir, pos);
+		_projectiles[_generateID] = std::make_shared<Projectile>(dir, pos);
+		object = _projectiles[_generateID];
 		break;
 	case ObjectType::Bomb:
-		break;
-	case ObjectType::UI:
 		break;
 	case ObjectType::Obstacle:
 		break;
 	}
+	LeaveCriticalSection(&_objectCS);
 
 	object->SetID(_generateID++);
-
-	EnterCriticalSection(&_cs);
-	_objects[object->GetID()] = object;
-	LeaveCriticalSection(&_cs);
 
 	g_framework->SendAddObjectPacket(object, true);
 
 	return object;
 }
 
-void Room::RemoveObject(int id)
+void Room::RemoveObject(ObjectType type, int id)
 {
-	GameObjectRef object = _objects[id];
+	GameObjectRef object;
 
-	EnterCriticalSection(&_cs);
-	_objects.erase(id);
-	LeaveCriticalSection(&_cs);
+	EnterCriticalSection(&_objectCS);
+	switch (type)
+	{
+	case ObjectType::Player:
+		object = _players[id];
+		_players.erase(id);
+		_playerCount--;
+		break;
+	case ObjectType::NormalMonster:
+	case ObjectType::TankMonster:
+	case ObjectType::BomberMonster:
+	case ObjectType::RespawnMonster:
+	case ObjectType::ObstacleMonster:
+		object = _monsters[id];
+		_monsters.erase(id);
+		_monsterCount--;
+		break;
+	case ObjectType::Item:
+		object = _items[id];
+		_items.erase(id);
+		break;
+	case ObjectType::Bullet:
+		object = _projectiles[id];
+		_projectiles.erase(id);
+		break;
+	case ObjectType::Bomb:
+		break;
+	case ObjectType::Obstacle:
+		break;
+	}
+	LeaveCriticalSection(&_objectCS);
 
 	g_framework->SendRemoveObjectPacket(object, true);
+}
+
+GameObjectRef Room::GetObject(ObjectType type, int id)
+{
+	switch (type)
+	{
+	case ObjectType::Player:
+		return _players[id];
+	case ObjectType::NormalMonster:
+	case ObjectType::TankMonster:
+	case ObjectType::BomberMonster:
+	case ObjectType::RespawnMonster:
+	case ObjectType::ObstacleMonster:
+		return _monsters[id];
+	case ObjectType::Item:
+		return _items[id];
+	case ObjectType::Bullet:
+		return _projectiles[id];
+	case ObjectType::Bomb:
+		break;
+	case ObjectType::Obstacle:
+		break;
+	}
 }
 
 void Room::SpawnMonster()

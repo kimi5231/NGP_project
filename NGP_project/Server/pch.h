@@ -233,6 +233,7 @@ using EventType = std::variant<SendEventRef<S_AddObject_Packet>, SendEventRef<S_
 using ClientRef = std::shared_ptr<class Client>;
 using GameObjectRef = std::shared_ptr<class GameObject>;
 using PlayerRef = std::shared_ptr<class Player>;
+using MonsterRef = std::shared_ptr<class Monster>;
 using ItemRef = std::shared_ptr<class Item>;
 using ProjectileRef = std::shared_ptr<class Projectile>;
 

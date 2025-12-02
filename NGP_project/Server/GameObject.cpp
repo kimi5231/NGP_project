@@ -24,7 +24,7 @@ BoundingBox GameObject::GetBoundingBox() const
     return BoundingBox(_pos, _size);
 }
 
-bool GameObject::IsCollision(const GameObject* other) const
+bool GameObject::IsCollision(const GameObjectRef other) const
 {
     return GetBoundingBox().Intersects(other->GetBoundingBox());
 }

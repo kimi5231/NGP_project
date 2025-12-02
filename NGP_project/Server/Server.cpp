@@ -25,7 +25,7 @@ int main(void)
 
 	//GET_SINGLE(TimeManager)->Init();
 
-	InitializeCriticalSection(&g_cs);
+	InitializeCriticalSection(&g_sendCS);
 
 	// 로직 처리 Thread 생성
 	CreateThread(NULL, 0, ProcessGameData, NULL, 0, nullptr);
@@ -36,7 +36,7 @@ int main(void)
 		//GET_SINGLE(TimeManager)->Update();
 	}
 
-	DeleteCriticalSection(&g_cs);
+	DeleteCriticalSection(&g_sendCS);
 
 	return 0;
 }

@@ -3,4 +3,4 @@ class ServerFramework;
 
 extern ServerFramework* g_framework;
 
-extern CRITICAL_SECTION g_cs;
+extern CRITICAL_SECTION g_sendCS;

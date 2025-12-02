@@ -73,7 +73,6 @@ void Monster::FindTarget(GameObject* other)
 
 bool Monster::Move()
 {
-    _prevPos = _pos;
     float dx = _targetPos.x - _pos.x;
     float dy = _targetPos.y - _pos.y;
     double distance = sqrt(dx * dx + dy * dy);
@@ -98,8 +97,11 @@ bool Monster::Move()
     if (dy < 0) _dir = Dir::Up;
     else if (dy > 0) _dir = Dir::Down;
 
-    //Sleep(300);
-    g_framework->SendMovePacket(shared_from_this(), true);
+    if (abs(static_cast<int>(_prevPos.x) - static_cast<int>(_pos.x)) > 1 || abs(static_cast<int>(_prevPos.y) - static_cast<int>(_pos.y)) > 1)
+    {
+        _prevPos = _pos;
+        g_framework->SendMovePacket(shared_from_this(), true);
+    }
 
     return true;
 }

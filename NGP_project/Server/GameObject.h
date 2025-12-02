@@ -2,6 +2,7 @@
 #include "StateMachine.h"
 
 using SpawnCallback = std::function<void(GameObject*)>;
+class BoundingBox;
 
 typedef struct Status {
 	int _speed{};
@@ -36,6 +37,9 @@ public:
 	void SetState(ObjectState state) { _state = state; }
 	ObjectState GetState() { return _state; }
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
+
+	BoundingBox GetBoundingBox() const;
+	bool IsCollision(const GameObject* other) const;
 
 	Status _status{};
 protected:

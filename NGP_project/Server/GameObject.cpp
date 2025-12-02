@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "BoundingBox.h"
 #include "GameObject.h"
 
 #define DIFF 5.001  // 임시 상수
@@ -16,6 +17,16 @@ GameObject::GameObject(ObjectState state)
 GameObject::GameObject(ObjectType type, Vertex pos)
     : _type{ type }, _pos{ pos }
 {
+}
+
+BoundingBox GameObject::GetBoundingBox() const
+{
+    return BoundingBox(_pos, _size);
+}
+
+bool GameObject::IsCollision(const GameObject* other) const
+{
+    return GetBoundingBox().Intersects(other->GetBoundingBox());
 }
 
 bool GameObject::IsArrive()

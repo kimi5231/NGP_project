@@ -80,6 +80,9 @@
     <ClInclude Include="Global.h">
       <Filter>소스 파일\Main</Filter>
     </ClInclude>
+    <ClInclude Include="BoundingBox.h">
+      <Filter>소스 파일\Game\Object\Interactable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -135,6 +138,9 @@
     </ClCompile>
     <ClCompile Include="Global.cpp">
       <Filter>소스 파일\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>소스 파일\Game\Object\Interactable</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

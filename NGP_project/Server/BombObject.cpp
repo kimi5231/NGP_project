@@ -1,40 +1,46 @@
 ﻿#include "pch.h"
 #include "BombObject.h"
 #include "Constant.h"
+#include "TimeManager.h"
+#include "Global.h"
+#include "ServerFramework.h"
 
 BombObject::BombObject()
-{   _type = ObjectType::Bomb;
+{   
+    _type = ObjectType::Bomb;
+    _maxCnt = 6;
 }
 
 BombObject::BombObject(Vertex pos)
 {
     _pos = pos;
     _type = ObjectType::Bomb;
+    _maxCnt = 6;
 }
 
 void BombObject::Update()
 {
     // 시간 지남에 따라 상태 변화하도록 변경하기
-    /*if (CheckTimer(_timer, (float)BOMB_TIME / _spriteCnt.x)) {
-        _curFrame.x++;
+    if (GET_SINGLE(TimeManager)->CheckTimer(_timerOffset, BOMB_TIME / _maxCnt)) {
+        // 시간 send
+        _timer++;
+        g_framework->SendUpdateTimerPacket(shared_from_this(), true);   // 오브젝트 보내기 필요
     }
-
-    if (_curFrame.x >= _spriteCnt.x) {
+    
+    if (_timer >= _maxCnt) {
         if (!_isBomb) {
             _isBomb = true;
-            DeleteObject(_bitmap);
-            DeleteObject(_bitmapMask);
-            _bitmap = (HBITMAP)LoadImage(hInst, (g_resourcePath / "bomb_effect.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-            _bitmapMask = (HBITMAP)LoadImage(hInst, (g_resourcePath / "bomb_effect_mask.bmp").wstring().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-            _spriteCnt = { 7, 1 };
-            _curFrame = {};
+            _maxCnt = 7;
             _size.x *= 3;
             _size.y *= 3;
+            _timer = 0;
+            g_framework->SendUpdateTimerPacket(shared_from_this(), true);   // 오브젝트 보내기 필요
         }
         else {
             SetState(ObjectState::Dead);
+            // 상태 send
         }
-    }*/
+    }
 }
 
 bool BombObject::Move()

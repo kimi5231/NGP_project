@@ -14,14 +14,12 @@ public:
 public:
 	GameObjectRef AddObject(ObjectType type, Vertex pos = {-1, -1}, Dir dir = Dir::None);
 	void RemoveObject(int id);
-
 public:
 	std::unordered_map<int, GameObjectRef>& GetObjects() { return _objects; }
 	GameObjectRef GetObject(int id) { return _objects[id]; }
 	int GetPlayerCount() { return _playerCount; }
 	void SetRoomState(RoomState state) { _state = state; }
 	int GetTimer() { return _timer; }
-
 private:
 	std::unordered_map<int, GameObjectRef> _objects;
 	int _curStage{ 1 };

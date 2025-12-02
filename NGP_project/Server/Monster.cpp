@@ -106,9 +106,9 @@ bool Monster::Move()
     return true;
 }
 
-void Monster::Update(GameObject* other)
+void Monster::Update()
 {
-    _stateMachine->Update(other);
+    _stateMachine->Update();
 }
 
 void Monster::DropItem()

@@ -16,7 +16,7 @@ public:
 	bool CanUseSkill() const { return _canUseSkill; }
 	bool Move();
 
-	virtual void Update(GameObject* other);
+	virtual void Update();
 	// 외부에서 state을 위해 bool값 리턴 - true: state 변경
 	virtual bool UseSkill() { return false; }
 	void DropItem();

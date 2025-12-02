@@ -176,6 +176,8 @@ struct S_ItemUseResult_Packet
 struct S_UpdateTimer_Packet
 {
     int time;
+    int objectID;
+    ObjectType type;
 };
 
 // Client Packet

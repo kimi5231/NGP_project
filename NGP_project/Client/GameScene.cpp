@@ -62,13 +62,9 @@ void GameScene::Update()
 	//	}
 	//}
 
-	//for (const auto& object : _objects) {
-	//	object->Update();
-	//	// 아이템 충돌 처리
-	//	if (object->GetObjectType() == ObjectType::Item && _localPlayer->IsCollision(object.get())) {
-	//		_localPlayer->SetItem(dynamic_pointer_cast<Item>(object));
-	//		object->SetState(ObjectState::Dead);
-	//	}
+	for (const auto& object : _objects) {
+		object.second->Update();
+	}
 
 	//	// 장애물
 	//	if (object->GetObjectType() == ObjectType::Obstacle && _localPlayer->IsCollision(object.get())) {
@@ -337,6 +333,14 @@ void GameScene::SyncBullet(int id, const Vertex& pos)
 	if (_objects.find(id) != _objects.end())
 	{
 		_objects[id]->SetPos(pos);
+	}
+}
+
+void GameScene::SyncObjectTimer(const int timer, const int id)
+{
+	if (_objects.find(id) != _objects.end())
+	{
+		_objects[id]->SetTimer(timer);
 	}
 }
 

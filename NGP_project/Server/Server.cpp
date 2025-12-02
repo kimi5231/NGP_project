@@ -12,7 +12,6 @@ DWORD WINAPI ProcessGameData(LPVOID client)
 	{
 		GET_SINGLE(TimeManager)->Tick(60.0f);
 		g_framework->GetRoom()->Update();
-		GET_SINGLE(TimeManager)->Update();
 	}
 	
 	return 0;
@@ -33,7 +32,6 @@ int main(void)
 	while (true)
 	{
 		g_framework->Update();
-		//GET_SINGLE(TimeManager)->Update();
 	}
 
 	DeleteCriticalSection(&g_cs);

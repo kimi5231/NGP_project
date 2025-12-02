@@ -6,6 +6,7 @@
 #include "Global.h"
 #include "ServerFramework.h"
 #include "Projectile.h"
+#include "BombObject.h"
 
 // Monster
 #include "Monster.h"
@@ -36,70 +37,35 @@ void Room::Update()
 		return;
 
 	// Timer Update
-	static float sumTime;
+	/*static float sumTime;
 	sumTime += GET_SINGLE(TimeManager)->GetDeltaTime();
 	if (sumTime > 1)
 	{
 		sumTime = 0;
 		_timer -= 1;
 		g_framework->SendUpdateTimerPacket(true);
-	}
+	}*/
 	
 	SpawnMonster();
 
-	EnterCriticalSection(&_cs);
+	/*EnterCriticalSection(&_cs);
 	for (const auto& item : _objects)
 	{
 		item.second->Update();
 	}
+	LeaveCriticalSection(&_cs);*/
+
+	EnterCriticalSection(&_cs);
+	for (const auto& object : _objects) {
+		object.second->Update();
+	}
 	LeaveCriticalSection(&_cs);
 
-	//EnterCriticalSection(&_cs);
-	for (const auto& object : _objects) {
-		switch (object.second->GetObjectType()) {
-		case ObjectType::Player:
-			//object.second->Update();
-			break;
-		case ObjectType::ObstacleMonster:
-		case ObjectType::NormalMonster:
-		case ObjectType::RespawnMonster:
-		case ObjectType::TankMonster:
-		case ObjectType::BomberMonster:
-		{
-			Monster* monster = dynamic_cast<Monster*>(object.second.get());
-			if (!monster) break;
-
-			GameObject* closestPlayer = nullptr;
-			float minDistance = std::numeric_limits<float>::infinity();
-
-			// 가장 가까운 플레이어 탐색
-			for (const auto& otherObject : _objects) {
-				if (otherObject.second->GetObjectType() == ObjectType::Player) {
-					float dx = otherObject.second->GetPos().x - monster->GetPos().x;
-					float dy = otherObject.second->GetPos().y - monster->GetPos().y;
-					float distance = sqrt(dx * dx + dy * dy);
-
-					if (distance < minDistance) {
-						minDistance = distance;
-						closestPlayer = otherObject.second.get();
-					}
-				}
-			}
-
-			// 가장 가까운 플레이어에게만 이동
-			if (closestPlayer) {
-				monster->Update(closestPlayer);
-			}
-			break;
-		}
-		}
-	}
-
-	//// 상태가 Dead면 클라 연결 끊으면 오류남
-	///*_objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const GameObjectRef& o) {
-	//	return o->IsState(ObjectState::Dead);
-	//	}), _objects.end());*/
-	//LeaveCriticalSection(&_cs);
+	EnterCriticalSection(&_cs);
+	std::erase_if(_objects, [](const auto& kv) {
+		return kv.second->IsState(ObjectState::Dead);
+		});
+	LeaveCriticalSection(&_cs);
 }
 
 GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
@@ -114,18 +80,34 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		break;
 	case ObjectType::NormalMonster:
 		object = std::make_shared<NormalMonster>();
+		// item, bomb 생성을 위한 콜백함수 설정
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::TankMonster:
 		object = std::make_shared<TankMonster>();
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::BomberMonster:
 		object = std::make_shared<BomberMonster>();
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::RespawnMonster:
 		object = std::make_shared<RespawnMonster>();
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::ObstacleMonster:
 		object = std::make_shared<ObstacleMonster>();
+		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+			});
 		break;
 	case ObjectType::Item:
 		break;
@@ -133,6 +115,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		object = std::make_shared<Projectile>(dir, pos);
 		break;
 	case ObjectType::Bomb:
+		object = std::make_shared<BombObject>(pos);
 		break;
 	case ObjectType::UI:
 		break;
@@ -174,9 +157,4 @@ void Room::SpawnMonster()
 		if (!monster) 
 			return;
 	}
-	
-	//// item, bomb 생성을 위한 콜백함수 설정
-	//monster->SetCallback([this](GameObject* obj) {
-	//	this->AddObject(obj);
-	//	});
 }

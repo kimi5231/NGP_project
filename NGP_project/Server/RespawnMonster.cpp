@@ -2,6 +2,7 @@
 #include "Monster.h"
 #include "RespawnMonster.h"
 #include "Constant.h"
+#include "TimeManager.h"
 
 RespawnMonster::RespawnMonster() : Monster()
 {
@@ -14,15 +15,15 @@ void RespawnMonster::Update()
     Monster::Update();
 
     if (_canUseSkill) {
-        // 시간 재는 함수 추가 시 주석 풀기
-        /*if (CheckTimer(_timer, RESPAWN_TIME)) {
-            SetState(ObjectState::Move);
+        //// 시간 재는 함수 추가 시 주석 풀기
+        //if (GET_SINGLE(TimeManager)->CheckTimer(_timer, RESPAWN_TIME)) {
+        //    SetState(ObjectState::Move);
 
-            _stateMachine->ChangeState(new FindTargetState);
-            _stateMachine->Start();
-            _canUseSkill = false;
-            _invincible = false;
-        }*/
+        //    _stateMachine->ChangeState(new FindTargetState);
+        //    _stateMachine->Start();
+        //    _canUseSkill = false;
+        //    _invincible = false;
+        //}
     }
 }
 

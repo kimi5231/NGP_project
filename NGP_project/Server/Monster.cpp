@@ -1,5 +1,4 @@
 ﻿#include "pch.h"
-#include <random>
 #include "Monster.h"
 #include "Item.h"
 #include "Constant.h"
@@ -9,12 +8,8 @@
 
 RECT gBackgroundRect{ 150, 50, FRAME_BUFFER_WIDTH - 170, FRAME_BUFFER_HEIGHT - 70 };	// 변경 시 클라도 동일하게 변경 필요
 
-std::random_device rd;
-std::mt19937 gen(rd());
-
 std::uniform_int_distribution<> randWidth(gBackgroundRect.left + CELL_SIZE, gBackgroundRect.right - CELL_SIZE);
 std::uniform_int_distribution<> randHeight(gBackgroundRect.top + CELL_SIZE, gBackgroundRect.bottom - CELL_SIZE);
-
 
 Monster::Monster()
     : _stateMachine{ new StateMachine{this, new FindTargetState} }
@@ -113,9 +108,7 @@ void Monster::Update()
 
 void Monster::DropItem()
 {
-    std::uniform_int_distribution<> randSpawn(static_cast<int>(ItemType::Life), static_cast<int>(ItemType::Hourglass));
-
-    GameObject* item = new Item(static_cast<ItemType>(randSpawn(gen)), _pos);
+    GameObject* item = new Item(_pos);
     _spawnCallback(item);
 }
 

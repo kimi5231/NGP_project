@@ -41,6 +41,9 @@ public:
 	BoundingBox GetBoundingBox() const;
 	bool IsCollision(const GameObjectRef other) const;
 
+	int GetDamage() const { return _damage; }
+	bool CanDamage() const { return !_invincible; }
+
 	Status _status{};
 	int _timer{};	// 총알, 폭탄 등에 사용
 protected:
@@ -55,5 +58,6 @@ protected:
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 
 	bool _invincible{};	// 무적 판정
+	int _damage{ 10 };
 };
 

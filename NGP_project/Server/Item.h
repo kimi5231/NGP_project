@@ -4,8 +4,8 @@
 class Item : public GameObject
 {
 public:
-	Item(ItemType type);
-	Item(ItemType type, Vertex pos);
+	Item();
+	Item(Vertex pos);
 	virtual ~Item() {};
 
 public:

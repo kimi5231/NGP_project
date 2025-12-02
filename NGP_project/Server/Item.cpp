@@ -1,19 +1,21 @@
 ﻿#include "pch.h"
 #include "Item.h"
 #include "Constant.h"
+#include "Global.h"
 
 float bulletSpeed{ BULLET_TIME };
 // 아이템 사용 관련 전역 변수
 bool useLightning{}, useWaterWheel{}, useShotgun{}, useHourglass{};
 
-Item::Item(ItemType type)
+Item::Item()
 {
 	GameObject::_type = ObjectType::Item;
-	_type = type;
+	std::uniform_int_distribution<> randSpawn(static_cast<int>(ItemType::Life), static_cast<int>(ItemType::Hourglass));
+	_type = static_cast<ItemType>(randSpawn(gen));
 }
 
-Item::Item(ItemType type, Vertex pos)
-	: Item(type)
+Item::Item(Vertex pos)
+	: Item()
 {
 	_pos = pos;
 }

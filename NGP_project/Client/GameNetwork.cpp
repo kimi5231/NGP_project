@@ -9,6 +9,7 @@
 #include "ObstacleMonster.h"
 #include "Projectile.h"
 #include "BombObject.h"
+#include "Item.h"
 
 // 수영 데스크탑
 //char* SERVERIP = (char*)"61.255.49.141";
@@ -334,6 +335,12 @@ void GameNetwork::RecvAddObject(S_AddObject_Packet addObjectPacket)
 	{
 		std::shared_ptr<BombObject> object = std::make_shared<BombObject>();
 		object->SetPos(addObjectPacket.pos);
+		_gameScene->AddObject(addObjectPacket.objectID, object);
+	}
+	break;
+	case ObjectType::Item:
+	{
+		std::shared_ptr<Item> object = std::make_shared<Item>(addObjectPacket.itemType, addObjectPacket.pos);
 		_gameScene->AddObject(addObjectPacket.objectID, object);
 	}
 	break;

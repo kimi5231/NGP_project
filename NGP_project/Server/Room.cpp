@@ -53,12 +53,20 @@ void Room::Update()
 	EnterCriticalSection(&_objectCS);
 	for (const auto& item : _players)
 		item.second->Update();
-	for (const auto& item : _monsters)
+	for (const auto& item : _monsters) {
 		item.second->Update();
+		if (item.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(item.second);
+		}
+	}
 	for (const auto& item : _items)
 		item.second->Update();
-	for (const auto& item : _projectiles)
+	for (const auto& item : _projectiles) {
 		item.second->Update();
+		if (item.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(item.second);
+		}
+	}
 	for (const auto& item : _bombs) {
 		item.second->Update();
 		if (item.second->IsState(ObjectState::Dead)) {
@@ -74,7 +82,7 @@ void Room::Update()
 		// Monster와 충돌 처리
 		for (const auto& monsterItem : _monsters)
 		{
-			if (monsterItem.second->IsCollision(playerItem.second))
+			if (monsterItem.second->IsCollision(playerItem.second) && !monsterItem.second->IsState(ObjectState::Dead) && monsterItem.second->CanDamage())
 				playerItem.second->SetState(ObjectState::Dead);
 		}
 
@@ -98,7 +106,8 @@ void Room::Update()
 		{
 			if (projectileItem.second->IsCollision(monsterItem.second))
 			{
-
+				monsterItem.second->Damaged(projectileItem.second->GetDamage());
+				projectileItem.second->SetState(ObjectState::Dead);
 			}
 		}
 
@@ -170,6 +179,8 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 			});
 		break;
 	case ObjectType::Item:
+		_items[_generateID] = std::make_shared<Item>(pos);
+		object = _items[_generateID];
 		break;
 	case ObjectType::Bullet:
 		_projectiles[_generateID] = std::make_shared<Projectile>(dir, pos);

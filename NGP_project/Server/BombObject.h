@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 
-class BombObject : public GameObject {
+class BombObject : public GameObject, public std::enable_shared_from_this<BombObject> {
 public:
 	BombObject();
 	BombObject(Vertex pos);
@@ -12,4 +12,5 @@ public:
 
 private:
 	int _maxCnt;	// 폭탄 터지는 카운트
+	float _timerOffset{};
 };

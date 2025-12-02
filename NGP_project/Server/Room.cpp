@@ -37,14 +37,14 @@ void Room::Update()
 		return;
 
 	// Timer Update
-	static float sumTime;
+	/*static float sumTime;
 	sumTime += GET_SINGLE(TimeManager)->GetDeltaTime();
 	if (sumTime > 1)
 	{
 		sumTime = 0;
 		_timer -= 1;
 		g_framework->SendUpdateTimerPacket(true);
-	}
+	}*/
 	
 	SpawnMonster();
 
@@ -192,8 +192,5 @@ void Room::SpawnMonster()
 		GameObjectRef monster = AddObject(static_cast<ObjectType>(type));
 		if (!monster) 
 			return;
-
-		
 	}
-	
 }

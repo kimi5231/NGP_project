@@ -49,6 +49,8 @@ public:
 	Dir GetDir() const { return _dir; }
 	void SetDir(Dir dir) { _dir = dir; }
 
+	void SetTimer(const int timer) { _timer = timer; }
+
 	int GetDamage() const { return _damage; }
 
 	void UndoPos() { _pos = _prevPos; }

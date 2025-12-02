@@ -2,6 +2,8 @@
 #include "BombObject.h"
 #include "Constant.h"
 #include "TimeManager.h"
+#include "Global.h"
+#include "ServerFramework.h"
 
 BombObject::BombObject()
 {   
@@ -19,16 +21,20 @@ BombObject::BombObject(Vertex pos)
 void BombObject::Update()
 {
     // 시간 지남에 따라 상태 변화하도록 변경하기
-    if (GET_SINGLE(TimeManager)->CheckTimer(_timer, (float)BOMB_TIME / _maxCnt)) {
+    if (GET_SINGLE(TimeManager)->CheckTimer(_timerOffset, BOMB_TIME / _maxCnt)) {
         // 시간 send
+        _timer++;
+        g_framework->SendUpdateTimerPacket(shared_from_this(), true);   // 오브젝트 보내기 필요
     }
     
-    if (_timer >= BOMB_TIME) {
+    if (_timer >= _maxCnt) {
         if (!_isBomb) {
             _isBomb = true;
             _maxCnt = 7;
             _size.x *= 3;
             _size.y *= 3;
+            _timer = 0;
+            g_framework->SendUpdateTimerPacket(shared_from_this(), true);   // 오브젝트 보내기 필요
         }
         else {
             SetState(ObjectState::Dead);

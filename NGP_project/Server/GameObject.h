@@ -38,6 +38,7 @@ public:
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
 
 	Status _status{};
+	int _timer{};	// 총알, 폭탄 등에 사용
 protected:
 	int _id{};
 	ObjectType _type{};
@@ -50,6 +51,5 @@ protected:
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 
 	bool _invincible{};	// 무적 판정
-	float _timer{};	// 총알, 폭탄 등에 사용
 };
 

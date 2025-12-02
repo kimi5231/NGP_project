@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "GameObject.h"
 
+class BombObject;
+
 class Room
 {
 public:
@@ -22,11 +24,11 @@ public:
 	void SetRoomState(RoomState state) { _state = state; }
 	int GetTimer() { return _timer; }
 private:
-	//std::unordered_map<int, GameObjectRef> _objects;
 	std::unordered_map<int, PlayerRef> _players;
 	std::unordered_map<int, MonsterRef> _monsters;
 	std::unordered_map<int, ItemRef> _items;
 	std::unordered_map<int, ProjectileRef> _projectiles;
+	std::unordered_map<int, std::shared_ptr<BombObject>> _bombs;
 	int _curStage{ 1 };
 
 	int _generateID;

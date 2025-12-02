@@ -59,6 +59,12 @@ void Room::Update()
 		item.second->Update();
 	for (const auto& item : _projectiles)
 		item.second->Update();
+	for (const auto& item : _bombs) {
+		item.second->Update();
+		if (item.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(item.second);
+		}
+	}
 	LeaveCriticalSection(&_objectCS);
 
 	EnterCriticalSection(&_objectCS);
@@ -109,15 +115,6 @@ void Room::Update()
 		}
 	}
 	LeaveCriticalSection(&_objectCS);
-
-	/*EnterCriticalSection(&_cs);
-	for (const auto& object : _objects) {
-		object.second->Update();
-		if (object.second->IsState(ObjectState::Dead)) {
-			g_framework->AddRemoveObject(object.second);
-		}
-	}
-	LeaveCriticalSection(&_cs);*/
 }
 
 GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
@@ -136,7 +133,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		_monsters[_generateID] = std::make_shared<NormalMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
-		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+		std::dynamic_pointer_cast<Monster>(object)->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
 			});
 		break;
@@ -144,7 +141,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		_monsters[_generateID] = std::make_shared<TankMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
-		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+		std::dynamic_pointer_cast<Monster>(object)->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
 			});
 		break;
@@ -152,7 +149,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		_monsters[_generateID] = std::make_shared<BomberMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
-		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+		std::dynamic_pointer_cast<Monster>(object)->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
 			});
 		break;
@@ -160,7 +157,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		_monsters[_generateID] = std::make_shared<RespawnMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
-		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+		std::dynamic_pointer_cast<Monster>(object)->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
 			});
 		break;
@@ -168,7 +165,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		_monsters[_generateID] = std::make_shared<ObstacleMonster>();
 		object = _monsters[_generateID];
 		_monsterCount++;
-		dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+		std::dynamic_pointer_cast<Monster>(object)->SetCallback([this](GameObject* obj) {
 			this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
 			});
 		break;
@@ -179,7 +176,8 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		object = _projectiles[_generateID];
 		break;
 	case ObjectType::Bomb:
-		object = std::make_shared<BombObject>(pos);
+		_bombs[_generateID] = std::make_shared<BombObject>(pos);
+		object = _bombs[_generateID];
 		break;
 	case ObjectType::Obstacle:
 		break;
@@ -223,6 +221,8 @@ void Room::RemoveObject(ObjectType type, int id)
 		_projectiles.erase(id);
 		break;
 	case ObjectType::Bomb:
+		object = _bombs[id];
+		_bombs.erase(id);
 		break;
 	case ObjectType::Obstacle:
 		break;

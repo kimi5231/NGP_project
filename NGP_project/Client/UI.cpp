@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "UI.h"
 #include <string>
 #include "Global.h"
@@ -45,5 +45,4 @@ void ProgressBar::Update(int serverTimer)
     
     _box._halfSize.x -= _maxSize / _maxProgress;
     _box._center.x -= _maxSize / _maxProgress;
-
 }

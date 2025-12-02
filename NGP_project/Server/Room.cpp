@@ -7,6 +7,7 @@
 #include "ServerFramework.h"
 #include "Projectile.h"
 #include "Item.h"
+#include "BombObject.h"
 
 // Monster
 #include "Monster.h"
@@ -52,8 +53,8 @@ void Room::Update()
 	EnterCriticalSection(&_objectCS);
 	for (const auto& item : _players)
 		item.second->Update();
-	/*for (const auto& item : _monsters)
-		item.second->Update();*/
+	for (const auto& item : _monsters)
+		item.second->Update();
 	for (const auto& item : _items)
 		item.second->Update();
 	for (const auto& item : _projectiles)
@@ -67,8 +68,8 @@ void Room::Update()
 		// Monster와 충돌 처리
 		for (const auto& monsterItem : _monsters)
 		{
-			/*if (monsterItem.second->IsCollision(playerItem.second))
-				playerItem.second->SetState(ObjectState::Dead);*/
+			if (monsterItem.second->IsCollision(playerItem.second))
+				playerItem.second->SetState(ObjectState::Dead);
 		}
 
 		// Item과 충돌 처리
@@ -108,6 +109,15 @@ void Room::Update()
 		}
 	}
 	LeaveCriticalSection(&_objectCS);
+
+	/*EnterCriticalSection(&_cs);
+	for (const auto& object : _objects) {
+		object.second->Update();
+		if (object.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(object.second);
+		}
+	}
+	LeaveCriticalSection(&_cs);*/
 }
 
 GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
@@ -147,6 +157,37 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		object = _monsters[_generateID];
 		_monsterCount++;
 		break;
+
+	//	object = std::make_shared<NormalMonster>();
+	//	// item, bomb 생성을 위한 콜백함수 설정
+	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+	//		});
+	//	break;
+	//case ObjectType::TankMonster:
+	//	object = std::make_shared<TankMonster>();
+	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+	//		});
+	//	break;
+	//case ObjectType::BomberMonster:
+	//	object = std::make_shared<BomberMonster>();
+	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+	//		});
+	//	break;
+	//case ObjectType::RespawnMonster:
+	//	object = std::make_shared<RespawnMonster>();
+	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+	//		});
+	//	break;
+	//case ObjectType::ObstacleMonster:
+	//	object = std::make_shared<ObstacleMonster>();
+	//	dynamic_cast<Monster*>(object.get())->SetCallback([this](GameObject* obj) {
+	//		this->AddObject(obj->GetObjectType(), obj->GetPos(), obj->GetDir());
+	//		});
+
 	case ObjectType::Item:
 		break;
 	case ObjectType::Bullet:
@@ -154,6 +195,7 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		object = _projectiles[_generateID];
 		break;
 	case ObjectType::Bomb:
+		object = std::make_shared<BombObject>(pos);
 		break;
 	case ObjectType::Obstacle:
 		break;
@@ -241,9 +283,4 @@ void Room::SpawnMonster()
 		if (!monster) 
 			return;
 	}
-	
-	//// item, bomb 생성을 위한 콜백함수 설정
-	//monster->SetCallback([this](GameObject* obj) {
-	//	this->AddObject(obj);
-	//	});
 }

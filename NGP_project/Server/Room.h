@@ -21,7 +21,6 @@ public:
 	int GetPlayerCount() { return _playerCount; }
 	void SetRoomState(RoomState state) { _state = state; }
 	int GetTimer() { return _timer; }
-
 private:
 	//std::unordered_map<int, GameObjectRef> _objects;
 	std::unordered_map<int, PlayerRef> _players;

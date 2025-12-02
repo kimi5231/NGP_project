@@ -24,7 +24,7 @@ BombObject::BombObject(Vertex pos)
 
 void BombObject::Update()
 {
-    if (CheckTimer(_timer, (float)BOMB_TIME / _spriteCnt.x)) {
+    if (_timer != (int)_curFrame.x) {
         _curFrame.x++;
     }
 
@@ -39,9 +39,6 @@ void BombObject::Update()
             _curFrame = {};
             _size.x *= 3;
             _size.y *= 3;
-        }
-        else {
-            SetState(ObjectState::Dead);
         }
     }
 }

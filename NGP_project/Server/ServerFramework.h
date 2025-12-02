@@ -40,6 +40,7 @@ public:
 	void SendAddObjectPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendRemoveObjectPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
+	void SendUpdateTimerPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(bool broadcast, SOCKET client = 0);
 
 	template <class T>

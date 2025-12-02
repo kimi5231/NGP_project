@@ -48,6 +48,8 @@ public:
 	void SyncMonster(int id, const Vertex& pos, const Dir dir, const ObjectState state);
 	void SyncBullet(int id, const Vertex& pos);
 	
+	void SyncObjectTimer(const int timer, const int id);
+
 	// Get UI
 	ProgressBar& GetTimerUI() { return _timerUI; }
 

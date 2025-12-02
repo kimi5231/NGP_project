@@ -42,6 +42,7 @@ public:
 	bool IsCollision(const GameObjectRef other) const;
 
 	Status _status{};
+	int _timer{};	// 총알, 폭탄 등에 사용
 protected:
 	int _id{};
 	ObjectType _type{};

@@ -9,7 +9,7 @@
 #include "GameNetwork.h"
 
 GameFramework::GameFramework()
-{
+{	
 }
 
 GameFramework::~GameFramework()
@@ -25,15 +25,12 @@ void GameFramework::Init()
 
 	GET_SINGLE(InputManager)->Init(hWnd);
 	GET_SINGLE(TimeManager)->Init();
-	
+
 	// Sound
 	GET_SINGLE(SoundManager)->Init(hWnd, soundPath);
 	GET_SINGLE(SoundManager)->LoadSound(L"main_music", L"main_music.wav", SoundType::BGM);
 
-	_gameNetwork = new GameNetwork;
 	_scene = new GameScene;
-	_scene->SetGameNetwork(_gameNetwork);
-	_gameNetwork->SetGameScene(_scene);
 }
 
 void GameFramework::Update()
@@ -42,8 +39,7 @@ void GameFramework::Update()
 	GET_SINGLE(TimeManager)->Update();
 
 	_scene->Update();
-	_gameNetwork->Update();
-
+	
 	InvalidateRect(hWnd, NULL, false);
 }
 

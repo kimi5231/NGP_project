@@ -16,9 +16,10 @@ public:
 	void Render(HDC hdc);
 
 public:
+	GameScene* GetGameScene() { return _scene; }
+public:
 	void ChangeScene();
 
 private:
 	GameScene* _scene{};
-	GameNetwork* _gameNetwork{};
 };

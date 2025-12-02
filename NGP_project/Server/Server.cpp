@@ -22,9 +22,8 @@ int main(void)
 	// ServerFramework 생성
 	g_framework = new ServerFramework();
 
-	//GET_SINGLE(TimeManager)->Init();
-
 	InitializeCriticalSection(&g_sendCS);
+	InitializeCriticalSection(&g_objectCS);
 
 	// 로직 처리 Thread 생성
 	CreateThread(NULL, 0, ProcessGameData, NULL, 0, nullptr);
@@ -35,6 +34,7 @@ int main(void)
 	}
 
 	DeleteCriticalSection(&g_sendCS);
+	DeleteCriticalSection(&g_objectCS);
 
 	return 0;
 }

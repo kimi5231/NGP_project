@@ -19,8 +19,6 @@
 
 Room::Room()
 {
-	InitializeCriticalSection(&_objectCS);
-
 	_generateID = 1;
 	_playerCount = 0;
 	_monsterCount = 0;
@@ -30,7 +28,6 @@ Room::Room()
 
 Room::~Room()
 {
-	DeleteCriticalSection(&_objectCS);
 }
 
 void Room::Update()
@@ -50,7 +47,7 @@ void Room::Update()
 	
 	SpawnMonster();
 
-	EnterCriticalSection(&_objectCS);
+	EnterCriticalSection(&g_objectCS);
 	for (const auto& item : _players)
 		item.second->Update();
 	for (const auto& item : _monsters)
@@ -59,15 +56,11 @@ void Room::Update()
 		item.second->Update();
 	for (const auto& item : _projectiles)
 		item.second->Update();
-	for (const auto& item : _bombs) {
+	for (const auto& item : _bombs)
 		item.second->Update();
-		if (item.second->IsState(ObjectState::Dead)) {
-			g_framework->AddRemoveObject(item.second);
-		}
-	}
-	LeaveCriticalSection(&_objectCS);
+	LeaveCriticalSection(&g_objectCS);
 
-	EnterCriticalSection(&_objectCS);
+	EnterCriticalSection(&g_objectCS);
 	// Player 충돌 처리
 	for (const auto& playerItem : _players)
 	{
@@ -87,9 +80,9 @@ void Room::Update()
 			}
 		}
 	}
-	LeaveCriticalSection(&_objectCS);
+	LeaveCriticalSection(&g_objectCS);
 
-	EnterCriticalSection(&_objectCS);
+	EnterCriticalSection(&g_objectCS);
 	// Monster 충돌 처리
 	for (const auto& monsterItem : _monsters)
 	{
@@ -114,14 +107,14 @@ void Room::Update()
 			}
 		}
 	}
-	LeaveCriticalSection(&_objectCS);
+	LeaveCriticalSection(&g_objectCS);
 }
 
 GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 {
 	GameObjectRef object;
 
-	EnterCriticalSection(&_objectCS);
+	EnterCriticalSection(&g_objectCS);
 	switch (type)
 	{
 	case ObjectType::Player:
@@ -182,9 +175,9 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 	case ObjectType::Obstacle:
 		break;
 	}
-	LeaveCriticalSection(&_objectCS);
 
 	object->SetID(_generateID++);
+	LeaveCriticalSection(&g_objectCS);
 
 	g_framework->SendAddObjectPacket(object, true);
 
@@ -195,7 +188,7 @@ void Room::RemoveObject(ObjectType type, int id)
 {
 	GameObjectRef object;
 
-	EnterCriticalSection(&_objectCS);
+	EnterCriticalSection(&g_objectCS);
 	switch (type)
 	{
 	case ObjectType::Player:
@@ -227,7 +220,7 @@ void Room::RemoveObject(ObjectType type, int id)
 	case ObjectType::Obstacle:
 		break;
 	}
-	LeaveCriticalSection(&_objectCS);
+	LeaveCriticalSection(&g_objectCS);
 
 	g_framework->SendRemoveObjectPacket(object, true);
 }

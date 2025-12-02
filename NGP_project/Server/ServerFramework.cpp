@@ -138,8 +138,10 @@ void ServerFramework::Update()
 	}
 
 	// 삭제할 Object가 있으면 삭제
-	for (GameObjectRef object : _removeObjects)
-		_room->RemoveObject(object->GetObjectType(), object->GetID());
+	EnterCriticalSection(&g_objectCS);
+	for (const auto& item : _removeObjects)
+		_room->RemoveObject(item.second->GetObjectType(), item.second->GetID());
+	LeaveCriticalSection(&g_objectCS);
 
 	_removeObjects.clear();
 }

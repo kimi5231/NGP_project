@@ -4,3 +4,4 @@
 ServerFramework* g_framework = nullptr;
 
 CRITICAL_SECTION g_sendCS;
+CRITICAL_SECTION g_objectCS;

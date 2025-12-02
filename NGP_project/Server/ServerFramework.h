@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "GameObject.h"
+
 class Room;
 class Player;
 
@@ -57,7 +59,7 @@ private:
 public:
 	Room* GetRoom() { return _room; }
 
-	void AddRemoveObject(GameObjectRef object) { _removeObjects.push_back(object); }
+	void AddRemoveObject(GameObjectRef object) { _removeObjects[object->GetID()] = object; }
 
 private:
 	fd_set _readSet{};
@@ -70,6 +72,6 @@ private:
 
 private:
 	Room* _room{};
-	std::vector<GameObjectRef> _removeObjects;
+	std::unordered_map<int, GameObjectRef> _removeObjects;
 	std::vector<EventType> _sendEvents;
 };

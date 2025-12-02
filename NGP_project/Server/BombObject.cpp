@@ -37,7 +37,7 @@ void BombObject::Update()
             g_framework->SendUpdateTimerPacket(shared_from_this(), true);   // 오브젝트 보내기 필요
         }
         else {
-            SetState(ObjectState::Dead);
+            g_framework->AddRemoveObject(shared_from_this());
         }
     }
 }

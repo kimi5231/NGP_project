@@ -38,6 +38,4 @@ private:
 	RoomState _state;
 
 	int _timer;
-
-	CRITICAL_SECTION _objectCS;
 };

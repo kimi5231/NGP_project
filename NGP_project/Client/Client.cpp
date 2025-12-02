@@ -38,9 +38,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    gameFramework.Init();
+    InitializeCriticalSection(&g_send_cs);
+    InitializeCriticalSection(&g_recv_cs);
 
-    InitializeCriticalSection(&g_cs);
+    gameFramework.Init();
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 
@@ -62,7 +63,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
      }
 
-     DeleteCriticalSection(&g_cs);
+     DeleteCriticalSection(&g_send_cs);
+     DeleteCriticalSection(&g_recv_cs);
 
      return (int) msg.wParam;
 }

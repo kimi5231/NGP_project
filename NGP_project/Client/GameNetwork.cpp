@@ -15,6 +15,7 @@
 //char* SERVERIP = (char*)"192.168.35.52";	
 // 루프백
 char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"192.168.1.191";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512
@@ -78,7 +79,7 @@ void GameNetwork::Update()
 	FD_SET(_socket, &_readSet);
 	FD_SET(_socket, &_writeSet);
 
-	// select
+	// select - 마지막 인자 0, NULL은 event 올 때까지 무한대기
 	if (select(0, &_readSet, &_writeSet, NULL, 0) == SOCKET_ERROR)
 	{
 		//err_display("select");
@@ -130,7 +131,7 @@ void GameNetwork::ProcessRecv()
 	*/
 	int packetSize;
 	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
-	std::cout << "packetSize: " << packetSize << std::endl;
+	//std::cout << "packetSize: " << packetSize << std::endl;
 
 	// Packet 수신(가변 데이터)
 	std::vector<char> packet(packetSize);

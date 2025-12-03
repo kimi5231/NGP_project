@@ -23,8 +23,8 @@ ServerFramework::ServerFramework()
 	}
 
 	// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
-	int DelayZeroOpt = 1;
-	setsockopt(_listenSocket, SOL_SOCKET, TCP_NODELAY, (const char*)&DelayZeroOpt, sizeof(DelayZeroOpt));
+	int optval = 1;
+	setsockopt(_listenSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 	// bind
 	sockaddr_in addr;
@@ -100,8 +100,8 @@ void ServerFramework::Update()
 		}
 
 		// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
-		int DelayZeroOpt = 1;
-		setsockopt(clientSocket, SOL_SOCKET, TCP_NODELAY, (const char*)&DelayZeroOpt, sizeof(DelayZeroOpt));
+		int optval = 1;
+		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 		ProcessAccept(clientSocket);
 	}

@@ -14,8 +14,9 @@
 // 미나 데스크탑
 //char* SERVERIP = (char*)"192.168.35.52";	
 // 루프백
-char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"127.0.0.1";
 //char* SERVERIP = (char*)"192.168.1.191";
+char* SERVERIP = (char*)"192.168.22.185";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512
@@ -45,8 +46,8 @@ GameNetwork::GameNetwork()
 		err_quit("socket()");	
 
 	// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
-	int DelayZeroOpt = 1;
-	setsockopt(_socket, SOL_SOCKET, TCP_NODELAY, (const char*)&DelayZeroOpt, sizeof(DelayZeroOpt));
+	int optval = 1;
+	setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 	// connect()
 	int retval;

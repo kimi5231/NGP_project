@@ -25,8 +25,9 @@ void Player::Update()
                 // 삭제....
                 return;
             }
-            /*_pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
-            _prevPos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };*/
+            _pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
+            _prevPos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
+            g_framework->SendMovePacket(shared_from_this(), true);
         }
         _invincible = true; // 잠시 무적
         

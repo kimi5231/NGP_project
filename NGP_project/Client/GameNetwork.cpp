@@ -44,8 +44,9 @@ GameNetwork::GameNetwork()
 	if (_socket == INVALID_SOCKET)
 		err_quit("socket()");	
 
-	int opt_val = TRUE;
-	setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (char*)& opt_val, sizeof(opt_val));
+	// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
+	int DelayZeroOpt = 1;
+	setsockopt(_socket, SOL_SOCKET, TCP_NODELAY, (const char*)&DelayZeroOpt, sizeof(DelayZeroOpt));
 
 	// connect()
 	int retval;

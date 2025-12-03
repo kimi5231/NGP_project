@@ -22,6 +22,10 @@ ServerFramework::ServerFramework()
 		return;
 	}
 
+	// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
+	int DelayZeroOpt = 1;
+	setsockopt(_listenSocket, SOL_SOCKET, TCP_NODELAY, (const char*)&DelayZeroOpt, sizeof(DelayZeroOpt));
+
 	// bind
 	sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
@@ -94,6 +98,10 @@ void ServerFramework::Update()
 		{
 			std::cout << "clientSocket 생성 실패" << std::endl;
 		}
+
+		// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
+		int DelayZeroOpt = 1;
+		setsockopt(clientSocket, SOL_SOCKET, TCP_NODELAY, (const char*)&DelayZeroOpt, sizeof(DelayZeroOpt));
 
 		ProcessAccept(clientSocket);
 	}

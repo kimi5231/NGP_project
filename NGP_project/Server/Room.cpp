@@ -32,6 +32,19 @@ Room::~Room()
 
 void Room::Update()
 {
+	EnterCriticalSection(&g_objectCS);
+	for (const auto& item : _players)	// player update 필요한가
+		item.second->Update();
+	for (const auto& item : _monsters)
+		item.second->Update();
+	for (const auto& item : _items)
+		item.second->Update();
+	for (const auto& item : _projectiles)
+		item.second->Update();
+	for (const auto& item : _bombs)
+		item.second->Update();
+	LeaveCriticalSection(&g_objectCS);
+
 	if (_state != RoomState::Playing)
 		return;
 
@@ -45,21 +58,17 @@ void Room::Update()
 		g_framework->SendUpdateTimerPacket(true);
 	}
 	
-	SpawnMonster();
-
-	EnterCriticalSection(&g_objectCS);
-	for (const auto& item : _players)
-		item.second->Update();
-	for (const auto& item : _monsters)
-		item.second->Update();
-	for (const auto& item : _items)
-		item.second->Update();
-	for (const auto& item : _projectiles)
-		item.second->Update();
-	for (const auto& item : _bombs)
-		item.second->Update();
-	LeaveCriticalSection(&g_objectCS);
-
+	// 시간이 남았을 때만 몬스터 생성
+	if (_timer >= 0)
+	{
+		SpawnMonster();
+	}
+	else
+	{
+		if (_monsterCount == 0)
+			ChangeNextStage();
+	}
+	
 	EnterCriticalSection(&g_objectCS);
 	// Player 충돌 처리
 	for (const auto& playerItem : _players)
@@ -221,6 +230,45 @@ void Room::RemoveObject(ObjectType type, int id)
 	LeaveCriticalSection(&g_objectCS);
 
 	g_framework->SendRemoveObjectPacket(object, true);
+}
+
+void Room::ChangeNextStage()
+{
+	switch (_curStage)
+	{
+	case 1:
+		// 스테이지 클리어
+		ClearStage();
+		// 스테이지2 장애물 생성
+
+		break;
+	case 2:
+
+		break;
+	case 3:
+
+		break;
+	case 4:
+		// 게임 종료
+		break;
+	}
+}
+
+void Room::ClearStage()
+{
+	for (const auto& itemItem : _items)
+		g_framework->AddRemoveObject(itemItem.second);
+	_items.clear();
+
+	for (const auto& projectileItem : _projectiles)
+		g_framework->AddRemoveObject(projectileItem.second);
+	_projectiles.clear();
+
+	for (const auto& bombItem : _bombs)
+		g_framework->AddRemoveObject(bombItem.second);
+	_bombs.clear();
+
+	// 장애물도 삭제하기
 }
 
 GameObjectRef Room::GetObject(ObjectType type, int id)

@@ -152,7 +152,7 @@ struct S_Move_Packet
     ObjectState state;
 };
 
-struct S_ChangeNextStage_Packet
+struct S_ChangeNextStage_Packet // 필요한가?
 {
     int stageNum;
 };
@@ -245,6 +245,7 @@ using PlayerRef = std::shared_ptr<class Player>;
 using MonsterRef = std::shared_ptr<class Monster>;
 using ItemRef = std::shared_ptr<class Item>;
 using ProjectileRef = std::shared_ptr<class Projectile>;
+using BombRef = std::shared_ptr<class BombObject>;
 
 #define DECLARE_SINGLE(classname)           \
 private:                                    \

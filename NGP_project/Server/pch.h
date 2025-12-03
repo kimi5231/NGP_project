@@ -99,13 +99,14 @@ enum PacketID
     S_AddObject,
     S_RemoveObject,
     S_UpdateObjectState,
-    S_UpdateDir,
+    S_UpdateDir, // 삭제 예정
     S_Move,
     S_ChangeNextStage,
-    S_CollisionResult,
+    S_CollisionResult, // 삭제 예정
     S_MonsterDamaged,
     S_ItemUseResult,
     S_UpdateTimer,
+    S_GetItem,
 };
 
 struct Header
@@ -135,7 +136,7 @@ struct S_UpdateObjectState_Packet
     ObjectState state;
 };
 
-struct S_UpdateDir_Packet
+struct S_UpdateDir_Packet // 삭제 예정
 {
     int objectID;
     ObjectType type;
@@ -156,12 +157,12 @@ struct S_ChangeNextStage_Packet
     int stageNum;
 };
 
-struct S_CollisionResult_Packet
+struct S_CollisionResult_Packet // 삭제 예정
 {
     bool result;
 };
 
-struct S_MonsterDamaged_Packet
+struct S_MonsterDamaged_Packet // 삭제 예정
 {
     int objectID;
     ObjectType type;
@@ -178,6 +179,11 @@ struct S_UpdateTimer_Packet
     int time;
     int objectID;
     ObjectType type;
+};
+
+struct S_GetItem_Packet
+{
+    ItemType type;
 };
 
 // Client Packet
@@ -230,7 +236,8 @@ template <class T>
 using SendEventRef = std::shared_ptr<SendEvent<T>>;
 
 using EventType = std::variant<SendEventRef<S_AddObject_Packet>, SendEventRef<S_RemoveObject_Packet>,
-    SendEventRef<S_Move_Packet>, SendEventRef<S_UpdateTimer_Packet>>;
+    SendEventRef<S_UpdateObjectState_Packet>, SendEventRef<S_Move_Packet>, SendEventRef<S_UpdateTimer_Packet>,
+    SendEventRef<S_GetItem_Packet>>;
 
 using ClientRef = std::shared_ptr<class Client>;
 using GameObjectRef = std::shared_ptr<class GameObject>;

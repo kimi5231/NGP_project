@@ -75,9 +75,7 @@ void Room::Update()
 		for (const auto& itemItem : _items)
 		{
 			if (itemItem.second->IsCollision(playerItem.second))
-			{
-
-			}
+				g_framework->SendGetItemPacket(itemItem.second, playerItem.second);
 		}
 	}
 	LeaveCriticalSection(&g_objectCS);

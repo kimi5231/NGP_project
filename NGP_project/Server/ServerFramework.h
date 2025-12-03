@@ -41,9 +41,11 @@ public:
 	// Send
 	void SendAddObjectPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendRemoveObjectPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
+	void SenUpdateObjectStatePacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(bool broadcast, SOCKET client = 0);
+	void SendGetItemPacket(ItemRef item, PlayerRef player);
 
 	template <class T>
 	void Broadcast(PacketID id, const T& packetData);

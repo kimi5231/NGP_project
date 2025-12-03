@@ -2,6 +2,7 @@
 #include "ServerFramework.h"
 #include "Room.h"
 #include "Player.h"
+#include "Item.h"
 #include "Global.h"
 
 ServerFramework::ServerFramework()
@@ -257,6 +258,22 @@ void ServerFramework::SendRemoveObjectPacket(GameObjectRef object, bool broadcas
 	LeaveCriticalSection(&g_sendCS);
 }
 
+void ServerFramework::SenUpdateObjectStatePacket(GameObjectRef object, bool broadcast, SOCKET client)
+{
+	S_UpdateObjectState_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetState() };
+
+	// SendEvent 생성
+	SendEventRef<S_UpdateObjectState_Packet> event = std::make_shared<SendEvent<S_UpdateObjectState_Packet>>();
+	event->isBroadcast = broadcast;
+	event->clientSocket = client;
+	event->packetID = S_UpdateObjectState;
+	event->packetData = packetData;
+
+	EnterCriticalSection(&g_sendCS);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_sendCS);
+}
+
 void ServerFramework::SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client)
 {
 	S_Move_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), object->GetDir(), object->GetState()};
@@ -298,6 +315,27 @@ void ServerFramework::SendUpdateTimerPacket(bool broadcast, SOCKET client)
 	event->isBroadcast = broadcast;
 	event->clientSocket = client;
 	event->packetID = S_UpdateTimer;
+	event->packetData = packetData;
+
+	EnterCriticalSection(&g_sendCS);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_sendCS);
+}
+
+void ServerFramework::SendGetItemPacket(ItemRef item, PlayerRef player)
+{
+	S_GetItem_Packet packetData{ item->GetItemType() };
+	// SendEvent 생성
+	SendEventRef<S_GetItem_Packet> event = std::make_shared<SendEvent<S_GetItem_Packet>>();
+	// 본인한테만 알리면 되므로 false
+	event->isBroadcast = false;
+	// player와 대응되는 client 찾기
+	for (ClientRef& client : _clients)
+	{
+		if(client->player == player)
+			event->clientSocket = client->socket;
+	}
+	event->packetID = S_GetItem;
 	event->packetData = packetData;
 
 	EnterCriticalSection(&g_sendCS);

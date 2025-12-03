@@ -345,9 +345,8 @@ void GameScene::SyncBullet(int id, const Vertex& pos)
 void GameScene::ProcessInput()
 {
 	if (!_localPlayer)
-	{
 		return;
-	}
+
 
 	// 코드 길어져서 포인터로 받기
 	InputManager* input = GET_SINGLE(InputManager);
@@ -362,11 +361,32 @@ void GameScene::ProcessInput()
 	if (input->GetButton(KeyType::S)) vecDir.y += 1;
 
 	Dir dir = ConvertVecToDir(vecDir);
-	
+	bool moved = false;
+
 	if (vecDir.x != 0 || vecDir.y != 0) {
 		_localPlayer->Move(vecDir, dir);
+		moved = true;
 		// 이동 후 서버로 Move 패킷 Send
-		_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());
+		//_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());
+	}
+
+	if (moved)
+	{
+		Vertex curPos = _localPlayer->GetPos();
+		Vertex prevPos = _localPlayer->GetPrevSendPos();
+
+		int dx = abs(static_cast<int>(curPos.x) - static_cast<int>(prevPos.x));
+		int dy = abs(static_cast<int>(curPos.y) - static_cast<int>(prevPos.y));
+
+		if (dx > 1 || dy > 1)
+		{
+			// Player 내부 변수 갱신
+			_localPlayer->SetPrevSendPos(curPos);
+			_localPlayer->SetPrevDir(dir);
+
+			// 서버로 이동 패킷 전송
+			_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, curPos, dir, _localPlayer->GetState());
+		}
 	}
 
 	// 총알 발사

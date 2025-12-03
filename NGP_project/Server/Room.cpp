@@ -86,6 +86,15 @@ void Room::Update()
 			if (monsterItem.second->IsCollision(playerItem.second))
 				playerItem.second->SetState(ObjectState::Dead);
 		}
+		// bomb과 충돌 처리
+		for (const auto& bombItem : _bombs)
+		{
+			// 폭발하는 상태에서만 충돌처리
+			if (bombItem.second->_isBomb && playerItem.second->IsCollision(bombItem.second))
+			{
+				playerItem.second->SetState(ObjectState::Dead);
+			}
+		}
 
 		// Item과 충돌 처리
 		for (const auto& itemItem : _items)
@@ -118,6 +127,15 @@ void Room::Update()
 			{
 				monsterItem.second->Damaged(projectileItem.second->GetDamage());
 				projectileItem.second->SetState(ObjectState::Dead);
+			}
+		}
+		// bomb과 충돌 처리
+		for (const auto& bombItem : _bombs)
+		{
+			// 폭발하는 상태에서만 충돌처리
+			if (bombItem.second->_isBomb && monsterItem.second->IsCollision(bombItem.second))
+			{
+				monsterItem.second->Damaged(bombItem.second->GetDamage());
 			}
 		}
 

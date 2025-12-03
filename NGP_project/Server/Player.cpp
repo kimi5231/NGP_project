@@ -19,11 +19,23 @@ Player::Player()
 
 void Player::Update()
 {
-    //if (_state == ObjectState::Dead) {
-    //    --_status._life;
-    //    _invincible = true; // 잠시 무적
-    //    // 시간 잰 다음에 풀리도록
-    //}
+    if (_state == ObjectState::Dead) {
+        if (!_invincible) {// 무적 아닐 때 한번만
+            if (--_status._life == 0) {
+                // 삭제....
+                return;
+            }
+            /*_pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
+            _prevPos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };*/
+        }
+        _invincible = true; // 잠시 무적
+        
+        // 시간 잰 다음에 풀리도록
+        if (GET_SINGLE(TimeManager)->CheckTimer(_invincibleTimer, RESPAWN_TIME)) {
+            _invincible = false;
+            _state = ObjectState::Idle;
+        }
+    }
 
     if (_item.second) {
         //if (useLightning) {   // 번개 아이템 사용 시 바로 제거

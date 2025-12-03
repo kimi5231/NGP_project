@@ -35,7 +35,7 @@ void GameFramework::Init()
 	_scene->SetGameNetwork(_gameNetwork);
 	_gameNetwork->SetGameScene(_scene);
 
-	//_hNetworkThread = CreateThread(NULL, 0, GameFramework::ProcessNetwork, this, 0, NULL);
+	_hNetworkThread = CreateThread(NULL, 0, GameFramework::ProcessNetwork, this, 0, NULL);
 }
 
 void GameFramework::Update()
@@ -43,7 +43,7 @@ void GameFramework::Update()
 	GET_SINGLE(InputManager)->Update();
 	GET_SINGLE(TimeManager)->Update();
 
-	_gameNetwork->Update();
+	//_gameNetwork->Update();
 	_scene->Update(); 
 
 	InvalidateRect(hWnd, NULL, false);

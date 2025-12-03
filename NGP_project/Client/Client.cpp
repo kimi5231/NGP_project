@@ -24,6 +24,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
+    InitializeCriticalSection(&g_cs);
+
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -44,8 +46,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-    //CreateThread(NULL, 0, ProcessGameNetwork, g_network, 0, nullptr);
-
     // 기본 메시지 루프입니다:
      while (true) {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -59,6 +59,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             gameFramework.Update();
         }
      }
+
+     DeleteCriticalSection(&g_cs);
 
      return (int) msg.wParam;
 }

@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "Global.h"
 #include "GameNetwork.h"
 #include "GameScene.h"
 #include "Player.h"
@@ -14,9 +15,9 @@
 // 미나 데스크탑
 //char* SERVERIP = (char*)"192.168.35.52";	
 // 루프백
-//char* SERVERIP = (char*)"127.0.0.1";
+char* SERVERIP = (char*)"127.0.0.1";
 //char* SERVERIP = (char*)"192.168.1.191";
-char* SERVERIP = (char*)"192.168.22.185";
+//char* SERVERIP = (char*)"192.168.22.185";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512
@@ -60,7 +61,7 @@ GameNetwork::GameNetwork()
 	if (retval == SOCKET_ERROR)
 		err_quit("connect()");
 
-	//InitConsole();
+	InitConsole();
 }
 
 GameNetwork::~GameNetwork()
@@ -75,7 +76,7 @@ GameNetwork::~GameNetwork()
 void GameNetwork::Update()
 {
 	if (_socket != INVALID_SOCKET)
-	ProcessRecv();
+		ProcessRecv();
 }
 
 template<class T>

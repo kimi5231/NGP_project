@@ -15,15 +15,16 @@ void RespawnMonster::Update()
     Monster::Update();
 
     if (_canUseSkill) {
-        //// 시간 재는 함수 추가 시 주석 풀기
-        //if (GET_SINGLE(TimeManager)->CheckTimer(_timer, RESPAWN_TIME)) {
-        //    SetState(ObjectState::Move);
+        // 시간 재는 함수 추가 시 주석 풀기
+        if (GET_SINGLE(TimeManager)->CheckTimer(_respawnTimer, RESPAWN_TIME)) {
+            // 상태 send
+            SetState(ObjectState::Move);
 
-        //    _stateMachine->ChangeState(new FindTargetState);
-        //    _stateMachine->Start();
-        //    _canUseSkill = false;
-        //    _invincible = false;
-        //}
+            _stateMachine->ChangeState(new FindTargetState);
+            _stateMachine->Start();
+            _canUseSkill = false;
+            _invincible = false;
+        }
     }
 }
 
@@ -48,6 +49,7 @@ void RespawnMonster::Damaged(int damage)
             _invincible = true;
         }
         else {
+            // 상태 send
             _stateMachine->ChangeState(new DeadState);
             _stateMachine->Start();
         }

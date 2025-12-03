@@ -12,4 +12,6 @@ public:
 	bool UseSkill() override;
 	void Damaged(int damage) override;
 	virtual void FindTarget(GameObject* other) override;
+private:
+	float _respawnTimer{};
 };

@@ -43,6 +43,7 @@ public:
 
 	int GetDamage() const { return _damage; }
 	bool CanDamage() const { return !_invincible; }
+	void UndoPos() { _pos = _prevPos; }
 
 	Status _status{};
 	int _timer{};	// 총알, 폭탄 등에 사용

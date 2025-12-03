@@ -53,8 +53,6 @@ public:
 
 	int GetDamage() const { return _damage; }
 
-	void UndoPos() { _pos = _prevPos; }
-
 	// 충돌 관련
 	BoundingBox GetBoundingBox() const;
 	BoundingBox GetTargetBoundingBox() const;	// 타겟에 도작했는지 확인용

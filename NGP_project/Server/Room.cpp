@@ -8,6 +8,7 @@
 #include "Projectile.h"
 #include "Item.h"
 #include "BombObject.h"
+#include "GameObject.h"
 
 // Monster
 #include "Monster.h"
@@ -82,7 +83,7 @@ void Room::Update()
 		// Monster와 충돌 처리
 		for (const auto& monsterItem : _monsters)
 		{
-			if (monsterItem.second->IsCollision(playerItem.second) && !monsterItem.second->IsState(ObjectState::Dead) && monsterItem.second->CanDamage())
+			if (monsterItem.second->IsCollision(playerItem.second))
 				playerItem.second->SetState(ObjectState::Dead);
 		}
 
@@ -104,7 +105,7 @@ void Room::Update()
 		// Projectile과 충돌 처리
 		for (const auto& projectileItem : _projectiles)
 		{
-			if (projectileItem.second->IsCollision(monsterItem.second))
+			if (projectileItem.second->IsCollision(monsterItem.second) && !monsterItem.second->IsState(ObjectState::Dead) && monsterItem.second->CanDamage())
 			{
 				monsterItem.second->Damaged(projectileItem.second->GetDamage());
 				projectileItem.second->SetState(ObjectState::Dead);
@@ -119,7 +120,7 @@ void Room::Update()
 
 			if (monsterItem2.second->IsCollision(monsterItem.second))
 			{
-
+				monsterItem2.second->UndoPos();
 			}
 		}
 	}

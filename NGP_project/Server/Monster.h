@@ -21,12 +21,14 @@ public:
 	virtual bool UseSkill() { return false; }
 	void DropItem();
 	virtual void Damaged(int damage);
+	void PushOther(MonsterRef other);
 
 	void SetCallback(SpawnCallback cb) { _spawnCallback = cb; }
 protected:
 	SpawnCallback _spawnCallback;
 	bool _isFollow{ true };
 	bool _canUseSkill{ false };
+	bool _isCollision{ false };
 
 	std::unique_ptr<StateMachine> _stateMachine;
 };

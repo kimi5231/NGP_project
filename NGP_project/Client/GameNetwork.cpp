@@ -344,6 +344,12 @@ void GameNetwork::RecvAddObject(S_AddObject_Packet addObjectPacket)
 		_gameScene->AddObject(addObjectPacket.objectID, object);
 	}
 	break;
+	case ObjectType::Obstacle:
+	{
+		std::shared_ptr<GameObject> object = std::make_shared<GameObject>(ObjectType::Obstacle, addObjectPacket.pos);
+		_gameScene->AddObject(addObjectPacket.objectID, object);
+	}
+	break;
 	}
 }
 

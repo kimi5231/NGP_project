@@ -92,7 +92,16 @@ void Room::Update()
 		{
 			if (itemItem.second->IsCollision(playerItem.second))
 			{
+				playerItem.second->SetItem(itemItem.second);
+			}
+		}
 
+		// Obstacle과 충돌 처리
+		for (const auto& ObstacleItem : _obstacles)
+		{
+			if (playerItem.second->IsCollision(ObstacleItem.second))
+			{
+				playerItem.second->SetCollision();
 			}
 		}
 	}
@@ -121,6 +130,15 @@ void Room::Update()
 			if (monsterItem2.second->IsCollision(monsterItem.second))
 			{
 				monsterItem2.second->UndoPos();
+			}
+		}
+
+		// Obstacle과 충돌 처리
+		for (const auto& ObstacleItem : _obstacles)
+		{
+			if (monsterItem.second->IsCollision(ObstacleItem.second))
+			{
+				monsterItem.second->UndoPos();
 			}
 		}
 	}
@@ -192,6 +210,8 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		object = _bombs[_generateID];
 		break;
 	case ObjectType::Obstacle:
+		_obstacles[_generateID] = std::make_shared<GameObject>(type, pos);
+		object = _obstacles[_generateID];
 		break;
 	}
 	LeaveCriticalSection(&_objectCS);
@@ -237,6 +257,8 @@ void Room::RemoveObject(ObjectType type, int id)
 		_bombs.erase(id);
 		break;
 	case ObjectType::Obstacle:
+		object = _obstacles[id];
+		_obstacles.erase(id);
 		break;
 	}
 	LeaveCriticalSection(&_objectCS);
@@ -261,8 +283,10 @@ GameObjectRef Room::GetObject(ObjectType type, int id)
 	case ObjectType::Bullet:
 		return _projectiles[id];
 	case ObjectType::Bomb:
+		return _bombs[id];
 		break;
 	case ObjectType::Obstacle:
+		return _obstacles[id];
 		break;
 	}
 }
@@ -278,5 +302,8 @@ void Room::SpawnMonster()
 		GameObjectRef monster = AddObject(static_cast<ObjectType>(type));
 		if (!monster) 
 			return;
+
+		// test 용 장애물 생성
+		AddObject(ObjectType::Obstacle, Vertex{ (float)gBackgroundRect.left + 4 * CELL_SIZE, (float)gBackgroundRect.top + 4 * CELL_SIZE });
 	}
 }

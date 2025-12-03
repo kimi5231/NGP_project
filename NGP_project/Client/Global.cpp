@@ -2,9 +2,6 @@
 #include "Global.h"
 #include "TimeManager.h"
 
-CRITICAL_SECTION g_send_cs;
-CRITICAL_SECTION g_recv_cs;
-
 std::filesystem::path g_resourcePath;
 
 RECT gBackgroundRect{ 150, 50, FRAME_BUFFER_WIDTH - 170, FRAME_BUFFER_HEIGHT - 70 };	// 이 수치를 조정해서 배경화면 그리기

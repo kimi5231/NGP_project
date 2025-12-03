@@ -42,8 +42,10 @@ GameNetwork::GameNetwork()
 	// 소켓 생성
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket == INVALID_SOCKET)
-		return;
-		// err_quit("socket()");	// 지금은 서버와 접속 안 돼도 클라 실행되도록 되어있음
+		err_quit("socket()");	
+
+	int opt_val = TRUE;
+	setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (char*)& opt_val, sizeof(opt_val));
 
 	// connect()
 	int retval;
@@ -54,8 +56,7 @@ GameNetwork::GameNetwork()
 	serveraddr.sin_port = htons(SERVERPORT);
 	retval = connect(_socket, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
 	if (retval == SOCKET_ERROR)
-		return;
-		// err_quit("connect()");
+		err_quit("connect()");
 
 	//InitConsole();
 }
@@ -71,30 +72,8 @@ GameNetwork::~GameNetwork()
 
 void GameNetwork::Update()
 {
-	// socket set 초기화
-	FD_ZERO(&_readSet);
-	FD_ZERO(&_writeSet);
-
-	// readSet, wirteSet에 socket 등록
-	FD_SET(_socket, &_readSet);
-	FD_SET(_socket, &_writeSet);
-
-	// select - 마지막 인자 0, NULL은 event 올 때까지 무한대기
-	if (select(0, &_readSet, &_writeSet, NULL, 0) == SOCKET_ERROR)
-	{
-		//err_display("select");
-		return;
-	}
-
-	if (FD_ISSET(_socket, &_readSet))
-	{
-		ProcessRecv();
-	}
-
-	if (FD_ISSET(_socket, &_writeSet))
-	{
-		
-	}
+	if (_socket != INVALID_SOCKET)
+	ProcessRecv();
 }
 
 template<class T>

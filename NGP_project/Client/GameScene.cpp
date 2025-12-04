@@ -69,9 +69,11 @@ void GameScene::Update()
 	//	}
 	//}
 
+	EnterCriticalSection(&g_cs);
 	for (const auto& object : _objects) {
 		object.second->Update();
 	}
+	LeaveCriticalSection(&g_cs);
 
 	//	// 장애물
 	//	if (object->GetObjectType() == ObjectType::Obstacle && _localPlayer->IsCollision(object.get())) {
@@ -367,16 +369,17 @@ void GameScene::SyncBullet(int id, const Vertex& pos)
 
 void GameScene::SyncObjectTimer(const int timer, const int id)
 {
+	EnterCriticalSection(&g_cs);
 	if (_objects.find(id) != _objects.end())
 	{
 		_objects[id]->SetTimer(timer);
 	}
+	LeaveCriticalSection(&g_cs);
 }
 
 void GameScene::ProcessInput()
 {
 	EnterCriticalSection(&g_cs);
-
 	if (!_localPlayer)
 	{
 		LeaveCriticalSection(&g_cs);
@@ -410,8 +413,10 @@ void GameScene::ProcessInput()
 
 	if (moved)
 	{
+		EnterCriticalSection(&g_cs);
 		Vertex curPos = _localPlayer->GetPos();
 		Vertex prevPos = _localPlayer->GetPrevSendPos();
+		LeaveCriticalSection(&g_cs);
 
 		int dx = abs(static_cast<int>(curPos.x) - static_cast<int>(prevPos.x));
 		int dy = abs(static_cast<int>(curPos.y) - static_cast<int>(prevPos.y));

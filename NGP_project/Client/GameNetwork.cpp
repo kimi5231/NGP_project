@@ -63,7 +63,7 @@ GameNetwork::GameNetwork()
 	if (retval == SOCKET_ERROR)
 		err_quit("connect()");
 
-	InitConsole();
+	//InitConsole();
 }
 
 GameNetwork::~GameNetwork()

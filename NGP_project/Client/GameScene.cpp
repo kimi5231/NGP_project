@@ -47,10 +47,15 @@ GameScene::~GameScene()
 void GameScene::Update()
 {
 	EnterCriticalSection(&g_cs);
-	if (!_localPlayer.get())
-		return;	
-	LeaveCriticalSection(&g_cs);
 
+	if (!_localPlayer.get())
+	{
+		LeaveCriticalSection(&g_cs);
+		return;
+	}
+	
+	LeaveCriticalSection(&g_cs);
+	
 	ProcessInput();
 
 	//if(_timerUI._progress != 0)	// 0초이면 생성x
@@ -152,9 +157,10 @@ void GameScene::Render(HDC hdc)
 	oldbit[1] = (HBITMAP)SelectObject(memDCImage, gBackgroundBitmap);
 	StretchBlt(memDC, gBackgroundRect.left, gBackgroundRect.top, gBackgroundRect.right- gBackgroundRect.left, gBackgroundRect.bottom - gBackgroundRect.top, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
 
+	EnterCriticalSection(&g_cs);
+
 	// GameObject
 	// Obstacle 
-	EnterCriticalSection(&g_cs);
 	for (const auto obstacle : _obstacles)
 	{
 		obstacle->Render(memDC, memDCImage);
@@ -192,9 +198,9 @@ void GameScene::Render(HDC hdc)
 	}
 
 	_timerUI.Render(memDC, memDCImage, _stagetime);
-
-	LeaveCriticalSection(&g_cs);
 	
+	LeaveCriticalSection(&g_cs);
+
 	// hDC에 memDC 출력(최종화면 출력)
 	BitBlt(hdc, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, memDC, 0, 0, SRCCOPY);
 
@@ -270,11 +276,13 @@ void GameScene::CreateObstacle()
 void GameScene::AddPlayer(int id, PlayerRef player)
 {		
 	EnterCriticalSection(&g_cs);
+
 	// MyPlayer 설정
 	if (!_localPlayer)
 	{
 		_localPlayer = player;
 		_localPlayer->SetId(id);
+
 		LeaveCriticalSection(&g_cs);
 		return;
 	}
@@ -301,7 +309,7 @@ void GameScene::AddMonster(int id, MonsterRef monster)
 }
 
 void GameScene::AddObject(int id, GameObjectRef object)
-{	
+{
 	EnterCriticalSection(&g_cs);
 	_objects[id] = object;
 	_objects[id]->SetId(id);
@@ -367,8 +375,14 @@ void GameScene::SyncObjectTimer(const int timer, const int id)
 
 void GameScene::ProcessInput()
 {
+	EnterCriticalSection(&g_cs);
+
 	if (!_localPlayer)
+	{
+		LeaveCriticalSection(&g_cs);
 		return;
+	}
+	LeaveCriticalSection(&g_cs);
 
 	// 코드 길어져서 포인터로 받기
 	InputManager* input = GET_SINGLE(InputManager);
@@ -383,13 +397,36 @@ void GameScene::ProcessInput()
 	if (input->GetButton(KeyType::S)) vecDir.y += 1;
 
 	Dir dir = ConvertVecToDir(vecDir);
-	
+	bool moved = false;
+
 	if (vecDir.x != 0 || vecDir.y != 0) {
 		EnterCriticalSection(&g_cs);
 		_localPlayer->Move(vecDir, dir);
-		// 이동 후 서버로 Move 패킷 Send
-		_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());
 		LeaveCriticalSection(&g_cs);
+		moved = true;
+		// 이동 후 서버로 Move 패킷 Send
+		//_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());
+	}
+
+	if (moved)
+	{
+		Vertex curPos = _localPlayer->GetPos();
+		Vertex prevPos = _localPlayer->GetPrevSendPos();
+
+		int dx = abs(static_cast<int>(curPos.x) - static_cast<int>(prevPos.x));
+		int dy = abs(static_cast<int>(curPos.y) - static_cast<int>(prevPos.y));
+
+		if (dx > 1 || dy > 1)
+		{
+			EnterCriticalSection(&g_cs);
+			// Player 내부 변수 갱신
+			_localPlayer->SetPrevSendPos(curPos);
+			_localPlayer->SetPrevDir(dir);
+
+			// 서버로 이동 패킷 전송
+			_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, curPos, dir, _localPlayer->GetState());
+			LeaveCriticalSection(&g_cs);
+		}
 	}
 
 	// 총알 발사

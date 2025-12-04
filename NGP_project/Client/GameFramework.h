@@ -15,6 +15,8 @@ public:
 	void Update();
 	void Render(HDC hdc);
 
+	static DWORD WINAPI ProcessNetwork(LPVOID arg);
+
 public:
 	GameScene* GetGameScene() { return _scene; }
 public:
@@ -22,4 +24,6 @@ public:
 
 private:
 	GameScene* _scene{};
+	GameNetwork* _gameNetwork{};
+	HANDLE _hNetworkThread{};
 };

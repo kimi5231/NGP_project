@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "Global.h"
 #include "GameNetwork.h"
 #include "GameScene.h"
 #include "Player.h"
@@ -15,7 +16,10 @@
 // 미나 데스크탑
 //char* SERVERIP = (char*)"192.168.35.52";	
 // 루프백
-char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"192.168.1.191";
+//char* SERVERIP = (char*)"192.168.22.185";
+char* SERVERIP = (char*)"192.168.70.143";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512
@@ -42,8 +46,11 @@ GameNetwork::GameNetwork()
 	// 소켓 생성
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket == INVALID_SOCKET)
-		return;
-		// err_quit("socket()");	// 지금은 서버와 접속 안 돼도 클라 실행되도록 되어있음
+		err_quit("socket()");	
+
+	// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
+	int optval = 1;
+	setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 	// connect()
 	int retval;
@@ -54,10 +61,9 @@ GameNetwork::GameNetwork()
 	serveraddr.sin_port = htons(SERVERPORT);
 	retval = connect(_socket, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
 	if (retval == SOCKET_ERROR)
-		return;
-		// err_quit("connect()");
+		err_quit("connect()");
 
-	//InitConsole();
+	InitConsole();
 }
 
 GameNetwork::~GameNetwork()
@@ -79,7 +85,7 @@ void GameNetwork::Update()
 	FD_SET(_socket, &_readSet);
 	FD_SET(_socket, &_writeSet);
 
-	// select
+	// select - 마지막 인자 0, NULL은 event 올 때까지 무한대기
 	if (select(0, &_readSet, &_writeSet, NULL, 0) == SOCKET_ERROR)
 	{
 		//err_display("select");
@@ -93,8 +99,10 @@ void GameNetwork::Update()
 
 	if (FD_ISSET(_socket, &_writeSet))
 	{
-		
+
 	}
+	/*if (_socket != INVALID_SOCKET)
+		ProcessRecv();*/
 }
 
 template<class T>
@@ -131,7 +139,7 @@ void GameNetwork::ProcessRecv()
 	*/
 	int packetSize;
 	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
-	std::cout << "packetSize: " << packetSize << std::endl;
+	//std::cout << "packetSize: " << packetSize << std::endl;
 
 	// Packet 수신(가변 데이터)
 	std::vector<char> packet(packetSize);

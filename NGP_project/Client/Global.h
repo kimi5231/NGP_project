@@ -1,16 +1,10 @@
 #pragma once
 #include <filesystem>
 
-class GameNetwork;
-class GameFramework;
-
-extern GameNetwork* g_network;
-extern GameFramework* g_framework;
-
-extern CRITICAL_SECTION g_cs;
-
 extern std::filesystem::path g_resourcePath;
 extern RECT gBackgroundRect;
+
+extern CRITICAL_SECTION g_cs;
 
 extern HINSTANCE hInst;
 extern HWND hWnd;

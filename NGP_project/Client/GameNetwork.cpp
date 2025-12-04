@@ -15,9 +15,10 @@
 // 미나 데스크탑
 //char* SERVERIP = (char*)"192.168.35.52";	
 // 루프백
-char* SERVERIP = (char*)"127.0.0.1";
+//char* SERVERIP = (char*)"127.0.0.1";
 //char* SERVERIP = (char*)"192.168.1.191";
 //char* SERVERIP = (char*)"192.168.22.185";
+char* SERVERIP = (char*)"192.168.70.143";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512
@@ -75,8 +76,32 @@ GameNetwork::~GameNetwork()
 
 void GameNetwork::Update()
 {
-	if (_socket != INVALID_SOCKET)
+	// socket set 초기화
+	FD_ZERO(&_readSet);
+	FD_ZERO(&_writeSet);
+
+	// readSet, wirteSet에 socket 등록
+	FD_SET(_socket, &_readSet);
+	FD_SET(_socket, &_writeSet);
+
+	// select - 마지막 인자 0, NULL은 event 올 때까지 무한대기
+	if (select(0, &_readSet, &_writeSet, NULL, 0) == SOCKET_ERROR)
+	{
+		//err_display("select");
+		return;
+	}
+
+	if (FD_ISSET(_socket, &_readSet))
+	{
 		ProcessRecv();
+	}
+
+	if (FD_ISSET(_socket, &_writeSet))
+	{
+
+	}
+	/*if (_socket != INVALID_SOCKET)
+		ProcessRecv();*/
 }
 
 template<class T>

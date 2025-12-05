@@ -432,18 +432,23 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 {
 	GameObjectRef object = _room->GetObject(packet.type, packet.objectID);
 
-	// 나중에 bool값 받기
-	object->SetPos(packet.pos);
+	bool result = object->SetPos(packet.pos);
 	object->SetDir(packet.dir);
 	object->SetState(packet.state);
 
 	std::cout << "Object " << packet.objectID << ": Move " << packet.pos.x << ", " << packet.pos.y << std::endl;
 
-	// 자신을 제외한 모든 클라이언트에게 알리기
-	for (ClientRef client : _clients)
+	// 이동 실패 시, 모두에게 알리기
+	if(!result)
+		SendMovePacket(object, true);
+	else
 	{
-		if (client->player->GetID() != packet.objectID)
-			SendMovePacket(object, false, client->socket);
+		// 자신을 제외한 모든 클라이언트에게 알리기
+		for (ClientRef client : _clients)
+		{
+			if (client->player->GetID() != packet.objectID)
+				SendMovePacket(object, false, client->socket);
+		}
 	}
 }
 

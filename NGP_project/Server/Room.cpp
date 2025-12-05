@@ -55,6 +55,8 @@ void Room::Update()
 	{
 		if (_monsterCount == 0)
 			ChangeNextStage();
+
+		_timer = 0;
 	}
 
 	EnterCriticalSection(&g_objectCS);
@@ -320,19 +322,18 @@ void Room::ChangeNextStage()
 
 void Room::ClearStage()
 {
+	// Player 제외 Stage에 있던 모든 Object 삭제
 	for (const auto& itemItem : _items)
 		g_framework->AddRemoveObject(itemItem.second);
-	_items.clear();
 
 	for (const auto& projectileItem : _projectiles)
 		g_framework->AddRemoveObject(projectileItem.second);
-	_projectiles.clear();
 
 	for (const auto& bombItem : _bombs)
 		g_framework->AddRemoveObject(bombItem.second);
-	_bombs.clear();
 
-	// 장애물도 삭제하기
+	for (const auto& obstacleItem : _obstacles)
+		g_framework->AddRemoveObject(obstacleItem.second);
 }
 
 GameObjectRef Room::GetObject(ObjectType type, int id)

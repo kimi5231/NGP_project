@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <filesystem>
 
 extern std::filesystem::path g_resourcePath;
@@ -10,5 +10,3 @@ extern HINSTANCE hInst;
 extern HWND hWnd;
 extern bool useLightning, useWaterWheel, useShotgun, useHourglass;
 extern float bulletSpeed;
-
-bool CheckTimer(int& currentTime, int targetTime);

@@ -27,9 +27,6 @@
     <Filter Include="소스 파일\Game\Object\Item">
       <UniqueIdentifier>{07661162-3097-4270-b053-a238dbf09766}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Game\Object\StateMachin">
-      <UniqueIdentifier>{9ada7704-1d9a-4118-9388-dfd7d7322975}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Network">
       <UniqueIdentifier>{6905b09f-48a3-4215-ad5c-7b4b2c08631d}</UniqueIdentifier>
     </Filter>
@@ -100,9 +97,6 @@
     </ClInclude>
     <ClInclude Include="TimeManager.h">
       <Filter>소스 파일\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="StateMachine.h">
-      <Filter>소스 파일\Game\Object\StateMachin</Filter>
     </ClInclude>
     <ClInclude Include="GameNetwork.h">
       <Filter>소스 파일\Network</Filter>
@@ -183,9 +177,6 @@
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
       <Filter>소스 파일\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="StateMachine.cpp">
-      <Filter>소스 파일\Game\Object\StateMachin</Filter>
     </ClCompile>
     <ClCompile Include="GameNetwork.cpp">
       <Filter>소스 파일\Network</Filter>

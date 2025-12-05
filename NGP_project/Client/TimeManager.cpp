@@ -72,3 +72,14 @@ void TimeManager::Tick(float lockFps)
 	for (ULONG i = 0; i < _sampleCount; i++) _deltaTime += _frameTimeSample[i];
 	if (_sampleCount > 0) _deltaTime /= _sampleCount;
 }
+
+bool TimeManager::CheckTimer(int& currentTime, int targetTime)
+{
+	currentTime += GetDeltaTime();
+
+	if (currentTime >= targetTime) {
+		currentTime = 0.0f; // 타이머 초기화
+		return true;         // 타이머 완료
+	}
+	return false;            // 아직 완료 안 됨
+}

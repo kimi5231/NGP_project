@@ -1,8 +1,5 @@
 ﻿#pragma once
-#include "StateMachine.h"
-
 class BoundingBox;
-
 
 typedef struct Status {
 	int _speed{};
@@ -21,16 +18,8 @@ public:
 public:
 	virtual void Update();
 	virtual void Render(HDC hdc, HDC srcDC);
-
 public:
 	virtual void Move() {}
-
-private:
-	virtual void Idle() {};
-	//virtual void Move() {};
-	virtual void Boom() {};
-	virtual void Dead() {};
-
 public:
 	void SetBitmap(HBITMAP bitmap) { _bitmap = bitmap; }
 	void SetSpriteVertex(POINT Vertex) { _spriteCnt = Vertex; }
@@ -51,19 +40,14 @@ public:
 
 	void SetTimer(const int timer) { _timer = timer; }
 
-	int GetDamage() const { return _damage; }
-
 	// 충돌 관련
 	BoundingBox GetBoundingBox() const;
-	BoundingBox GetTargetBoundingBox() const;	// 타겟에 도작했는지 확인용
 	bool IsCollision(const GameObject* other) const;
 	bool IsClick(const POINT mouse) const;
-	bool IsArrive() const;
 
 	void SetState(ObjectState state) { _state = state; }
 	ObjectState GetState() { return _state; }
 	bool IsState(ObjectState state) const { if (_state == state) return true; return false; }
-	bool CanDamage() const { return !_invincible; }
 public:
 	void ResetCurFrame();
 
@@ -78,7 +62,6 @@ protected:
 	int _id{};
 	ObjectType _type{};
 	ObjectState _state;
-	int _damage{ 10 };
 	Dir _dir{};
 	Vertex _pos{};
 	Vertex _prevPos{};

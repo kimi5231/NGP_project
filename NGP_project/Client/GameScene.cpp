@@ -58,42 +58,12 @@ void GameScene::Update()
 	
 	ProcessInput();
 
-	//if(_timerUI._progress != 0)	// 0초이면 생성x
-	//	SpawnMonster();
-	//else {	// 스테이지 끝난 뒤 바깥으로 가보면
-	//	RECT rect{ gBackgroundRect.left + CELL_SIZE * 7, gBackgroundRect.bottom - CELL_SIZE, gBackgroundRect.left + CELL_SIZE * 9, gBackgroundRect.bottom };
-	//	Vertex playerPos{ _localPlayer->GetPos() };
-	//	if (playerPos.x >= rect.left && playerPos.x <= rect.right && playerPos.y >= rect.top && playerPos.y <= rect.bottom) {
-	//		_curStage++;
-	//		InitStage();
-	//	}
-	//}
-
 	EnterCriticalSection(&g_cs);
 	for (const auto& object : _objects) {
 		object.second->Update();
 	}
 	LeaveCriticalSection(&g_cs);
 
-	//	// 장애물
-	//	if (object->GetObjectType() == ObjectType::Obstacle && _localPlayer->IsCollision(object.get())) {
-	//		_localPlayer->UndoPos();
-	//	}
-	//}
-	//for (const auto& monster : _monsters) {
-	//	monster->Update(_localPlayer.get());
-
-	//	// 몬스터-총알 충돌 처리
-	//	for (const auto& object : _objects) {
-	//		ObjectType type = object->GetObjectType();
-	//		if (type == ObjectType::Bullet ) {
-	//			if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) {
-	//				monster->Damaged(object.get()->GetDamage());
-	//				object->SetState(ObjectState::Dead);
-	//			}
-	//		} if ((type == ObjectType::Bomb && dynamic_cast<BombObject*>(object.get())->_isBomb)) {
-	//			if (monster->IsCollision(object.get()) && !monster->IsState(ObjectState::Dead) && monster->CanDamage()) monster->Damaged(object.get()->GetDamage());
-	//		}
 	//		// 장애물
 	//		if (type == ObjectType::Obstacle && monster->IsCollision(object.get())) {
 	//			ObjectType monsterType = monster->GetObjectType();
@@ -104,39 +74,16 @@ void GameScene::Update()
 	//			monster->UndoPos();
 	//		}
 	//	}
-
-	//	// 몬스터끼리 충돌 처리
-	//	for (const auto& otherMonster : _monsters) {
-	//		if (otherMonster == monster) continue;
-	//		if (monster->IsCollision(otherMonster.get())) {
-	//			if(monster->GetPos() != monster->GetPrevPos())
-	//			monster->UndoPos();
-	//		}
-	//	}
 	//	// 시계 아이템 사용 시
 	//	if (useHourglass)
 	//		monster->_status._speed = 0;
 	//	else
 	//		monster->_status._speed = MONSTER_SPEED;
-	//}
-	//_localPlayer->Update();
 
 	//if (useLightning) {	// 번개 아이템 사용 시
 	//	_monsters.clear();
 	//	useLightning = false;
 	//}
-
-	//// 삭제
-	//_monsters.erase(std::remove_if(_monsters.begin(), _monsters.end(), [](const MonsterRef& o) {
-	//	return o->IsState(ObjectState::Dead);
-	//	}), _monsters.end());
-
-	//_objects.erase(std::remove_if(_objects.begin(), _objects.end(),[](const GameObjectRef& o) {
-	//		return o->IsState(ObjectState::Dead);
-	//	}),	_objects.end());
-
-	//// 타이머 UI
-	//_timerUI.Update(_stagetime);
 }
 
 void GameScene::Render(HDC hdc)
@@ -596,7 +543,6 @@ void GameScene::ProcessInput()
 	//if (input->GetButtonDown(KeyType::SpaceBar)) {
 	//	_localPlayer->UseItem();
 	//}
-
 }
 
 

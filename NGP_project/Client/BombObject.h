@@ -7,6 +7,5 @@ public:
 	BombObject(Vertex pos);
 
 	void Update() override;
-	void Move() override;
 	bool _isBomb{};
 };

@@ -24,7 +24,6 @@ public:
 	void SetPrevDir(Dir dir) { _prevDir = dir; }
 
 public:
-
 	std::pair<ItemRef, ItemRef> _item;	// first: 가지고 있는 아이템, second: 사용 중인 아이템
 	int _itemTimer{};
 

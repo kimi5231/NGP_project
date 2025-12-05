@@ -170,7 +170,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="StateMachine.h" />
     <ClInclude Include="TankMonster.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TitleScene.h" />
@@ -200,7 +199,6 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="TankMonster.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />

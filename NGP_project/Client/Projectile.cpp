@@ -1,7 +1,6 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Projectile.h"
 #include "Global.h"
-#include "StateMachine.h"
 
 #define BULLET_SIZE 5
 
@@ -21,17 +20,6 @@ Projectile::Projectile() : GameObject()
 	_size = { 10, 10 };
 }
 
-
-
-void Projectile::Update()
-{
-	//Move();	// Move는 서버에서 함
-	
-	if (_pos.x < gBackgroundRect.left || _pos.x > gBackgroundRect.right ||
-		_pos.y < gBackgroundRect.top || _pos.y > gBackgroundRect.bottom) {
-	}
-}
-
 void Projectile::Render(HDC hdc, HDC srcDC)
 {
 	HBRUSH hBrush;
@@ -41,40 +29,4 @@ void Projectile::Render(HDC hdc, HDC srcDC)
 	Ellipse(hdc, _pos.x, _pos.y, _pos.x + BULLET_SIZE, _pos.y + BULLET_SIZE);
 
 	DeleteObject(hBrush);
-}
-
-
-void Projectile::Move()
-{
-	switch (_dir)
-	{
-	case Dir::Left:
-		_pos.x -= _status._speed;
-		break;
-	case Dir::Right:
-		_pos.x += _status._speed;
-		break;
-	case Dir::Up:
-		_pos.y -= _status._speed;
-		break;
-	case Dir::Down:
-		_pos.y += _status._speed;
-		break;
-	case Dir::LeftUp:
-		_pos.x -= _status._speed;
-		_pos.y -= _status._speed;
-		break;
-	case Dir::LeftDown:
-		_pos.x -= _status._speed;
-		_pos.y += _status._speed;
-		break;
-	case Dir::RightUp:
-		_pos.x += _status._speed;
-		_pos.y -= _status._speed;
-		break;
-	case Dir::RightDown:
-		_pos.x += _status._speed;
-		_pos.y += _status._speed;
-		break;
-	}
 }

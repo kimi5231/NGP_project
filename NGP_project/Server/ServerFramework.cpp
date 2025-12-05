@@ -191,12 +191,10 @@ void ServerFramework::ProcessRecv(ClientRef client)
 		memcpy(&createProcjecilePacket, packet.data() + sizeof(Header), sizeof(C_CreateProjectile_Packet));
 		ProcessCreateProjectilePacket(createProcjecilePacket);
 		break;
-	case C_Collision:
-		C_Collision_Packet collisionPacket;
-		memcpy(&collisionPacket, packet.data() + sizeof(Header), sizeof(C_Collision_Packet));
-		ProcessCollisionPacket(collisionPacket);
-		break;
 	case C_UseItem:
+		C_UseItem_Packet useItemPacket;
+		memcpy(&useItemPacket, packet.data() + sizeof(Header), sizeof(C_UseItem_Packet));
+		ProcessUseItemPacket(useItemPacket);
 		break;
 	case C_StayGame:
 		break;
@@ -356,6 +354,27 @@ void ServerFramework::SendGetItemPacket(ItemRef item, PlayerRef player)
 	LeaveCriticalSection(&g_sendCS);
 }
 
+void ServerFramework::SendItemUseResultPacket(PlayerRef player, bool result)
+{
+	S_ItemUseResult_Packet packetData{ result };
+	// SendEvent 생성
+	SendEventRef<S_ItemUseResult_Packet> event = std::make_shared<SendEvent<S_ItemUseResult_Packet>>();
+	// 본인한테만 알리면 되므로 false
+	event->isBroadcast = false;
+	// player와 대응되는 client 찾기
+	for (ClientRef& client : _clients)
+	{
+		if (client->player == player)
+			event->clientSocket = client->socket;
+	}
+	event->packetID = S_ItemUseResult;
+	event->packetData = packetData;
+
+	EnterCriticalSection(&g_sendCS);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_sendCS);
+}
+
 template<class T>
 void ServerFramework::Broadcast(PacketID id, const T& packetData)
 {
@@ -432,10 +451,23 @@ void ServerFramework::ProcessCreateProjectilePacket(C_CreateProjectile_Packet pa
 {
 	GameObjectRef projectile = _room->AddObject(packet.type, packet.pos, packet.dir);
 
-	std::cout << "Create Object " << packet.objectID << std::endl;
+	std::cout << "Create Object " << projectile->GetID() << std::endl;
 }
 
-void ServerFramework::ProcessCollisionPacket(C_Collision_Packet packet)
+void ServerFramework::ProcessUseItemPacket(C_UseItem_Packet packet)
 {
+	// 아이템 사용 결과값
+	bool result = false;
 
+	PlayerRef player = dynamic_pointer_cast<Player>(_room->GetObject(packet.objectType, packet.objectID));
+
+	// 사용하려는 아이템이 실제로 있는지 확인
+	if (player->GetItem()->GetItemType() == packet.itemType)
+	{
+		player->UseItem();
+		result = true;
+	}
+
+	// 사용 요청한 클라이언트에게 결과 알리기
+	SendItemUseResultPacket(player, result);
 }

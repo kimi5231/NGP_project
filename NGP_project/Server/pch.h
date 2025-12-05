@@ -219,7 +219,8 @@ struct C_Collision_Packet
 struct C_UseItem_Packet
 {
     int objectID;
-    ObjectType itemType;
+    ObjectType objectType;
+    ItemType itemType;
 };
 
 struct C_StayGame_Packet
@@ -239,7 +240,7 @@ using SendEventRef = std::shared_ptr<SendEvent<T>>;
 
 using EventType = std::variant<SendEventRef<S_AddObject_Packet>, SendEventRef<S_RemoveObject_Packet>,
     SendEventRef<S_UpdateObjectState_Packet>, SendEventRef<S_Move_Packet>, SendEventRef<S_UpdateTimer_Packet>,
-    SendEventRef<S_GetItem_Packet>>;
+    SendEventRef<S_GetItem_Packet>, SendEventRef<S_ItemUseResult_Packet>>;
 
 using ClientRef = std::shared_ptr<class Client>;
 using GameObjectRef = std::shared_ptr<class GameObject>;

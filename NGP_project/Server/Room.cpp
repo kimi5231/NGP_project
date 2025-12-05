@@ -33,7 +33,6 @@ Room::~Room()
 
 void Room::Update()
 {
-
 	if (_state != RoomState::Playing)
 		return;
 

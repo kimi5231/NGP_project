@@ -45,7 +45,9 @@ public:
 	void SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(bool broadcast, SOCKET client = 0);
+	
 	void SendGetItemPacket(ItemRef item, PlayerRef player);
+	void SendItemUseResultPacket(PlayerRef player, bool result);
 
 	template <class T>
 	void Broadcast(PacketID id, const T& packetData);
@@ -56,7 +58,7 @@ private:
 	void ProcessDisconnect(ClientRef client);
 	void ProcessMovePacket(C_Move_Packet packet);
 	void ProcessCreateProjectilePacket(C_CreateProjectile_Packet packet);
-	void ProcessCollisionPacket(C_Collision_Packet packet);
+	void ProcessUseItemPacket(C_UseItem_Packet packet);
 
 public:
 	Room* GetRoom() { return _room; }

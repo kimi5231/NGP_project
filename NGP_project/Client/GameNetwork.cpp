@@ -132,7 +132,7 @@ void GameNetwork::ProcessRecv()
 	*/
 	int packetSize;
 	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
-	std::cout << "packetSize: " << packetSize << std::endl;
+	//std::cout << "packetSize: " << packetSize << std::endl;
 
 	// Packet 수신(가변 데이터)
 	std::vector<char> packet(packetSize);

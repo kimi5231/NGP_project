@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 class GameScene;
 
@@ -24,7 +24,7 @@ public:
 	void SendStayGamePacket(int id);
 	void SendEndGamePacket(int id);
 
-	// Recv µø¿€
+	// Recv ÎèôÏûë
 	void RecvAddObject(S_AddObject_Packet addObjectPacket);
 	void RecvRemoveObject(S_RemoveObject_Packet removeObjectPacket);
 	void RecvUpdateObjectState(S_UpdateObjectState_Packet updateObjectStatePacket);
@@ -35,7 +35,7 @@ public:
 	void RecvMonsterDamaged(S_MonsterDamaged_Packet monsterDamagedPacket);
 	void RecvItemUseResult(S_ItemUseResult_Packet itemUseResultPacket);
 	void RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket);
-
+	void RecvGetItem(S_GetItem_Packet getItemPacket);
 public:
 	template <class T>
 	std::vector<char> CreatePacket(PacketID id, T& packet);

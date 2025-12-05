@@ -28,8 +28,8 @@ void Player::Update()
             _pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
             _prevPos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
             g_framework->SendMovePacket(shared_from_this(), true);
+            _invincible = true; // 잠시 무적
         }
-        _invincible = true; // 잠시 무적
         
         // 시간 잰 다음에 풀리도록
         if (GET_SINGLE(TimeManager)->CheckTimer(_invincibleTimer, RESPAWN_TIME)) {
@@ -66,6 +66,7 @@ void Player::UseItem()
 
 void Player::SetItem(ItemRef item)
 {
+    g_framework->SendGetItemPacket(item, shared_from_this());
     // 목숨은 먹으면 바로 획득
     if (item->GetItemType() == ItemType::Life) {
         item->ChangeState(this);

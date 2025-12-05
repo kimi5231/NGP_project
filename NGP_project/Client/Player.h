@@ -10,7 +10,7 @@ public:
 public:
 	virtual void Update();
 	void UseItem();
-	void SetItem(ItemRef item);
+	void SetItem(ItemType item);
 	void Move(Vertex vecDir, Dir dir);
 
 	void SetDirAndFrame(Dir dir);

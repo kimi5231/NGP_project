@@ -187,6 +187,12 @@ void GameNetwork::ProcessRecv()
 		S_UpdateTimer_Packet updateTimerPacket;
 		memcpy(&updateTimerPacket, packet.data() + sizeof(Header), sizeof(S_UpdateTimer_Packet));
 		RecvUpdateTimer(updateTimerPacket);
+		break;
+	case S_GetItem:
+		S_GetItem_Packet getItemPacket;
+		memcpy(&getItemPacket, packet.data() + sizeof(Header), sizeof(S_GetItem_Packet));
+		RecvGetItem(getItemPacket);
+		break;
 	}
 }
 
@@ -443,4 +449,9 @@ void GameNetwork::RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket)
 	default:
 		break;
 	}
+}
+
+void GameNetwork::RecvGetItem(S_GetItem_Packet getItemPacket)
+{
+	_gameScene->GetItemLocalPlayer(getItemPacket.type);
 }

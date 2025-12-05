@@ -67,8 +67,12 @@ void Room::Update()
 			g_framework->AddRemoveObject(item.second);
 		}
 	}
-	for (const auto& item : _items)
+	for (const auto& item : _items) {
 		item.second->Update();
+		if (item.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(item.second);
+		}
+	}
 	for (const auto& item : _projectiles) {
 		item.second->Update();
 		if (item.second->IsState(ObjectState::Dead)) {
@@ -90,8 +94,9 @@ void Room::Update()
 		// Monster와 충돌 처리
 		for (const auto& monsterItem : _monsters)
 		{
-			if (monsterItem.second->IsCollision(playerItem.second))
+			if (monsterItem.second->IsCollision(playerItem.second)) {
 				playerItem.second->SetState(ObjectState::Dead);
+			}
 		}
 		// bomb과 충돌 처리
 		for (const auto& bombItem : _bombs)
@@ -109,6 +114,7 @@ void Room::Update()
 			if (itemItem.second->IsCollision(playerItem.second)) {
 				g_framework->SendGetItemPacket(itemItem.second, playerItem.second);
 				playerItem.second->SetItem(itemItem.second);
+				itemItem.second->SetState(ObjectState::Dead);
 			}
 		}
 

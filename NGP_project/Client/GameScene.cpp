@@ -319,6 +319,13 @@ void GameScene::SyncBullet(int id, const Vertex& pos)
 	LeaveCriticalSection(&g_cs);
 }
 
+void GameScene::GetItemLocalPlayer(ItemType itemType)
+{
+	EnterCriticalSection(&g_cs);
+	_localPlayer->SetItem(itemType);
+	LeaveCriticalSection(&g_cs);
+}
+
 void GameScene::SyncObjectTimer(const int timer, const int id)
 {
 	EnterCriticalSection(&g_cs);

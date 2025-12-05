@@ -147,6 +147,7 @@ enum PacketID
     S_MonsterDamaged,
     S_ItemUseResult,
 	S_UpdateTimer,
+    S_GetItem,
 };
 
 struct Header
@@ -220,6 +221,11 @@ struct S_UpdateTimer_Packet
     int time;
     int objectID;
     ObjectType type;
+};
+
+struct S_GetItem_Packet
+{
+    ItemType type;
 };
 
 // Client Packet

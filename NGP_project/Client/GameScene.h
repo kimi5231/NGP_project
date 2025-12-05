@@ -47,7 +47,8 @@ public:
 	void SyncPlayer(int id, const Vertex& pos, const Dir dir, const ObjectState state);
 	void SyncMonster(int id, const Vertex& pos, const Dir dir, const ObjectState state);
 	void SyncBullet(int id, const Vertex& pos);
-	
+	void GetItemLocalPlayer(ItemType itemType);
+
 	void SyncObjectTimer(const int timer, const int id);
 
 	// Get UI

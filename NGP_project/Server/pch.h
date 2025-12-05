@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <variant>
+#include <random>
 
 #pragma comment(lib, "ws2_32")
 
@@ -121,6 +122,7 @@ struct S_AddObject_Packet
     int objectID;
     ObjectType type;
     Vertex pos;
+    ItemType itemType;
 };
 
 struct S_RemoveObject_Packet

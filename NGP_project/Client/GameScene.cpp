@@ -336,6 +336,11 @@ Dir GameScene::ConvertVecToDir(const Vertex& dir)
 void GameScene::SyncPlayer(int id, const Vertex& pos, const Dir dir, const ObjectState state)
 {
 	EnterCriticalSection(&g_cs);
+	if (_localPlayer->GetId() == id) {
+		_localPlayer->SetPos(pos);
+		_localPlayer->SetDirAndFrame(dir);
+		_localPlayer->SetState(state);
+	}
 	if (_players.find(id) != _players.end()) 
 	{
 		_players[id]->SetPos(pos);

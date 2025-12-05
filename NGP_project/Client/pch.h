@@ -161,6 +161,7 @@ struct S_AddObject_Packet
 	int objectID;
 	ObjectType type;
 	Vertex pos;
+    ItemType itemType;
 };
 
 struct S_RemoveObject_Packet

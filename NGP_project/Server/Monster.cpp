@@ -1,5 +1,4 @@
 ﻿#include "pch.h"
-#include <random>
 #include "Monster.h"
 #include "Item.h"
 #include "Constant.h"
@@ -9,12 +8,8 @@
 
 RECT gBackgroundRect{ 150, 50, FRAME_BUFFER_WIDTH - 170, FRAME_BUFFER_HEIGHT - 70 };	// 변경 시 클라도 동일하게 변경 필요
 
-std::random_device rd;
-std::mt19937 gen(rd());
-
 std::uniform_int_distribution<> randWidth(gBackgroundRect.left + CELL_SIZE, gBackgroundRect.right - CELL_SIZE);
 std::uniform_int_distribution<> randHeight(gBackgroundRect.top + CELL_SIZE, gBackgroundRect.bottom - CELL_SIZE);
-
 
 Monster::Monster()
     : _stateMachine{ new StateMachine{this, new FindTargetState} }
@@ -73,6 +68,8 @@ void Monster::FindTarget(GameObject* other)
 
 bool Monster::Move()
 {
+    if (_isCollision) return false;
+
     float dx = _targetPos.x - _pos.x;
     float dy = _targetPos.y - _pos.y;
     double distance = sqrt(dx * dx + dy * dy);
@@ -113,9 +110,7 @@ void Monster::Update()
 
 void Monster::DropItem()
 {
-    std::uniform_int_distribution<> randSpawn(static_cast<int>(ItemType::Life), static_cast<int>(ItemType::Hourglass));
-
-    GameObject* item = new Item(static_cast<ItemType>(randSpawn(gen)), _pos);
+    GameObject* item = new Item(_pos);
     _spawnCallback(item);
 }
 
@@ -127,4 +122,44 @@ void Monster::Damaged(int damage)
         _stateMachine->ChangeState(new DeadState);
         _stateMachine->Start();
     }
+}
+
+void Monster::PushOther(MonsterRef other)
+{
+    _isCollision = true;
+    Vertex otherPos = other->GetPos();
+    float dx = _pos.x - otherPos.x;
+    float dy = _pos.y - otherPos.y;
+    float dist = std::sqrt(dx * dx + dy * dy);
+
+    if (dist == 0) {
+        // 완전히 같은 위치일 경우 임의로 밀어냄
+        dx = 1.0f;
+        dy = 0.0f;
+        dist = 1.0f;
+    }
+
+    float overlap = (CELL_SIZE * 2) - dist;
+
+    // 정규화된 방향 벡터
+    dx /= dist;
+    dy /= dist;
+
+    // 서로 반씩 밀어내기
+    _pos.x += dx * (overlap / 2.0f);
+    _pos.y += dy * (overlap / 2.0f);
+
+    other->SetPos({
+           otherPos.x - dx * (overlap / 2.0f),
+           otherPos.y - dy * (overlap / 2.0f)
+        });
+
+    _pos.x = std::clamp(_pos.x, (float)(gBackgroundRect.left), (float)(gBackgroundRect.right));
+    _pos.y = std::clamp(_pos.y, (float)(gBackgroundRect.top), (float)(gBackgroundRect.bottom));
+
+    _prevPos = _pos;
+    g_framework->SendMovePacket(shared_from_this(), true);
+    g_framework->SendMovePacket(other, true);
+
+    _isCollision = false;
 }

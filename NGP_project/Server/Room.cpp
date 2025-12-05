@@ -8,6 +8,7 @@
 #include "Projectile.h"
 #include "Item.h"
 #include "BombObject.h"
+#include "GameObject.h"
 
 // Monster
 #include "Monster.h"
@@ -32,18 +33,6 @@ Room::~Room()
 
 void Room::Update()
 {
-	EnterCriticalSection(&g_objectCS);
-	for (const auto& item : _players)	// player update 필요한가
-		item.second->Update();
-	for (const auto& item : _monsters)
-		item.second->Update();
-	for (const auto& item : _items)
-		item.second->Update();
-	for (const auto& item : _projectiles)
-		item.second->Update();
-	for (const auto& item : _bombs)
-		item.second->Update();
-	LeaveCriticalSection(&g_objectCS);
 
 	if (_state != RoomState::Playing)
 		return;
@@ -68,7 +57,32 @@ void Room::Update()
 		if (_monsterCount == 0)
 			ChangeNextStage();
 	}
-	
+
+	EnterCriticalSection(&g_objectCS);
+	for (const auto& item : _players)
+		item.second->Update();
+	for (const auto& item : _monsters) {
+		item.second->Update();
+		if (item.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(item.second);
+		}
+	}
+	for (const auto& item : _items)
+		item.second->Update();
+	for (const auto& item : _projectiles) {
+		item.second->Update();
+		if (item.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(item.second);
+		}
+	}
+	for (const auto& item : _bombs) {
+		item.second->Update();
+		if (item.second->IsState(ObjectState::Dead)) {
+			g_framework->AddRemoveObject(item.second);
+		}
+	}
+	LeaveCriticalSection(&g_objectCS);
+
 	EnterCriticalSection(&g_objectCS);
 	// Player 충돌 처리
 	for (const auto& playerItem : _players)
@@ -79,12 +93,32 @@ void Room::Update()
 			if (monsterItem.second->IsCollision(playerItem.second))
 				playerItem.second->SetState(ObjectState::Dead);
 		}
+		// bomb과 충돌 처리
+		for (const auto& bombItem : _bombs)
+		{
+			// 폭발하는 상태에서만 충돌처리
+			if (bombItem.second->_isBomb && playerItem.second->IsCollision(bombItem.second))
+			{
+				playerItem.second->SetState(ObjectState::Dead);
+			}
+		}
 
 		// Item과 충돌 처리
 		for (const auto& itemItem : _items)
 		{
-			if (itemItem.second->IsCollision(playerItem.second))
+			if (itemItem.second->IsCollision(playerItem.second)) {
 				g_framework->SendGetItemPacket(itemItem.second, playerItem.second);
+				playerItem.second->SetItem(itemItem.second);
+			}
+		}
+
+		// Obstacle과 충돌 처리
+		for (const auto& ObstacleItem : _obstacles)
+		{
+			if (playerItem.second->IsCollision(ObstacleItem.second))
+			{
+				playerItem.second->SetCollision();
+			}
 		}
 	}
 	LeaveCriticalSection(&g_objectCS);
@@ -96,9 +130,19 @@ void Room::Update()
 		// Projectile과 충돌 처리
 		for (const auto& projectileItem : _projectiles)
 		{
-			if (projectileItem.second->IsCollision(monsterItem.second))
+			if (projectileItem.second->IsCollision(monsterItem.second) && !monsterItem.second->IsState(ObjectState::Dead) && monsterItem.second->CanDamage())
 			{
-
+				monsterItem.second->Damaged(projectileItem.second->GetDamage());
+				projectileItem.second->SetState(ObjectState::Dead);
+			}
+		}
+		// bomb과 충돌 처리
+		for (const auto& bombItem : _bombs)
+		{
+			// 폭발하는 상태에서만 충돌처리
+			if (bombItem.second->_isBomb && monsterItem.second->IsCollision(bombItem.second))
+			{
+				monsterItem.second->Damaged(bombItem.second->GetDamage());
 			}
 		}
 
@@ -110,7 +154,16 @@ void Room::Update()
 
 			if (monsterItem2.second->IsCollision(monsterItem.second))
 			{
+				monsterItem2.second->UndoPos();
+			}
+		}
 
+		// Obstacle과 충돌 처리
+		for (const auto& ObstacleItem : _obstacles)
+		{
+			if (monsterItem.second->IsCollision(ObstacleItem.second))
+			{
+				monsterItem.second->UndoPos();
 			}
 		}
 	}
@@ -170,6 +223,8 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 			});
 		break;
 	case ObjectType::Item:
+		_items[_generateID] = std::make_shared<Item>(pos);
+		object = _items[_generateID];
 		break;
 	case ObjectType::Bullet:
 		_projectiles[_generateID] = std::make_shared<Projectile>(dir, pos);
@@ -180,6 +235,8 @@ GameObjectRef Room::AddObject(ObjectType type, Vertex pos, Dir dir)
 		object = _bombs[_generateID];
 		break;
 	case ObjectType::Obstacle:
+		_obstacles[_generateID] = std::make_shared<GameObject>(type, pos);
+		object = _obstacles[_generateID];
 		break;
 	}
 
@@ -225,6 +282,8 @@ void Room::RemoveObject(ObjectType type, int id)
 		_bombs.erase(id);
 		break;
 	case ObjectType::Obstacle:
+		object = _obstacles[id];
+		_obstacles.erase(id);
 		break;
 	}
 	LeaveCriticalSection(&g_objectCS);
@@ -288,8 +347,10 @@ GameObjectRef Room::GetObject(ObjectType type, int id)
 	case ObjectType::Bullet:
 		return _projectiles[id];
 	case ObjectType::Bomb:
+		return _bombs[id];
 		break;
 	case ObjectType::Obstacle:
+		return _obstacles[id];
 		break;
 	}
 }
@@ -305,5 +366,8 @@ void Room::SpawnMonster()
 		GameObjectRef monster = AddObject(static_cast<ObjectType>(type));
 		if (!monster) 
 			return;
+
+		// test 용 장애물 생성
+		AddObject(ObjectType::Obstacle, Vertex{ (float)gBackgroundRect.left + 4 * CELL_SIZE, (float)gBackgroundRect.top + 4 * CELL_SIZE });
 	}
 }

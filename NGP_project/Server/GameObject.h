@@ -27,7 +27,7 @@ public:
 
 	void SetID(int id) { _id = id; }
 	int GetID() const { return _id; }
-	bool SetPos(Vertex pos);
+	virtual bool SetPos(Vertex pos);
 	Vertex GetPos() const { return _pos; }
 	void SetTargetPos(Vertex target) { _targetPos = target; }
 	Vertex GetTargetPos() const { return _targetPos; }
@@ -40,6 +40,10 @@ public:
 
 	BoundingBox GetBoundingBox() const;
 	bool IsCollision(const GameObjectRef other) const;
+
+	int GetDamage() const { return _damage; }
+	bool CanDamage() const { return !_invincible; }
+	void UndoPos() { _pos = _prevPos; }
 
 	Status _status{};
 	int _timer{};	// 총알, 폭탄 등에 사용
@@ -55,5 +59,6 @@ protected:
 	Vertex _size{ CELL_SIZE, CELL_SIZE };
 
 	bool _invincible{};	// 무적 판정
+	int _damage{ 10 };
 };
 

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "Global.h"
+#include "Item.h"
 
 ServerFramework::ServerFramework()
 {
@@ -235,7 +236,11 @@ std::vector<char> ServerFramework::CreatePakcet(PacketID id, const T& packetData
 void ServerFramework::SendAddObjectPacket(GameObjectRef object, bool broadcast, SOCKET client)
 {
 	// Packet Data 생성
-	S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos() };
+	S_AddObject_Packet packetData{ object->GetID(), object->GetObjectType(), object->GetPos(), };
+
+	if (ObjectType::Item == object->GetObjectType()) {
+		packetData.itemType = std::dynamic_pointer_cast<Item>(object)->GetItemType();
+	}
 
 	// SendEvent 생성
 	SendEventRef<S_AddObject_Packet> event = std::make_shared<SendEvent<S_AddObject_Packet>>();

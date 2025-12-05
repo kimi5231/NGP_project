@@ -10,16 +10,17 @@
 #include "ObstacleMonster.h"
 #include "Projectile.h"
 #include "BombObject.h"
+#include "Item.h"
 
 // 수영 데스크탑
 //char* SERVERIP = (char*)"61.255.49.141";
 // 미나 데스크탑
 //char* SERVERIP = (char*)"192.168.35.52";	
 // 루프백
-//char* SERVERIP = (char*)"127.0.0.1";
+char* SERVERIP = (char*)"127.0.0.1";
 //char* SERVERIP = (char*)"192.168.1.191";
 //char* SERVERIP = (char*)"192.168.22.185";
-char* SERVERIP = (char*)"192.168.70.143";
+//char* SERVERIP = (char*)"192.168.70.143";
 
 #define SERVERPORT 7777
 #define BUFSIZE 512
@@ -342,6 +343,18 @@ void GameNetwork::RecvAddObject(S_AddObject_Packet addObjectPacket)
 	{
 		std::shared_ptr<BombObject> object = std::make_shared<BombObject>();
 		object->SetPos(addObjectPacket.pos);
+		_gameScene->AddObject(addObjectPacket.objectID, object);
+	}
+	break;
+	case ObjectType::Item:
+	{
+		std::shared_ptr<Item> object = std::make_shared<Item>(addObjectPacket.itemType, addObjectPacket.pos);
+		_gameScene->AddObject(addObjectPacket.objectID, object);
+	}
+	break;
+	case ObjectType::Obstacle:
+	{
+		std::shared_ptr<GameObject> object = std::make_shared<GameObject>(ObjectType::Obstacle, addObjectPacket.pos);
 		_gameScene->AddObject(addObjectPacket.objectID, object);
 	}
 	break;

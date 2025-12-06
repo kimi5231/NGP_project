@@ -33,6 +33,19 @@ Room::~Room()
 
 void Room::Update()
 {
+	EnterCriticalSection(&g_objectCS);
+	for (const auto& item : _players)
+		item.second->Update();
+	for (const auto& item : _monsters)
+		item.second->Update();
+	for (const auto& item : _items)
+		item.second->Update();
+	for (const auto& item : _projectiles)
+		item.second->Update();
+	for (const auto& item : _bombs)
+		item.second->Update();
+	LeaveCriticalSection(&g_objectCS);
+
 	if (_state != RoomState::Playing)
 		return;
 
@@ -59,34 +72,6 @@ void Room::Update()
 		_timer = 0;
 	}
 
-	EnterCriticalSection(&g_objectCS);
-	for (const auto& item : _players)
-		item.second->Update();
-	for (const auto& item : _monsters) {
-		item.second->Update();
-		if (item.second->IsState(ObjectState::Dead)) {
-			g_framework->AddRemoveObject(item.second);
-		}
-	}
-	for (const auto& item : _items) {
-		item.second->Update();
-		if (item.second->IsState(ObjectState::Dead)) {
-			g_framework->AddRemoveObject(item.second);
-		}
-	}
-	for (const auto& item : _projectiles) {
-		item.second->Update();
-		if (item.second->IsState(ObjectState::Dead)) {
-			g_framework->AddRemoveObject(item.second);
-		}
-	}
-	for (const auto& item : _bombs) {
-		item.second->Update();
-		if (item.second->IsState(ObjectState::Dead)) {
-			g_framework->AddRemoveObject(item.second);
-		}
-	}
-	LeaveCriticalSection(&g_objectCS);
 
 	EnterCriticalSection(&g_objectCS);
 	// Player 충돌 처리

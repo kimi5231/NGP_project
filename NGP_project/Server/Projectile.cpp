@@ -24,6 +24,9 @@ void Projectile::Update()
 	{
 		g_framework->AddRemoveObject(shared_from_this());
 	}
+	else if (_state == ObjectState::Dead) {
+		g_framework->AddRemoveObject(shared_from_this());
+	}
 }
 
 bool Projectile::Move()

@@ -106,6 +106,10 @@ bool Monster::Move()
 void Monster::Update()
 {
     _stateMachine->Update();
+
+    if (_state == ObjectState::Dead) {
+        g_framework->AddRemoveObject(shared_from_this());
+    }
 }
 
 void Monster::DropItem()

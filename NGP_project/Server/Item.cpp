@@ -2,6 +2,7 @@
 #include "Item.h"
 #include "Constant.h"
 #include "Global.h"
+#include "ServerFramework.h"
 
 float bulletSpeed{ BULLET_TIME };
 // 아이템 사용 관련 전역 변수
@@ -18,6 +19,13 @@ Item::Item(Vertex pos)
 	: Item()
 {
 	_pos = pos;
+}
+
+void Item::Update()
+{
+	if (_state == ObjectState::Dead) {
+		g_framework->AddRemoveObject(shared_from_this());
+	}
 }
 
 void Item::ChangeState(GameObject* player)

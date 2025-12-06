@@ -102,8 +102,6 @@ void GameNetwork::Update()
 	{
 
 	}
-	/*if (_socket != INVALID_SOCKET)
-		ProcessRecv();*/
 }
 
 template<class T>
@@ -441,6 +439,9 @@ void GameNetwork::RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket)
 	switch (updateTimerPacket.type)
 	{
 	case ObjectType::UI:
+		if (updateTimerPacket.time <= 0)
+			updateTimerPacket.time = 0;
+
 		_gameScene->GetTimerUI().Update(updateTimerPacket.time);
 		break;
 	case ObjectType::Bomb:

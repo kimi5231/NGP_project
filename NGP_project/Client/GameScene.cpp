@@ -365,10 +365,7 @@ void GameScene::ProcessInput()
 		EnterCriticalSection(&g_cs);
 		_localPlayer->Move(vecDir, dir);
 		LeaveCriticalSection(&g_cs);
-		moved = true;
-		// 이동 후 서버로 Move 패킷 Send
-		//_gameNetwork->SendMovePacket(_localPlayer->GetId(), ObjectType::Player, _localPlayer->GetPos(), _localPlayer->GetDir(), _localPlayer->GetState());
-	}
+		moved = true;	}
 
 	if (moved)
 	{

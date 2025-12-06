@@ -30,12 +30,8 @@ void GameFramework::Init()
 	GET_SINGLE(SoundManager)->Init(hWnd, soundPath);
 	GET_SINGLE(SoundManager)->LoadSound(L"main_music", L"main_music.wav", SoundType::BGM);
 
-	_gameNetwork = new GameNetwork;
-	_scene = new GameScene;
-	_scene->SetGameNetwork(_gameNetwork);
-	_gameNetwork->SetGameScene(_scene);
-
-	_hNetworkThread = CreateThread(NULL, 0, GameFramework::ProcessNetwork, this, 0, NULL);
+	_scene = new TitleScene;
+	dynamic_cast<TitleScene*>(_scene)->SetGameFramework(this);
 }
 
 void GameFramework::Update()
@@ -43,7 +39,6 @@ void GameFramework::Update()
 	GET_SINGLE(InputManager)->Update();
 	GET_SINGLE(TimeManager)->Update();
 
-	//_gameNetwork->Update();
 	_scene->Update(); 
 
 	InvalidateRect(hWnd, NULL, false);
@@ -70,7 +65,18 @@ DWORD __stdcall GameFramework::ProcessNetwork(LPVOID arg)
 	return 0;
 }
 
-void GameFramework::ChangeScene()
+void GameFramework::ChangeTitleToGameScene(char* ip)
 {
+	// 삭제
+	delete _scene;
+	_scene = nullptr;
 
+	// GameScene 생성
+	_scene = new GameScene();
+	 _gameNetwork = new GameNetwork(ip);
+	 dynamic_cast<GameScene*>(_scene)->SetGameNetwork(_gameNetwork);
+	_gameNetwork->SetGameScene(dynamic_cast<GameScene*>(_scene));
+
+	// 네트워크 스레드 생성
+	_hNetworkThread = CreateThread(NULL, 0, GameFramework::ProcessNetwork, this, 0, NULL);
 }

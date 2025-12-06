@@ -4,6 +4,7 @@
 #include "GameFramework.h"
 #include "GameNetwork.h"
 #include "GameScene.h"
+#include "TitleScene.h"
 
 #define MAX_LOADSTRING 100
 

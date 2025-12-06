@@ -37,7 +37,7 @@ void InitConsole()
 	std::cout << "콘솔 로그 시작!" << std::endl;
 }
 
-GameNetwork::GameNetwork()
+GameNetwork::GameNetwork(char* ip)
 {
 	// 윈속 초기화
 	WSADATA wsa;
@@ -58,7 +58,7 @@ GameNetwork::GameNetwork()
 	struct sockaddr_in serveraddr;
 	memset(&serveraddr, 0, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
-	inet_pton(AF_INET, SERVERIP, &serveraddr.sin_addr);
+	inet_pton(AF_INET, ip, &serveraddr.sin_addr);
 	serveraddr.sin_port = htons(SERVERPORT);
 	retval = connect(_socket, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
 	if (retval == SOCKET_ERROR)

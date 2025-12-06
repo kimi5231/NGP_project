@@ -5,7 +5,7 @@ class GameScene;
 class GameNetwork
 {
 public:
-	GameNetwork();
+	GameNetwork(char* ip);
 	~GameNetwork();
 
 public:

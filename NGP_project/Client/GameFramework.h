@@ -2,7 +2,7 @@
 
 class InputManager;
 class GameNetwork;
-class GameScene;
+class Scene;
 
 class GameFramework
 {
@@ -18,12 +18,13 @@ public:
 	static DWORD WINAPI ProcessNetwork(LPVOID arg);
 
 public:
-	GameScene* GetGameScene() { return _scene; }
+	Scene* GetGameScene() { return _scene; }
+
 public:
-	void ChangeScene();
+	void ChangeTitleToGameScene(char* ip);
 
 private:
-	GameScene* _scene{};
+	Scene* _scene{};
 	GameNetwork* _gameNetwork{};
 	HANDLE _hNetworkThread{};
 };

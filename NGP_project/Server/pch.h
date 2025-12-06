@@ -154,28 +154,6 @@ struct S_Move_Packet
     ObjectState state;
 };
 
-struct S_ChangeNextStage_Packet // 필요한가?
-{
-    int stageNum;
-};
-
-struct S_CollisionResult_Packet // 삭제 예정
-{
-    bool result;
-};
-
-struct S_MonsterDamaged_Packet // 삭제 예정
-{
-    int objectID;
-    ObjectType type;
-    int monsterHP;
-};
-
-struct S_ItemUseResult_Packet
-{
-    bool result;
-};
-
 struct S_UpdateTimer_Packet
 {
     int time;
@@ -186,6 +164,11 @@ struct S_UpdateTimer_Packet
 struct S_GetItem_Packet
 {
     ItemType type;
+};
+
+struct S_ItemUseResult_Packet
+{
+    bool result;
 };
 
 // Client Packet

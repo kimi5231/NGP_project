@@ -288,8 +288,10 @@ void Room::ChangeNextStage()
 	// Stage 클리어
 	ClearStage();
 
-	int sizeOffset{ CELL_SIZE / 2 };
+	_curStage++;
+	_timer = 50;
 
+	int sizeOffset{ CELL_SIZE / 2 };
 	switch (_curStage)
 	{
 	case 1:
@@ -328,14 +330,21 @@ void Room::ChangeNextStage()
 		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset });
 		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset });
 		break;
-	case 4:
-		// 게임 종료
+	case 4:	// 게임 종료
+		// Stage Reset
+		_curStage = 1;
+		
+		// Player Pos Reset
+		for (const auto& item : _players)
+		{
+			item.second->SetPos({ 400, 300 });
+			g_framework->SendMovePacket(item.second, true);
+		}
 
+		// Room State Set
+		_state = RoomState::Idle;
 		break;
 	}
-
-	_curStage++;
-	_timer = 50;
 }
 
 void Room::ClearStage()

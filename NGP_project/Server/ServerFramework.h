@@ -45,7 +45,6 @@ public:
 	void SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(bool broadcast, SOCKET client = 0);
-	
 	void SendGetItemPacket(ItemRef item, PlayerRef player);
 	void SendItemUseResultPacket(PlayerRef player, bool result);
 

@@ -50,13 +50,13 @@ void Room::Update()
 		return;
 
 	// Timer Update
-	static float sumTime;
+	static float sumTime = 1;
 	sumTime += GET_SINGLE(TimeManager)->GetDeltaTime();
 	if (sumTime > 1)
 	{
+		g_framework->SendUpdateTimerPacket(true);
 		sumTime = 0;
 		_timer -= 1;
-		g_framework->SendUpdateTimerPacket(true);
 	}
 	
 	// 시간이 남았을 때만 몬스터 생성
@@ -68,8 +68,6 @@ void Room::Update()
 	{
 		if (_monsterCount == 0)
 			ChangeNextStage();
-
-		_timer = 0;
 	}
 
 
@@ -128,6 +126,7 @@ void Room::Update()
 				projectileItem.second->SetState(ObjectState::Dead);
 			}
 		}
+
 		// bomb과 충돌 처리
 		for (const auto& bombItem : _bombs)
 		{
@@ -280,29 +279,63 @@ void Room::RemoveObject(ObjectType type, int id)
 	}
 	LeaveCriticalSection(&g_objectCS);
 
-	g_framework->SendRemoveObjectPacket(object, true);
+	if(object)
+		g_framework->SendRemoveObjectPacket(object, true);
 }
 
 void Room::ChangeNextStage()
 {
+	// Stage 클리어
+	ClearStage();
+
+	int sizeOffset{ CELL_SIZE / 2 };
+
 	switch (_curStage)
 	{
 	case 1:
-		// 스테이지 클리어
-		ClearStage();
-		// 스테이지2 장애물 생성
-
+		// Stage2 장애물 생성
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset });
 		break;
 	case 2:
+		// Stage3 장애물 생성
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset });
 
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 5 * CELL_SIZE + sizeOffset });
+
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 5 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset });
+
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 11 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 11 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset });
 		break;
 	case 3:
-
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 4 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.right - 4 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.bottom - 4 * CELL_SIZE + sizeOffset });
+			
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 6 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 6 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset });
+		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset });
 		break;
 	case 4:
 		// 게임 종료
+
 		break;
 	}
+
+	_curStage++;
+	_timer = 50;
 }
 
 void Room::ClearStage()
@@ -357,8 +390,5 @@ void Room::SpawnMonster()
 		GameObjectRef monster = AddObject(static_cast<ObjectType>(type));
 		if (!monster) 
 			return;
-
-		// test 용 장애물 생성
-		AddObject(ObjectType::Obstacle, Vertex{ (float)gBackgroundRect.left + 4 * CELL_SIZE, (float)gBackgroundRect.top + 4 * CELL_SIZE });
 	}
 }

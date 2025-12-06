@@ -148,6 +148,7 @@ enum PacketID
     S_ItemUseResult,
 	S_UpdateTimer,
     S_GetItem,
+    S_EndGame,
 };
 
 struct Header
@@ -226,6 +227,11 @@ struct S_UpdateTimer_Packet
 struct S_GetItem_Packet
 {
     ItemType type;
+};
+
+struct S_EndGame_Packet
+{
+    bool end;   // 내용 아무거나 넣는데 수정이 필요하다면 해주십쇼..
 };
 
 // Client Packet

@@ -25,6 +25,8 @@ public:
 	void AddMonster(int id, MonsterRef monster);
 	void AddObject(int id, GameObjectRef object);
 
+	void AddEndGameUi(bool isStay, Vertex center, Vertex size, std::wstring text);	// EndGame 패킷 받으면 생성할 UI
+
 	// Get Object
 	PlayerRef GetLocalPlayer() const { return _localPlayer; }
 	MonsterRef GetMonster(int id) { return _monsters[id]; }

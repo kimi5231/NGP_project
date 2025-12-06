@@ -265,6 +265,17 @@ void GameScene::AddObject(int id, GameObjectRef object)
 	LeaveCriticalSection(&g_cs);
 }
 
+void GameScene::AddEndGameUi(bool isStay, Vertex center, Vertex size, std::wstring text)
+{
+	DWORD StayButtonColor{ RGB(51, 102, 255) };
+	DWORD LeaveButtonColor{ RGB(255, 102, 153) };
+
+	if (isStay)
+		_ui.push_back(std::make_shared<Button>(center, size, text, StayButtonColor));
+	else
+		_ui.push_back(std::make_shared<UI>(center, size, text, LeaveButtonColor));
+}
+
 Dir GameScene::ConvertVecToDir(const Vertex& dir)
 {
 	// 상하좌우

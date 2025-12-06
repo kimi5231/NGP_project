@@ -36,6 +36,8 @@ public:
 	void RecvItemUseResult(S_ItemUseResult_Packet itemUseResultPacket);
 	void RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket);
 	void RecvGetItem(S_GetItem_Packet getItemPacket);
+	void RecvEndGame();
+
 public:
 	template <class T>
 	std::vector<char> CreatePacket(PacketID id, T& packet);

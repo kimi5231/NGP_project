@@ -102,8 +102,8 @@ void ServerFramework::Update()
 		}
 
 		// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
-		int optval = 1;
-		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+		//int optval = 1;
+		//setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 		ProcessAccept(clientSocket);
 	}

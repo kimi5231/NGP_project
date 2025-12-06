@@ -50,8 +50,8 @@ GameNetwork::GameNetwork(char* ip)
 		err_quit("socket()");	
 
 	// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
-	int optval = 1;
-	setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+	/*int optval = 1;
+	setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));*/
 
 	// connect()
 	int retval;
@@ -191,6 +191,9 @@ void GameNetwork::ProcessRecv()
 		memcpy(&getItemPacket, packet.data() + sizeof(Header), sizeof(S_GetItem_Packet));
 		RecvGetItem(getItemPacket);
 		break;
+	case S_EndGame:
+		// 내용 까볼 필요 없음
+		RecvEndGame();
 	}
 }
 
@@ -455,4 +458,10 @@ void GameNetwork::RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket)
 void GameNetwork::RecvGetItem(S_GetItem_Packet getItemPacket)
 {
 	_gameScene->GetItemLocalPlayer(getItemPacket.type);
+}
+
+void GameNetwork::RecvEndGame()
+{
+	_gameScene->AddEndGameUi(true, Vertex{ 270, 300 }, Vertex{ 150, 150 }, L"Stay");
+	_gameScene->AddEndGameUi(false, Vertex{ 500, 300 }, Vertex{ 150, 150 }, L"Leave");
 }

@@ -198,23 +198,6 @@ struct C_CreateProjectile_Packet
     Dir dir;
 };
 
-struct C_KickBomb_Packet
-{
-    int objectID;
-    Dir dir;
-};
-
-struct C_Collision_Packet
-{
-    CollisionType collisionType;
-    int objectID1;
-    ObjectType type1;
-    Vertex pos1;
-    int objectID2;
-    ObjectType type2;
-    Vertex pos2;
-};
-
 struct C_UseItem_Packet
 {
     int objectID;
@@ -222,14 +205,10 @@ struct C_UseItem_Packet
     ItemType itemType;
 };
 
-struct C_StayGame_Packet
+struct C_KickBomb_Packet
 {
     int objectID;
-};
-
-struct C_EndGame_Packet
-{
-    int objectID;
+    Dir dir;
 };
 
 template <class T>

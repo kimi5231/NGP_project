@@ -59,6 +59,7 @@ private:
 	void ProcessMovePacket(C_Move_Packet packet);
 	void ProcessCreateProjectilePacket(C_CreateProjectile_Packet packet);
 	void ProcessUseItemPacket(C_UseItem_Packet packet);
+	void ProcessKickBombPacket(C_KickBomb_Packet packet);
 
 public:
 	Room* GetRoom() { return _room; }

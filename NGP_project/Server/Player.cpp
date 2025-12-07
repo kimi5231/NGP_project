@@ -62,15 +62,6 @@ void Player::SetItem(ItemRef item)
     _item.first = item;
 }
 
-bool Player::SetPos(Vertex pos)
-{
-    if (!_isCollision) return GameObject::SetPos(pos);
-
-    _isCollision = true;
-
-    return false;
-}
-
 void Player::Damaged(int damage)
 {
     if (!_invincible) {// 무적 아닐 때 한번만

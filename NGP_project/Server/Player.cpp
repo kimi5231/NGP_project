@@ -50,6 +50,9 @@ void Player::UseItem()
 
 void Player::SetItem(ItemRef item)
 {
+    // 삭제를 나중에 해서 여러 번 먹어지는 오류 방지
+    if (item->GetState() == ObjectState::Dead) return;
+
     g_framework->SendGetItemPacket(item, std::static_pointer_cast<Player>(shared_from_this()));
     // 목숨은 먹으면 바로 획득
     if (item->GetItemType() == ItemType::Life) {

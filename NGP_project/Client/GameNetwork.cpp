@@ -180,6 +180,9 @@ void GameNetwork::ProcessRecv()
 	case S_MonsterDamaged:
 		break;
 	case S_ItemUseResult:
+		S_ItemUseResult_Packet useItemPacket;
+		memcpy(&useItemPacket, packet.data() + sizeof(Header), sizeof(S_ItemUseResult_Packet));
+		RecvItemUseResult(useItemPacket);
 		break;
 	case S_UpdateTimer:
 		S_UpdateTimer_Packet updateTimerPacket;
@@ -255,10 +258,11 @@ void GameNetwork::SendCollisionPacket(CollisionType c_type, int id1, ObjectType 
 	ProcessSend(PacketID::C_Collision, packet);
 }
 
-void GameNetwork::SendUseItemPacket(int id, ObjectType itemType)
+void GameNetwork::SendUseItemPacket(int id, ObjectType player, ItemType itemType)
 {
 	C_UseItem_Packet packet;
 	packet.objectID = id;
+	packet.objectType = player;
 	packet.itemType = itemType;
 
 	ProcessSend(PacketID::C_UseItem, packet);
@@ -435,6 +439,9 @@ void GameNetwork::RecvMonsterDamaged(S_MonsterDamaged_Packet monsterDamagedPacke
 
 void GameNetwork::RecvItemUseResult(S_ItemUseResult_Packet itemUseResultPacket)
 {
+	if (itemUseResultPacket.result) {
+		_gameScene->GetLocalPlayer()->UseItem();
+	}
 }
 
 void GameNetwork::RecvUpdateTimer(S_UpdateTimer_Packet updateTimerPacket)

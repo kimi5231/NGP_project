@@ -64,6 +64,10 @@ void GameScene::Update()
 	}
 	LeaveCriticalSection(&g_cs);
 
+	EnterCriticalSection(&g_cs);
+	_localPlayer->Update();
+	LeaveCriticalSection(&g_cs);
+
 	//		// 장애물
 	//		if (type == ObjectType::Obstacle && monster->IsCollision(object.get())) {
 	//			ObjectType monsterType = monster->GetObjectType();
@@ -411,37 +415,69 @@ void GameScene::ProcessInput()
 		if (downUp || downDown || downLeft || downRight)
 		{
 			Vertex playerPos = _localPlayer->GetPos();
-			Dir shootDir = Dir::Down;
+			Dir shootDir;
 
-			// shootDir 결정
-			if (downUp)
-			{
-				if (downRight) shootDir = Dir::RightUp;
-				else if (downLeft) shootDir = Dir::LeftUp;
-				else shootDir = Dir::Up;
+			// 1) 대각선 먼저 체크
+			if (downUp && downRight) {
+				shootDir = Dir::RightUp;
 			}
-			else if (downDown)
-			{
-				if (downRight) shootDir = Dir::RightDown;
-				else if (downLeft) shootDir = Dir::LeftDown;
-				else shootDir = Dir::Down;
+			else if (downUp && downLeft) {
+				shootDir = Dir::LeftUp;
 			}
-			else if (downLeft)
-			{
+			else if (downDown && downRight) {
+				shootDir = Dir::RightDown;
+			}
+			else if (downDown && downLeft) {
+				shootDir = Dir::LeftDown;
+			}
+			// 2) 단일 방향
+			else if (downUp) {
+				shootDir = Dir::Up;
+			}
+			else if (downDown) {
+				shootDir = Dir::Down;
+			}
+			else if (downLeft) {
 				shootDir = Dir::Left;
 			}
-			else if (downRight)
-			{
+			else if (downRight) {
 				shootDir = Dir::Right;
 			}
 
-			// 패킷 1회 전송
-			EnterCriticalSection(&g_cs);
-			_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
-			LeaveCriticalSection(&g_cs);
+			// 아이템 사용 여부에 따라 발사 방식 분리
+			if (useWaterWheel) {
+				// 아이템 사용 시: 8방향 발사
+				for (int i = 0; i < 8; ++i) {
+					EnterCriticalSection(&g_cs);
+					_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, Dir(i));
+					LeaveCriticalSection(&g_cs);
+				}
+			}
+			else if (useShotgun) {
+				// 샷건 모드: 기준 방향 중심으로 3방향 발사
+				FireProjectiles(shootDir);
+			}
+
+			else {
+				// 평소: 선택된 방향으로 1발만 발사
+				EnterCriticalSection(&g_cs);
+				_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
+				LeaveCriticalSection(&g_cs);
+			}
 		}
 	}
 
+	// 아이템 사용
+	if (input->GetButtonDown(KeyType::SpaceBar)) {
+		ItemRef item = _localPlayer->GetItem();
+
+		if (item) {
+			EnterCriticalSection(&g_cs);
+			_gameNetwork->SendUseItemPacket(_localPlayer->GetId(), _localPlayer->GetObjectType(), item->GetItemType());
+			LeaveCriticalSection(&g_cs);
+		}
+	}
+	
 		// 
 		//if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
 		//	Vertex playerPos = _localPlayer->GetPos();
@@ -500,20 +536,6 @@ void GameScene::ProcessInput()
 		//_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
 
 
-	//	// 물래방아 아이템 8방향으로 발사
-	//	if (useWaterWheel) {
-	//		if (input->GetButton(KeyType::Right) || input->GetButton(KeyType::Up) || input->GetButton(KeyType::Down) || input->GetButton(KeyType::Left)) {
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::Down, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::Right, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::RightDown, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-	//			_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-	//		}
-	//	}
-	//}
 
 	// 이동 키 Up
 	/*if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
@@ -554,10 +576,43 @@ void GameScene::ProcessInput()
 	//	}
 	//}
 
-	// 아이템 사용
-	//if (input->GetButtonDown(KeyType::SpaceBar)) {
-	//	_localPlayer->UseItem();
-	//}
 }
 
+void GameScene::FireProjectiles(Dir baseDir) {
+	Vertex playerPos = _localPlayer->GetPos();
 
+	std::vector<Dir> dirs;
+
+	switch (baseDir) {
+	case Dir::Right:
+		dirs = { Dir::Right, Dir::RightUp, Dir::RightDown };
+		break;
+	case Dir::Left:
+		dirs = { Dir::Left, Dir::LeftUp, Dir::LeftDown };
+		break;
+	case Dir::Up:
+		dirs = { Dir::Up, Dir::LeftUp, Dir::RightUp };
+		break;
+	case Dir::Down:
+		dirs = { Dir::Down, Dir::LeftDown, Dir::RightDown };
+		break;
+	case Dir::RightUp:
+		dirs = { Dir::RightUp, Dir::Right, Dir::Up };
+		break;
+	case Dir::RightDown:
+		dirs = { Dir::RightDown, Dir::Right, Dir::Down };
+		break;
+	case Dir::LeftUp:
+		dirs = { Dir::LeftUp, Dir::Left, Dir::Up };
+		break;
+	case Dir::LeftDown:
+		dirs = { Dir::LeftDown, Dir::Left, Dir::Down };
+		break;
+	}
+
+	for (Dir d : dirs) {
+		EnterCriticalSection(&g_cs);
+		_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, d);
+		LeaveCriticalSection(&g_cs);
+	}
+}

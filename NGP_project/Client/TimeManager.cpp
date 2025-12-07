@@ -73,7 +73,7 @@ void TimeManager::Tick(float lockFps)
 	if (_sampleCount > 0) _deltaTime /= _sampleCount;
 }
 
-bool TimeManager::CheckTimer(int& currentTime, int targetTime)
+bool TimeManager::CheckTimer(float& currentTime, float targetTime)
 {
 	currentTime += GetDeltaTime();
 

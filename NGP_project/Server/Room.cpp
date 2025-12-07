@@ -96,7 +96,6 @@ void Room::Update()
 		for (const auto& itemItem : _items)
 		{
 			if (itemItem.second->IsCollision(playerItem.second)) {
-				g_framework->SendGetItemPacket(itemItem.second, playerItem.second);
 				playerItem.second->SetItem(itemItem.second);
 				itemItem.second->SetState(ObjectState::Dead);
 			}

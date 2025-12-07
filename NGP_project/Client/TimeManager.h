@@ -9,7 +9,7 @@ public:
 	void Init();
 	void Update();
 	void Tick(float lockFps);
-	bool CheckTimer(int& currentTime, int targetTime);
+	bool CheckTimer(float& currentTime, float targetTime);
 
 	unsigned __int32 GetFps() { return _fps; }
 	float GetDeltaTime() { return _deltaTime; }

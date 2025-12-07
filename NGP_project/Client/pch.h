@@ -266,7 +266,8 @@ struct C_Collision_Packet
 struct C_UseItem_Packet
 {
     int objectID;
-    ObjectType itemType;
+    ObjectType objectType;
+    ItemType itemType;
 };
 
 struct C_StayGame_Packet

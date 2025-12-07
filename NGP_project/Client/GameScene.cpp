@@ -460,9 +460,8 @@ void GameScene::ProcessInput()
 			}
 			else if (useShotgun) {
 				// 샷건 모드: 기준 방향 중심으로 3방향 발사
-				FireProjectiles(shootDir);
+				ShotGunFire(shootDir);
 			}
-
 			else {
 				// 평소: 선택된 방향으로 1발만 발사
 				EnterCriticalSection(&g_cs);
@@ -593,7 +592,7 @@ void GameScene::ProcessInput()
 
 }
 
-void GameScene::FireProjectiles(Dir baseDir) {
+void GameScene::ShotGunFire(Dir baseDir) {
 	Vertex playerPos = _localPlayer->GetPos();
 
 	std::vector<Dir> dirs;

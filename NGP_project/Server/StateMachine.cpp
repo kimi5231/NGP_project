@@ -28,6 +28,11 @@ void MoveToTargetState::Tick(Monster* self)
 	}
 }
 
+void IdleState::Enter(Monster* self)
+{
+	self->SetState(ObjectState::Idle);
+}
+
 // SetTarget
 void FindTargetState::Enter(Monster* self)
 {
@@ -156,3 +161,4 @@ void StateMachine::ChangeState(State* state)
 
 	_curState = state;
 }
+

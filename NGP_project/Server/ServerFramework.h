@@ -47,6 +47,7 @@ public:
 	void SendUpdateTimerPacket(bool broadcast, SOCKET client = 0);
 	void SendGetItemPacket(ItemRef item, PlayerRef player);
 	void SendItemUseResultPacket(PlayerRef player, bool result);
+	void SendEndGamePacket(bool broadcast, SOCKET client = 0);
 
 	template <class T>
 	void Broadcast(PacketID id, const T& packetData);
@@ -70,6 +71,7 @@ private:
 
 	SOCKET _listenSocket{}; 
 	std::vector<ClientRef> _clients;
+	std::vector<ClientRef> _removeClients;
 
 	int _generateClientID{};
 

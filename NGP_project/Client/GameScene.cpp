@@ -315,7 +315,7 @@ void GameScene::SyncMonster(int id, const Vertex& pos, const Dir dir, const Obje
 	LeaveCriticalSection(&g_cs);
 }
 
-void GameScene::SyncBullet(int id, const Vertex& pos)
+void GameScene::SyncObject(int id, const Vertex& pos)
 {
 	EnterCriticalSection(&g_cs);
 	if (_objects.find(id) != _objects.end())

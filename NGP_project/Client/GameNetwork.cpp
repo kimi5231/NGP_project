@@ -171,7 +171,7 @@ void GameNetwork::ProcessRecv()
 		memcpy(&dirPacket, packet.data() + sizeof(Header), sizeof(S_UpdateDir_Packet));
 		RecvUpdateDir(dirPacket);
 		break;
-	case S_Move:	// Player의 pos, dir, state 다 받음
+	case S_Move:
 		S_Move_Packet movePacket;
 		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(S_Move_Packet));
 		RecvMove(movePacket);
@@ -450,7 +450,8 @@ void GameNetwork::RecvMove(S_Move_Packet movePacket)
 		_gameScene->SyncPlayer(movePacket.objectID, movePacket.pos, movePacket.dir, movePacket.state);
 		break;
 	case ObjectType::Bullet:
-		_gameScene->SyncBullet(movePacket.objectID, movePacket.pos);
+	case ObjectType::Bomb:
+		_gameScene->SyncObject(movePacket.objectID, movePacket.pos);
 		break;
 	case ObjectType::NormalMonster:
 	case ObjectType::TankMonster:

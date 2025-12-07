@@ -359,19 +359,14 @@ void ServerFramework::SendGetItemPacket(ItemRef item, PlayerRef player)
 	LeaveCriticalSection(&g_sendCS);
 }
 
-void ServerFramework::SendItemUseResultPacket(PlayerRef player, bool result)
+void ServerFramework::SendItemUseResultPacket(bool result, ItemType type, bool broadcast, SOCKET client)
 {
-	S_ItemUseResult_Packet packetData{ result };
+	S_ItemUseResult_Packet packetData{ result, type };
 	// SendEvent 생성
 	SendEventRef<S_ItemUseResult_Packet> event = std::make_shared<SendEvent<S_ItemUseResult_Packet>>();
-	// 본인한테만 알리면 되므로 false
-	event->isBroadcast = false;
-	// player와 대응되는 client 찾기
-	for (ClientRef& client : _clients)
-	{
-		if (client->player == player)
-			event->clientSocket = client->socket;
-	}
+	
+	event->isBroadcast = broadcast;
+	event->clientSocket = client;
 	event->packetID = S_ItemUseResult;
 	event->packetData = packetData;
 
@@ -482,7 +477,7 @@ void ServerFramework::ProcessUseItemPacket(C_UseItem_Packet packet)
 {
 	// 아이템 사용 결과값
 	bool result = false;
-
+	
 	PlayerRef player = dynamic_pointer_cast<Player>(_room->GetObject(packet.objectType, packet.objectID));
 
 	// 사용하려는 아이템이 실제로 있는지 확인
@@ -492,6 +487,16 @@ void ServerFramework::ProcessUseItemPacket(C_UseItem_Packet packet)
 		result = true;
 	}
 
-	// 사용 요청한 클라이언트에게 결과 알리기
-	SendItemUseResultPacket(player, result);
+	// 아이템이 번개이거나 모래시계일 때, 모두에게 알리기
+	if (packet.itemType == ItemType::Lightning || packet.itemType == ItemType::Hourglass)
+		SendItemUseResultPacket(result, packet.itemType, true);
+	else
+	{
+		// player와 대응되는 client 찾기
+		for (ClientRef& client : _clients)
+		{
+			if (client->player == player)
+				SendItemUseResultPacket(result, packet.itemType, false, client->socket);
+		}
+	}
 }

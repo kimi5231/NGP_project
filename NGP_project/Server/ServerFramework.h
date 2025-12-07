@@ -46,7 +46,7 @@ public:
 	void SendUpdateTimerPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(bool broadcast, SOCKET client = 0);
 	void SendGetItemPacket(ItemRef item, PlayerRef player);
-	void SendItemUseResultPacket(PlayerRef player, bool result);
+	void SendItemUseResultPacket(bool result, ItemType type, bool broadcast, SOCKET client = 0);
 	void SendEndGamePacket(bool broadcast, SOCKET client = 0);
 
 	template <class T>

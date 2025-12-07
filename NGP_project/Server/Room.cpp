@@ -32,7 +32,8 @@ Room::~Room()
 }
 
 void Room::Update()
-{
+{	
+	// 인원이 충족되면 게임 시작
 	if (_playerCount == 2)
 		_state = RoomState::Playing;
 
@@ -49,8 +50,24 @@ void Room::Update()
 		item.second->Update();
 	LeaveCriticalSection(&g_objectCS);
 
-	if (_state != RoomState::Playing)
+	// 대기중에는 작업 패스
+	if (_state == RoomState::Idle)
 		return;
+
+	// 살아있는 Player가 있는지 확인
+	bool isAlive = false;
+	for (const auto& item : _players)
+	{
+		if (item.second->GetState() != ObjectState::Dead)
+			isAlive = true;
+	}
+
+	// 모든 Player가 죽으면 게임 종료
+	if (!isAlive)
+	{
+		ClearStage();
+		EndGame();
+	}
 
 	// Timer Update
 	static float sumTime = 1;
@@ -71,7 +88,6 @@ void Room::Update()
 			ChangeNextStage();
 	}
 
-
 	EnterCriticalSection(&g_objectCS);
 	// Player 충돌 처리
 	for (const auto& playerItem : _players)
@@ -83,6 +99,7 @@ void Room::Update()
 				playerItem.second->Damaged(monsterItem.second->GetDamage());
 			}
 		}
+
 		// bomb과 충돌 처리
 		for (const auto& bombItem : _bombs)
 		{
@@ -293,8 +310,20 @@ void Room::ChangeNextStage()
 	// Stage 클리어
 	ClearStage();
 
+	// Timer Reset
+	_timer = 50;
+
+	// Player Pos, State Reset
+	for (const auto& item : _players)
+	{
+		item.second->SetPos({ 400, 300 });
+		g_framework->SendMovePacket(item.second, true);
+		item.second->SetState(ObjectState::Idle);
+		g_framework->SenUpdateObjectStatePacket(item.second, true);
+	}
+
 	int sizeOffset{ CELL_SIZE / 2 };
-	switch (_curStage)
+	switch (_curStage++)
 	{
 	case 1:
 		// Stage2 장애물 생성
@@ -336,21 +365,14 @@ void Room::ChangeNextStage()
 		EndGame();
 		break;
 	}
-
-	_curStage++;
-	_timer = 50;
-
-	// Player Pos Reset
-	for (const auto& item : _players)
-	{
-		item.second->SetPos({ 400, 300 });
-		g_framework->SendMovePacket(item.second, true);
-	}
 }
 
 void Room::ClearStage()
 {
 	// Player 제외 Stage에 있던 모든 Object 삭제
+	for (const auto& monsterItem : _monsters)
+		g_framework->AddRemoveObject(monsterItem.second);
+
 	for (const auto& itemItem : _items)
 		g_framework->AddRemoveObject(itemItem.second);
 
@@ -369,8 +391,22 @@ void Room::EndGame()
 	// Stage Reset
 	_curStage = 1;
 
+	// Timer Reset
+	_timer = 50;
+
 	// Room State Set
 	_state = RoomState::Idle;
+
+	// Player Pos, State Reset
+	for (const auto& item : _players)
+	{
+		item.second->SetPos({ 400, 300 });
+		g_framework->SendMovePacket(item.second, true);
+		item.second->SetState(ObjectState::Idle);
+		g_framework->SenUpdateObjectStatePacket(item.second, true);
+		item.second->_status._life = 1;
+		g_framework->SendSetLifePacket(item.second);
+	}
 
 	// 게임 종료 알리기
 	g_framework->SendEndGamePacket(true);

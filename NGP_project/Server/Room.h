@@ -38,7 +38,7 @@ private:
 	std::unordered_map<int, BombRef> _bombs;
 	std::unordered_map<int, GameObjectRef> _obstacles;
 
-	int _curStage{ 4 };
+	int _curStage{ 1 };
 
 	int _generateID;
 	int _playerCount;

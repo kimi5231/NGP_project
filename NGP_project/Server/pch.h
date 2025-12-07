@@ -172,6 +172,7 @@ struct S_GetItem_Packet
 struct S_ItemUseResult_Packet
 {
     bool result;
+    ItemType type;
 };
 
 struct S_EndGame_Packet

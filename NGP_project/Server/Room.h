@@ -19,12 +19,13 @@ public:
 
 	void ChangeNextStage();
 	void ClearStage();
+	void EndGame();
 
 public:
 	std::unordered_map<int, PlayerRef>& GetPlayers() { return _players; }
 	std::unordered_map<int, MonsterRef>& GetMonsters() { return _monsters; }
 	GameObjectRef GetObject(ObjectType type, int id);
-	int GetPlayerCount() { return _playerCount; }
+	RoomState GetRoomState() { return _state; }
 	void SetRoomState(RoomState state) { _state = state; }
 	int GetTimer() { return _timer; }
 
@@ -36,7 +37,7 @@ private:
 	std::unordered_map<int, BombRef> _bombs;
 	std::unordered_map<int, GameObjectRef> _obstacles;
 
-	int _curStage{ 1 };
+	int _curStage{ 4 };
 
 	int _generateID;
 	int _playerCount;

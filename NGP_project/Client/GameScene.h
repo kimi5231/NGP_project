@@ -71,6 +71,10 @@ private:
 	// UI
 	std::vector<std::shared_ptr<UI>> _ui;
 	ProgressBar _timerUI{ Vertex{ 650, 30}, Vertex{1000, 20}, GAME_TIME };
+	Button* _stayButton{};
+	Button* _leaveButton{};
+	bool _isStayButtonActive = true;
+
 	float _stagetime{};
 	int _curStage{1};
 

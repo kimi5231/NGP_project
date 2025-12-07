@@ -67,6 +67,26 @@ void GameScene::Update()
 	_localPlayer->Update();
 	LeaveCriticalSection(&g_cs);
 
+	EnterCriticalSection(&g_cs);
+	if ( _isStayButtonActive && _stayButton && _leaveButton)
+	{
+		POINT mousePos;
+		GetCursorPos(&mousePos);
+		ScreenToClient(hWnd, &mousePos);
+
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		{
+			if (_stayButton->Intersects(mousePos))
+			{
+				_isStayButtonActive = false;
+			}
+			if (_leaveButton->Intersects(mousePos))
+			{
+				PostQuitMessage(0);
+			}
+		}
+	}
+	LeaveCriticalSection(&g_cs);
 	//		// 장애물
 	//		if (type == ObjectType::Obstacle && monster->IsCollision(object.get())) {
 	//			ObjectType monsterType = monster->GetObjectType();
@@ -154,7 +174,11 @@ void GameScene::Render(HDC hdc)
 			ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
 		}
 	}
-
+	if ( _isStayButtonActive && _stayButton && _leaveButton)
+	{
+		_stayButton->Render(memDC, memDCImage, 0);
+		_leaveButton->Render(memDC, memDCImage, 0);
+	}
 	_timerUI.Render(memDC);
 	
 	LeaveCriticalSection(&g_cs);
@@ -279,10 +303,14 @@ void GameScene::AddEndGameUi(bool isStay, Vertex center, Vertex size, std::wstri
 	DWORD StayButtonColor{ RGB(51, 102, 255) };
 	DWORD LeaveButtonColor{ RGB(255, 102, 153) };
 
+	EnterCriticalSection(&g_cs);
 	if (isStay)
-		_ui.push_back(std::make_shared<Button>(center, size, text, StayButtonColor));
+		_stayButton = new Button(center, size, text, StayButtonColor);
 	else
-		_ui.push_back(std::make_shared<UI>(center, size, text, LeaveButtonColor));
+		_leaveButton = new Button(center, size, text, LeaveButtonColor);
+	LeaveCriticalSection(&g_cs);
+
+	_isStayButtonActive = true;
 }
 
 Dir GameScene::ConvertVecToDir(const Vertex& dir)

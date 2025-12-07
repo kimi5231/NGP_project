@@ -5,7 +5,7 @@
 TankMonster::TankMonster()
 {
     _type = ObjectType::TankMonster;
-
+    _status._hp = 20;
 }
 
 void TankMonster::FindTarget(GameObject* other)

@@ -35,6 +35,7 @@ enum class ObjectState
     Move,
     UseSkill,
     Dead,
+    Damaged,
 };
 
 enum class ObjectType

@@ -28,7 +28,6 @@ protected:
 	SpawnCallback _spawnCallback;
 	bool _isFollow{ true };
 	bool _canUseSkill{ false };
-	bool _isCollision{ false };
 
 	std::unique_ptr<StateMachine> _stateMachine;
 };

@@ -48,6 +48,7 @@ public:
 	void SendGetItemPacket(ItemRef item, PlayerRef player);
 	void SendItemUseResultPacket(bool result, ItemType type, bool broadcast, SOCKET client = 0);
 	void SendEndGamePacket(bool broadcast, SOCKET client = 0);
+	void SendSetLifePacket(PlayerRef player);
 
 	template <class T>
 	void Broadcast(PacketID id, const T& packetData);

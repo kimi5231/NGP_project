@@ -14,7 +14,7 @@ Player::Player()
 
     _status._hp = 10;
     _status._speed = PLAYER_SPEED;
-    _status._life = 2;
+    _status._life = 1;
 	_type = ObjectType::Player;
 }
 
@@ -65,7 +65,12 @@ void Player::SetItem(ItemRef item)
 void Player::Damaged(int damage)
 {
     if (!_invincible) {// 무적 아닐 때 한번만
-        if (--_status._life == 0) {
+        if (_status._life <= 0) return;
+
+        --_status._life;
+        g_framework->SendSetLifePacket(std::static_pointer_cast<Player>(shared_from_this()));
+
+        if (_status._life == 0) {
             _state = ObjectState::Dead;
             g_framework->SenUpdateObjectStatePacket(shared_from_this(), true);
             return;

@@ -53,6 +53,13 @@ public:
 
 	void SyncObjectTimer(const int timer, const int id);
 
+	void SetPlayerState(int id, const ObjectState state);
+	void SetMonsterState(int id, const ObjectState state);
+
+	void SetLifeOfLocalPlayer(int life);
+
+	void SetObjectState(int id, const ObjectState state);
+
 	// Get UI
 	ProgressBar& GetTimerUI() { return _timerUI; }
 	

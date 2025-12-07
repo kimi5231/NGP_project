@@ -295,13 +295,11 @@ void GameScene::SyncPlayer(int id, const Vertex& pos, const Dir dir, const Objec
 	if (_localPlayer->GetId() == id) {
 		_localPlayer->SetPos(pos);
 		_localPlayer->SetDirAndFrame(dir);
-		_localPlayer->SetState(state);
 	}
 	if (_players.find(id) != _players.end()) 
 	{
 		_players[id]->SetPos(pos);
 		_players[id]->SetDirAndFrame(dir);
-		_players[id]->SetState(state);
 	}
 	LeaveCriticalSection(&g_cs);
 }
@@ -313,7 +311,6 @@ void GameScene::SyncMonster(int id, const Vertex& pos, const Dir dir, const Obje
 	{	
 		_monsters[id]->SetPos(pos);
 		_monsters[id]->SetDirAndFrame(dir);
-		_monsters[id]->SetState(state);
 	}
 	LeaveCriticalSection(&g_cs);
 }
@@ -341,6 +338,46 @@ void GameScene::SyncObjectTimer(const int timer, const int id)
 	if (_objects.find(id) != _objects.end())
 	{
 		_objects[id]->SetTimer(timer);
+	}
+	LeaveCriticalSection(&g_cs);
+}
+
+void GameScene::SetPlayerState(int id, const ObjectState state)
+{
+	EnterCriticalSection(&g_cs);
+	if (_localPlayer->GetId() == id) {
+		_localPlayer->SetState(state);
+	}
+	if (_players.find(id) != _players.end())
+	{
+		_players[id]->SetState(state);
+	}
+	LeaveCriticalSection(&g_cs);
+}
+
+void GameScene::SetMonsterState(int id, const ObjectState state)
+{
+	EnterCriticalSection(&g_cs);
+	if (_monsters.find(id) != _monsters.end())
+	{
+		_monsters[id]->SetState(state);
+	}
+	LeaveCriticalSection(&g_cs);
+}
+
+void GameScene::SetLifeOfLocalPlayer(int life)
+{
+	EnterCriticalSection(&g_cs);
+	_localPlayer->_status._life = life;
+	LeaveCriticalSection(&g_cs);
+}
+
+void GameScene::SetObjectState(int id, const ObjectState state)
+{
+	EnterCriticalSection(&g_cs);
+	if (_objects.find(id) != _objects.end())
+	{
+		_objects[id]->SetState(state);
 	}
 	LeaveCriticalSection(&g_cs);
 }

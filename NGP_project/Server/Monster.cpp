@@ -64,12 +64,22 @@ void Monster::FindTarget(GameObject* other)
 {
     SetTargetPos({ float(randWidth(gen)),
                    float(randHeight(gen)) });
+
+    int sizeOffset = CELL_SIZE / 2;
+
+    float minX = gBackgroundRect.left + sizeOffset + CELL_SIZE - 5;                      // 벽 오른쪽 한 칸
+    float maxX = gBackgroundRect.left + sizeOffset + (BOARD_SIZE - 2) * CELL_SIZE + 5;   // 벽 왼쪽 한 칸 내부
+
+    float minY = gBackgroundRect.top + sizeOffset + CELL_SIZE;                       // 위쪽 벽 아래 한 칸
+    float maxY = gBackgroundRect.top + sizeOffset + (BOARD_SIZE - 2) * CELL_SIZE;    // 아래쪽 벽 위 한 칸
+
+    
+    _targetPos.x = std::clamp(_targetPos.x, minX, maxX);
+    _targetPos.y = std::clamp(_targetPos.y, minY, maxY);
 }
 
 bool Monster::Move()
 {
-    if (_isCollision) return false;
-
     float dx = _targetPos.x - _pos.x;
     float dy = _targetPos.y - _pos.y;
     double distance = sqrt(dx * dx + dy * dy);
@@ -130,7 +140,7 @@ void Monster::Damaged(int damage)
 
 void Monster::PushOther(MonsterRef other)
 {
-    _isCollision = true;
+    //_isCollision = true;
     Vertex otherPos = other->GetPos();
     float dx = _pos.x - otherPos.x;
     float dy = _pos.y - otherPos.y;
@@ -165,5 +175,5 @@ void Monster::PushOther(MonsterRef other)
     g_framework->SendMovePacket(shared_from_this(), true);
     g_framework->SendMovePacket(other, true);
 
-    _isCollision = false;
+    //_isCollision = false;
 }

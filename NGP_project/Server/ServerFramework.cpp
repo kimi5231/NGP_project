@@ -396,6 +396,26 @@ void ServerFramework::SendEndGamePacket(bool broadcast, SOCKET client)
 	LeaveCriticalSection(&g_sendCS);
 }
 
+void ServerFramework::SendSetLifePacket(PlayerRef player)
+{
+	S_SetLife_Packet packetData{ player->_status._life };
+	// SendEvent 생성
+	SendEventRef<S_SetLife_Packet> event = std::make_shared<SendEvent<S_SetLife_Packet>>();
+	event->isBroadcast = false;
+	// player와 대응되는 client 찾기
+	for (ClientRef& client : _clients)
+	{
+		if (client->player == player)
+			event->clientSocket = client->socket;
+	}
+	event->packetID = S_SetLife;
+	event->packetData = packetData;
+
+	EnterCriticalSection(&g_sendCS);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_sendCS);
+}
+
 template<class T>
 void ServerFramework::Broadcast(PacketID id, const T& packetData)
 {

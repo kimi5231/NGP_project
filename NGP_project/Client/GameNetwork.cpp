@@ -161,7 +161,10 @@ void GameNetwork::ProcessRecv()
 		memcpy(&removeObjectPacket, packet.data() + sizeof(Header), sizeof(S_RemoveObject_Packet));
 		RecvRemoveObject(removeObjectPacket);
 		break;
-	case S_UpdateObjectState:	
+	case S_UpdateObjectState:
+		S_UpdateObjectState_Packet updateStatePacket;
+		memcpy(&updateStatePacket, packet.data() + sizeof(Header), sizeof(S_UpdateObjectState_Packet));
+		RecvUpdateObjectState(updateStatePacket);
 		break;
 	case S_UpdateDir:
 		S_UpdateDir_Packet dirPacket;
@@ -178,6 +181,11 @@ void GameNetwork::ProcessRecv()
 	case S_CollisionResult:
 		break;
 	case S_MonsterDamaged:
+		break;
+	case S_SetLife:
+		S_SetLife_Packet setLifePacket;
+		memcpy(&setLifePacket, packet.data() + sizeof(Header), sizeof(S_SetLife_Packet));
+		RecvSetLife(setLifePacket);
 		break;
 	case S_ItemUseResult:
 		S_ItemUseResult_Packet useItemPacket;
@@ -408,6 +416,26 @@ void GameNetwork::RecvRemoveObject(S_RemoveObject_Packet removeObjectPacket)
 
 void GameNetwork::RecvUpdateObjectState(S_UpdateObjectState_Packet updateObjectStatePacket)
 {
+	switch (updateObjectStatePacket.type)
+	{
+	case ObjectType::Player:
+		_gameScene->SetPlayerState(updateObjectStatePacket.objectID, updateObjectStatePacket.state);
+		break;
+
+	case ObjectType::NormalMonster:
+	case ObjectType::TankMonster:
+	case ObjectType::BomberMonster:
+	case ObjectType::RespawnMonster:
+	case ObjectType::ObstacleMonster:
+		_gameScene->SetMonsterState(updateObjectStatePacket.objectID, updateObjectStatePacket.state);
+		break;
+	case ObjectType::Bomb:
+	case ObjectType::Bullet:
+	case ObjectType::Item:
+	case ObjectType::Obstacle:
+		_gameScene->SetObjectState(updateObjectStatePacket.objectID, updateObjectStatePacket.state);
+		break;
+	}
 }
 
 void GameNetwork::RecvUpdateDir(S_UpdateDir_Packet updateDirPacket)
@@ -480,4 +508,9 @@ void GameNetwork::RecvEndGame()
 {
 	_gameScene->AddEndGameUi(true, Vertex{ 270, 300 }, Vertex{ 150, 150 }, L"Stay");
 	_gameScene->AddEndGameUi(false, Vertex{ 500, 300 }, Vertex{ 150, 150 }, L"Leave");
+}
+
+void GameNetwork::RecvSetLife(S_SetLife_Packet lifePacket)
+{
+	_gameScene->SetLifeOfLocalPlayer(lifePacket.life);
 }

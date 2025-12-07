@@ -150,7 +150,7 @@ void GameScene::Render(HDC hdc)
 		}
 	}
 
-	_timerUI.Render(memDC, memDCImage, _stagetime);
+	_timerUI.Render(memDC);
 	
 	LeaveCriticalSection(&g_cs);
 
@@ -468,7 +468,9 @@ void GameScene::ProcessInput()
 
 	// 아이템 사용
 	if (input->GetButtonDown(KeyType::SpaceBar)) {
+		EnterCriticalSection(&g_cs);
 		ItemRef item = _localPlayer->GetItem();
+		LeaveCriticalSection(&g_cs);
 
 		if (item) {
 			EnterCriticalSection(&g_cs);
@@ -477,6 +479,14 @@ void GameScene::ProcessInput()
 		}
 	}
 	
+	// 폭탄 발로 차기
+	if (input->GetButtonDown(KeyType::LeftShift))
+	{
+		EnterCriticalSection(&g_cs);
+		_gameNetwork->SendKickBombPacket(_localPlayer->GetId(), _localPlayer->GetDir());
+		LeaveCriticalSection(&g_cs);
+	}
+
 		// 
 		//if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
 		//	Vertex playerPos = _localPlayer->GetPos();

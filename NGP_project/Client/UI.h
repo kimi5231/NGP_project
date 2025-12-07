@@ -39,10 +39,11 @@ public:
 	{
 		_text = L"";
 		_brushColor = RGB(0, 255, 0);
-		_isNumText = true;
+		_isNumText = false;
 		_maxSize = _box._halfSize.x;
 	}
 
+	virtual void Render(HDC hdc);
 	void Update(int severTimer);
 
 	UINT _maxProgress, _progress;

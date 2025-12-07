@@ -115,6 +115,7 @@ void Player::SetDirAndFrame(Dir dir)
     case Dir::RightDown:   _curFrame.y = 2; break;
     }
 
+    SetDir(dir);
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }
 

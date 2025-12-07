@@ -91,6 +91,7 @@ enum PacketID
     // Client
     C_Move,
     C_CreateProjectile,
+    C_KickBomb,
     C_Collision,
     C_UseItem,
     C_StayGame,
@@ -174,7 +175,7 @@ struct S_ItemUseResult_Packet
 
 struct S_EndGame_Packet
 {
-    bool end;   // 내용 아무거나 넣는데 수정이 필요하다면 해주십쇼..
+    bool end;
 };
 
 // Client Packet
@@ -194,6 +195,13 @@ struct C_CreateProjectile_Packet
     Vertex pos;
     Dir dir;
 };
+
+struct C_KickBomb_Packet
+{
+    int objectID;
+    Dir dir;
+};
+
 struct C_Collision_Packet
 {
     CollisionType collisionType;
@@ -229,7 +237,7 @@ using SendEventRef = std::shared_ptr<SendEvent<T>>;
 
 using EventType = std::variant<SendEventRef<S_AddObject_Packet>, SendEventRef<S_RemoveObject_Packet>,
     SendEventRef<S_UpdateObjectState_Packet>, SendEventRef<S_Move_Packet>, SendEventRef<S_UpdateTimer_Packet>,
-    SendEventRef<S_GetItem_Packet>, SendEventRef<S_ItemUseResult_Packet>>;
+    SendEventRef<S_GetItem_Packet>, SendEventRef<S_ItemUseResult_Packet>, SendEventRef<S_EndGame_Packet>>;
 
 using ClientRef = std::shared_ptr<class Client>;
 using GameObjectRef = std::shared_ptr<class GameObject>;

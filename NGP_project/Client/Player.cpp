@@ -55,12 +55,12 @@ void Player::UseItem()
 
 void Player::SetItem(ItemType type)
 {
-    ItemRef item = std::make_shared<Item>(type);
     // 목숨은 먹으면 바로 획득
     if (type == ItemType::Life) {
-        item->ChangeState(this);
+        _status._life++;
         return;
     }
+    ItemRef item = std::make_shared<Item>(type);
     _item.first = item;
 }
 

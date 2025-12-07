@@ -156,6 +156,11 @@ void Room::Update()
 			{
 				monsterItem.second->UndoPos();
 			}
+			//폭탄/장애물 몬스터는 장애물에 걸리면 경로 다시 탐색
+			ObjectType monsterType = monsterItem.second->GetObjectType();
+			if (monsterType == ObjectType::BomberMonster || monsterType == ObjectType::ObstacleMonster) {
+				monsterItem.second->FindTarget(nullptr);
+			}
 		}
 	}
 	LeaveCriticalSection(&g_objectCS);

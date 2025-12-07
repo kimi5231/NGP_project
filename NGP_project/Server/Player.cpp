@@ -26,11 +26,8 @@ void Player::Update()
     }
 
     if (_item.second) {
-        //if (useLightning) {   // 번개 아이템 사용 시 바로 제거
-        //    _item.second = nullptr;
-        //}
         if (GET_SINGLE(TimeManager)->CheckTimer(_itemTimer, ITEM_TIME)) {
-            _item.second->Expired(this);
+            //_item.second->Expired(this);
             _item.second = nullptr;
         }
     }
@@ -41,13 +38,13 @@ void Player::UseItem()
     if (_item.first) {
         // 사용 중이던 아이템 Expired
         if (_item.second) {
-            _item.second->Expired(this);
+            //_item.second->Expired(this);
             _item.second = nullptr;
         }
 
         _item.second = _item.first;
         _item.first = nullptr;
-        _item.second->ChangeState(this);
+        //_item.second->ChangeState(this);
     }
 }
 
@@ -56,7 +53,7 @@ void Player::SetItem(ItemRef item)
     g_framework->SendGetItemPacket(item, std::static_pointer_cast<Player>(shared_from_this()));
     // 목숨은 먹으면 바로 획득
     if (item->GetItemType() == ItemType::Life) {
-        item->ChangeState(this);
+        _status._life++;
         return;
     }
     _item.first = item;

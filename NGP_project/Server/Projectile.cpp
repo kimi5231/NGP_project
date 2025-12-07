@@ -9,7 +9,8 @@ Projectile::Projectile(Dir dir, const Vertex& pos)
 	: GameObject()
 {
 	_dir = dir;
-	_status._speed = 3;
+	if(g_useMagazine) _status._speed = BULLET_SPEED * ADD_SPEED;
+	else _status._speed = BULLET_SPEED;
 	_prevPos = pos;
 	_pos = pos;
 	_type = ObjectType::Bullet;

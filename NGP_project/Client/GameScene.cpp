@@ -47,16 +47,15 @@ GameScene::~GameScene()
 void GameScene::Update()
 {
 	EnterCriticalSection(&g_cs);
-
 	if (!_localPlayer.get())
 	{
 		LeaveCriticalSection(&g_cs);
 		return;
 	}
-	
+
+	if (_localPlayer->GetState() != ObjectState::Dead)
+		ProcessInput();
 	LeaveCriticalSection(&g_cs);
-	
-	ProcessInput();
 
 	EnterCriticalSection(&g_cs);
 	for (const auto& object : _objects) {
@@ -121,14 +120,20 @@ void GameScene::Render(HDC hdc)
 
 	// Local Player
 	if (_localPlayer) {
-		_localPlayer->Render(memDC, memDCImage);
-		_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
+		if (_localPlayer->GetState() != ObjectState::Dead)
+		{
+			_localPlayer->Render(memDC, memDCImage);
+			_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
+		}
 	}
 
 	// Other Player
 	for (const auto& [id, player] : _players) {
-		player->Render(memDC, memDCImage);
-		player->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 255, 0));	// 디버깅용
+		if (player->GetState() != ObjectState::Dead)
+		{
+			player->Render(memDC, memDCImage);
+			player->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 255, 0));	// 디버깅용
+		}
 	}
 
 	// Monster
@@ -455,9 +460,8 @@ void GameScene::ProcessInput()
 			}
 			else if (useShotgun) {
 				// 샷건 모드: 기준 방향 중심으로 3방향 발사
-				FireProjectiles(shootDir);
+				ShotGunFire(shootDir);
 			}
-
 			else {
 				// 평소: 선택된 방향으로 1발만 발사
 				EnterCriticalSection(&g_cs);
@@ -588,7 +592,7 @@ void GameScene::ProcessInput()
 
 }
 
-void GameScene::FireProjectiles(Dir baseDir) {
+void GameScene::ShotGunFire(Dir baseDir) {
 	Vertex playerPos = _localPlayer->GetPos();
 
 	std::vector<Dir> dirs;

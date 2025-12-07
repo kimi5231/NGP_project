@@ -8,3 +8,4 @@ extern CRITICAL_SECTION g_sendCS;
 
 extern std::random_device g_rd;
 extern std::mt19937 gen;
+extern bool g_useMagazine;

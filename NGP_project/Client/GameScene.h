@@ -56,7 +56,7 @@ public:
 	// Get UI
 	ProgressBar& GetTimerUI() { return _timerUI; }
 	
-	void FireProjectiles(Dir baseDir);
+	void ShotGunFire(Dir baseDir);
 public:
 	virtual void ProcessInput() override;
 

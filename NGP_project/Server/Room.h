@@ -22,6 +22,7 @@ public:
 
 public:
 	std::unordered_map<int, PlayerRef>& GetPlayers() { return _players; }
+	std::unordered_map<int, MonsterRef>& GetMonsters() { return _monsters; }
 	GameObjectRef GetObject(ObjectType type, int id);
 	int GetPlayerCount() { return _playerCount; }
 	void SetRoomState(RoomState state) { _state = state; }

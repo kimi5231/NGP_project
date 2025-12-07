@@ -53,26 +53,14 @@ Item::Item(ItemType type, Vertex pos)
 void Item::ChangeState(GameObject* player)
 {
 	switch (_type) {
-	case ItemType::Life:
-		player->_status._life++;
-		break;
-	case ItemType::Magazine:
-		bulletSpeed = BULLET_TIME / ADD_SPEED;
-		break;
-	case ItemType::Lightning:
-		useLightning = true;
-		break;
 	case ItemType::Waterwheel:
 		useWaterWheel = true;
 		break;
 	case ItemType::Coffee:
-		player->_status._speed = PLAYER_SPEED + ADD_SPEED;
+		player->_status._speed = PLAYER_SPEED * ADD_SPEED;
 		break;
 	case ItemType::Shotgun:
 		useShotgun = true;
-		break;
-	case ItemType::Hourglass:
-		useHourglass = true;
 		break;
 	}
 }
@@ -80,9 +68,6 @@ void Item::ChangeState(GameObject* player)
 void Item::Expired(GameObject* player)
 {
 	switch (_type) {
-	case ItemType::Magazine:
-		bulletSpeed = BULLET_TIME;
-		break;
 	case ItemType::Coffee:
 		player->_status._speed = PLAYER_SPEED;
 		break;
@@ -91,9 +76,6 @@ void Item::Expired(GameObject* player)
 		break;
 	case ItemType::Shotgun:
 		useShotgun = false;
-		break;
-	case ItemType::Hourglass:
-		useHourglass = false;
 		break;
 	}
 }

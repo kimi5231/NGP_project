@@ -13,7 +13,7 @@ public:
 
 class IdleState : public State{
 public:
-	virtual void Enter(Monster* self) override {};
+	virtual void Enter(Monster* self) override;
 	virtual void Exit(Monster* self) override {};
 	virtual void Tick(Monster* self) override {};
 };

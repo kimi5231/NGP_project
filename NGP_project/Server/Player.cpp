@@ -27,7 +27,7 @@ void Player::Update()
 
     if (_item.second) {
         if (GET_SINGLE(TimeManager)->CheckTimer(_itemTimer, ITEM_TIME)) {
-            //_item.second->Expired(this);
+            _item.second->Expired(this);
             _item.second = nullptr;
         }
     }
@@ -38,13 +38,13 @@ void Player::UseItem()
     if (_item.first) {
         // 사용 중이던 아이템 Expired
         if (_item.second) {
-            //_item.second->Expired(this);
+            _item.second->Expired(this);
             _item.second = nullptr;
         }
 
         _item.second = _item.first;
         _item.first = nullptr;
-        //_item.second->ChangeState(this);
+        _item.second->ChangeState(this);
     }
 }
 

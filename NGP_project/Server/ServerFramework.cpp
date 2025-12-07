@@ -375,6 +375,21 @@ void ServerFramework::SendItemUseResultPacket(PlayerRef player, bool result)
 	LeaveCriticalSection(&g_sendCS);
 }
 
+void ServerFramework::SendEndGamePacket(bool broadcast, SOCKET client)
+{
+	S_EndGame_Packet packetData{ true };
+	// SendEvent 생성
+	SendEventRef<S_EndGame_Packet> event = std::make_shared<SendEvent<S_EndGame_Packet>>();
+	event->isBroadcast = broadcast;
+	event->clientSocket = client;
+	event->packetID = S_EndGame;
+	event->packetData = packetData;
+
+	EnterCriticalSection(&g_sendCS);
+	_sendEvents.push_back(event);
+	LeaveCriticalSection(&g_sendCS);
+}
+
 template<class T>
 void ServerFramework::Broadcast(PacketID id, const T& packetData)
 {

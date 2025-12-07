@@ -10,7 +10,7 @@ typedef struct Status {
 	int _life{ 1 };
 }Status;
 
-class GameObject
+class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
 	GameObject();
@@ -43,7 +43,7 @@ public:
 
 	int GetDamage() const { return _damage; }
 	bool CanDamage() const { return !_invincible; }
-	void UndoPos() { _pos = _prevPos; }
+	void UndoPos();
 
 	Status _status{};
 	int _timer{};	// 총알, 폭탄 등에 사용

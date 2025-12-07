@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 
-class Projectile : public GameObject, public std::enable_shared_from_this<Projectile>
+class Projectile : public GameObject
 {
 public:
 	Projectile(Dir dir, const Vertex& pos);

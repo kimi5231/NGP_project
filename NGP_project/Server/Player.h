@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 
-class Player : public GameObject, public std::enable_shared_from_this<Player>
+class Player : public GameObject
 {
 public:
 	Player();

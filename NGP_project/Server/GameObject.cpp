@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "BoundingBox.h"
 #include "GameObject.h"
+#include "Global.h"
+#include "ServerFramework.h"
 
 #define DIFF 5.001  // 임시 상수
 
@@ -27,6 +29,14 @@ BoundingBox GameObject::GetBoundingBox() const
 bool GameObject::IsCollision(const GameObjectRef other) const
 {
     return GetBoundingBox().Intersects(other->GetBoundingBox());
+}
+
+void GameObject::UndoPos()
+{
+    if (_status._speed + DIFF >= abs(_prevPos.x - _pos.x) && _status._speed + DIFF >= abs(_prevPos.y - _pos.y)) {
+        _pos = _prevPos;
+        g_framework->SendMovePacket(shared_from_this(), true);
+    }
 }
 
 bool GameObject::IsArrive()

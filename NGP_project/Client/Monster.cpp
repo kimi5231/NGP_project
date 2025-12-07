@@ -22,6 +22,7 @@ Monster::Monster(ObjectState state)
     SetState(state);
 }
 
+
 void Monster::SetDirAndFrame(Dir dir)
 {
     switch (dir)

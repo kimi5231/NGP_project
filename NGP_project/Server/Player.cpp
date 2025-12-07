@@ -66,7 +66,7 @@ void Player::UseItem()
 
 void Player::SetItem(ItemRef item)
 {
-    g_framework->SendGetItemPacket(item, shared_from_this());
+    g_framework->SendGetItemPacket(item, std::static_pointer_cast<Player>(shared_from_this()));
     // 목숨은 먹으면 바로 획득
     if (item->GetItemType() == ItemType::Life) {
         item->ChangeState(this);

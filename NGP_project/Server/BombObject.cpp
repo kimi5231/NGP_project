@@ -9,6 +9,7 @@ BombObject::BombObject()
 {   
     _type = ObjectType::Bomb;
     _maxCnt = 6;
+    _state = ObjectState::Idle;
 }
 
 BombObject::BombObject(Vertex pos)
@@ -16,10 +17,15 @@ BombObject::BombObject(Vertex pos)
     _pos = pos;
     _type = ObjectType::Bomb;
     _maxCnt = 6;
+    _state = ObjectState::Idle;
 }
 
 void BombObject::Update()
 {
+    if (_state == ObjectState::Move) {
+        Move();
+    }
+
     // 시간 지남에 따라 상태 변화하도록 변경하기
     if (GET_SINGLE(TimeManager)->CheckTimer(_timerOffset, BOMB_TIME / _maxCnt)) {
         // 시간 send

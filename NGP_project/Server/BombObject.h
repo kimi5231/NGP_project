@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 
-class BombObject : public GameObject, public std::enable_shared_from_this<BombObject> {
+class BombObject : public GameObject {
 public:
 	BombObject();
 	BombObject(Vertex pos);

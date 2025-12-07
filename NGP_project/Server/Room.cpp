@@ -107,7 +107,7 @@ void Room::Update()
 		{
 			if (playerItem.second->IsCollision(ObstacleItem.second))
 			{
-				playerItem.second->SetCollision();
+				playerItem.second->UndoPos();
 			}
 		}
 	}

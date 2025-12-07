@@ -14,28 +14,15 @@ Player::Player()
 
     _status._hp = 10;
     _status._speed = PLAYER_SPEED;
+    _status._life = 2;
 	_type = ObjectType::Player;
 }
 
 void Player::Update()
 {
-    if (_state == ObjectState::Dead) {
-        if (!_invincible) {// 무적 아닐 때 한번만
-            if (--_status._life == 0) {
-                // 삭제....
-                return;
-            }
-            _pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
-            _prevPos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
-            g_framework->SendMovePacket(shared_from_this(), true);
-            _invincible = true; // 잠시 무적
-        }
-        
-        // 시간 잰 다음에 풀리도록
-        if (GET_SINGLE(TimeManager)->CheckTimer(_invincibleTimer, RESPAWN_TIME)) {
-            _invincible = false;
-            _state = ObjectState::Idle;
-        }
+    // 시간 잰 다음에 풀리도록
+    if (GET_SINGLE(TimeManager)->CheckTimer(_invincibleTimer, RESPAWN_TIME)) {
+        _invincible = false;
     }
 
     if (_item.second) {
@@ -82,4 +69,19 @@ bool Player::SetPos(Vertex pos)
     _isCollision = true;
 
     return false;
+}
+
+void Player::Damaged(int damage)
+{
+    if (!_invincible) {// 무적 아닐 때 한번만
+        if (--_status._life == 0) {
+            _state = ObjectState::Dead;
+            g_framework->SenUpdateObjectStatePacket(shared_from_this(), true);
+            return;
+        }
+        _pos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
+        _prevPos = { FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2 };
+        g_framework->SendMovePacket(shared_from_this(), true);
+        _invincible = true; // 잠시 무적
+    }
 }

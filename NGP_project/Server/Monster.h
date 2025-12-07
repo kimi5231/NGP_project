@@ -20,7 +20,7 @@ public:
 	// 외부에서 state을 위해 bool값 리턴 - true: state 변경
 	virtual bool UseSkill() { return false; }
 	void DropItem();
-	virtual void Damaged(int damage);
+	void Damaged(int damage) override;
 	void PushOther(MonsterRef other);
 
 	void SetCallback(SpawnCallback cb) { _spawnCallback = cb; }

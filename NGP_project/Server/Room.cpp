@@ -79,7 +79,7 @@ void Room::Update()
 		for (const auto& monsterItem : _monsters)
 		{
 			if (monsterItem.second->IsCollision(playerItem.second)) {
-				playerItem.second->SetState(ObjectState::Dead);
+				playerItem.second->Damaged(monsterItem.second->GetDamage());
 			}
 		}
 		// bomb과 충돌 처리
@@ -88,7 +88,7 @@ void Room::Update()
 			// 폭발하는 상태에서만 충돌처리
 			if (bombItem.second->_isBomb && playerItem.second->IsCollision(bombItem.second))
 			{
-				playerItem.second->SetState(ObjectState::Dead);
+				playerItem.second->Damaged(bombItem.second->GetDamage());
 			}
 		}
 

@@ -41,6 +41,7 @@ public:
 	BoundingBox GetBoundingBox() const;
 	bool IsCollision(const GameObjectRef other) const;
 
+	virtual void Damaged(int damage) {};
 	int GetDamage() const { return _damage; }
 	bool CanDamage() const { return !_invincible; }
 	void UndoPos();

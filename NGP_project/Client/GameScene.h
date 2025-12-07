@@ -70,7 +70,7 @@ private:
 
 	// UI
 	std::vector<std::shared_ptr<UI>> _ui;
-	ProgressBar _timerUI{ Vertex{ 600, 30}, Vertex{1000, 20}, GAME_TIME };
+	ProgressBar _timerUI{ Vertex{ 650, 30}, Vertex{1000, 20}, GAME_TIME };
 	float _stagetime{};
 	int _curStage{1};
 

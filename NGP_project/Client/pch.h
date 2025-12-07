@@ -131,6 +131,7 @@ enum PacketID
     // Client
     C_Move,
     C_CreateProjectile,
+    C_KickBomb,
     C_Collision,
     C_UseItem,
     C_StayGame,
@@ -249,6 +250,12 @@ struct C_CreateProjectile_Packet
     int objectID;
     ObjectType type;
     Vertex pos;
+    Dir dir;
+};
+
+struct C_KickBomb_Packet
+{
+    int objectID;
     Dir dir;
 };
 

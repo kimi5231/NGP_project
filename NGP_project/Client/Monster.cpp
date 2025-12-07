@@ -33,5 +33,6 @@ void Monster::SetDirAndFrame(Dir dir)
     case Dir::Down:        _curFrame.y = 2; break;
     }
 
+    SetDir(dir);
     _curFrame.x = (_curFrame.x + 1) % _spriteCnt.x;
 }

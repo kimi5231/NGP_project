@@ -293,16 +293,6 @@ void Room::ChangeNextStage()
 	// Stage 클리어
 	ClearStage();
 
-	_curStage++;
-	_timer = 50;
-
-	// Player Pos Reset
-	for (const auto& item : _players)
-	{
-		item.second->SetPos({ 400, 300 });
-		g_framework->SendMovePacket(item.second, true);
-	}
-
 	int sizeOffset{ CELL_SIZE / 2 };
 	switch (_curStage)
 	{
@@ -345,6 +335,16 @@ void Room::ChangeNextStage()
 	case 4:	// 게임 종료
 		EndGame();
 		break;
+	}
+
+	_curStage++;
+	_timer = 50;
+
+	// Player Pos Reset
+	for (const auto& item : _players)
+	{
+		item.second->SetPos({ 400, 300 });
+		g_framework->SendMovePacket(item.second, true);
 	}
 }
 

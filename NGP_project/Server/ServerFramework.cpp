@@ -206,6 +206,11 @@ void ServerFramework::ProcessRecv(ClientRef client)
 		memcpy(&useItemPacket, packet.data() + sizeof(Header), sizeof(C_UseItem_Packet));
 		ProcessUseItemPacket(useItemPacket);
 		break;
+	case C_KickBomb:
+		C_KickBomb_Packet kickBombPacket;
+		memcpy(&kickBombPacket, packet.data() + sizeof(Header), sizeof(C_KickBomb_Packet));
+		ProcessKickBombPacket(kickBombPacket);
+		break;
 	}
 }
 
@@ -496,4 +501,9 @@ void ServerFramework::ProcessUseItemPacket(C_UseItem_Packet packet)
 				SendItemUseResultPacket(result, packet.itemType, false, client->socket);
 		}
 	}
+}
+
+void ServerFramework::ProcessKickBombPacket(C_KickBomb_Packet packet)
+{
+
 }

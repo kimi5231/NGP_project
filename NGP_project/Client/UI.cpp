@@ -33,16 +33,37 @@ void UI::Render(HDC hdc, HDC srcDC, int num)
     DeleteObject(hBrush);
 }
 
+void ProgressBar::Render(HDC hdc)
+{
+    HPEN hPen = CreatePen(PS_SOLID, 1, _penColor);
+    HBRUSH hBrush = (HBRUSH)CreateSolidBrush(_brushColor);
+
+    SelectObject(hdc, hPen);
+    SelectObject(hdc, hBrush);
+
+    // 1초에 몇 픽셀?
+    float pixel = _maxSize / _maxProgress;
+
+    RECT rect;
+    rect.top = _box.Top();
+    rect.bottom = _box.Bottom();
+    rect.left = _box._center.x - _box._halfSize.x;
+    rect.right = rect.left + _progress * pixel;
+
+    Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+
+    // 객체 삭제
+    DeleteObject(hPen);
+    DeleteObject(hBrush);
+}
+
 void ProgressBar::Update(int serverTimer)
 {
-    _progress = serverTimer;
+    if (serverTimer <= 0)
+        serverTimer = 0;
 
-    // 0이 아니면 진행
-    if (_progress == 0) {
-        _box._halfSize.x = 0;
-        return;
-    }
-    
-    _box._halfSize.x -= _maxSize / _maxProgress;
-    _box._center.x -= _maxSize / _maxProgress;
+    if (serverTimer >= _maxProgress)
+        serverTimer = _maxProgress;
+
+    _progress = serverTimer;
 }

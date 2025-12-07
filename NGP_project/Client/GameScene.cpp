@@ -150,7 +150,7 @@ void GameScene::Render(HDC hdc)
 		}
 	}
 
-	_timerUI.Render(memDC, memDCImage, _stagetime);
+	_timerUI.Render(memDC);
 	
 	LeaveCriticalSection(&g_cs);
 

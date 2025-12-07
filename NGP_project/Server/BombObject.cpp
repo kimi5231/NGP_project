@@ -70,5 +70,7 @@ bool BombObject::Move()
     _pos.x = std::clamp(_pos.x, (float)(gBackgroundRect.left), (float)(gBackgroundRect.right));
     _pos.y = std::clamp(_pos.y, (float)(gBackgroundRect.top), (float)(gBackgroundRect.bottom));
 
+    g_framework->SendMovePacket(shared_from_this(), true);
+
     return true;
 }

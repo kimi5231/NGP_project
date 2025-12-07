@@ -3,8 +3,8 @@
 #include "Room.h"
 #include "Player.h"
 #include "Item.h"
+#include "BombObject.h"
 #include "Global.h"
-#include "Item.h"
 
 ServerFramework::ServerFramework()
 {
@@ -505,5 +505,16 @@ void ServerFramework::ProcessUseItemPacket(C_UseItem_Packet packet)
 
 void ServerFramework::ProcessKickBombPacket(C_KickBomb_Packet packet)
 {
-
+	GameObjectRef player = _room->GetObject(ObjectType::Player, packet.objectID);
+	std::unordered_map<int, BombRef>& bombs = _room->GetBombs();
+	
+	for (const auto& item : bombs)
+	{
+		if (player->IsCollision(item.second))
+		{
+			item.second->SetDir(packet.dir);
+			item.second->SetState(ObjectState::Move);
+			return;
+		}
+	}
 }

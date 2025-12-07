@@ -154,6 +154,15 @@ void ServerFramework::Update()
 	LeaveCriticalSection(&g_objectCS);
 
 	_removeObjects.clear();
+
+	// 연결 끊긴 Client 제거
+	for (ClientRef client : _removeClients)
+	{
+		closesocket(client->socket);
+		_clients.erase(std::find(_clients.begin(), _clients.end(), client));
+	}
+	
+	_removeClients.clear();
 }
 
 void ServerFramework::ProcessRecv(ClientRef client)
@@ -195,10 +204,6 @@ void ServerFramework::ProcessRecv(ClientRef client)
 		C_UseItem_Packet useItemPacket;
 		memcpy(&useItemPacket, packet.data() + sizeof(Header), sizeof(C_UseItem_Packet));
 		ProcessUseItemPacket(useItemPacket);
-		break;
-	case C_StayGame:
-		break;
-	case C_EndGame:
 		break;
 	}
 }
@@ -438,9 +443,8 @@ void ServerFramework::ProcessDisconnect(ClientRef client)
 	
 	std::cout << "Client" << client->id << " 접속 종료" << std::endl;
 
-	// 연결 끊긴 Client 제거
-	closesocket(client->socket);
-	_clients.erase(std::find(_clients.begin(), _clients.end(), client));
+	// 연결 끊긴 Client 삭제 예약
+	_removeClients.push_back(client);
 }
 
 void ServerFramework::ProcessMovePacket(C_Move_Packet packet)

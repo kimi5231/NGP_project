@@ -71,6 +71,7 @@ private:
 
 	SOCKET _listenSocket{}; 
 	std::vector<ClientRef> _clients;
+	std::vector<ClientRef> _removeClients;
 
 	int _generateClientID{};
 

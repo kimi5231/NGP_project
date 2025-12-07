@@ -72,8 +72,9 @@ void ServerFramework::Update()
 	FD_ZERO(&_writeSet);
 
 	// readSet에 listenSocket 등록
-	FD_SET(_listenSocket, &_readSet);
-
+	if (_room->GetRoomState() == RoomState::Idle)
+		FD_SET(_listenSocket, &_readSet);
+	
 	// readSet, writeSet에 clientSocket 등록
 	for (ClientRef client : _clients)
 	{
@@ -425,10 +426,6 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 			SendAddObjectPacket(item.second, false, newClient->socket);
 		}
 	}
-
-	// 게임 시작 인원이 되면 게임중으로 RoomState 변경
-	if (_room->GetPlayerCount() == 2)
-		_room->SetRoomState(RoomState::Playing);
 }
 
 void ServerFramework::ProcessDisconnect(ClientRef client)

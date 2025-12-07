@@ -33,6 +33,9 @@ Room::~Room()
 
 void Room::Update()
 {
+	if (_playerCount == 2)
+		_state = RoomState::Playing;
+
 	EnterCriticalSection(&g_objectCS);
 	for (const auto& item : _players)
 		item.second->Update();
@@ -61,9 +64,7 @@ void Room::Update()
 	
 	// 시간이 남았을 때만 몬스터 생성
 	if (_timer >= 0)
-	{
 		SpawnMonster();
-	}
 	else
 	{
 		if (_monsterCount == 0)
@@ -342,14 +343,7 @@ void Room::ChangeNextStage()
 		AddObject(ObjectType::Obstacle, { (float)gBackgroundRect.left + 10 * CELL_SIZE + sizeOffset, (float)gBackgroundRect.top + 10 * CELL_SIZE + sizeOffset });
 		break;
 	case 4:	// 게임 종료
-		// Stage Reset
-		_curStage = 1;
-
-		// Room State Set
-		_state = RoomState::Idle;
-
-		// 게임 종료 알리기
-		g_framework->SendEndGamePacket(true);
+		EndGame();
 		break;
 	}
 }
@@ -368,6 +362,18 @@ void Room::ClearStage()
 
 	for (const auto& obstacleItem : _obstacles)
 		g_framework->AddRemoveObject(obstacleItem.second);
+}
+
+void Room::EndGame()
+{
+	// Stage Reset
+	_curStage = 1;
+
+	// Room State Set
+	_state = RoomState::Idle;
+
+	// 게임 종료 알리기
+	g_framework->SendEndGamePacket(true);
 }
 
 GameObjectRef Room::GetObject(ObjectType type, int id)

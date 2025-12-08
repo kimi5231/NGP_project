@@ -11,7 +11,7 @@ Item::Item()
 	GameObject::_type = ObjectType::Item;
 	std::uniform_int_distribution<> randSpawn(static_cast<int>(ItemType::Life), static_cast<int>(ItemType::Hourglass));
 	_type = static_cast<ItemType>(randSpawn(gen));
-	//_type = static_cast<ItemType>(ItemType::Lightning); // test용
+	//_type = static_cast<ItemType>(ItemType::Hourglass); // test용
 }
 
 Item::Item(Vertex pos)

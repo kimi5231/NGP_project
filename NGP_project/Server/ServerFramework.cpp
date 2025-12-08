@@ -509,17 +509,11 @@ void ServerFramework::ProcessUseItemPacket(C_UseItem_Packet packet)
 		result = true;
 	}
 
-	// 아이템이 번개이거나 모래시계일 때, 모두에게 알리기
-	if (packet.itemType == ItemType::Lightning || packet.itemType == ItemType::Hourglass)
-		SendItemUseResultPacket(result, packet.itemType, true);
-	else
+	// player와 대응되는 client 찾기
+	for (ClientRef& client : _clients)
 	{
-		// player와 대응되는 client 찾기
-		for (ClientRef& client : _clients)
-		{
-			if (client->player == player)
-				SendItemUseResultPacket(result, packet.itemType, false, client->socket);
-		}
+		if (client->player == player)
+			SendItemUseResultPacket(result, packet.itemType, false, client->socket);
 	}
 }
 

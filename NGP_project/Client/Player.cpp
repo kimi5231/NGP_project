@@ -4,7 +4,7 @@
 #include "Global.h"
 #include "TimeManager.h"
 #include "Constant.h"
-#include <algorithm>
+#include "UI.h"
 
 Player::Player()
     : GameObject(ObjectState::Idle)
@@ -23,6 +23,7 @@ Player::Player()
     _status._hp = 10;
     _status._speed = PLAYER_SPEED;
     _type = ObjectType::Player;
+    _itemUI = std::make_shared<TextureUI>( Vertex{ 70, 100 }, Vertex{100, 100} );
 }
 
 void Player::Update()
@@ -62,6 +63,7 @@ void Player::SetItem(ItemType type)
     }
     ItemRef item = std::make_shared<Item>(type);
     _item.first = item;
+    _itemUI->SetBitmap(_item.first->_bitmap, _item.first->_bitmapMask);
 }
 
 void Player::Move(Vertex vecDir, Dir dir)
@@ -99,6 +101,14 @@ void Player::Move(Vertex vecDir, Dir dir)
 
     // clamp
     ClampPlayerArea();
+}
+
+void Player::Render(HDC hdc, HDC srcDC)
+{
+    if (_item.first) {
+        _itemUI->Render(hdc, srcDC);
+    }
+    GameObject::Render(hdc, srcDC);
 }
 
 void Player::SetDirAndFrame(Dir dir)

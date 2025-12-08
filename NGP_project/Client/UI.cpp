@@ -3,7 +3,7 @@
 #include <string>
 #include "Global.h"
 
-void UI::Render(HDC hdc, HDC srcDC, int num)
+void UI::Render(HDC hdc, int num)
 {
     HPEN hPen = CreatePen(PS_SOLID, 1, _penColor);
     HBRUSH hBrush = (HBRUSH)CreateSolidBrush(_brushColor);
@@ -66,4 +66,42 @@ void ProgressBar::Update(int serverTimer)
         serverTimer = _maxProgress;
 
     _progress = serverTimer;
+}
+
+void TextureUI::Render(HDC hdc, HDC srcDC)
+{
+    if (!_bitmap || !_bitmapMask) return;
+
+    // 대상 크기 (UI 박스 크기)
+    POINT dstSize = { _box._halfSize.x * 2, _box._halfSize.y * 2 };
+
+    // 마스크 먼저
+    SelectObject(srcDC, _bitmapMask);
+    StretchBlt(
+        hdc,
+        _box._center.x - _box._halfSize.x,   // 대상 X
+        _box._center.y - _box._halfSize.y,   // 대상 Y
+        dstSize.x,                           // 대상 너비
+        dstSize.y,                           // 대상 높이
+        srcDC,
+        0, 0,                                // 원본 시작 좌표 (UI는 고정 이미지라면 0,0)
+        CELL_SIZE,                                // 원본 너비 (CELL_SIZE)
+        CELL_SIZE,                                // 원본 높이 (CELL_SIZE)
+        SRCAND
+    );
+
+    // 실제 비트맵
+    SelectObject(srcDC, _bitmap);
+    StretchBlt(
+        hdc,
+        _box._center.x - _box._halfSize.x,
+        _box._center.y - _box._halfSize.y,
+        dstSize.x,
+        dstSize.y,
+        srcDC,
+        0, 0,
+        CELL_SIZE,                                // 원본 너비 (CELL_SIZE)
+        CELL_SIZE,                                // 원본 높이 (CELL_SIZE)
+        SRCPAINT
+    );
 }

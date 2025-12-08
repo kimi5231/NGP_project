@@ -11,7 +11,7 @@ public:
 	}
 
 	bool Intersects(const POINT& point) const { return _box.Intersects(point); }
-	void Render(HDC hdc, HDC srcDC, int num);
+	void Render(HDC hdc, int num);
 	ObjectType GetObjectType() const { return _type; }
 protected:
 	BoundingBox _box;
@@ -48,4 +48,20 @@ public:
 
 	UINT _maxProgress, _progress;
 	int _maxSize;
+};
+
+class TextureUI : public UI {
+public:
+	TextureUI(const Vertex& center, const Vertex& size)
+		: UI(center, size)
+	{
+	}
+	void SetBitmap(HBITMAP bitmap, HBITMAP bitmapMask) 
+	{
+		_bitmap = bitmap;
+		_bitmapMask = bitmapMask;
+	}
+	void Render(HDC hdc, HDC srcDC);
+	
+	HBITMAP _bitmap, _bitmapMask;
 };

@@ -53,9 +53,9 @@ public:
 
 	int _timer{};	// 총알, 폭탄 등에 사용
 	Status _status{0, 10};
-protected:
 	HBITMAP _bitmap{};
 	HBITMAP _bitmapMask{};
+protected:
 	POINT _spriteCnt{};	// 스프라이트 시트의 가로/세로 칸 개수
 	POINT _curFrame{};
 

@@ -30,7 +30,7 @@ GameScene::GameScene()
 
 	// UI
 	//_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
-	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 100 }, Vertex{100, 100}, L"Item UI"));
+	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 100 }, Vertex{100, 100}));
 	DWORD uiColor{ RGB(50, 50, 50) };
 	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 200 }, Vertex{100, 50}, L"Life: ", uiColor, true));
 
@@ -124,6 +124,13 @@ void GameScene::Render(HDC hdc)
 		obstacle->Render(memDC, memDCImage);
 	}
 
+	// UI
+	if (_localPlayer.get()) {
+		for (const auto ui : _ui) {
+			ui->Render(memDC, _localPlayer->_status._life);	// 나중에 수정
+		}
+	}
+
 	// Local Player
 	if (_localPlayer) {
 		if (_localPlayer->GetState() != ObjectState::Dead)
@@ -154,16 +161,10 @@ void GameScene::Render(HDC hdc)
 		object->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
 	}
 
-	// UI
-	if (_localPlayer.get()) {
-		for (const auto ui : _ui) {
-			ui->Render(memDC, memDCImage, _localPlayer->_status._life);	// 나중에 수정
-		}
-	}
 	if ( _isStayButtonActive && _stayButton && _leaveButton)
 	{
-		_stayButton->Render(memDC, memDCImage, 0);
-		_leaveButton->Render(memDC, memDCImage, 0);
+		_stayButton->Render(memDC, 0);
+		_leaveButton->Render(memDC, 0);
 	}
 	_timerUI.Render(memDC);
 	

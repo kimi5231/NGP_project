@@ -10,8 +10,8 @@ Item::Item()
 {
 	GameObject::_type = ObjectType::Item;
 	std::uniform_int_distribution<> randSpawn(static_cast<int>(ItemType::Life), static_cast<int>(ItemType::Hourglass));
-	_type = static_cast<ItemType>(randSpawn(gen));
-	//_type = static_cast<ItemType>(ItemType::Magazine); test용
+	//_type = static_cast<ItemType>(randSpawn(gen));
+	_type = static_cast<ItemType>(ItemType::Lightning);
 }
 
 Item::Item(Vertex pos)
@@ -37,7 +37,8 @@ void Item::ChangeState(GameObject* player)
 	{
 		std::unordered_map<int, MonsterRef> monsters = g_framework->GetRoom()->GetMonsters();
 		for (auto& monster : monsters) {
-			monster.second->SetState(ObjectState::Dead);
+			monster.second->GetStateMachine()->ChangeState(new DeadState);
+			monster.second->GetStateMachine()->Start();
 		}
 	}
 		break;

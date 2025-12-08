@@ -318,6 +318,11 @@ void Room::ChangeNextStage()
 	{
 		item.second->SetPos({ 400, 300 });
 		g_framework->SendMovePacket(item.second, true);
+		if (item.second->GetState() == ObjectState::Dead)
+		{
+			item.second->_status._life = 1;
+			g_framework->SendSetLifePacket(item.second);
+		}
 		item.second->SetState(ObjectState::Idle);
 		g_framework->SenUpdateObjectStatePacket(item.second, true);
 	}

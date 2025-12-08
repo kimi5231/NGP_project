@@ -163,7 +163,7 @@ void GameScene::Render(HDC hdc)
 	}
 
 	// Objects
-	for (const auto [id, object] : _objects) {
+	for (const auto& [id, object] : _objects) {
 		object->Render(memDC, memDCImage);
 		object->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
 	}

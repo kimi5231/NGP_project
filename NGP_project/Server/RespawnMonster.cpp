@@ -3,6 +3,8 @@
 #include "RespawnMonster.h"
 #include "Constant.h"
 #include "TimeManager.h"
+#include "Global.h"
+#include "ServerFramework.h"
 
 RespawnMonster::RespawnMonster() : Monster()
 {
@@ -19,6 +21,7 @@ void RespawnMonster::Update()
         if (GET_SINGLE(TimeManager)->CheckTimer(_respawnTimer, RESPAWN_TIME)) {
             // 상태 send
             SetState(ObjectState::Move);
+            g_framework->SenUpdateObjectStatePacket(shared_from_this(), true);
 
             _stateMachine->ChangeState(new FindTargetState);
             _stateMachine->Start();
@@ -34,6 +37,7 @@ bool RespawnMonster::UseSkill()
 
     _stateMachine->ChangeState(new IdleState);
     _stateMachine->Start();
+    g_framework->SenUpdateObjectStatePacket(shared_from_this(), true);
 
     return true;
 }

@@ -7,4 +7,6 @@ class RespawnMonster : public Monster
 public:
 	RespawnMonster();
 	virtual ~RespawnMonster() {};
+
+	void Update() override;
 };

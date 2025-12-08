@@ -68,6 +68,12 @@ void GameScene::Update()
 	LeaveCriticalSection(&g_cs);
 
 	EnterCriticalSection(&g_cs);
+	for (const auto& monster : _monsters) {
+		monster.second->Update();
+	}
+	LeaveCriticalSection(&g_cs);
+
+	EnterCriticalSection(&g_cs);
 	if ( _isStayButtonActive && _stayButton && _leaveButton)
 	{
 		POINT mousePos;
@@ -87,26 +93,6 @@ void GameScene::Update()
 		}
 	}
 	LeaveCriticalSection(&g_cs);
-	//		// 장애물
-	//		if (type == ObjectType::Obstacle && monster->IsCollision(object.get())) {
-	//			ObjectType monsterType = monster->GetObjectType();
-	//			// 폭탄/장애물 몬스터는 장애물에 걸리면 경로 다시 탐색
-	//			if (monsterType == ObjectType::BomberMonster || monsterType == ObjectType::ObstacleMonster) {
-	//				monster->FindTarget(nullptr);
-	//			}
-	//			monster->UndoPos();
-	//		}
-	//	}
-	//	// 시계 아이템 사용 시
-	//	if (useHourglass)
-	//		monster->_status._speed = 0;
-	//	else
-	//		monster->_status._speed = MONSTER_SPEED;
-
-	//if (useLightning) {	// 번개 아이템 사용 시
-	//	_monsters.clear();
-	//	useLightning = false;
-	//}
 }
 
 void GameScene::Render(HDC hdc)

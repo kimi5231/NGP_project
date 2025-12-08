@@ -13,3 +13,11 @@ RespawnMonster::RespawnMonster() : Monster()
     _status._life = 2;
     _type = ObjectType::RespawnMonster;
 }
+
+void RespawnMonster::Update()
+{
+    if (_state == ObjectState::Idle) {
+        _curFrame.x = 1;
+        _curFrame.y = 5;
+    }
+}

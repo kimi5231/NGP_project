@@ -14,7 +14,7 @@ std::uniform_int_distribution<> randHeight(gBackgroundRect.top + CELL_SIZE, gBac
 
 Monster::Monster()
 {
-
+    _state = ObjectState::Move;
 }
 
 Monster::Monster(ObjectState state)

@@ -145,9 +145,8 @@ void ServerFramework::Update()
 	EnterCriticalSection(&g_objectCS);
 	for (const auto& item : _removeObjects)
 		_room->RemoveObject(item.second->GetObjectType(), item.second->GetID());
-	LeaveCriticalSection(&g_objectCS);
-
 	_removeObjects.clear();
+	LeaveCriticalSection(&g_objectCS);
 
 	// 연결 끊긴 Client 제거
 	for (ClientRef client : _removeClients)
@@ -529,5 +528,5 @@ void ServerFramework::AddRemoveObject(GameObjectRef object)
 {
 	EnterCriticalSection(&g_objectCS);
 	_removeObjects[object->GetID()] = object;
-	EnterCriticalSection(&g_objectCS);
+	LeaveCriticalSection(&g_objectCS);
 }

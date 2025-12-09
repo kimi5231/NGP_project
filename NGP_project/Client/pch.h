@@ -48,9 +48,9 @@ enum class ObjectType
     Item,
     Bullet,
     Bomb,
-    UI,
     Obstacle,
 
+    UI,
     Button,
 };
 
@@ -132,20 +132,13 @@ enum PacketID
     C_Move,
     C_CreateProjectile,
     C_KickBomb,
-    C_Collision,
     C_UseItem,
-    C_StayGame,
-    C_EndGame,
 
     // Server
     S_AddObject,
     S_RemoveObject,
     S_UpdateObjectState,
-    S_UpdateDir,
     S_Move,
-    S_ChangeNextStage,
-    S_CollisionResult,
-    S_MonsterDamaged,
     S_ItemUseResult,
 	S_UpdateTimer,
     S_GetItem,

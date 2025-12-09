@@ -9,8 +9,6 @@
 #include "Item.h"
 #include "BombObject.h"
 #include "GameObject.h"
-
-// Monster
 #include "Monster.h"
 #include "BomberMonster.h"
 #include "NormalMonster.h"
@@ -34,7 +32,7 @@ Room::~Room()
 void Room::Update()
 {	
 	// 인원이 충족되면 게임 시작
-	if (_playerCount == 2)
+	if (_playerCount == 3)
 		_state = RoomState::Playing;
 
 	EnterCriticalSection(&g_objectCS);
@@ -318,11 +316,13 @@ void Room::ChangeNextStage()
 	{
 		item.second->SetPos({ 400, 300 });
 		g_framework->SendMovePacket(item.second, true);
+
 		if (item.second->GetState() == ObjectState::Dead)
 		{
 			item.second->_status._life = 1;
 			g_framework->SendSetLifePacket(item.second);
 		}
+
 		item.second->SetState(ObjectState::Idle);
 		g_framework->SenUpdateObjectStatePacket(item.second, true);
 	}
@@ -407,8 +407,10 @@ void Room::EndGame()
 	{
 		item.second->SetPos({ 400, 300 });
 		g_framework->SendMovePacket(item.second, true);
+
 		item.second->SetState(ObjectState::Idle);
 		g_framework->SenUpdateObjectStatePacket(item.second, true);
+		
 		item.second->_status._life = 1;
 		g_framework->SendSetLifePacket(item.second);
 	}

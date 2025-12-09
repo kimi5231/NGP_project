@@ -24,10 +24,6 @@ ServerFramework::ServerFramework()
 		return;
 	}
 
-	// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
-	int optval = 1;
-	setsockopt(_listenSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
-
 	// bind
 	sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
@@ -101,10 +97,6 @@ void ServerFramework::Update()
 		{
 			std::cout << "clientSocket 생성 실패" << std::endl;
 		}
-
-		// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
-		//int optval = 1;
-		//setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 		ProcessAccept(clientSocket);
 	}
@@ -368,9 +360,9 @@ void ServerFramework::SendGetItemPacket(ItemRef item, PlayerRef player)
 void ServerFramework::SendItemUseResultPacket(bool result, ItemType type, bool broadcast, SOCKET client)
 {
 	S_ItemUseResult_Packet packetData{ result, type };
+
 	// SendEvent 생성
 	SendEventRef<S_ItemUseResult_Packet> event = std::make_shared<SendEvent<S_ItemUseResult_Packet>>();
-	
 	event->isBroadcast = broadcast;
 	event->clientSocket = client;
 	event->packetID = S_ItemUseResult;
@@ -443,6 +435,8 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 	// 새로 접속한 Client에게 Room에 있는 Player 정보 송신
 	std::unordered_map<int, PlayerRef> players = _room->GetPlayers();
+	// 총알 보내기
+	
 	for (const auto& item : players)
 	{
 		// 자기 자신 제외
@@ -468,23 +462,17 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 {
 	GameObjectRef object = _room->GetObject(packet.type, packet.objectID);
 
-	bool result = object->SetPos(packet.pos);
+	object->SetPos(packet.pos);
 	object->SetDir(packet.dir);
 	object->SetState(packet.state);
 
 	std::cout << "Object " << packet.objectID << ": Move " << packet.pos.x << ", " << packet.pos.y << std::endl;
 
-	// 이동 실패 시, 모두에게 알리기
-	if(!result)
-		SendMovePacket(object, true);
-	else
+	// 자신을 제외한 모든 클라이언트에게 알리기
+	for (ClientRef client : _clients)
 	{
-		// 자신을 제외한 모든 클라이언트에게 알리기
-		for (ClientRef client : _clients)
-		{
-			if (client->player->GetID() != packet.objectID)
-				SendMovePacket(object, false, client->socket);
-		}
+		if (client->player->GetID() != packet.objectID)
+			SendMovePacket(object, false, client->socket);
 	}
 }
 

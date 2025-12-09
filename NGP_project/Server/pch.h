@@ -3,7 +3,6 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
-
 #include <memory>
 #include <iostream>
 #include <vector>
@@ -39,8 +38,8 @@ enum class ObjectType
     Item,
     Bullet,
     Bomb,
-    UI,
     Obstacle,
+    UI,
 };
 
 enum class ItemType
@@ -92,20 +91,13 @@ enum PacketID
     C_Move,
     C_CreateProjectile,
     C_KickBomb,
-    C_Collision,
     C_UseItem,
-    C_StayGame,
-    C_EndGame,
 
     // Server
     S_AddObject,
     S_RemoveObject,
     S_UpdateObjectState,
-    S_UpdateDir, // 삭제 예정
     S_Move,
-    S_ChangeNextStage,
-    S_CollisionResult, // 삭제 예정
-    S_MonsterDamaged,
     S_ItemUseResult,
     S_UpdateTimer,
     S_GetItem,
@@ -139,13 +131,6 @@ struct S_UpdateObjectState_Packet
     int objectID;
     ObjectType type;
     ObjectState state;
-};
-
-struct S_UpdateDir_Packet // 삭제 예정
-{
-    int objectID;
-    ObjectType type;
-    Dir dir;
 };
 
 struct S_Move_Packet

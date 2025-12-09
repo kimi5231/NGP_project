@@ -129,8 +129,6 @@ StateMachine::StateMachine(Monster* object, ObjectState state)
 	case ObjectState::Dead:
 		_curState = new DeadState;
 		break;
-	default:
-		break;
 	}
 }
 

@@ -8,5 +8,4 @@ extern CRITICAL_SECTION g_cs;
 
 extern HINSTANCE hInst;
 extern HWND hWnd;
-extern bool useLightning, useWaterWheel, useShotgun, useHourglass;
-extern float bulletSpeed;
+extern bool useWaterWheel, useShotgun;

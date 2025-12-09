@@ -9,13 +9,11 @@
 #define ADD_SPEED 2	// 이 배수만큼 스피드(아이템 사용 시) 증가
 #define MONSTER_SPAWN_TIME 3
 
-// 임시지정
 #define MONSTER_SPEED 1
 #define PLAYER_SPEED 3
 #define BOARD_SIZE 16
 #define CELL_SIZE 30
 
 #define BULLET_SIZE 5
-#define BOMB_MOVE 5
 
 extern RECT gBackgroundRect;

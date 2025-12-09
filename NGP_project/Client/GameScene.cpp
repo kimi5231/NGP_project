@@ -26,10 +26,9 @@ bool useLightning{}, useWaterWheel{}, useShotgun{}, useHourglass{};
 GameScene::GameScene()
 {
 	// Sound        
-	//GET_SINGLE(SoundManager)->Play(L"main_music", true);
+	// GET_SINGLE(SoundManager)->Play(L"main_music", true);
 
 	// UI
-	//_ui.push_back(std::make_shared<Button>(Vertex{ 50, 400 }, Vertex{100, 100}, L"button"));
 	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 100 }, Vertex{100, 100}));
 	DWORD uiColor{ RGB(50, 50, 50) };
 	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 200 }, Vertex{100, 50}, L"Life: ", uiColor, true));
@@ -115,59 +114,70 @@ void GameScene::Render(HDC hdc)
 	oldbit[1] = (HBITMAP)SelectObject(memDCImage, gBackgroundBitmap);
 	StretchBlt(memDC, gBackgroundRect.left, gBackgroundRect.top, gBackgroundRect.right- gBackgroundRect.left, gBackgroundRect.bottom - gBackgroundRect.top, memDCImage, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight, SRCCOPY);
 
-	EnterCriticalSection(&g_cs);
-
 	// GameObject
 	// Obstacle 
+
+	EnterCriticalSection(&g_cs);
 	for (const auto obstacle : _obstacles)
 	{
 		obstacle->Render(memDC, memDCImage);
 	}
+	LeaveCriticalSection(&g_cs);
 
 	// UI
+	EnterCriticalSection(&g_cs);
 	if (_localPlayer.get()) {
 		for (const auto ui : _ui) {
 			ui->Render(memDC, _localPlayer->_status._life);	// 나중에 수정
 		}
 	}
+	LeaveCriticalSection(&g_cs);
 
 	// Local Player
+	EnterCriticalSection(&g_cs);
 	if (_localPlayer) {
 		if (_localPlayer->GetState() != ObjectState::Dead)
 		{
 			_localPlayer->Render(memDC, memDCImage);
-			_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
+			//_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
 		}
 	}
+	LeaveCriticalSection(&g_cs);
 
 	// Other Player
+	EnterCriticalSection(&g_cs);
 	for (const auto& [id, player] : _players) {
 		if (player->GetState() != ObjectState::Dead)
 		{
 			player->Render(memDC, memDCImage);
-			player->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 255, 0));	// 디버깅용
+			//player->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 255, 0));	// 디버깅용
 		}
 	}
+	LeaveCriticalSection(&g_cs);
 
 	// Monster
+	EnterCriticalSection(&g_cs);
 	for (const auto& [id, monster] : _monsters) {
 		monster->Render(memDC, memDCImage);
-		monster->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
+		//monster->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
 	}
+	LeaveCriticalSection(&g_cs);
 
 	// Objects
+	EnterCriticalSection(&g_cs);
 	for (const auto& [id, object] : _objects) {
 		object->Render(memDC, memDCImage);
-		object->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
+		//object->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));	// 디버깅용
 	}
+	LeaveCriticalSection(&g_cs);
 
+	EnterCriticalSection(&g_cs);
 	if ( _isStayButtonActive && _stayButton && _leaveButton)
 	{
 		_stayButton->Render(memDC, 0);
 		_leaveButton->Render(memDC, 0);
 	}
 	_timerUI.Render(memDC);
-	
 	LeaveCriticalSection(&g_cs);
 
 	// hDC에 memDC 출력(최종화면 출력)
@@ -218,7 +228,7 @@ void GameScene::AddPlayer(int id, PlayerRef player)
 	}
 
 	// 다른 Player 설정
-	if (id == _localPlayer->GetId())	// 이거 안 하면 클라 두개 실행시 첫 번째 클라에서 플레이어 3명 그려짐
+	if (id == _localPlayer->GetId())
 	{
 		LeaveCriticalSection(&g_cs);
 		return;
@@ -504,105 +514,6 @@ void GameScene::ProcessInput()
 		_gameNetwork->SendKickBombPacket(_localPlayer->GetId(), _localPlayer->GetDir());
 		LeaveCriticalSection(&g_cs);
 	}
-
-		// 
-		//if (prevKeyUp || CheckTimer(_localPlayer->_timer, bulletSpeed)) {
-		//	Vertex playerPos = _localPlayer->GetPos();
-		//	Dir shootDir = Dir::Down;
-
-		//	bool up = input->GetButton(KeyType::Up);
-		//	bool down = input->GetButton(KeyType::Down);
-		//	bool left = input->GetButton(KeyType::Left);
-		//	bool right = input->GetButton(KeyType::Right);
-
-		//	if (up)
-		//	{
-		//		if (right) shootDir = Dir::RightUp;
-		//		else if (left) shootDir = Dir::LeftUp;
-		//		else shootDir = Dir::Up;
-		//	}
-		//	else if (down)
-		//	{
-		//		if (right) shootDir = Dir::RightDown;
-		//		else if (left) shootDir = Dir::LeftDown;
-		//		else shootDir = Dir::Down;
-		//	}
-		//	else if (left)
-		//	{
-		//		shootDir = Dir::Left;
-		//	}
-		//	else if (right)
-		//	{
-		//		shootDir = Dir::Right;
-		//	}
-
-		//	// 방향에 따른 총알 생성 in Local - 생성을 서버에서 받은 후에 해야하나???
-		//	switch (shootDir)
-		//	{
-		//	case Dir::Up:
-		//		//_objects.push_back(std::make_shared<Projectile>(Dir::Up, playerPos));
-		//		if (useShotgun) {
-		//			//_objects.push_back(std::make_shared<Projectile>(Dir::RightUp, playerPos));
-		//			//_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-		//		}
-		//		prevKeyUp = false;
-		//		_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
-		//		break;
-		//	}
-		//
-		//else if (input->GetButton(KeyType::Left)) {
-		//	_objects.push_back(std::make_shared<Projectile>(Dir::Left, playerPos));
-		//	if (useShotgun) {
-		//		_objects.push_back(std::make_shared<Projectile>(Dir::LeftUp, playerPos));
-		//		_objects.push_back(std::make_shared<Projectile>(Dir::LeftDown, playerPos));
-		//	}
-		//	prevKeyUp = false;
-		//}
-
-		// 서버로 Create Projectile 패킷 Send
-		//_gameNetwork->SendCreateProjectilePacket(_localPlayer->GetId(), playerPos, shootDir);
-
-
-
-	// 이동 키 Up
-	/*if (input->GetButtonUp(KeyType::W) || input->GetButtonUp(KeyType::A) || input->GetButtonUp(KeyType::S) || input->GetButtonUp(KeyType::D)) {
-		
-		_localPlayer->ResetCurFrame();
-		_localPlayer->SetState(ObjectState::Idle);	
-		
-	}
-	if (input->GetButtonUp(KeyType::Left) || input->GetButtonUp(KeyType::Up) || input->GetButtonUp(KeyType::Down) || input->GetButtonUp(KeyType::Right)) {
-		prevKeyUp = true;
-		_localPlayer->_timer = 0.0f;
-		}*/
-
-	//// 버튼 클릭
-	//if (input->GetButtonDown(KeyType::LeftMouse)) {
-	//	for (const auto& button : _ui) {
-	//		if (button->GetObjectType() == ObjectType::Button && button->Intersects(input->GetMousePos())) {
-	//			_monsters.push_back(std::make_shared<TankMonster>());	// test
-	//		}
-	//	}
-	//}
-
-	//// 폭탄 발로 차기
-	//if (input->GetButtonDown(KeyType::LeftShift)) {
-	//	for (const auto& object : _objects) {
-	//		if (object->GetObjectType() == ObjectType::Bomb && !dynamic_cast<BombObject*>(object.get())->_isBomb && _localPlayer->IsCollision(object.get())) {
-	//			object->SetDir(_localPlayer->GetDir());
-	//			for (int i = 0; i < BOMB_MOVE; ++i) {
-	//				object->Move(); // CELLSIZE만큼씩 이동
-	//				for (const auto& otherObject : _objects) {	// 장애물에 걸리면 이동X
-	//					if (otherObject->GetObjectType() == ObjectType::Obstacle && object->IsCollision(otherObject.get())) {
-	//						object->UndoPos();
-	//						i = BOMB_MOVE;
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
 }
 
 void GameScene::ShotGunFire(Dir baseDir) {

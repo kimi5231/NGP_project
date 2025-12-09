@@ -21,7 +21,6 @@ public:
 	virtual bool UseSkill() { return false; }
 	void DropItem();
 	void Damaged(int damage) override;
-	void PushOther(MonsterRef other);
 
 	void SetCallback(SpawnCallback cb) { _spawnCallback = cb; }
 protected:

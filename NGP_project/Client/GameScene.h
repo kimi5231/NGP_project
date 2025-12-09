@@ -36,9 +36,9 @@ public:
 	std::unordered_map<int, GameObjectRef> GetObjects() { return _objects; }
 
 	// Remove Object
-	void RemovePlayer(int id) { _players.erase(id); }
-	void RemoveMonster(int id) { _monsters.erase(id); }
-	void RemoveObject(int id) { _objects.erase(id); }
+	void RemovePlayer(int id); 
+	void RemoveMonster(int id); 
+	void RemoveObject(int id); 
 
 	void SetGameNetwork(GameNetwork* gameNetwork) { _gameNetwork = gameNetwork; }
 

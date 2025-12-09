@@ -271,6 +271,27 @@ void GameScene::AddEndGameUi(bool isStay, Vertex center, Vertex size, std::wstri
 	_isStayButtonActive = true;
 }
 
+void GameScene::RemovePlayer(int id)
+{
+	EnterCriticalSection(&g_cs);
+	_players.erase(id);
+	LeaveCriticalSection(&g_cs);
+}
+
+void GameScene::RemoveMonster(int id)
+{
+	EnterCriticalSection(&g_cs);
+	_monsters.erase(id);
+	LeaveCriticalSection(&g_cs);
+}
+
+void GameScene::RemoveObject(int id)
+{
+	EnterCriticalSection(&g_cs);
+	_objects.erase(id);
+	LeaveCriticalSection(&g_cs);
+}
+
 Dir GameScene::ConvertVecToDir(const Vertex& dir)
 {
 	// 상하좌우

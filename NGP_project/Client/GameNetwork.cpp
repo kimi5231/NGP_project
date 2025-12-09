@@ -12,16 +12,6 @@
 #include "BombObject.h"
 #include "Item.h"
 
-// 수영 데스크탑
-//char* SERVERIP = (char*)"61.255.49.141";
-// 미나 데스크탑
-//char* SERVERIP = (char*)"192.168.35.52";	
-// 루프백
-char* SERVERIP = (char*)"127.0.0.1";
-//char* SERVERIP = (char*)"192.168.1.191";
-//char* SERVERIP = (char*)"192.168.22.185";
-//char* SERVERIP = (char*)"192.168.70.143";
-
 #define SERVERPORT 7777
 #define BUFSIZE 512
 

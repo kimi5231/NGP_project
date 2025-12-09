@@ -13,6 +13,12 @@ Item::Item()
 	_type = static_cast<ItemType>(randSpawn(gen));
 }
 
+Item::Item(ItemType item)
+	: _type{item}
+{
+	GameObject::_type = ObjectType::Item;
+}
+
 Item::Item(Vertex pos)
 	: Item()
 {

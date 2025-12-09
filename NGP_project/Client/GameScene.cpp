@@ -26,7 +26,7 @@ bool useLightning{}, useWaterWheel{}, useShotgun{}, useHourglass{};
 GameScene::GameScene()
 {
 	// Sound        
-	// GET_SINGLE(SoundManager)->Play(L"main_music", true);
+	GET_SINGLE(SoundManager)->Play(L"main_music", true);
 
 	// UI
 	_ui.push_back(std::make_shared<UI>(Vertex{ 70, 100 }, Vertex{100, 100}));
@@ -116,7 +116,6 @@ void GameScene::Render(HDC hdc)
 
 	// GameObject
 	// Obstacle 
-
 	EnterCriticalSection(&g_cs);
 	for (const auto obstacle : _obstacles)
 	{

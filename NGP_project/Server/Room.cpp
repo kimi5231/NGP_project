@@ -135,7 +135,7 @@ void Room::Update()
 		// Projectile과 충돌 처리
 		for (const auto& projectileItem : _projectiles)
 		{
-			if (projectileItem.second->IsCollision(monsterItem.second) && !monsterItem.second->IsState(ObjectState::Dead) && monsterItem.second->CanDamage())
+			if (projectileItem.second->IsCollision(monsterItem.second) && projectileItem.second->GetState() != ObjectState::Dead && !monsterItem.second->IsState(ObjectState::Dead) && monsterItem.second->CanDamage())
 			{
 				monsterItem.second->Damaged(projectileItem.second->GetDamage());
 				projectileItem.second->SetState(ObjectState::Dead);

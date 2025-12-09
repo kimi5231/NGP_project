@@ -337,9 +337,9 @@ void ServerFramework::SendUpdateTimerPacket(bool broadcast, SOCKET client)
 	LeaveCriticalSection(&g_sendCS);
 }
 
-void ServerFramework::SendGetItemPacket(ItemRef item, PlayerRef player)
+void ServerFramework::SendGetItemPacket(ItemType itemType, PlayerRef player)
 {
-	S_GetItem_Packet packetData{ item->GetItemType() };
+	S_GetItem_Packet packetData{ itemType };
 	// SendEvent 생성
 	SendEventRef<S_GetItem_Packet> event = std::make_shared<SendEvent<S_GetItem_Packet>>();
 	// 본인한테만 알리면 되므로 false
@@ -523,4 +523,11 @@ void ServerFramework::ProcessKickBombPacket(C_KickBomb_Packet packet)
 			return;
 		}
 	}
+}
+
+void ServerFramework::AddRemoveObject(GameObjectRef object)
+{
+	EnterCriticalSection(&g_objectCS);
+	_removeObjects[object->GetID()] = object;
+	EnterCriticalSection(&g_objectCS);
 }

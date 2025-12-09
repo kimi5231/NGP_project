@@ -45,7 +45,7 @@ public:
 	void SendMovePacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(GameObjectRef object, bool broadcast, SOCKET client = 0);
 	void SendUpdateTimerPacket(bool broadcast, SOCKET client = 0);
-	void SendGetItemPacket(ItemRef item, PlayerRef player);
+	void SendGetItemPacket(ItemType itemtype, PlayerRef player);
 	void SendItemUseResultPacket(bool result, ItemType type, bool broadcast, SOCKET client = 0);
 	void SendEndGamePacket(bool broadcast, SOCKET client = 0);
 	void SendSetLifePacket(PlayerRef player);
@@ -65,7 +65,7 @@ private:
 public:
 	Room* GetRoom() { return _room; }
 
-	void AddRemoveObject(GameObjectRef object) { _removeObjects[object->GetID()] = object; }
+	void AddRemoveObject(GameObjectRef object);
 
 private:
 	fd_set _readSet{};

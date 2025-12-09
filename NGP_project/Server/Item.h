@@ -5,6 +5,7 @@ class Item : public GameObject
 {
 public:
 	Item();
+	Item(ItemType item);
 	Item(Vertex pos);
 	virtual ~Item() {};
 

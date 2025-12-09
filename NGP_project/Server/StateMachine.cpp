@@ -58,7 +58,7 @@ void FindTargetState::Tick(Monster* self)
 
 	// 가장 가까운 플레이어 탐색
 	for (const auto& otherObject : g_framework->GetRoom()->GetPlayers()) {
-		if (otherObject.second->GetState() == ObjectState::Dead) continue;
+		if (otherObject.second->_status._life <= 0) continue;
 		float dx = otherObject.second->GetPos().x - self->GetPos().x;
 		float dy = otherObject.second->GetPos().y - self->GetPos().y;
 		float distance = sqrt(dx * dx + dy * dy);

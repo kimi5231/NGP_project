@@ -17,13 +17,14 @@ public:
 	GameObjectRef AddObject(ObjectType type, Vertex pos = {-1, -1}, Dir dir = Dir::None);
 	void RemoveObject(ObjectType type, int id);
 
-	void ChangeNextStage();
+	void ChangeStage();
 	void ClearStage();
 	void EndGame();
 
 public:
 	std::unordered_map<int, PlayerRef>& GetPlayers() { return _players; }
 	std::unordered_map<int, MonsterRef>& GetMonsters() { return _monsters; }
+	std::unordered_map<int, ProjectileRef>& GetProjectiles() { return _projectiles; }
 	std::unordered_map<int, BombRef>& GetBombs() { return _bombs; }
 	GameObjectRef GetObject(ObjectType type, int id);
 	RoomState GetRoomState() { return _state; }

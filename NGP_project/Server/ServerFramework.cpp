@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "BombObject.h"
+#include "projectile.h"
 #include "Global.h"
 
 ServerFramework::ServerFramework()
@@ -433,9 +434,9 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 
 	std::cout << "Client" << newClient->id << " 접속" << std::endl;
 
-	// 새로 접속한 Client에게 Room에 있는 Player 정보 송신
+	// 새로 접속한 Client에게 Room에 있는 Player 정보 및 Projectile 정보 송신
 	std::unordered_map<int, PlayerRef> players = _room->GetPlayers();
-	// 총알 보내기
+	std::unordered_map<int, ProjectileRef> projectiles = _room->GetProjectiles();
 	
 	for (const auto& item : players)
 	{
@@ -445,6 +446,9 @@ void ServerFramework::ProcessAccept(SOCKET clientSocket)
 			SendAddObjectPacket(item.second, false, newClient->socket);
 		}
 	}
+
+	for (const auto& item : projectiles)
+		SendAddObjectPacket(item.second, false, newClient->socket);
 }
 
 void ServerFramework::ProcessDisconnect(ClientRef client)

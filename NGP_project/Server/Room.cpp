@@ -85,7 +85,7 @@ void Room::Update()
 	else
 	{
 		if (_monsterCount == 0)
-			ChangeNextStage();
+			ChangeStage();
 	}
 
 	EnterCriticalSection(&g_objectCS);
@@ -303,9 +303,23 @@ void Room::RemoveObject(ObjectType type, int id)
 
 	if(object)
 		g_framework->SendRemoveObjectPacket(object, true);
+
+	if (_playerCount == 0)
+	{
+		ClearStage();
+
+		// Stage Reset
+		_curStage = 1;
+
+		// Timer Reset
+		_timer = 50;
+
+		// Room State Set
+		_state = RoomState::Idle;
+	}
 }
 
-void Room::ChangeNextStage()
+void Room::ChangeStage()
 {
 	// Stage 클리어
 	ClearStage();

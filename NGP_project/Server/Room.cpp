@@ -54,11 +54,13 @@ void Room::Update()
 
 	// 살아있는 Player가 있는지 확인
 	bool isAlive = false;
+	EnterCriticalSection(&g_objectCS);
 	for (const auto& item : _players)
 	{
-		if (item.second->GetState() != ObjectState::Dead)
+		if (item.second->_status._life > 0)
 			isAlive = true;
 	}
+	LeaveCriticalSection(&g_objectCS);
 
 	// 모든 Player가 죽으면 게임 종료
 	if (!isAlive)
@@ -312,12 +314,13 @@ void Room::ChangeNextStage()
 	_timer = 50;
 
 	// Player Pos, State Reset
+	EnterCriticalSection(&g_objectCS);
 	for (const auto& item : _players)
 	{
 		item.second->SetPos({ 400, 300 });
 		g_framework->SendMovePacket(item.second, true);
 
-		if (item.second->GetState() == ObjectState::Dead)
+		if (item.second->_status._life == 0)
 		{
 			item.second->_status._life = 1;
 			g_framework->SendSetLifePacket(item.second);
@@ -326,6 +329,7 @@ void Room::ChangeNextStage()
 		item.second->SetState(ObjectState::Idle);
 		g_framework->SenUpdateObjectStatePacket(item.second, true);
 	}
+	LeaveCriticalSection(&g_objectCS);
 
 	int sizeOffset{ CELL_SIZE / 2 };
 	switch (_curStage++)
@@ -403,6 +407,7 @@ void Room::EndGame()
 	_state = RoomState::Idle;
 
 	// Player Pos, State Reset
+	EnterCriticalSection(&g_objectCS);
 	for (const auto& item : _players)
 	{
 		item.second->SetPos({ 400, 300 });
@@ -414,6 +419,7 @@ void Room::EndGame()
 		item.second->_status._life = 1;
 		g_framework->SendSetLifePacket(item.second);
 	}
+	LeaveCriticalSection(&g_objectCS);
 
 	// 게임 종료 알리기
 	g_framework->SendEndGamePacket(true);

@@ -139,7 +139,7 @@ void GameScene::Render(HDC hdc)
 		if (_localPlayer->GetState() != ObjectState::Dead)
 		{
 			_localPlayer->Render(memDC, memDCImage);
-			_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(255, 0, 0));
+			_localPlayer->GetBoundingBox().Render(memDC, memDCImage, RGB(0, 0, 0));
 		}
 	}
 	LeaveCriticalSection(&g_cs);

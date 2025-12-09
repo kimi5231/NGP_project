@@ -166,21 +166,10 @@ void GameNetwork::ProcessRecv()
 		memcpy(&updateStatePacket, packet.data() + sizeof(Header), sizeof(S_UpdateObjectState_Packet));
 		RecvUpdateObjectState(updateStatePacket);
 		break;
-	case S_UpdateDir:
-		S_UpdateDir_Packet dirPacket;
-		memcpy(&dirPacket, packet.data() + sizeof(Header), sizeof(S_UpdateDir_Packet));
-		RecvUpdateDir(dirPacket);
-		break;
 	case S_Move:
 		S_Move_Packet movePacket;
 		memcpy(&movePacket, packet.data() + sizeof(Header), sizeof(S_Move_Packet));
 		RecvMove(movePacket);
-		break;
-	case S_ChangeNextStage:
-		break;
-	case S_CollisionResult:
-		break;
-	case S_MonsterDamaged:
 		break;
 	case S_SetLife:
 		S_SetLife_Packet setLifePacket;
@@ -261,20 +250,6 @@ void GameNetwork::SendKickBombPacket(int id, Dir dir)
 	ProcessSend(PacketID::C_KickBomb, packet);
 }
 
-void GameNetwork::SendCollisionPacket(CollisionType c_type, int id1, ObjectType type1, Vertex pos1, int id2, ObjectType type2, Vertex pos2)
-{
-	C_Collision_Packet packet;
-	packet.collisionType = c_type;
-	packet.objectID1 = id1;
-	packet.type1 = type1;
-	packet.pos1 = pos1;
-	packet.objectID2 = id2;
-	packet.type2 = type2;
-	packet.pos2 = pos2;
-
-	ProcessSend(PacketID::C_Collision, packet);
-}
-
 void GameNetwork::SendUseItemPacket(int id, ObjectType player, ItemType itemType)
 {
 	C_UseItem_Packet packet;
@@ -285,21 +260,6 @@ void GameNetwork::SendUseItemPacket(int id, ObjectType player, ItemType itemType
 	ProcessSend(PacketID::C_UseItem, packet);
 }
 
-void GameNetwork::SendStayGamePacket(int id)
-{
-	C_StayGame_Packet packet;
-	packet.objectID = id;
-
-	ProcessSend(PacketID::C_StayGame, packet);
-}
-
-void GameNetwork::SendEndGamePacket(int id)
-{
-	C_EndGame_Packet packet;
-	packet.objectID = id;
-
-	ProcessSend(PacketID::C_EndGame, packet);
-}
 
 void GameNetwork::RecvAddObject(S_AddObject_Packet addObjectPacket)
 {

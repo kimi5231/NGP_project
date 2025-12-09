@@ -226,7 +226,7 @@ struct S_GetItem_Packet
 
 struct S_EndGame_Packet
 {
-    bool end;   // 내용 아무거나 넣는데 수정이 필요하다면 해주십쇼..
+    bool end;
 };
 
 struct S_SetLife_Packet
@@ -258,32 +258,11 @@ struct C_KickBomb_Packet
     Dir dir;
 };
 
-struct C_Collision_Packet
-{
-    CollisionType collisionType;
-    int objectID1;
-    ObjectType type1;
-    Vertex pos1;
-    int objectID2;
-    ObjectType type2;
-    Vertex pos2;
-};
-
 struct C_UseItem_Packet
 {
     int objectID;
     ObjectType objectType;
     ItemType itemType;
-};
-
-struct C_StayGame_Packet
-{
-    int objectID;
-};
-
-struct C_EndGame_Packet
-{
-    int objectID;
 };
 
 // Sound

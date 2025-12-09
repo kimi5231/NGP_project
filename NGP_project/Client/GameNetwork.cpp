@@ -39,10 +39,6 @@ GameNetwork::GameNetwork(char* ip)
 	if (_socket == INVALID_SOCKET)
 		err_quit("socket()");	
 
-	// 네이글 - 1(OFF, 딜레이 없음), 0(ON, 딜레이 있음)
-	/*int optval = 1;
-	setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));*/
-
 	// connect()
 	int retval;
 	struct sockaddr_in serveraddr;
@@ -87,11 +83,6 @@ void GameNetwork::Update()
 	{
 		ProcessRecv();
 	}
-
-	if (FD_ISSET(_socket, &_writeSet))
-	{
-
-	}
 }
 
 template<class T>
@@ -107,7 +98,7 @@ void GameNetwork::ProcessSend(PacketID id, const T& packet)
 	retval = send(_socket, (char*)&packetSize, sizeof(int), 0);
 	if (retval == SOCKET_ERROR)
 	{
-		// err_display("send()");
+		//err_display("send()");
 		return;
 	}
 
@@ -115,7 +106,7 @@ void GameNetwork::ProcessSend(PacketID id, const T& packet)
 	retval = send(_socket, sendPacket.data(), packetSize, 0);
 	if (retval == SOCKET_ERROR)
 	{
-		// err_display("send()");
+		//err_display("send()");
 		return;
 	}
 }
@@ -123,9 +114,6 @@ void GameNetwork::ProcessSend(PacketID id, const T& packet)
 void GameNetwork::ProcessRecv()
 {
 	// PacketSize 수신(고정 길이)
-	/*int packetSize{};
-	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
-	*/
 	int packetSize;
 	recv(_socket, (char*)&packetSize, sizeof(int), MSG_WAITALL);
 	//std::cout << "packetSize: " << packetSize << std::endl;

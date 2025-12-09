@@ -524,3 +524,10 @@ void ServerFramework::ProcessKickBombPacket(C_KickBomb_Packet packet)
 		}
 	}
 }
+
+void ServerFramework::AddRemoveObject(GameObjectRef object)
+{
+	EnterCriticalSection(&g_objectCS);
+	_removeObjects[object->GetID()] = object;
+	EnterCriticalSection(&g_objectCS);
+}

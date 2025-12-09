@@ -65,7 +65,7 @@ private:
 public:
 	Room* GetRoom() { return _room; }
 
-	void AddRemoveObject(GameObjectRef object) { _removeObjects[object->GetID()] = object; }
+	void AddRemoveObject(GameObjectRef object);
 
 private:
 	fd_set _readSet{};

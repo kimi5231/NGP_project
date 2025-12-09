@@ -39,6 +39,7 @@ enum class ObjectType
     Bullet,
     Bomb,
     Obstacle,
+    UI,
 };
 
 enum class ItemType

@@ -299,8 +299,6 @@ void ServerFramework::SendMovePacket(GameObjectRef object, bool broadcast, SOCKE
 	event->packetID = S_Move;
 	event->packetData = packetData;
 
-	std::cout << "Object " << packetData.objectID << ": Move " << packetData.pos.x << ", " << packetData.pos.y << std::endl;
-	
 	EnterCriticalSection(&g_sendCS);
 	_sendEvents.push_back(event);
 	LeaveCriticalSection(&g_sendCS);
@@ -469,8 +467,6 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 	object->SetDir(packet.dir);
 	object->SetState(packet.state);
 
-	std::cout << "Object " << packet.objectID << ": Move " << packet.pos.x << ", " << packet.pos.y << std::endl;
-
 	// 자신을 제외한 모든 클라이언트에게 알리기
 	for (ClientRef client : _clients)
 	{
@@ -482,8 +478,6 @@ void ServerFramework::ProcessMovePacket(C_Move_Packet packet)
 void ServerFramework::ProcessCreateProjectilePacket(C_CreateProjectile_Packet packet)
 {
 	GameObjectRef projectile = _room->AddObject(packet.type, packet.pos, packet.dir);
-
-	std::cout << "Create Object " << projectile->GetID() << std::endl;
 }
 
 void ServerFramework::ProcessUseItemPacket(C_UseItem_Packet packet)
